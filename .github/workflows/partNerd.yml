@@ -16,7 +16,7 @@ jobs:
       - name: creates output
         run: sh ./build.sh
       - name: Pushes to another repository
-        id: eynow1159
+        id: push_directory
         uses: cpina/partNerd-FE@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.EYNOW_GITHUB_KEY }}
