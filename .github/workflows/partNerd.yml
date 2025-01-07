@@ -17,7 +17,7 @@ jobs:
         run: sh ./build.sh
       - name: Pushes to another repository
         id: push_directory
-        uses: cpina/partNerd-FE@main
+        uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.EYNOW_GITHUB_KEY }}
         with:
