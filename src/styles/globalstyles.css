@@ -4,3 +4,12 @@ body {
     font-family: 'Arial', sans-serif;
     
 }
+
+.loginPage{
+    background-color: #F3F4F7;
+    width:100%;
+    height:100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
