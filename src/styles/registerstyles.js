@@ -41,7 +41,7 @@ export const Subup = styled.label`
 `;
 
 export const Input = styled.input`
-    // width: 100%;
+    width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -60,6 +60,25 @@ export const Input = styled.input`
         border-color: #007bff;
         box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
     }
+
+    input:-webkit-autofill {
+    background-color: white !important; /* 배경색을 원하는 색으로 설정 */
+    color: inherit !important; /* 글자색 유지 */
+    box-shadow: 0 0 0px 1000px white inset !important; /* 배경색 덮어쓰기 */
+    
+    transition: background-color 5000s ease-in-out 0s; /* 배경색 애니메이션 제거 */
+`;
+
+export const InputPass = styled.input`
+    width: 100%;
+    padding: 12px;
+    border: hidden;
+    border-radius: 4px;
+    font-size: 12px;
+    outline: none;
+    background-color:transparent;
+    transition: all 0.3s ease;
+    text-indent:2px;
 `;
 
 export const Subdown = styled.p`
