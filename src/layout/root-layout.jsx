@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { GoBell } from "react-icons/go";
 import { MdOutlinePersonOutline } from "react-icons/md";
 import { useState, useEffect } from 'react';
-import Footer from '../components/Footer';
+import Footer from "../components/Footer";
 
 function RootLayout() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

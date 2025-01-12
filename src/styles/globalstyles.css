@@ -1,9 +1,3 @@
-@font-face {
-  font-family: 'PretendardGOV';
-  src: url('/fonts/PretendardGOV-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
 
 body {
   margin: 0;
