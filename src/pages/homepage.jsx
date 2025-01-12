@@ -1,5 +1,8 @@
 import React from 'react';
 import BannerSlider from '../components/BannerSlider';
+import Collaboration from '../components/Collaboration';
+import Project from '../components/Project';
+import Club from '../components/Club';
 import styled from 'styled-components';
 
 const Homepage = () => {
@@ -8,22 +11,18 @@ const Homepage = () => {
       <BannerWrapper>
         <BannerSlider />
       </BannerWrapper>
-      <TitleSection>
-        <TitleBox>최근 등록된 콜라보레이션</TitleBox>
-        <MoreButton>더보기 &gt;</MoreButton>
-      </TitleSection>
-      <TitleSection>
-        <TitleBox>당장 주목해야 하는 동아리</TitleBox>
-        <MoreButton>더보기 &gt;</MoreButton>
-      </TitleSection>
-      <TitleSection>
-        <TitleBox>지금 함께하고 싶은 프로젝트</TitleBox>
-        <MoreButton>더보기 &gt;</MoreButton>
-      </TitleSection>
-      <TitleSection>
-        <TitleBox>지금 인기 있는 프로젝트</TitleBox>
-        <MoreButton>더보기 &gt;</MoreButton>
-      </TitleSection>
+      <ContentSection>
+        <Collaboration />
+      </ContentSection>
+      <ContentSection>
+        <Club />
+      </ContentSection>
+      <ContentSection>
+        <Project />
+      </ContentSection>
+      <ContentSection>
+        <Project />
+      </ContentSection>
     </PageWrapper>
   );
 };
@@ -46,38 +45,12 @@ const BannerWrapper = styled.div`
   width: 100%;
 `;
 
-const TitleSection = styled.div`
+const ContentSection = styled.div`
+  width: 60%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-top: 50px;
-  width: 60%;
+  margin-top: 20px;
+  margin-bottom: 100px; 
   padding: 0;
   box-sizing: border-box;
-`;
-
-const TitleBox = styled.div`
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #333;
-  margin-right: auto;
-`;
-
-const MoreButton = styled.button`
-  background-color: transparent;
-  color: #D3D3D3;
-  border: none;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: normal;
-  padding: 0 5px;
-  margin-left: 10px;
-
-  &:focus {
-    outline: none;
-  }
-
-  &:hover {
-    color: #A9A9A9;
-  }
 `;
