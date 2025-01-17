@@ -48,7 +48,6 @@ function Navbar({ isLoggedIn }) {
 
 export default Navbar;
 
-
 const NavbarContainer = styled.nav`
   display: flex;
   align-items: center;
@@ -69,9 +68,9 @@ const NavbarWrapper = styled.div`
 
 const Logo = styled(NavLink)`
   display: block;
-  width: 100px; 
+  width: 100px;
   height: auto;
-  margin-right: 20px; 
+  margin-right: 20px;
   img {
     width: 100%;
     height: auto;
@@ -127,7 +126,7 @@ const AuthButtons = styled.div`
 `;
 
 const LoginButton = styled.button`
-  text-decoration: none; 
+  text-decoration: none;
   padding: 4px 9px;
   border: 2px solid #64E4B3;
   color: #64E4B3;
@@ -136,16 +135,13 @@ const LoginButton = styled.button`
   font-weight: bold;
   border-radius: 3.5px;
   &:hover {
-    background-color: rgba(243, 243, 243, 0.5); 
-    color: #64E4B3; 
-  }
-  &.active {
-    color: #0D29B7;
+    background-color: rgba(243, 243, 243, 0.5);
+    color: #64E4B3;
   }
 `;
 
 const SignupButton = styled.button`
-  text-decoration: none; 
+  text-decoration: none;
   padding: 4px 9px;
   background-color: #08D485;
   color: white;
@@ -155,8 +151,5 @@ const SignupButton = styled.button`
   border: 2px solid #08D485;
   &:hover {
     background-color: #07C073;
-  }
-  &.active {
-    color: #0D29B7;
   }
 `;
