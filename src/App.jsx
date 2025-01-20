@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RootLayout from './layout/root-layout';
 import HomePage from './pages/homepage';
 import NotFoundPage from './pages/notfoundpage';
+import MyPage from './pages/mypage';
 // import LoginPage from './pages/loginpage';
 
 const router = createBrowserRouter([
@@ -16,9 +17,8 @@ const router = createBrowserRouter([
       },
       {
         path: 'login',
-        element: <LoginPage/>
-          },
         
+      },
       {
         path: 'signin',
         // element: <HomePage/>
@@ -42,7 +42,21 @@ const router = createBrowserRouter([
       },
       {
         path: 'mypage',
-        // element: <HomePage/>
+        element: <MyPage/>,
+        children: [
+          {
+            path:'profile',
+          },
+          {
+            path:'personal-page',
+          },
+          {
+            path:'teams',
+          },
+          {
+            path:'my-posts',
+          }
+        ]
       },
       {
         path: '*', // 404 에러를 처리하는 와일드카드 경로
