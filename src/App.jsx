@@ -1,66 +1,66 @@
-import './styles/globalstyles.css'
+import './styles/globalstyles.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RootLayout from './layout/root-layout';
 import HomePage from './pages/homepage';
 import NotFoundPage from './pages/notfoundpage';
-// import LoginPage from './pages/loginpage';
+import { TeamPage } from './pages/TeamPage'; 
+import CollaborationDetailPage from './pages/CollaborationDetailPage'; 
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <RootLayout/>,
+    element: <RootLayout />,
     children: [
       {
         index: true,
-        element: <HomePage/>
+        element: <HomePage />
+      },
+      {
+        path: 'find',
+        // element: <FindPage />
+      },
+      {
+        path: 'find/:clubId',
+        element: <TeamPage /> 
+      },
+      {
+        path: 'collaboration/:id', 
+        element: <CollaborationDetailPage />
       },
       {
         path: 'login',
-        
+        // element: <LoginPage />
       },
       {
         path: 'signin',
-        // element: <HomePage/>
-      },
-      {
-        //파트너드 찾기
-        path: 'find',
-        // element: <HomePage/>
-      },
-      {
-        path: 'collaboration',
-        // element: <HomePage/>
+        // element: <SignInPage />
       },
       {
         path: 'project',
-        // element: <HomePage/>
+        // element: <ProjectPage />
       },
       {
         path: 'community',
-        // element: <HomePage/>
+        // element: <CommunityPage />
       },
       {
         path: 'mypage',
-        // element: <HomePage/>
+        // element: <MyPage />
       },
       {
-        path: '*', // 404 에러를 처리하는 와일드카드 경로
-        element: <NotFoundPage /> // 404 페이지
+        path: '*',
+        element: <NotFoundPage />
       }
-      //아래에 추가해주세요.
     ]
   }
-])
-
-
+]);
 
 function App() {
-
   return (
     <>
-      <RouterProvider router={router}/>
+      <RouterProvider router={router} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

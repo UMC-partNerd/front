@@ -3,9 +3,6 @@
 body, html {
     margin: 0;
     padding: 0;
-    
-    body {
-        font-family: 'Pretendard', sans-serif;
-    }
+    font-family: 'Pretendard', sans-serif;
     
 }
