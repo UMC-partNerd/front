@@ -3,7 +3,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RootLayout from './layout/root-layout';
 import HomePage from './pages/homepage';
 import NotFoundPage from './pages/notfoundpage';
-// import LoginPage from './pages/loginpage';
+
+import LoginPage from './pages/loginpage';
+import SignUpPage from './pages/signuppage';
+import SignUpSocialPage from './pages/signupsocial';
+
 
 const router = createBrowserRouter([
   {
@@ -16,11 +20,20 @@ const router = createBrowserRouter([
       },
       {
         path: 'login',
-        
+        element: <LoginPage/>
       },
       {
-        path: 'signin',
-        // element: <HomePage/>
+        path: 'register',
+        children: [
+          {
+            path: 'email',
+            element: <SignUpPage/>
+          },
+          {
+            path: 'social',
+            element: <SignUpSocialPage/>
+          }
+        ]
       },
       {
         //파트너드 찾기
