@@ -8,8 +8,4 @@ export default defineConfig({
   server: {
     port: 3000
   },
-<<<<<<< HEAD
-=======
-
->>>>>>> 5d74a0a28647a8050d84bc37292c2b16ae476728
 })

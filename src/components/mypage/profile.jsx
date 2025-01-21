@@ -1,9 +1,9 @@
 import styled from "styled-components"
 
-const MypageComp = () =>{
+const MyProfile = () =>{
     return(
         <MainWrapp>
-            dmdkdkdkddddddddddd
+            프로필
         </MainWrapp>
     )
 }
@@ -12,4 +12,4 @@ const MainWrapp = styled.main`
 
 `
 
-export default MypageComp;
+export default MyProfile;
