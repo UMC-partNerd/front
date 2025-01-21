@@ -41,7 +41,7 @@ box-sizing: border-box;
 const MainWrapp = styled.aside`
 display:flex;
 width:300px;
-height:100vh;
+height:auto;
 flex-direction: row-reverse;
 padding-right:55px;
 box-sizing: border-box;
