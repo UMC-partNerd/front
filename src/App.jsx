@@ -5,7 +5,6 @@ import HomePage from './pages/homepage';
 import CollaborationPage from './pages/CollaborationPage';
 import RequestPage from './pages/RequestPage';
 import NotFoundPage from './pages/notfoundpage';
-
 import LoginPage from './pages/loginpage';
 import SignUpPage from './pages/signuppage';
 import SignUpSocialPage from './pages/signupsocial';

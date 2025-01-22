@@ -1,6 +1,19 @@
 import styled from 'styled-components';
 
-export const RequestWrapper = styled.div`
+export const RequestWrap = styled.div`
+  width:480px;
+  height: 160px;
+  display: flex;
+  border-radius: 8px;
+  padding: 20px;
+  gap: 20px;
+  background-color: #D9D9D9;
+  flex-direction: row;
+  justify-content: space-between;
+  border: 1px solid #878787;
+`;
+
+export const IdContainer = styled.div`
   width:480px;
   height: 160px;
   display: flex;
@@ -24,7 +37,7 @@ export const Profile = styled.div`
   font-size: 24px;
 `;
 
-export const OtherUser = styled.h3`
+export const ClubName = styled.h3`
   font-size: 24px;
   font-weight: 600;
   margin: 0;
@@ -47,6 +60,19 @@ export const Message = styled.p`
   -webkit-box-orient: vertical;
 `;
 
+export const ButtonContainer  = styled.div`
+  width:480px;
+  height: 160px;
+  display: flex;
+  border-radius: 8px;
+  padding: 20px;
+  gap: 20px;
+  background-color: #D9D9D9;
+  flex-direction: row;
+  justify-content: space-between;
+  border: 1px solid #878787;
+`;
+
 export const Button = styled.button`
   width:96px;
   height: 32px;
@@ -60,6 +86,48 @@ export const Button = styled.button`
   border: 1px solid #878787;
   font-size: 8px;
 `; 
+
+export const CollabName = styled.p`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #757575;
+`;
+
+export const ChatRoomContainer  = styled.div`
+  width:480px;
+  height: 160px;
+  display: flex;
+  border-radius: 8px;
+  padding: 20px;
+  gap: 20px;
+  background-color: #D9D9D9;
+  flex-direction: row;
+  justify-content: space-between;
+  border: 1px solid #878787;
+`;
+
+export const ChatContainer  = styled.div`
+  width:480px;
+  height: 160px;
+  display: flex;
+  border-radius: 8px;
+  padding: 20px;
+  gap: 20px;
+  background-color: #D9D9D9;
+  flex-direction: row;
+  justify-content: space-between;
+  border: 1px solid #878787;
+`;
+
+export const LastChat = styled.p`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #757575;
+`;
 
 export const Time = styled.p`
   display: flex;
