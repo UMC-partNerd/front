@@ -78,12 +78,16 @@
 // }
 
 // export default RequestPage;
+import React from 'react';
+// import Pagenation from "../components/pagenation";
 
 const RequestPage = () =>{
   return(
-      <h1>
-          페이지네이션
-      </h1>
+      <>
+          <h3>협업 요청 페이지</h3>
+
+          {/* <Pagenation></Pagenation> */}
+      </>
   )
 }
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import useCustomNavigate from "../hooks/useCustomNavigate";
 
 const CollaborationPage = () => {
