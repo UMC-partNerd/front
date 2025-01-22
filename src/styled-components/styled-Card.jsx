@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { VARIANTS } from '../components/Card';
+import { VARIANTS } from '../components/home/Card';
 
 export const CardContainer = styled.div`
   width: ${({ variant }) => variant === VARIANTS.PROJECT ? '530px' : '480px'};

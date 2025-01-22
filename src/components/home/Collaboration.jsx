@@ -6,7 +6,7 @@ import {
   Title,
   MoreButton,
   CardGrid
-} from "../styled-components/styled-Collaboration";
+} from "../../styled-components/styled-Collaboration";
 
 const INITIAL_CARDS = [];
 

@@ -7,7 +7,7 @@ import {
   Title,
   Content,
   Footer
-} from '../styled-components/styled-Card';
+} from '../../styled-components/styled-Card';
 
 export const VARIANTS = {
   PROJECT: 'project',
