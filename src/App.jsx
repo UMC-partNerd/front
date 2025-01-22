@@ -5,7 +5,11 @@ import HomePage from './pages/homepage';
 import CollaborationPage from './pages/CollaborationPage';
 import RequestPage from './pages/RequestPage';
 import NotFoundPage from './pages/notfoundpage';
-// import LoginPage from './pages/loginpage';
+
+import LoginPage from './pages/loginpage';
+import SignUpPage from './pages/signuppage';
+import SignUpSocialPage from './pages/signupsocial';
+
 
 const router = createBrowserRouter([
   {
@@ -21,8 +25,17 @@ const router = createBrowserRouter([
         // element: <LoginPage/>
       },
       {
-        path: 'signin',
-        // element: <HomePage/>
+        path: 'register',
+        children: [
+          {
+            path: 'email',
+            element: <SignUpPage/>
+          },
+          {
+            path: 'social',
+            element: <SignUpSocialPage/>
+          }
+        ]
       },
       {
         // 파트너드 찾기
