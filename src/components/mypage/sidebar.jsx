@@ -40,7 +40,9 @@ box-sizing: border-box;
 
 const MainWrapp = styled.aside`
 display:flex;
-width:300px;
+min-width:200px;
+width: 30%;
+max-width:300px;
 height:auto;
 flex-direction: row-reverse;
 padding-right:55px;

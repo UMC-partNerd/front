@@ -5,6 +5,7 @@ import { Subup, Input, Subdown, FieldGroup , InputPass} from "../../styles/regis
 import React, {useState} from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import ButtonBlue from "./button_blue";
+import ToggleButton from "./button_toggle";
 
 
 const MyProfile = () => {
@@ -117,6 +118,7 @@ const MyProfile = () => {
                 <SubTitle style={{fontSize:'12px'}}>
                 파트너드의 신규 서비스 오픈, 변경사항 등 서비스 소식과 정보를 받아볼래요
                 </SubTitle>
+                <ToggleButton />
             </MarketingField>
             <p></p>
             </FieldGroup>
@@ -134,6 +136,9 @@ const MyProfile = () => {
 const MarketingField = styled.div`
 display:flex;
 flex-direction:row;
+width:100%;
+justify-content: space-between;
+ align-items: flex-end;
 `
 
 const SaveWrapp = styled.div`

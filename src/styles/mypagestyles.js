@@ -4,6 +4,8 @@ export const MainWrapp = styled.main`
 padding:60px;
 height: 100%;
 height:100%;
+width:40%;
+max-width:550px;
 `
 
 export const Title = styled.h3`
