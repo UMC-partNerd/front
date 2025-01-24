@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { MainWrapp, Title, SubTitle } from "../../styles/mypagestyles"
+import { MainWrapp, Title, SubTitle, SubupSec } from "../../styles/mypagestyles"
 import ButtonWhite from "./button_white"
 import { Subup, Input, Subdown, FieldGroup , InputPass} from "../../styles/registerstyles"
 import React, {useState} from "react";
@@ -149,12 +149,6 @@ justify-content:center;
 flex-direction:column;
 `
 
-const SubupSec = styled.span`
-font-size: 10px; 
-color: #C2C2C2;
-margin-bottom:5px;
-
-`
 
 const PasswordWrapper = styled.div`
     width: 100%;
