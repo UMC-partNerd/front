@@ -4,8 +4,8 @@ import styled from 'styled-components';
 const BannerSlider = () => {
   const slides = [
     { src: '/banner1.png', bgColor: '#0D29B7' },
-    { src: '/banner2.png', bgColor: '#FA1392' },
-    { src: '/banner3.png', bgColor: '#13ADFA' },
+    { src: '/banner2.png', bgColor: '#E3EFF5' },
+    { src: '/banner3.png', bgColor: '#121212' },
   ];
 
   const [currentImage, setCurrentImage] = useState(0);
