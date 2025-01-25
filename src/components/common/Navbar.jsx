@@ -61,11 +61,13 @@ export default Navbar;
 const NavbarContainer = styled.nav`
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center; 
   padding: 15px 20px;
   background-color: #f8f9fa;
   border-bottom: 1px solid #dee2e6;
   width: 100%;
+  overflow-x: hidden; 
+  box-sizing: border-box; 
 `;
 
 const NavbarWrapper = styled.div`
@@ -73,15 +75,16 @@ const NavbarWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 1200px; 
+  padding: 0 30px; 
+  box-sizing: border-box; 
 `;
 
 const LogoMenuGroup = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
-  margin-left: 20px;
+  margin-left: 30px;
 `;
 
 const Logo = styled(NavLink)`
@@ -136,8 +139,7 @@ const IconContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 15px;
-  margin-right: 90px;
-  height: 100%;
+   margin-right: 55px;
 
   @media (max-width: 1024px) {
     gap: 10px; 
@@ -145,9 +147,9 @@ const IconContainer = styled.div`
 
   @media (max-width: 768px) {
     gap: 8px; 
-    margin-right: 20px; 
   }
 `;
+
 
 const IconWrapper = styled.div`
   display: flex;
@@ -173,6 +175,7 @@ const IconWrapper = styled.div`
 const AuthButtons = styled.div`
   display: flex;
   gap: 15px;
+  margin-left: 50px;
 `;
 
 const LoginButton = styled.button`

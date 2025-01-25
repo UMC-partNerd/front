@@ -61,8 +61,9 @@ const Footer = () => {
 export default Footer;
 
 const FooterContainer = styled.footer`
+  margin-top: 100px;
   background-color: #f3f3f3;
-  padding: 20px 0;
+  padding: 15px 0;
   font-size: 11px;
   border-top: 1px solid #e7e7e7;
   width: 100%;
@@ -77,7 +78,7 @@ const FooterContainer = styled.footer`
 const FooterContent = styled.div`
   width: 100%;
   max-width: 1200px;
-  padding: 0 20px;
+  padding: 0 15px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
