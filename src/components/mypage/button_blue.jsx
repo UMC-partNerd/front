@@ -16,7 +16,7 @@ justify-content:center;
 padding:10px 10px;
 
 color: #FFFFFF;
-border-radius: 8px;
+border-radius: 4px;
 background:#0D29B7;
 font-size:13px;
 

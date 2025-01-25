@@ -2,7 +2,7 @@ import styled from "styled-components";
 import MyPersonalComp from "../../components/mypage/personal";
 import Sidebar from "../../components/mypage/sidebar";
 
-const myPagePersonal = () => {
+const MyPagePersonal = () => {
     return(
         <Wrapp>
             <Sidebar />
@@ -16,4 +16,4 @@ display:flex;
 flex-direction:row;
 `
 
-export default myPagePersonal;
+export default MyPagePersonal;

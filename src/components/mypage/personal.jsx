@@ -2,11 +2,14 @@ import styled from "styled-components"
 import { MainWrapp, Title, PersonalField, StyledHr,SubTitle, SubupSec } from "../../styles/mypagestyles";
 import { Subup } from "../../styles/registerstyles";
 import ButtonWhite from "./button_white";
+import PersonalContact from "./contact";
 
 const MyPersonalComp = () =>{
     return(
         <MainWrapp>
         <Title>펄스널 페이지</Title>
+
+        <PersonalContact />
 
         <ButtonWrapp>
             <ButtonWhite style={{width:'50px', height:'10px'}}>작성하기</ButtonWhite>
