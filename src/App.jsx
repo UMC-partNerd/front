@@ -8,6 +8,7 @@ import LoginPage from './pages/loginpage';
 import SignUpPage from './pages/signuppage';
 import SignUpSocialPage from './pages/signupsocial';
 
+import ModalPage from './pages/modalpage';
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: 'mypage',
         // element: <HomePage/>
+      },
+      {
+        path: 'modal-test',
+        element: <ModalPage/>
       },
       {
         path: '*', // 404 에러를 처리하는 와일드카드 경로
