@@ -6,7 +6,7 @@ import {
   Title,
   MoreButton,
   CardGrid
-} from "../styled-components/styled-Project";
+} from "../../styled-components/styled-Project";
 
 const INITIAL_CARDS = [];
 

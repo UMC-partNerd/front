@@ -1,8 +1,8 @@
 import React from 'react';
-import BannerSlider from '../components/BannerSlider';
-import Collaboration from '../components/Collaboration';
-import Project from '../components/Project';
-import Club from '../components/Club';
+import BannerSlider from '../components/home/BannerSlider';
+import Collaboration from '../components/home/Collaboration';
+import Project from '../components/home/Project';
+import Club from '../components/home/Club';
 import styled from 'styled-components';
 
 const Homepage = () => {
