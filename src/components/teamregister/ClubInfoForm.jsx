@@ -100,7 +100,6 @@ const ClubInfoForm = ({ handleAcitivityClick }) => {
 
           {/* 연락방법 박스 */}
           <ContactBox>
-            {/* ContactInput을 맨 앞에 배치 */}
             <ContactInput />
 
             {/* '추가하기' 텍스트 */}
@@ -120,15 +119,18 @@ const ClubInfoForm = ({ handleAcitivityClick }) => {
             </InputContainer>
           </TextAreaContainer>
 
-          {/* 이미지 업로드 배너 아래에 ImageRectangle을 8개 반복하여 불러옴 */}
+    
           <ActivityImageUpload onClick={handleAcitivityClick} />
           
-          {/* ImageRectangle 8개를 렌더링 */}
+     
           <ImageRectanglesContainer>
-            {Array.from({ length: 8 }).map((_, index) => (
-              <ImageRectangle key={index} />
-            ))}
-          </ImageRectanglesContainer>
+           {Array.from({ length: 8 }).map((_, index) => (
+           <ImageRectangle
+            key={index}
+           onClose={() => alert(`Close button clicked for rectangle ${index + 1}`)}
+           />
+          ))}
+         </ImageRectanglesContainer>
         </Section>
       </React.Fragment>
     </FormContainer>
@@ -139,10 +141,12 @@ export default ClubInfoForm;
 
 const ImageRectanglesContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(8, 1fr); 
-  gap: 5px;  // 이미지 간의 간격 설정
-  margin-top: 3px;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0; 
+  padding: 0; 
+  margin: 0;  
 `;
+
 
 const FormContainer = styled.div`
   background-color: white;

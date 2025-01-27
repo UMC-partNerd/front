@@ -15,15 +15,16 @@ const ImageRectangle = ({ onClose }) => {
 };
 
 const ImageBox = styled.div`
-  width: 112px;
+  width: 112px; 
   height: 112px;
   position: relative;
   box-sizing: border-box;
+  overflow: visible; 
 `;
 
 const Rectangle = styled.div`
-  width: 100px;
-  height: 100px;
+  width: 95px;
+  height: 95px;
   border: 2px solid #C2C2C2;
   border-radius: 12px;
 `;
@@ -32,8 +33,8 @@ const CloseIcon = styled.div`
   width: 16px;
   height: 16px;
   position: absolute;
-  top: -6px;
-  right: -2px;
+  top: -4px; 
+  right: 0px; 
   background: #C7F6E4;
   border: 1px solid #08D485;
   border-radius: 50%;

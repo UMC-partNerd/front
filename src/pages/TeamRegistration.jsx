@@ -27,7 +27,6 @@ const TeamRegistration = () => {
           handleProfileClick={handleProfileClick} 
           handleBannerClick={handleBannerClick}
         />
-        {/* ClubInfoForm을 추가한 부분 */}
         <ClubInfoForm />
       </Container>
     </>
@@ -42,9 +41,9 @@ const Container = styled.div`
   align-items: center;
   padding: 20px;
 
-  /* ProjectImageUploadForm과 ClubInfoForm 간 간격 띄우기 */
+
   & > :first-child {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
   }
 `;
 

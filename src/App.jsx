@@ -34,8 +34,14 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: 'collaboration/:id', 
-        element: <CollaborationDetailPage />
+        path: 'collaboration',
+        // element: <HomePage/>
+        children: [
+          {
+            path: 'collaboration/:id', 
+            element: <CollaborationDetailPage />
+          },
+        ],
       },
       {
         path: 'login',
@@ -53,10 +59,6 @@ const router = createBrowserRouter([
             element: <SignUpSocialPage/>
           }
         ]
-      },
-      {
-        path: 'collaboration',
-        // element: <HomePage/>
       },
       {
         path: 'project',
