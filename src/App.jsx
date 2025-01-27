@@ -4,12 +4,6 @@ import RootLayout from './layout/root-layout';
 import HomePage from './pages/homepage';
 import NotFoundPage from './pages/notfoundpage';
 import LoginPage from './pages/loginpage';
-import SignUpPage from './pages/signuppage';
-import SignUpSocialPage from './pages/signupsocial';
-import MyPageDe from './pages/mypages/mypage-default';
-import MyPagePersonal from './pages/mypages/mypage-personal';
-import MyPageTeams from './pages/mypages/mypage-teams';
-import MyPagePosts from './pages/mypages/mypage-mypost';
 
 const router = createBrowserRouter([
   {
@@ -25,17 +19,8 @@ const router = createBrowserRouter([
         element: <LoginPage/>
       },
       {
-        path: 'register',
-        children: [
-          {
-            path: 'email',
-            element: <SignUpPage/>
-          },
-          {
-            path: 'social',
-            element: <SignUpSocialPage/>
-          }
-        ]
+        path: 'signin',
+        // element: <HomePage/>
       },
       {
         //파트너드 찾기
@@ -54,26 +39,9 @@ const router = createBrowserRouter([
         path: 'community',
         // element: <HomePage/>
       },
-      { //마이페이지 경로 
+      {
         path: 'mypage',
-        children: [
-          {
-            path:'profile', //디폴트는 내 페이지 
-            element: <MyPageDe/>,
-          },
-          {
-            path:'personal-page',
-            element: <MyPagePersonal />
-          },
-          {
-            path:'teams',
-            element: <MyPageTeams />
-          },
-          {
-            path:'my-posts',
-            element: <MyPagePosts />
-          }
-        ]
+        // element: <HomePage/>
       },
       {
         path: '*', // 404 에러를 처리하는 와일드카드 경로
