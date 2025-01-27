@@ -10,15 +10,12 @@ const CollaborationFeed = ({ feed }) => {
     navigate(`/collaboration/${id}`);
   };
 
-  const handleGoToCollaboration = () => {
-    navigate('/collaboration');
-  };
-
   return (
     <Container>
       <Header>
         <SectionTitle>콜라보레이션 피드</SectionTitle>
-        <LinkButton onClick={handleGoToCollaboration}>콜라보레이션 바로가기  {'>'}</LinkButton>
+        {/* "콜라보레이션 바로가기" 버튼 제거 */}
+        {/* <LinkButton onClick={handleGoToCollaboration}>콜라보레이션 바로가기  {'>'}</LinkButton> */}
       </Header>
       <FeedList>
         {feed.map((item) => (
@@ -48,7 +45,6 @@ CollaborationFeed.propTypes = {
 
 export default CollaborationFeed;
 
-
 const Container = styled.div` 
   margin: 53px 0; 
   max-width: 800px; 
@@ -66,20 +62,6 @@ const SectionTitle = styled.h2`
   font-size: 32px; 
   font-weight: 700; 
   color: #212121;
-`;
-
-const LinkButton = styled.button`
-  font-size: 15px;
-  font-weight: 500;
-  color: #A0A0A0;
-  background: none;
-  border:none;
-  cursor: pointer; 
-  letter-spacing: -0.5px;
-  white-space: pre;
-  &:hover {
-    text-decoration: underline;
-  }
 `;
 
 const FeedList = styled.ul`
@@ -119,7 +101,6 @@ const FeedTitle = styled.div`
   font-size: 20px; 
   color: #0D29B7;
 `;
-
 
 const FeedDate = styled.div`
   font-size: 0.8em;

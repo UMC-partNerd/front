@@ -12,8 +12,7 @@ function RootLayout() {
     const scrollPosition = window.scrollY + window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
 
-
-    setIsFooterVisible(scrollPosition >= documentHeight + 100);
+    setIsFooterVisible(scrollPosition >= documentHeight);
   };
 
   useEffect(() => {
@@ -33,6 +32,7 @@ function RootLayout() {
     </MainContainer>
   );
 }
+
 
 export default RootLayout;
 

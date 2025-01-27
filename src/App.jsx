@@ -5,6 +5,11 @@ import HomePage from './pages/homepage';
 import NotFoundPage from './pages/notfoundpage';
 import { TeamPage } from './pages/TeamPage'; 
 import CollaborationDetailPage from './pages/CollaborationDetailPage'; 
+import TeamRegistration from './pages/TeamRegistration';
+import LoginPage from './pages/loginpage';
+import SignUpPage from './pages/signuppage';
+import SignUpSocialPage from './pages/signupsocial';
+
 
 const router = createBrowserRouter([
   {
@@ -17,11 +22,16 @@ const router = createBrowserRouter([
       },
       {
         path: 'find',
-        // element: <FindPage />
-      },
-      {
-        path: 'find/:clubId',
-        element: <TeamPage /> 
+        children: [
+          {
+            path: ':clubId',
+            element: <TeamPage />,
+          },
+          {
+            path: 'team-registration', 
+            element: <TeamRegistration />,
+          },
+        ],
       },
       {
         path: 'collaboration/:id', 
@@ -29,11 +39,24 @@ const router = createBrowserRouter([
       },
       {
         path: 'login',
-        // element: <LoginPage />
+        element: <LoginPage />
       },
       {
-        path: 'signin',
-        // element: <SignInPage />
+        path: 'register',
+        children: [
+          {
+            path: 'email',
+            element: <SignUpPage/>
+          },
+          {
+            path: 'social',
+            element: <SignUpSocialPage/>
+          }
+        ]
+      },
+      {
+        path: 'collaboration',
+        // element: <HomePage/>
       },
       {
         path: 'project',
@@ -63,4 +86,5 @@ function App() {
   );
 }
 
-export default App;
+export default App
+

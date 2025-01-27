@@ -1,4 +1,3 @@
-// TeamPage.jsx
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -88,4 +87,4 @@ const TeamPage = () => {
   );
 };
 
-export { TeamPage };  // named export로 변경
+export { TeamPage };  
