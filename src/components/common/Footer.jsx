@@ -81,12 +81,9 @@ const FooterContent = styled.div`
   padding: 0 15px;
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
   margin: 0 auto;
 
   @media (max-width: 1024px) {
-    flex-direction: row;
-    justify-content: space-between;
     padding: 0 15px;
   }
 
@@ -138,6 +135,7 @@ const LogoSection = styled.div`
     color: #0d29b7;
     margin-top: 4px;
     font-weight: bold;
+    text-align: left;
   }
 
   .copyright {
@@ -148,7 +146,7 @@ const LogoSection = styled.div`
 
   @media (max-width: 1024px) {
     width: 100%;
-    text-align: center;
+    text-align: left;
     font-size: 9px;
 
     .logo img {
@@ -166,9 +164,8 @@ const LogoSection = styled.div`
   }
 
   @media (max-width: 768px) {
-    text-align: center;
-    font-size: 8px;
     width: 100%;
+    font-size: 8px;
 
     .logo {
       font-size: 18px;
@@ -189,7 +186,7 @@ const InfoSection = styled.div`
   display: flex;
   justify-content: space-between;
   width: 45%;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 40px;
 
   @media (max-width: 1024px) {
