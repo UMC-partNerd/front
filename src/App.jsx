@@ -7,7 +7,9 @@ import NotFoundPage from './pages/notfoundpage';
 import LoginPage from './pages/loginpage';
 import SignUpPage from './pages/signuppage';
 import SignUpSocialPage from './pages/signupsocial';
+import SignUpSocialPage from './pages/signupsocial';
 
+import AlramPage from './/components/common/alarm';
 
 const router = createBrowserRouter([
   {
@@ -19,10 +21,12 @@ const router = createBrowserRouter([
         element: <HomePage/>
       },
       {
+        // 로그인
         path: 'login',
         element: <LoginPage/>
       },
       {
+        // 회원가입
         path: 'register',
         children: [
           {
@@ -51,6 +55,14 @@ const router = createBrowserRouter([
       {
         path: 'community',
         // element: <HomePage/>
+      },
+      {
+        path: 'chat',
+        // element: <HomePage/>
+      },
+      {
+        path: 'alarm-test',
+        element: <AlramPage/>
       },
       {
         path: 'mypage',
