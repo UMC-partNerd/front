@@ -1,29 +1,50 @@
-import './styles/globalstyles.css'
+import './styles/globalstyles.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RootLayout from './layout/root-layout';
 import HomePage from './pages/homepage';
 import NotFoundPage from './pages/notfoundpage';
-
+import { TeamPage } from './pages/TeamPage'; 
+import CollaborationDetailPage from './pages/CollaborationDetailPage'; 
+import TeamRegistration from './pages/TeamRegistration';
 import LoginPage from './pages/loginpage';
 import SignUpPage from './pages/signuppage';
 import SignUpSocialPage from './pages/signupsocial';
 import SignUpSocialPage from './pages/signupsocial';
-
-import AlramPage from './/components/common/alarm';
+import MyPageDe from './pages/mypages/mypage-default';
+import MyPagePersonal from './pages/mypages/mypage-personal';
+import MyPageTeams from './pages/mypages/mypage-teams';
+import MyPagePosts from './pages/mypages/mypage-mypost';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <RootLayout/>,
+    element: <RootLayout />,
     children: [
       {
         index: true,
-        element: <HomePage/>
+        element: <HomePage />
+      },
+      {
+        path: 'find',
+        children: [
+          {
+            path: ':clubId',
+            element: <TeamPage />,
+          },
+          {
+            path: 'team-registration', 
+            element: <TeamRegistration />,
+          },
+        ],
+      },
+      {
+        path: 'collaboration/:id', 
+        element: <CollaborationDetailPage />
       },
       {
         // 로그인
         path: 'login',
-        element: <LoginPage/>
+        element: <LoginPage />
       },
       {
         // 회원가입
@@ -40,52 +61,52 @@ const router = createBrowserRouter([
         ]
       },
       {
-        //파트너드 찾기
-        path: 'find',
-        // element: <HomePage/>
-      },
-      {
         path: 'collaboration',
         // element: <HomePage/>
       },
       {
         path: 'project',
-        // element: <HomePage/>
+        // element: <ProjectPage />
       },
       {
         path: 'community',
-        // element: <HomePage/>
-      },
-      {
-        path: 'chat',
-        // element: <HomePage/>
-      },
-      {
-        path: 'alarm',
-        element: <AlramPage/>
+        // element: <CommunityPage />
       },
       {
         path: 'mypage',
-        // element: <HomePage/>
+        children: [
+          {
+            path:'profile', //디폴트는 내 페이지 
+            element: <MyPageDe/>,
+          },
+          {
+            path:'personal-page',
+            element: <MyPagePersonal />
+          },
+          {
+            path:'teams',
+            element: <MyPageTeams />
+          },
+          {
+            path:'my-posts',
+            element: <MyPagePosts />
+          }
+        ]
       },
       {
-        path: '*', // 404 에러를 처리하는 와일드카드 경로
-        element: <NotFoundPage /> // 404 페이지
+        path: '*',
+        element: <NotFoundPage />
       }
-      //아래에 추가해주세요.
     ]
   }
-])
-
-
+]);
 
 function App() {
-
   return (
     <>
-      <RouterProvider router={router}/>
+      <RouterProvider router={router} />
     </>
-  )
+  );
 }
 
 export default App
