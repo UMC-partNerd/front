@@ -13,6 +13,7 @@ import MyPageDe from './pages/mypages/mypage-default';
 import MyPagePersonal from './pages/mypages/mypage-personal';
 import MyPageTeams from './pages/mypages/mypage-teams';
 import MyPagePosts from './pages/mypages/mypage-mypost';
+import CommunityPage from './pages/Communitypage';
 
 const router = createBrowserRouter([
   {
@@ -67,7 +68,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'community',
-        // element: <CommunityPage />
+        element: <CommunityPage />
       },
       { //마이페이지 경로 
         path: 'mypage',
