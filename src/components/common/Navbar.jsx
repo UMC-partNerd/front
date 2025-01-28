@@ -3,8 +3,14 @@ import styled from 'styled-components';
 import { GoBell } from "react-icons/go";
 import { MdOutlinePersonOutline } from "react-icons/md";
 import { BsChatRightDots } from "react-icons/bs";
+import { useState } from 'react';
+import ProfileMenu from '../home/ProfileMenu'; 
 
 function Navbar({ isLoggedIn }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false); 
+
+  const toggleMenu = () => setIsMenuOpen(prevState => !prevState); 
+
   return (
     <NavbarContainer>
       <NavbarWrapper>
@@ -36,8 +42,9 @@ function Navbar({ isLoggedIn }) {
               <IconWrapper>
                 <GoBell />
               </IconWrapper>
-              <IconWrapper>
+              <IconWrapper onClick={toggleMenu}>
                 <MdOutlinePersonOutline />
+                {isMenuOpen && <ProfileMenu />}
               </IconWrapper>
             </>
           ) : (
@@ -139,7 +146,7 @@ const IconContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 15px;
-   margin-right: 55px;
+  margin-right: 55px;
 
   @media (max-width: 1024px) {
     gap: 10px; 
@@ -149,7 +156,6 @@ const IconContainer = styled.div`
     gap: 8px; 
   }
 `;
-
 
 const IconWrapper = styled.div`
   display: flex;
