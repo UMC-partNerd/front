@@ -61,7 +61,7 @@ const router = createBrowserRouter([
         // element: <HomePage/>
       },
       {
-        path: 'alarm-test',
+        path: 'alarm',
         element: <AlramPage/>
       },
       {
