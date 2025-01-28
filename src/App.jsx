@@ -9,7 +9,6 @@ import TeamRegistration from './pages/TeamRegistration';
 import LoginPage from './pages/loginpage';
 import SignUpPage from './pages/signuppage';
 import SignUpSocialPage from './pages/signupsocial';
-import SignUpSocialPage from './pages/signupsocial';
 import MyPageDe from './pages/mypages/mypage-default';
 import MyPagePersonal from './pages/mypages/mypage-personal';
 import MyPageTeams from './pages/mypages/mypage-teams';
@@ -42,12 +41,10 @@ const router = createBrowserRouter([
         element: <CollaborationDetailPage />
       },
       {
-        // 로그인
         path: 'login',
         element: <LoginPage />
       },
       {
-        // 회원가입
         path: 'register',
         children: [
           {
@@ -72,7 +69,7 @@ const router = createBrowserRouter([
         path: 'community',
         // element: <CommunityPage />
       },
-      {
+      { //마이페이지 경로 
         path: 'mypage',
         children: [
           {
