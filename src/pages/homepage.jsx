@@ -18,10 +18,16 @@ const Homepage = () => {
         <Club />
       </ContentSection>
       <ContentSection>
-        <Project />
+        <Project 
+          title="지금 함께하고 싶은 프로젝트" 
+          type="recent" 
+        />
       </ContentSection>
       <ContentSection>
-        <Project />
+        <Project 
+          title="지금 인기 있는 프로젝트" 
+          type="popular" 
+        />
       </ContentSection>
     </PageWrapper>
   );
@@ -46,11 +52,15 @@ const BannerWrapper = styled.div`
 `;
 
 const ContentSection = styled.div`
-  width: 60%;
+  width: 100%;
+  max-width: 1200px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-top: 20px;
-  margin-bottom: 100px; 
-  padding: 0;
+  margin-bottom: 100px;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 0 16px;
+  }
 `;

@@ -8,6 +8,12 @@ import LoginPage from './pages/loginpage';
 import SignUpPage from './pages/signuppage';
 import SignUpSocialPage from './pages/signupsocial';
 
+import React from 'react';
+import PartnerSearch from './components/partnerd-search';
+import ProjectRecruitment from './components/project-recruitment';
+import ProjectCollaboration from './components/project-collaboration';
+import ProjectPromotion from './components/project-promotion';
+import Community from './components/community/Top10-rank';
 
 const router = createBrowserRouter([
   {
@@ -38,19 +44,32 @@ const router = createBrowserRouter([
       {
         //파트너드 찾기
         path: 'find',
-        // element: <HomePage/>
+        element: <PartnerSearch/>
       },
       {
         path: 'collaboration',
-        // element: <HomePage/>
+        element: <ProjectCollaboration/>
       },
       {
         path: 'project',
-        // element: <HomePage/>
+        children: [
+          {
+            path: 'recruit',
+            element: <ProjectRecruitment/>
+          },
+          {
+            path: 'promote',
+            element: <ProjectPromotion/>
+          },
+          {
+            index: true,
+            element: <ProjectRecruitment/>
+          }
+        ]
       },
       {
         path: 'community',
-        // element: <HomePage/>
+        element: <Community/>
       },
       {
         path: 'mypage',
@@ -65,14 +84,9 @@ const router = createBrowserRouter([
   }
 ])
 
-
-
 function App() {
-
   return (
-    <>
-      <RouterProvider router={router}/>
-    </>
+    <RouterProvider router={router}/>
   )
 }
 
