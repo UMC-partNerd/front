@@ -9,6 +9,11 @@ import TeamRegistration from './pages/TeamRegistration';
 import LoginPage from './pages/loginpage';
 import SignUpPage from './pages/signuppage';
 import SignUpSocialPage from './pages/signupsocial';
+import PartnerSearch from './components/partnerd-search';
+import ProjectRecruitment from './components/project-recruitment';
+import ProjectCollaboration from './components/project-collaboration';
+import ProjectPromotion from './components/project-promotion';
+import Community from './components/community/Top10-rank';
 
 
 const router = createBrowserRouter([
@@ -31,6 +36,10 @@ const router = createBrowserRouter([
             path: 'team-registration', 
             element: <TeamRegistration />,
           },
+          {
+            index: true,
+            element: <PartnerSearch />
+          }
         ],
       },
       {
@@ -55,40 +64,48 @@ const router = createBrowserRouter([
         ]
       },
       {
-        //파트너드 찾기
-        path: 'find',
-        // element: <HomePage/>
-      },
-      {
         path: 'collaboration',
         element: <ProjectCollaboration/>
       },
       {
         path: 'project',
-        // element: <HomePage/>
+        children: [
+          {
+            path: 'recruit',
+            element: <ProjectRecruitment/>
+          },
+          {
+            path: 'promote',
+            element: <ProjectPromotion/>
+          },
+          {
+            index: true,
+            element: <ProjectRecruitment/>
+          }
+        ]
       },
       {
         path: 'community',
-        // element: <HomePage/>
+        element: <Community/>
       },
       { //마이페이지 경로 
         path: 'mypage',
         children: [
           {
             path:'profile', //디폴트는 내 페이지 
-            element: <MyPageDe/>,
+            //element: <MyPageDe/>,
           },
           {
             path:'personal-page',
-            element: <MyPagePersonal />
+            //element: <MyPagePersonal />
           },
           {
             path:'teams',
-            element: <MyPageTeams />
+            //element: <MyPageTeams />
           },
           {
             path:'my-posts',
-            element: <MyPagePosts />
+            //element: <MyPagePosts />
           }
         ]
       },

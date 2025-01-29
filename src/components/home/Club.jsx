@@ -11,7 +11,8 @@ import {
   CategoryBadge,
   ClubTitle,
   Description
-} from "../styled-components/styled-Club";
+} from "../../styled-components/styled-Club";
+
 
 const TEMP_CARDS = [
   {
