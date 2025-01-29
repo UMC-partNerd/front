@@ -9,10 +9,7 @@ import TeamRegistration from './pages/TeamRegistration';
 import LoginPage from './pages/loginpage';
 import SignUpPage from './pages/signuppage';
 import SignUpSocialPage from './pages/signupsocial';
-import MyPageDe from './pages/mypages/mypage-default';
-import MyPagePersonal from './pages/mypages/mypage-personal';
-import MyPageTeams from './pages/mypages/mypage-teams';
-import MyPagePosts from './pages/mypages/mypage-mypost';
+
 
 const router = createBrowserRouter([
   {
@@ -58,16 +55,21 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: 'collaboration',
+        //파트너드 찾기
+        path: 'find',
         // element: <HomePage/>
       },
       {
+        path: 'collaboration',
+        element: <ProjectCollaboration/>
+      },
+      {
         path: 'project',
-        // element: <ProjectPage />
+        // element: <HomePage/>
       },
       {
         path: 'community',
-        // element: <CommunityPage />
+        // element: <HomePage/>
       },
       { //마이페이지 경로 
         path: 'mypage',
@@ -96,14 +98,16 @@ const router = createBrowserRouter([
       }
     ]
   }
-]);
+])
+
+
 
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <RouterProvider router={router}/>
     </>
-  );
+  )
 }
 
 export default App
