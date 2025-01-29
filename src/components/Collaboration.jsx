@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Card from "./Card";
 import {
   CollaborationContainer,
@@ -7,54 +7,14 @@ import {
   MoreButton,
   CardGrid
 } from "../styled-components/styled-Collaboration";
-
-const INITIAL_CARDS = [];
-
-const TEMP_CARDS = [
-  {
-    title: "UMC와 연합 해커톤 진행할 동아리를 찾습니다!",
-    content: "2025년 1월 셋째 주에 계획 중인 연합 해커톤을 함께할 동아리를 찾습니다. 장소는 이미 공덕 프론트원으로 섭외가 된 상태이고...",
-    thumbnail: "UMC",
-    footer: "UMC",
-  },
-  {
-    title: "UMC와 연합 해커톤 진행할 동아리를 찾습니다!2",
-    content: "2025년 1월 셋째 주에 계획 중인 연합 해커톤을 함께할 동아리를 찾습니다. 장소는 이미 공덕 프론트원으로 섭외가 된 상태이고...",
-    thumbnail: "UMC",
-    footer: "UMC",
-  },
-  {
-    title: "UMC와 연합 해커톤 진행할 동아리를 찾습니다!3",
-    content: "2025년 1월 셋째 주에 계획 중인 연합 해커톤을 함께할 동아리를 찾습니다. 장소는 이미 공덕 프론트원으로 섭외가 된 상태이고...",
-    thumbnail: "UMC",
-    footer: "UMC",
-  },
-  {
-    title: "UMC와 연합 해커톤 진행할 동아리를 찾습니다!4",
-    content: "2025년 1월 셋째 주에 계획 중인 연합 해커톤을 함께할 동아리를 찾습니다. 장소는 이미 공덕 프론트원으로 섭외가 된 상태이고...",
-    thumbnail: "UMC",
-    footer: "UMC",
-  }
-];
+import { useHomeData } from '../hooks/useHomeData';
 
 function Collaboration() {
-  const [cards, setCards] = useState(INITIAL_CARDS);
+  const { homeData, isLoading } = useHomeData();
 
-  useEffect(() => {
-    async function fetchTopCollaborations() {
-      try {
-        // const response = await fetch('/api/collaborations/top');
-        // const data = await response.json();
-        // setCards(data.slice(0, 4));
-      } catch (error) {
-        console.error('Failed to fetch collaborations:', error);
-      }
-    }
-
-    fetchTopCollaborations();
-  }, []);
-
-  const displayCards = cards.length > 0 ? cards : TEMP_CARDS;
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
     <CollaborationContainer>
@@ -63,7 +23,7 @@ function Collaboration() {
         <MoreButton href="#">더보기 ›</MoreButton>
       </Header>
       <CardGrid>
-        {displayCards.slice(0, 4).map((card, index) => (
+        {homeData.collaborations.slice(0, 4).map((card, index) => (
           <Card
             key={index}
             title={card.title}

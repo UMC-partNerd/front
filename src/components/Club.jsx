@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   ClubContainer,
   Header,
@@ -12,46 +12,14 @@ import {
   ClubTitle,
   Description
 } from "../styled-components/styled-Club";
-
-const TEMP_CARDS = [
-  {
-    title: "동아리 이름",
-    description: "동아리 한 줄 소개",
-    imageUrl: "썸네일",
-    category: "웹/앱 개발",
-  },
-  {
-    title: "동아리 이름2",
-    description: "동아리 한 줄 소개2",
-    imageUrl: "썸네일",
-    category: "웹/앱 개발",
-  },
-  {
-    title: "동아리 이름3",
-    description: "동아리 한 줄 소개3",
-    imageUrl: "썸네일",
-    category: "웹/앱 개발",
-  }
-];
+import { useHomeData } from '../hooks/useHomeData';
 
 function Club() {
-  const [clubs, setClubs] = useState([]);
+  const { homeData, isLoading } = useHomeData();
 
-  useEffect(() => {
-    async function fetchTopClubs() {
-      try {
-        // const response = await fetch('/api/clubs/top');
-        // const data = await response.json();
-        // setClubs(data.slice(0, 3));
-      } catch (error) {
-        console.error('Failed to fetch clubs:', error);
-      }
-    }
-
-    fetchTopClubs();
-  }, []);
-
-  const displayClubs = clubs.length > 0 ? clubs : TEMP_CARDS;
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
     <ClubContainer>
@@ -60,7 +28,7 @@ function Club() {
         <MoreButton href="/clubs">더보기 ›</MoreButton>
       </Header>
       <CardGrid>
-        {displayClubs.map((club, index) => (
+        {homeData.clubs.map((club, index) => (
           <ClubCard key={index}>
             <ImagePlaceholder>
               <img src={club.imageUrl} alt={club.title} />

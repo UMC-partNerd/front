@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-
 import {
   PaginationContainer,
   ArrowButton,
   ArrowIcon,
   PageButton
 } from "../styled-components/styled-common";
-
 import {
   Container as PartnerSearchContainer,
   PartnerGrid,
@@ -26,46 +24,32 @@ import {
   SearchContainer,
   CategoryBadge
 } from "../styled-components/styled-partnerd-search";
-
+import { usePartnerSearch, PARTNER_CATEGORIES, SORT_OPTIONS } from '../hooks/usePartnerSearch';
 
 const PartnerSearch = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState('latest');
+  const [sortBy, setSortBy] = useState(SORT_OPTIONS.RECENT);
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const itemsPerPage = 12;
 
-  // 예시 데이터
-  const partners = Array(50).fill().map((_, index) => ({
-    title: 'UMC',
-    description: 'UMC는 IT연합 동아리입니다.',
-    category: '웹/앱 개발',
-    imageUrl: 'default-image-url.jpg'
-  }));
+  const { partners, isLoading, error } = usePartnerSearch(selectedCategory, sortBy);
 
-  // 카테고리 필터링
-  const filteredPartners = selectedCategory === '전체'
-    ? partners
-    : partners.filter(partner => partner.category === selectedCategory);
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (error) {
+    return <div>에러가 발생했습니다: {error.message}</div>;
+  }
 
   // 현재 페이지의 데이터만 선택
-  const currentPartners = filteredPartners.slice(
+  const currentPartners = partners.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
   // 전체 페이지 수 계산
-  const totalPages = Math.ceil(filteredPartners.length / itemsPerPage);
-
-  const categories = [
-    '전체',
-    '웹/앱 개발',
-    '인공지능',
-    '데이터',
-    '디자인',
-    '마케팅',
-    '게임',
-    '기타'
-  ];
+  const totalPages = Math.ceil(partners.length / itemsPerPage);
 
   const renderPageButtons = () => {
     const buttons = [];
@@ -122,7 +106,7 @@ const PartnerSearch = () => {
     <PartnerSearchContainer>
       <CategoryTitle>카테고리</CategoryTitle>
       <CategoryContainer>
-        {categories.map(category => (
+        {PARTNER_CATEGORIES.map(category => (
           <CategoryButton
             key={category}
             isActive={selectedCategory === category}
@@ -136,14 +120,14 @@ const PartnerSearch = () => {
       <ButtonContainer>
         <SortContainer>
           <SortButton
-            isActive={sortBy === 'latest'}
-            onClick={() => setSortBy('latest')}
+            isActive={sortBy === SORT_OPTIONS.RECENT}
+            onClick={() => setSortBy(SORT_OPTIONS.RECENT)}
           >
             최신순
           </SortButton>
           <SortButton
-            isActive={sortBy === 'popular'}
-            onClick={() => setSortBy('popular')}
+            isActive={sortBy === SORT_OPTIONS.POPULAR}
+            onClick={() => setSortBy(SORT_OPTIONS.POPULAR)}
           >
             인기순
           </SortButton>
