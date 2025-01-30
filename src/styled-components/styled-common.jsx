@@ -19,60 +19,18 @@ export const ArrowButton = styled.button`
   justify-content: center;
 `;
 
-export const ArrowIcon = styled.span`
+export const ArrowIcon = styled.svg`
   position: relative;
   display: inline-block;
   width: 24px;
   height: 24px;
   
   &.right {
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 50%;
-      width: 16px;
-      height: 2px;
-      background: #4B48DF;
-      transform: translateY(-50%);
-    }
-
-    &::after {
-      content: '';
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      width: 8px;
-      height: 8px;
-      border-top: 2px solid #4B48DF;
-      border-right: 2px solid #4B48DF;
-      transform: translateY(-50%) rotate(45deg);
-    }
+    transform: rotate(180deg);
   }
 
-  &.left {
-    &::before {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: 50%;
-      width: 16px;
-      height: 2px;
-      background: #4B48DF;
-      transform: translateY(-50%);
-    }
-
-    &::after {
-      content: '';
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      width: 8px;
-      height: 8px;
-      border-top: 2px solid #4B48DF;
-      border-left: 2px solid #4B48DF;
-      transform: translateY(-50%) rotate(-45deg);
-    }
+  path {
+    stroke: #4B48DF;
   }
 `;
 
