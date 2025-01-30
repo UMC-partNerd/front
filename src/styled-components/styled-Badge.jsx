@@ -4,14 +4,16 @@ export const BadgeContainer = styled.div`
   width: 16px;
   height: 16px;
   flex-shrink: 0;
+
+  position: relative;
 `;
 
 export const StyledCircle = styled.svg.attrs({
   xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 452 2"
+  viewBox: "0 0 16 16"
 })`
-  width: 452px;
-  height: 2px;
+  width: 16px;
+  height: 16px;
   fill: none;
 
   circle {
@@ -32,4 +34,10 @@ export const CountBadge = styled.p`
   font-weight: 700;
   line-height: normal;
   letter-spacing: -0.24px;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
 `;
