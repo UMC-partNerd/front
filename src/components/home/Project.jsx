@@ -10,72 +10,86 @@ import {
 
 const INITIAL_CARDS = [];
 
-const TEMP_CARDS = [
-  {
-    title: '프로젝트 이름',
-    content: '프로젝트 한 줄 소개',
-    thumbnail: '썸네일',
-    footer: '프로젝트 한 줄 소개',
-  },
-  {
-    title: '프로젝트 이름2',
-    content: '프로젝트 한 줄 소개2',
-    thumbnail: '썸네일',
-    footer: '프로젝트 한 줄 소개',
-  },
-  {
-    title: '프로젝트 이름3',
-    content: '프로젝트 한 줄 소개3',
-    thumbnail: '썸네일',
-    footer: '프로젝트 한 줄 소개',
-  },
-  {
-    title: '프로젝트 이름4',
-    content: '프로젝트 한 줄 소개4',
-    thumbnail: '썸네일',
-    footer: '프로젝트 한 줄 소개',
-  },
-  {
-    title: '프로젝트 이름5',
-    content: '프로젝트 한 줄 소개5',
-    thumbnail: '썸네일',
-    footer: '프로젝트 한 줄 소개',
-  },
-  {
-    title: '프로젝트 이름6',
-    content: '프로젝트 한 줄 소개6',
-    thumbnail: '썸네일',
-    footer: '프로젝트 한 줄 소개',
-  }
-];
+const TEMP_CARDS = {
+  recent: [
+    {
+      title: '최신 프로젝트 1',
+      content: '최신 프로젝트 소개 1',
+      thumbnail: '썸네일',
+      footer: '방금 전',
+    },
+    {
+      title: '최신 프로젝트 2',
+      content: '최신 프로젝트 소개 2',
+      thumbnail: '썸네일',
+      footer: '1시간 전',
+    },
+    // ... 나머지 4개의 최신 프로젝트
+  ],
+  popular: [
+    {
+      title: '인기 프로젝트 1',
+      content: '인기 프로젝트 소개 1',
+      thumbnail: '썸네일',
+      footer: '조회수 1.2k',
+    },
+    {
+      title: '인기 프로젝트 2',
+      content: '인기 프로젝트 소개 2',
+      thumbnail: '썸네일',
+      footer: '조회수 1k',
+    },
+    {
+      title: '인기 프로젝트 1',
+      content: '인기 프로젝트 소개 1',
+      thumbnail: '썸네일',
+      footer: '조회수 1.2k',
+    },
+    {
+      title: '인기 프로젝트 2',
+      content: '인기 프로젝트 소개 2',
+      thumbnail: '썸네일',
+      footer: '조회수 1k',
+    },
+    
+    // ... 나머지 4개의 인기 프로젝트
+  ]
+};
 
-function Project() {
+function Project({ title, type = 'recent' }) {
   const [cards, setCards] = useState(INITIAL_CARDS);
 
   useEffect(() => {
-    async function fetchTopProjects() {
+    async function fetchProjects() {
       try {
-        // const response = await fetch('/api/projects/top');
+        // API 엔드포인트를 type에 따라 다르게 설정
+        const endpoint = type === 'recent' 
+          ? '/api/projects/recent'
+          : '/api/projects/popular';
+        
+        // const response = await fetch(endpoint);
         // const data = await response.json();
         // setCards(data.slice(0, 6));
+
+        // 임시로 TEMP_CARDS에서 데이터 가져오기
+        setCards(TEMP_CARDS[type]);
       } catch (error) {
         console.error('Failed to fetch projects:', error);
       }
     }
 
-    fetchTopProjects();
-  }, []);
+    fetchProjects();
+  }, [type]);
 
-  const displayCards = cards.length > 0 ? cards : TEMP_CARDS;
+  const displayCards = cards.length > 0 ? cards : TEMP_CARDS[type];
 
   return (
     <ProjectContainer>
       <Header>
         <Title>
-          <span>🤝</span>
-          지금 함께하고 싶은 프로젝트
+          {title}
         </Title>
-        <MoreButton href="/projects">더보기 ›</MoreButton>
+        <MoreButton href="/project">더보기 ›</MoreButton>
       </Header>
       <CardGrid>
         {displayCards.slice(0, 6).map((card, index) => (

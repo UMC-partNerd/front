@@ -1,51 +1,49 @@
 import React, { useState, useEffect } from "react";
-import Card from "./Card";
 import {
   ClubContainer,
   Header,
   Title,
   MoreButton,
-  CardGrid
+  CardGrid,
+  ClubCard,
+  ImagePlaceholder,
+  CardContent,
+  CategoryBadge,
+  ClubTitle,
+  Description
 } from "../../styled-components/styled-Club";
 
-const INITIAL_CARDS = [];
 
 const TEMP_CARDS = [
   {
     title: "동아리 이름",
-    content: "동아리 한 줄 소개",
-    thumbnail: "썸네일",
-    footer: "웹/앱 개발",
+    description: "동아리 한 줄 소개",
+    imageUrl: "썸네일",
+    category: "웹/앱 개발",
   },
   {
     title: "동아리 이름2",
-    content: "동아리 한 줄 소개2",
-    thumbnail: "썸네일",
-    footer: "웹/앱 개발",
+    description: "동아리 한 줄 소개2",
+    imageUrl: "썸네일",
+    category: "웹/앱 개발",
   },
   {
     title: "동아리 이름3",
-    content: "동아리 한 줄 소개3",
-    thumbnail: "썸네일",
-    footer: "웹/앱 개발",
-  },
-  {
-    title: "동아리 이름4",
-    content: "동아리 한 줄 소개4",
-    thumbnail: "썸네일",
-    footer: "웹/앱 개발",
+    description: "동아리 한 줄 소개3",
+    imageUrl: "썸네일",
+    category: "웹/앱 개발",
   }
 ];
 
 function Club() {
-  const [cards, setCards] = useState(INITIAL_CARDS);
+  const [clubs, setClubs] = useState([]);
 
   useEffect(() => {
     async function fetchTopClubs() {
       try {
         // const response = await fetch('/api/clubs/top');
         // const data = await response.json();
-        // setCards(data.slice(0, 4));
+        // setClubs(data.slice(0, 3));
       } catch (error) {
         console.error('Failed to fetch clubs:', error);
       }
@@ -54,27 +52,26 @@ function Club() {
     fetchTopClubs();
   }, []);
 
-  const displayCards = cards.length > 0 ? cards : TEMP_CARDS;
+  const displayClubs = clubs.length > 0 ? clubs : TEMP_CARDS;
 
   return (
     <ClubContainer>
       <Header>
-        <Title>
-          <span>🚀</span>
-          지금 주목해야 하는 동아리
-        </Title>
+        <Title>당장 주목해야 하는 동아리</Title>
         <MoreButton href="/clubs">더보기 ›</MoreButton>
       </Header>
       <CardGrid>
-        {displayCards.slice(0, 4).map((card, index) => (
-          <Card
-            key={index}
-            title={card.title}
-            content={card.content}
-            thumbnail={card.thumbnail}
-            footer={card.footer}
-            variant="club"
-          />
+        {displayClubs.map((club, index) => (
+          <ClubCard key={index}>
+            <ImagePlaceholder>
+              <img src={club.imageUrl} alt={club.title} />
+            </ImagePlaceholder>
+            <CardContent>
+              <CategoryBadge>{club.category}</CategoryBadge>
+              <ClubTitle>{club.title}</ClubTitle>
+              <Description>{club.description}</Description>
+            </CardContent>
+          </ClubCard>
         ))}
       </CardGrid>
     </ClubContainer>

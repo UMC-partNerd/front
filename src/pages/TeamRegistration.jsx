@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import Banner from '../components/common/Banner';
+import Banner from '../components/common/banner/Banner';
 import ProjectImageUploadForm from '../components/teamregister/ProjectImageUploadForm';
 import ClubInfoForm from '../components/teamregister/ClubInfoForm'; 
 
