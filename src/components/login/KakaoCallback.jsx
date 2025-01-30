@@ -29,7 +29,7 @@ const KakaoCallback = () => {
         const storedToken = localStorage.getItem("kakao_access_token");
         if (storedToken) {
             console.log("✅ 이미 로그인된 사용자입니다. access_token 사용:", storedToken);
-            navigate("/");
+            navigate("/register/social");
             return;
         }
 
@@ -44,11 +44,20 @@ const KakaoCallback = () => {
             .then(response => {
                 if (response.status === 200 && response.data.isSuccess) {
                     console.log("백엔드 응답 (액세스 토큰):", response.data);
+
+
+                    //이메일 정보 저장
+                    const email = response.data.result.email;
+                    const jwtToken = response.data.result.jwtToken;
+
                     localStorage.setItem("kakao_access_token", response.data.result.access_token);
                     localStorage.setItem("used_kakao_code", authCode);
+                    localStorage.setItem("kakao_email", email); // 이메일 저장
+                    localStorage.setItem("jwtToken", jwtToken); //jwt 토큰 저장
 
                     // ✅ URL에서 `code` 제거하여 중복 요청 방지
                     setSearchParams({});
+                    navigate("/register/social");
                 } else {
                     console.error("카카오 로그인 응답 오류:", response.data);
                     navigate("/login");
