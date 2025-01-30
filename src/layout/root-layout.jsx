@@ -5,7 +5,7 @@ import Footer from '../components/common/Footer';
 import { useState, useEffect } from 'react';
 
 function RootLayout() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // 기본적으로 로그인되지 않은 상태로 설정
+  const [isLoggedIn, setIsLoggedIn] = useState(false);  
   const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   const handleScroll = () => {
@@ -32,6 +32,7 @@ function RootLayout() {
     </MainContainer>
   );
 }
+
 
 export default RootLayout;
 

@@ -59,7 +59,7 @@ function Collaboration() {
   return (
     <CollaborationContainer>
       <Header>
-        <Title>📌 최근 등록된 콜라보레이션</Title>
+        <Title>최근 등록된 콜라보레이션</Title>
         <MoreButton href="#">더보기 ›</MoreButton>
       </Header>
       <CardGrid>

@@ -1,15 +1,22 @@
 import styled from 'styled-components';
 
 export const ProjectContainer = styled.div`
+  width: 100%;
+  max-width: 1200px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  padding: 0 20px;
+  box-sizing: border-box;
 `;
 
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 `;
 
 export const Title = styled.div`
@@ -18,10 +25,9 @@ export const Title = styled.div`
   gap: 8px;
   font-size: 24px;
   font-weight: 600;
-  margin-left: 100px;
+  margin: 0;
 
   @media (max-width: 768px) {
-    margin-left: 0;
     text-align: center;
   }
 `;
@@ -31,25 +37,25 @@ export const MoreButton = styled.a`
   color: #000;
   cursor: pointer;
   text-decoration: none;
-  margin-right: 100px;
+  margin-left: auto;
+  margin-right: -40px;
+  padding: 0;
 
   &:hover {
     text-decoration: underline;
   }
 
   @media (max-width: 768px) {
-    margin-right: 0;
     text-align: center;
   }
 `;
 
 export const CardGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 530px);
-  gap: 32px 80px;
-  justify-content: center;
-  align-items: center;
-  padding: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 64px;
+  row-gap: 24px;
+  width: 100%;
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(1, 1fr);
