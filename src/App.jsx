@@ -14,6 +14,8 @@ import MyPagePersonal from './pages/mypages/mypage-personal';
 import MyPageTeams from './pages/mypages/mypage-teams';
 import MyPagePosts from './pages/mypages/mypage-mypost';
 
+import TestPage from './pages/testPage';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -93,7 +95,11 @@ const router = createBrowserRouter([
       {
         path: '*',
         element: <NotFoundPage />
-      }
+      },
+      {
+        path: 'test',
+        element: <TestPage />
+      },
     ]
   }
 ]);

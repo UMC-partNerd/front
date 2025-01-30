@@ -1,120 +1,74 @@
 import styled from 'styled-components';
-import { VARIANTS } from '../components/home/Card';
 
-export const BadgeContainer = styled.div`
-  width: 16px;
-  height: 16px;
+export const AlarmWrap1 = styled.div`
+  width: 547px;
+  height: 747px;
   flex-shrink: 0;
-  fill: #08D485;
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-  <circle cx="8" cy="8" r="8" fill="#08D485"/>
-</svg>
+  border-radius: 16px;
+  background: #F3F4F7;
+  box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.15);
 `;
 
-export const Thumbnail = styled.div`
-  ${props => {
-    if (props.variant === 'project') {
-      return `
-        width: 100px;
-        height: 100px;
-        background-color: #D9D9D9;
-        border-radius: 12px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 20px;
-      `;
-    } else if (props.variant === 'club') {
-      return `
-        width: 153px;
-        height: 153px;
-        background-color: #D9D9D9;
-        border-radius: 16px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 24px;
-      `;
-    } else {
-      return `
-        width: 40px;
-        height: 40px;
-        background-color: #e0e0e0;
-        border-radius: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 16px;
-      `;
-    }
-  }}
+export const AlarmWrap2 = styled.div`
+  width: 497px;
+  height: 620px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: #FFFFFF;
 `;
 
-export const ContentSection = styled.div`
-  ${props => {
-    if (props.variant === 'project') {
-      return `
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 15px;
-      `;
-    } else if (props.variant === 'club') {
-      return `
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      `;
-    }
-  }}
+export const AlarmContainer = styled.div`
+  width: 122px;
+  height: 452px;
 `;
 
-export const Badge = styled.div`
-  background-color: rgba(0, 0, 0, 0.1);
-  padding: 6px 12px;
-  border-radius: 100px;
-  width: fit-content;
+export const Indicator = styled.circle`
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  fill: var(--Main-Color, #0D29B7);
+`;
+
+export const AlarmMessage = styled.p`
+  color: #212121;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: ${props => props.msg === 'club' ? 600 : 500};
+  line-height: normal;
+  letter-spacing: -0.4px;
+`;
+
+export const Timer = styled.p`
+  color: #C2C2C2;
+  text-align: right;
+  font-family: Pretendard;
   font-size: 14px;
+  font-style: normal;
   font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.28px;
 `;
 
-export const Title = styled.h3`
-  ${props => {
-    if (props.variant === 'project') {
-      return `
-        font-size: 21px;
-        font-weight: 600;
-        margin: 0;
-        color: #000;
-      `;
-    } else if (props.variant === 'club') {
-      return `
-        font-size: 24px;
-        font-weight: 600;
-        margin: 0;
-        color: #000;
-      `;
-    }
-  }}
+export const From = styled.p`
+  color: var(--Main-Color, #0D29B7);
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px; /* 122.222% */
+  letter-spacing: -0.36px;
 `;
 
-export const Content = styled.p`
-  font-size: ${props => props.variant === 'project' ? '14px' : '16px'};
-  color: ${props => props.variant === 'project' ? '#666' : '#757575'};
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-`;
+const StyledPath = styled.svg.attrs({
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 452 2"
+})`
+  width: 452px;
+  height: 2px;
+  fill: none;
 
-export const Footer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: #757575;
-`; 
+  path {
+    stroke: #C2C2C2;
+  }
+`;
