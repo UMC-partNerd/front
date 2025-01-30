@@ -1,15 +1,16 @@
+// Navbar.jsx
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { GoBell } from "react-icons/go";
 import { MdOutlinePersonOutline } from "react-icons/md";
 import { BsChatRightDots } from "react-icons/bs";
 import { useState } from 'react';
-import ProfileMenu from '../home/ProfileMenu'; 
+import ProfileMenu from '../home/ProfileMenu';
 
 function Navbar({ isLoggedIn }) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false); 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => setIsMenuOpen(prevState => !prevState); 
+  const toggleMenu = () => setIsMenuOpen(prevState => !prevState);
 
   return (
     <NavbarContainer>
