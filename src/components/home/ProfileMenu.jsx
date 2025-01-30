@@ -1,6 +1,6 @@
 // 홈페이지- 헤더 프로필
 import { NavLink } from 'react-router-dom';
-import { ProfileMenuContainer, ProfileMenuItem, Separator } from '../../styled-components/homes/styled-ProfileMenu';
+import { ProfileMenuContainer, ProfileMenuItem, Separator } from '../../styled-components/home-styles/styled-ProfileMenu';
 
 function ProfileMenu() {
   return (

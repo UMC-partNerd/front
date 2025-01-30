@@ -4,7 +4,7 @@ import RootLayout from './layout/root-layout';
 import HomePage from './pages/homepage';
 import NotFoundPage from './pages/notfoundpage';
 import { TeamPage } from './pages/TeamPage'; 
-import CollaborationDetailPage from './pages/CollaborationDetailPage'; 
+import CollaborationDetailPage from './pages/collaboration-pages/CollaborationDetailPage'; 
 import TeamRegistration from './pages/TeamRegistration';
 import LoginPage from './pages/loginpage';
 import SignUpPage from './pages/signuppage';
@@ -37,10 +37,6 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: 'collaboration/:id', 
-        element: <CollaborationDetailPage />
-      },
-      {
         path: 'login',
         element: <LoginPage />
       },
@@ -59,7 +55,12 @@ const router = createBrowserRouter([
       },
       {
         path: 'collaboration',
-        // element: <HomePage/>
+        children: [
+          {
+            path: ':id', 
+            element: <CollaborationDetailPage />,
+          },
+        ],
       },
       {
         path: 'project',
