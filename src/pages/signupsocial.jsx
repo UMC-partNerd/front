@@ -18,12 +18,12 @@ const SignUpSocialPage = () =>{
     });
 
     const [agreements, setAgreements] = useState({
-        isAdult: false,
-        termsOfService: false,
-        personalInfoUsage: false,
-        optionalInfoUsage: false,
-        marketingConsent: false,
-        marketingNotify: false,
+        isAdult: true,
+        termsOfService: true,
+        personalInfoUsage: true,
+        optionalInfoUsage: true,
+        marketingConsent: true,
+        marketingNotify: true,
     });
 
         // 사용자 데이터 업데이트
