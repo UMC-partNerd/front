@@ -5,8 +5,8 @@ export const BadgeContainer = styled.div`
   height: 16px;
   position: absolute;
 
-  top:20px;
-  right: 164px;
+  top:-5px;
+  right: -5px;
 
   transform: translate(50%, -50%);
   z-index: 10;
