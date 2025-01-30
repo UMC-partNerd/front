@@ -14,6 +14,7 @@ import ProjectRecruitment from './components/project-recruitment';
 import ProjectCollaboration from './components/project-collaboration';
 import ProjectPromotion from './components/project-promotion';
 import Community from './components/community/Top10-rank';
+import ContactForm from './components/contact/contactForm';
 
 
 const router = createBrowserRouter([
@@ -86,7 +87,8 @@ const router = createBrowserRouter([
       },
       {
         path: 'community',
-        element: <Community/>
+        element: <ContactForm/>
+        //element: <Community/>
       },
       { //마이페이지 경로 
         path: 'mypage',
