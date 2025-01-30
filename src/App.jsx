@@ -14,6 +14,7 @@ import ProjectRecruitment from './components/project-recruitment';
 import ProjectCollaboration from './components/project-collaboration';
 import ProjectPromotion from './components/project-promotion';
 import Community from './components/community/Top10-rank';
+import KakaoCallback from './components/login/KakaoCallback';
 
 
 const router = createBrowserRouter([
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: 'login',
         element: <LoginPage />
+      },
+      {
+        path: 'oauth/kakao/callback',
+        element: <KakaoCallback />
       },
       {
         path: 'register',
