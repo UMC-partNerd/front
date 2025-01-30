@@ -16,12 +16,12 @@ export const usePartnerSearch = (category = '전체', order = 'recent', page = 1
           page: page.toString()
         });
 
-        // 하드코딩된 Authorization 헤더
+        // 환경 변수에서 토큰을 가져옵니다.
         const headers = {
-          'Authorization': 'Bearer YOUR_HARDCODED_TOKEN_HERE', // 여기에 하드코딩된 토큰을 입력하세요
+          'Authorization': `Bearer ${import.meta.env.VITE_JWT_TOKEN}`,
           'Content-Type': 'application/json'
         };
-
+        console.log(import.meta.env.VITE_JWT_TOKEN);
         console.log('Request URL:', `${BASE_URL}/api/partnerd?${params}`);
         console.log('Request Headers:', headers);
         console.log('Request Parameters:', {
