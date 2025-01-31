@@ -1,7 +1,14 @@
 import styled from "styled-components";
-import ButtonBlue from "./button_blue";
+import ButtonBlue from "../mypage/button_blue";
+import { useLocation } from "react-router-dom";
+import ButtonWhite from "../mypage/button_white";
 
+//contact 컴포넌트 
 const PersonalContact = () =>{
+    const location = useLocation();
+
+    const isPersonalPage = location.pathname === "/mypage/personal-page";
+
     return(
         <Container>
             <SubContainer>
@@ -11,7 +18,12 @@ const PersonalContact = () =>{
                 <Explan>설명</Explan>
             </NameField>
             </SubContainer>
-            <ButtonBlue style={{width:'60px', height:'15px'}}>채팅</ButtonBlue>
+            {isPersonalPage ? (
+        <ButtonBlue style={{ width: "60px", height: "15px" }}>채팅</ButtonBlue>
+            ) : (
+                <ButtonWhite style={{ width: "60px", height: "15px" }}>채팅</ButtonWhite>
+                
+            )}
         </Container>
     )
 }
