@@ -53,6 +53,7 @@ color: #414141;
 
 `
 
+//페이지 메인 스타일
 export const MainWrapp = styled.main`
 padding:60px;
 height: 100%;
