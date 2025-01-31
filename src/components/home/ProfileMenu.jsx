@@ -16,7 +16,7 @@ function ProfileMenu({ onLogout }) {
       </ProfileMenuItem>
       <Separator />
       <ProfileMenuItem>
-        {/* ✅ 로그아웃 버튼 클릭 시 onLogout 호출 */}
+
         <button onClick={onLogout}>로그아웃</button>
       </ProfileMenuItem>
     </ProfileMenuContainer>

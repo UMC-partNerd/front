@@ -24,7 +24,7 @@ function RootLayout() {
     };
   }, []);
 
-  // ✅ 로그아웃 함수 추가
+  // 로그아웃 
   const handleLogout = () => {
     localStorage.removeItem("jwt_token");
     localStorage.removeItem("kakao_access_token");
