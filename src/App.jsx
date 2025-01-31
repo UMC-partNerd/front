@@ -16,7 +16,7 @@ import ProjectPromotion from './components/project-promotion';
 import Community from './components/community/Top10-rank';
 import ContactForm from './components/contact/contactForm';
 import TeamMemberSearch from './components/contact/member-registration';
-
+import PermissionRegistration from './components/contact/permission-registration'; 
 
 const router = createBrowserRouter([
   {
@@ -88,8 +88,6 @@ const router = createBrowserRouter([
       },
       {
         path: 'community',
-        //element: <TeamMemberSearch/>
-        //element: <ContactForm/>
         element: <Community/>
         
       },
