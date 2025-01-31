@@ -1,22 +1,9 @@
-import React from "react";
 import styled from "styled-components";
 
-const Banner = ({ largeText, smallText }) => {
-  return (
-    <BannerWrapper>
-      <LargeText>{largeText}</LargeText>
-      <SmallText>{smallText}</SmallText>
-    </BannerWrapper>
-  );
-};
-
-export default Banner;
-
-
-const BannerWrapper = styled.div`
+export const BannerWrapper = styled.div`
   position: relative;
   width: 100%;
-  height: 180px; 
+  height: 180px;
   background-color: #0d29b7;
   background-image: linear-gradient(to right, #0d29b7, #061251);
   display: flex;
@@ -25,26 +12,26 @@ const BannerWrapper = styled.div`
   overflow: hidden;
 
   @media (max-width: 1024px) {
-    height: 150px; 
+    height: 150px;
   }
 
   @media (max-width: 768px) {
-    height: 120px; 
+    height: 120px;
   }
 
   @media (max-width: 480px) {
-    height: 100px; 
+    height: 100px;
   }
 `;
 
-const LargeText = styled.div`
+export const LargeText = styled.div`
   position: absolute;
   color: #fff;
   font-size: 1.8rem;
   font-weight: bold;
   z-index: 2;
   top: 30%;
-  left: 18%; 
+  left: 18%;
   transform: translateX(0);
 
   @media (max-width: 1024px) {
@@ -63,7 +50,7 @@ const LargeText = styled.div`
   }
 `;
 
-const SmallText = styled.div`
+export const SmallText = styled.div`
   position: absolute;
   color: #fff;
   font-size: 1rem;

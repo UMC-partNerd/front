@@ -14,6 +14,13 @@ import MyPagePersonal from './pages/mypages/mypage-personal';
 import MyPageTeams from './pages/mypages/mypage-teams';
 import MyPagePosts from './pages/mypages/mypage-mypost';
 import CommunityPage from './pages/Communitypage';
+import PartnerSearch from './components/partnerd-search';
+import ProjectRecruitment from './components/project-recruitment';
+import ProjectCollaboration from './components/project-collaboration';
+import ProjectPromotion from './components/project-promotion';
+import Community from './components/community/Top10-rank';
+import KakaoCallback from './components/login/KakaoCallback';
+
 
 const router = createBrowserRouter([
   {
@@ -35,6 +42,10 @@ const router = createBrowserRouter([
             path: 'team-registration', 
             element: <TeamRegistration />,
           },
+          {
+            index: true,
+            element: <PartnerSearch />
+          }
         ],
       },
       {
@@ -44,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: 'login',
         element: <LoginPage />
+      },
+      {
+        path: 'oauth/kakao/callback',
+        element: <KakaoCallback />
       },
       {
         path: 'register',
@@ -60,11 +75,24 @@ const router = createBrowserRouter([
       },
       {
         path: 'collaboration',
-        // element: <HomePage/>
+        element: <ProjectCollaboration/>
       },
       {
         path: 'project',
-        // element: <ProjectPage />
+        children: [
+          {
+            path: 'recruit',
+            element: <ProjectRecruitment/>
+          },
+          {
+            path: 'promote',
+            element: <ProjectPromotion/>
+          },
+          {
+            index: true,
+            element: <ProjectRecruitment/>
+          }
+        ]
       },
       {
         path: 'community',
@@ -75,19 +103,19 @@ const router = createBrowserRouter([
         children: [
           {
             path:'profile', //디폴트는 내 페이지 
-            element: <MyPageDe/>,
+            //element: <MyPageDe/>,
           },
           {
             path:'personal-page',
-            element: <MyPagePersonal />
+            //element: <MyPagePersonal />
           },
           {
             path:'teams',
-            element: <MyPageTeams />
+            //element: <MyPageTeams />
           },
           {
             path:'my-posts',
-            element: <MyPagePosts />
+            //element: <MyPagePosts />
           }
         ]
       },
@@ -97,14 +125,16 @@ const router = createBrowserRouter([
       }
     ]
   }
-]);
+])
+
+
 
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <RouterProvider router={router}/>
     </>
-  );
+  )
 }
 
 export default App
