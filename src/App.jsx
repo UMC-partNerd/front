@@ -18,6 +18,9 @@ import ProjectPromotion from './components/project-promotion';
 import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
 
+import ChatPage from './pages/ChatPage';
+// import ChatList from './components/chat/chat-list';
+// import ChatRoom from './components/chat/chat-room';
 
 const router = createBrowserRouter([
   {
@@ -88,6 +91,18 @@ const router = createBrowserRouter([
         ],
       },
       {
+        // 채팅 목록
+        path: 'chat',
+        // element: <ChatList/>,
+        children: [
+          {
+            // 채팅방
+            path: ':chatId',
+            // element: <ChatRoom/>,
+          },
+        ],
+      },
+      {
         path: 'project',
         children: [
           {
@@ -132,6 +147,10 @@ const router = createBrowserRouter([
       {
         path: '*',
         element: <NotFoundPage />
+      },
+      {
+        path: 'test',
+        element: <ChatPage/>
       }
     ]
   }

@@ -9,6 +9,7 @@ import {
   ButtonContainer,
   Button,
   CollabName,
+  Row,
   ChatRoomContainer,
   ChatContainer,
   LastChat,
@@ -21,6 +22,8 @@ export const TYPES = {
 };
 
 function Request({ profile, clubName, collabName, lastChat, time }) {
+  
+  // 보낸 요청
   const renderSendtoRequest = () => (
     <RequestWrap>
       <IdContainer>
@@ -33,11 +36,12 @@ function Request({ profile, clubName, collabName, lastChat, time }) {
       
       <ButtonContainer>
         <Button>게시글 보러가기</Button>
-        <Button>콜라보레이션 채팅</Button>
+        <Button color='blue'>콜라보레이션 채팅</Button>
       </ButtonContainer>
     </RequestWrap>
   );
 
+  // 받은 요청
   const renderReceivetoRequest = () => (
     <RequestWrap>
       <IdContainer>
@@ -56,16 +60,18 @@ function Request({ profile, clubName, collabName, lastChat, time }) {
 
   // 채팅 목록 컴포넌트
   const renderDefaultRequest = () => (
-    <RequestWrap>
+    <RequestWrap >
       <CollabName>{collabName}</CollabName>
       
       <ChatRoomContainer>
-        <Profile>{profile}</Profile>
-        <ClubName>{clubName}</ClubName>
-        <ChatContainer>
-          <LastChat>{lastChat}</LastChat>
-          <Time>{time}</Time>
-        </ChatContainer>
+        <Profile type='user'>{profile}</Profile>
+        <Row>
+          <ClubName>{clubName}</ClubName>
+          <ChatContainer>
+            <LastChat>{lastChat}</LastChat>
+            <Time>{time}</Time>
+          </ChatContainer>
+        </Row>
       </ChatRoomContainer>
     </RequestWrap>
   );
