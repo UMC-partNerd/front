@@ -9,10 +9,13 @@ import TeamRegistration from './pages/TeamRegistration';
 import LoginPage from './pages/loginpage';
 import SignUpPage from './pages/signuppage';
 import SignUpSocialPage from './pages/signupsocial';
-import MyPageDe from './pages/mypages/mypage-default';
-import MyPagePersonal from './pages/mypages/mypage-personal';
-import MyPageTeams from './pages/mypages/mypage-teams';
-import MyPagePosts from './pages/mypages/mypage-mypost';
+import PartnerSearch from './components/partnerd-search';
+import ProjectRecruitment from './components/project-recruitment';
+import ProjectCollaboration from './components/project-collaboration';
+import ProjectPromotion from './components/project-promotion';
+import Community from './components/community/Top10-rank';
+import KakaoCallback from './components/login/KakaoCallback';
+
 
 const router = createBrowserRouter([
   {
@@ -34,11 +37,19 @@ const router = createBrowserRouter([
             path: 'team-registration', 
             element: <TeamRegistration />,
           },
+          {
+            index: true,
+            element: <PartnerSearch />
+          }
         ],
       },
       {
         path: 'login',
         element: <LoginPage />
+      },
+      {
+        path: 'oauth/kakao/callback',
+        element: <KakaoCallback />
       },
       {
         path: 'register',
@@ -55,39 +66,56 @@ const router = createBrowserRouter([
       },
       {
         path: 'collaboration',
+
         children: [
           {
             path: ':id', 
             element: <CollaborationDetailPage />,
           },
         ],
+
+        element: <ProjectCollaboration/>
+
       },
       {
         path: 'project',
-        // element: <ProjectPage />
+        children: [
+          {
+            path: 'recruit',
+            element: <ProjectRecruitment/>
+          },
+          {
+            path: 'promote',
+            element: <ProjectPromotion/>
+          },
+          {
+            index: true,
+            element: <ProjectRecruitment/>
+          }
+        ]
       },
       {
         path: 'community',
-        // element: <CommunityPage />
+        element: <Community/>
       },
       { //마이페이지 경로 
         path: 'mypage',
         children: [
           {
             path:'profile', //디폴트는 내 페이지 
-            element: <MyPageDe/>,
+            //element: <MyPageDe/>,
           },
           {
             path:'personal-page',
-            element: <MyPagePersonal />
+            //element: <MyPagePersonal />
           },
           {
             path:'teams',
-            element: <MyPageTeams />
+            //element: <MyPageTeams />
           },
           {
             path:'my-posts',
-            element: <MyPagePosts />
+            //element: <MyPagePosts />
           }
         ]
       },
@@ -97,14 +125,16 @@ const router = createBrowserRouter([
       }
     ]
   }
-]);
+])
+
+
 
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <RouterProvider router={router}/>
     </>
-  );
+  )
 }
 
 export default App

@@ -1,17 +1,25 @@
 import styled from "styled-components";
+import axios from "axios";
+import { getRedirectURI } from "./redirectURI";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 
+const KakaoBtn = () => {
+    const kakaoRestAPI = import.meta.env.VITE_KAKAO_CLIENT_ID;
+    const redirect_uri = getRedirectURI();
+    const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoRestAPI}&redirect_uri=${redirect_uri}&response_type=code`;
 
-const KakaoBtn =() =>{
-    const handleClick = () => {
-        alert("카카오 버튼 클릭!");
-        // window.location.href = kakaoURL;
-        //KakaoRedirectHandler;
+    //카카오 로그인 화면 
+    const handleLogin = () => {
+        console.log("버튼 클릭");
+        window.location.href = kakaoURL;
     };
-    return(
+
+    return (
         <ButtonWRapp>
-            <ButtonImage src="/src/assets/images/kakaoBtn.png"
-                alt="Kakao Login" onClick={handleClick}/>
+            <ButtonImage src="/kakaoBtn.png"
+                alt="Kakao Login" onClick={handleLogin} />
         </ButtonWRapp >
     )
 }

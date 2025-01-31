@@ -12,28 +12,31 @@ function RootLayout() {
   const handleScroll = () => {
     const scrollPosition = window.scrollY + window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
-
     setIsFooterVisible(scrollPosition >= documentHeight);
   };
 
   useEffect(() => {
-    // 로컬 스토리지에서 jwt_token 읽어서 로그인 상태 업데이트
     const token = localStorage.getItem('jwt_token');
-    if (token) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-
+    setIsLoggedIn(!!token); // 토큰이 있으면 true, 없으면 false
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
+  // ✅ 로그아웃 함수 추가
+  const handleLogout = () => {
+    localStorage.removeItem("jwt_token");
+    localStorage.removeItem("kakao_access_token");
+    localStorage.removeItem("used_kakao_code");
+    localStorage.removeItem("kakao_email");
+    setIsLoggedIn(false); // 상태 업데이트
+    window.location.href = '/'; // 페이지 새로고침
+  };
+
   return (
     <MainContainer>
-      <Navbar isLoggedIn={isLoggedIn} />
+      <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       <MainContent>
         <Outlet />
       </MainContent>

@@ -7,7 +7,7 @@ import { BsChatRightDots } from "react-icons/bs";
 import { useState } from 'react';
 import ProfileMenu from '../home/ProfileMenu';
 
-function Navbar({ isLoggedIn }) {
+function Navbar({ isLoggedIn, onLogout }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(prevState => !prevState);
@@ -45,7 +45,7 @@ function Navbar({ isLoggedIn }) {
               </IconWrapper>
               <IconWrapper onClick={toggleMenu}>
                 <MdOutlinePersonOutline />
-                {isMenuOpen && <ProfileMenu />}
+                {isMenuOpen && <ProfileMenu onLogout={onLogout} />}
               </IconWrapper>
             </>
           ) : (
@@ -65,6 +65,9 @@ function Navbar({ isLoggedIn }) {
 }
 
 export default Navbar;
+
+
+
 
 const NavbarContainer = styled.nav`
   display: flex;

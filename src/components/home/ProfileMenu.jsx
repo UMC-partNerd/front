@@ -1,8 +1,8 @@
-// 홈페이지- 헤더 프로필
-import { NavLink } from 'react-router-dom';
+import React from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { ProfileMenuContainer, ProfileMenuItem, Separator } from '../../styled-components/home-styles/styled-ProfileMenu';
 
-function ProfileMenu() {
+function ProfileMenu({ onLogout }) {
   return (
     <ProfileMenuContainer>
       <ProfileMenuItem>
@@ -16,7 +16,8 @@ function ProfileMenu() {
       </ProfileMenuItem>
       <Separator />
       <ProfileMenuItem>
-        <NavLink to="/logout">로그아웃</NavLink>
+        {/* ✅ 로그아웃 버튼 클릭 시 onLogout 호출 */}
+        <button onClick={onLogout}>로그아웃</button>
       </ProfileMenuItem>
     </ProfileMenuContainer>
   );

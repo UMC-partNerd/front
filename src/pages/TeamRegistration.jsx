@@ -17,6 +17,8 @@ const TeamRegistration = () => {
   });
   const [profileImage, setProfileImage] = useState(null);
   const [bannerImage, setBannerImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); 
+  const [errorMessage, setErrorMessage] = useState(''); 
 
   const handleProfileClick = () => {
     fileInputRefProfile.current.click();
@@ -37,7 +39,11 @@ const TeamRegistration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    
+    // 로딩 상태 시작
+    setIsLoading(true);
+    setErrorMessage('');
+    
     // FormData 준비
     const formData = new FormData();
     formData.append('name', teamInfo.name);
@@ -47,7 +53,7 @@ const TeamRegistration = () => {
     formData.append('activities', teamInfo.activities);
     if (profileImage) formData.append('profileImage', profileImage);
     if (bannerImage) formData.append('bannerImage', bannerImage);
-  
+
     // 로컬 스토리지에서 JWT 토큰 가져오기
     const token = localStorage.getItem('authToken');
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -62,13 +68,15 @@ const TeamRegistration = () => {
         },
       });
       console.log('팀 등록 성공:', response.data);
+      // 성공 처리 후, 사용자에게 알림 등 추가 기능
     } catch (error) {
       console.error('팀 등록 실패:', error);
-      // 실패 시 오류 처리 (예: 사용자에게 알림)
+      setErrorMessage('팀 등록에 실패했습니다. 다시 시도해 주세요.');
+    } finally {
+      setIsLoading(false); // 로딩 상태 종료
     }
   };
   
-
   return (
     <>
       <Banner 
@@ -85,11 +93,18 @@ const TeamRegistration = () => {
           teamInfo={teamInfo}
           setTeamInfo={setTeamInfo}
         />
-        <SubmitButton onClick={handleSubmit}>팀 등록</SubmitButton>
+        <SubmitButton onClick={handleSubmit} disabled={isLoading}>
+          {isLoading ? '등록 중...' : '팀 등록'}
+        </SubmitButton>
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>} {/* 에러 메시지 표시 */}
       </Container>
     </>
   );
 };
+
+
+export default TeamRegistration;
+
 
 const Container = styled.div`
   background-color: #F3F4F7;
@@ -112,4 +127,7 @@ const SubmitButton = styled.button`
   margin-top: 20px;
 `;
 
-export default TeamRegistration;
+const ErrorMessage = styled.p`
+  color: red;
+  font-size: 14px;
+`;
