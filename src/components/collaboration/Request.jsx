@@ -8,12 +8,6 @@ import {
   Message,
   ButtonContainer,
   Button,
-  CollabName,
-  Row,
-  ChatRoomContainer,
-  ChatContainer,
-  LastChat,
-  Time
 } from '../../styled-components/styled-Request';
 
 export const TYPES = {
@@ -58,24 +52,6 @@ function Request({ profile, clubName, collabName, lastChat, time }) {
     </RequestWrap>
   );
 
-  // 채팅 목록 컴포넌트
-  const renderDefaultRequest = () => (
-    <RequestWrap >
-      <CollabName>{collabName}</CollabName>
-      
-      <ChatRoomContainer>
-        <Profile type='user'>{profile}</Profile>
-        <Row>
-          <ClubName>{clubName}</ClubName>
-          <ChatContainer>
-            <LastChat>{lastChat}</LastChat>
-            <Time>{time}</Time>
-          </ChatContainer>
-        </Row>
-      </ChatRoomContainer>
-    </RequestWrap>
-  );
-  
   if (type ===  TYPES.SENDTO) {
     return renderSendtoRequest();
   }
@@ -83,8 +59,6 @@ function Request({ profile, clubName, collabName, lastChat, time }) {
   if (type === TYPES.RECEIVETO) {
     return renderReceivetoRequest();
   }
-
-  return renderDefaultRequest();
 }
 
 export default Request;
