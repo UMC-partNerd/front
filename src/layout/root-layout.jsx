@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 
 function RootLayout() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);  
-  const [isFooterVisible, setIsFooterVisible] = useState(false);
+  const [isFooterVisible, setIsFooterVisible] = useState(true);
 
   const handleScroll = () => {
     const scrollPosition = window.scrollY + window.innerHeight;
