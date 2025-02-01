@@ -7,8 +7,6 @@ import { TeamPage } from './pages/TeamPage';
 import CollaborationDetailPage from './pages/collaboration-pages/CollaborationDetailPage'; 
 import TeamRegistration from './pages/TeamRegistration';
 import LoginPage from './pages/loginpage';
-<<<<<<< HEAD
-=======
 import SignUpPage from './pages/signuppage';
 import SignUpSocialPage from './pages/signupsocial';
 import MyPageDe from './pages/mypages/mypage-default';
@@ -22,8 +20,6 @@ import ProjectCollaboration from './components/project-collaboration';
 import ProjectPromotion from './components/project-promotion';
 import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
-
->>>>>>> d5766451815f519c6166c822b35e4ad219eb80e9
 
 const router = createBrowserRouter([
   {
@@ -99,9 +95,6 @@ const router = createBrowserRouter([
       },
       {
         path: 'mypage',
-<<<<<<< HEAD
-        // element: <HomePage/>
-=======
         children: [
           {
             path:'profile', //디폴트는 내 페이지 
@@ -120,7 +113,6 @@ const router = createBrowserRouter([
             //element: <MyPagePosts />
           }
         ]
->>>>>>> d5766451815f519c6166c822b35e4ad219eb80e9
       },
       {
         path: '*',

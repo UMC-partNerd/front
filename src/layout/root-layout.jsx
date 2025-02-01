@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-import {Outlet} from "react-router-dom";
-const RootLayout = () =>{
-    return (
-        <>
-            <Outlet/>
-        </>
-    );
-}
-
-export default RootLayout;
-=======
 // RootLayout.jsx
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
@@ -18,7 +6,7 @@ import Footer from '../components/common/Footer';
 import { useState, useEffect } from 'react';
 
 function RootLayout() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);  
+  const [isLoggedIn, setIsLoggedIn] = useState(true);  
   const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   const handleScroll = () => {
@@ -68,4 +56,3 @@ const MainContainer = styled.div`
 const MainContent = styled.main`
   flex: 1;
 `;
->>>>>>> d5766451815f519c6166c822b35e4ad219eb80e9
