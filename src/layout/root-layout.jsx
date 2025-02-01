@@ -1,4 +1,3 @@
-// RootLayout.jsx
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import Navbar from '../components/common/Navbar';
@@ -6,8 +5,8 @@ import Footer from '../components/common/Footer';
 import { useState, useEffect } from 'react';
 
 function RootLayout() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);  
-  const [isFooterVisible, setIsFooterVisible] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   const handleScroll = () => {
     const scrollPosition = window.scrollY + window.innerHeight;
@@ -16,8 +15,6 @@ function RootLayout() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('jwt_token');
-    setIsLoggedIn(!!token); // 토큰이 있으면 true, 없으면 false
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);

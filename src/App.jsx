@@ -110,19 +110,19 @@ const router = createBrowserRouter([
         children: [
           {
             path:'profile', //디폴트는 내 페이지 
-            //element: <MyPageDe/>,
+            element: <MyPageDe/>,
           },
           {
             path:'personal-page',
-            //element: <MyPagePersonal />
+            element: <MyPagePersonal />
           },
           {
             path:'teams',
-            //element: <MyPageTeams />
+            element: <MyPageTeams />
           },
           {
             path:'my-posts',
-            //element: <MyPagePosts />
+            element: <MyPagePosts />
           }
         ]
       },
