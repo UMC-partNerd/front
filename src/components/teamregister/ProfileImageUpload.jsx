@@ -1,65 +1,56 @@
-import React, { useRef } from 'react';
-import styled from 'styled-components';
+import React, { useState, useRef } from 'react';
+import { getPreSignedUrl, uploadImageToS3 } from '../../utils/imageUtils';
+import { UploadGroup, UploadRectangle, CenterContainer, ImagePreview, UploadText } from '../../styled-components/teamregister-styles/styled-ProfileImageUpload'; 
 
 const ProfileImageUpload = ({ onClick, imagePreview }) => {
   const fileInputRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
 
   const handleClick = () => {
-    fileInputRef.current.click(); 
+    fileInputRef.current.click(); // 파일 업로드 버튼 클릭 시 파일 선택 창 띄우기
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploading(true); // 업로드 시작 시 loading 상태
+    try {
+      // 1단계: pre-signed URL 요청
+      const preSignedUrl = await getPreSignedUrl(file);
+
+      // 2단계: S3에 파일 업로드
+      await uploadImageToS3(file, preSignedUrl);
+
+      // 업로드 성공 후 이미지 미리보기 설정
+      onClick(URL.createObjectURL(file)); // onClick을 이용해 이미지 미리보기 설정
+
+      console.log("이미지 업로드 완료");
+    } catch (error) {
+      console.error("이미지 업로드 중 오류 발생", error);
+    } finally {
+      setUploading(false); // 업로드 완료 후 loading 상태 해제
+    }
   };
 
   return (
     <UploadGroup>
       <UploadRectangle onClick={handleClick}>
         <CenterContainer>
-        <ImagePreview src={imagePreview || "/image.png"} alt="Profile Image" />
-        <UploadText>이미지 업로드하기</UploadText>
+          <ImagePreview src={imagePreview || "/image.png"} alt="Profile Image" />
+          <UploadText>이미지 업로드하기</UploadText>
         </CenterContainer>
       </UploadRectangle>
       <input
         type="file"
         ref={fileInputRef}
-        style={{ display: 'none' }}
+        style={{ display: 'none' }} // 파일 input 숨기기
+        onChange={handleFileChange}  // 파일 선택 후 처리
       />
+      {uploading ? <p>업로드 중...</p> : null}  {/* 업로드 중 표시 */}
+      {imagePreview && <img src={imagePreview} alt="미리보기" />}
     </UploadGroup>
   );
 };
 
-const UploadGroup = styled.div`
-  position: relative;
-  width: 100%;
-  height: 150px;
-  margin-bottom: 70px;
-`;
-
-const UploadRectangle = styled.div`
-  width: 250px;
-  height: 180px;
-  background: #F3F3F3;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  position: relative;
-`;
-
-const CenterContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const ImagePreview = styled.img`
-  width: 30px;  // 고정된 너비
-  height: 30px;  // 고정된 높이
-`;
-
-const UploadText = styled.div`
-  font-weight: 500;
-  font-size: 18px;
-  color: #A0A0A0;
-  margin-top: 10px;
-`;
 export default ProfileImageUpload;

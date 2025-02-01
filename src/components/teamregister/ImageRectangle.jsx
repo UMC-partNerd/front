@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const ImageRectangle = ({ onClose }) => {
+const ImageRectangle = ({ imagePreview, onClose }) => {
   return (
     <ImageBox>
-      <Rectangle />
+      <Rectangle>
+        {imagePreview && <PreviewImage src={imagePreview} alt="미리보기" />}
+      </Rectangle>
       {onClose && (
         <CloseIcon onClick={onClose}>
           <CloseText>X</CloseText>
@@ -27,6 +29,13 @@ const Rectangle = styled.div`
   height: 95px;
   border: 2px solid #C2C2C2;
   border-radius: 12px;
+  position: relative;
+`;
+
+const PreviewImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover; // 이미지 크기에 맞게 잘라서 채우기
 `;
 
 const CloseIcon = styled.div`

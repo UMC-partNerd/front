@@ -27,7 +27,8 @@ const KakaoBtn = () => {
 const ButtonWRapp = styled.div`
 background:	#FEE500;
 width:100%;
-max-height:45px;
+min-height:54px;
+max-width:420px;
 display: inline-block;
 display:flex;
 justify-content: center;
