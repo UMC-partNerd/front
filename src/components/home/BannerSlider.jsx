@@ -84,7 +84,7 @@ const PaginationWrapper = styled.div`
   padding: 0 8px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
   font-size: 1rem;
-  height: 44px;
+  height: 44px; 
   width: 129px;
   border-top-left-radius: 27px;
   border-top-right-radius: 27px;
