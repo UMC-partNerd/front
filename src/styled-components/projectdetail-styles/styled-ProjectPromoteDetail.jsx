@@ -68,21 +68,10 @@ export const SFormContainer = styled.div`
   align-items: center;
   flex-direction: column;
   margin-top: 30px;
+  margin-left: 10px;
 `;
 
-export const SJoinProjectInfoWrapper = styled.div`
-  margin-top: 5px;
-  width: 94%;
-  max-width: 1000px;
-  padding: 40px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex-direction: column;
-  margin-left: 260px;
-`;
-
-export const SCommentFormWrapper = styled.div`
+/*export const SCommentFormWrapper = styled.div`
   width: 94%;
   max-width: 1000px;
   padding: 20px;
@@ -91,7 +80,7 @@ export const SCommentFormWrapper = styled.div`
   align-items: center;
   flex-direction: column;
   margin-top: 20px;
-  margin-left: -22px;  
+  margin-left: -10px;  
 `;
 
 
@@ -103,5 +92,5 @@ export const SProjectCommentListWrapper = styled.div`
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  margin-left: 260px;
-`;
+  margin-left: 250px;
+`;*/

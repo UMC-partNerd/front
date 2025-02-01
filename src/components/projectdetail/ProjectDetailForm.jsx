@@ -2,43 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 
-const Title = styled.h2`
-  font-size: 24px;
-  font-weight: bold;
-  color: #212121;
-  margin-bottom: 10px;
-`;
-
-const Description = styled.p`
-  font-size: 16px;
-  color: #414141;
-  line-height: 1.5;
-  margin-bottom: 40px;
-  white-space: pre-line;  // 엔터키로 줄바꿈을 적용
-`;
-
-const SectionWrapper = styled.div`
-  margin-top: 80px;
-`;
-
-const TechStackWrapper = styled.div`
-  margin-top: 80px;
-`;
-
-const TechStackTitle = styled.h3`
-  font-size: 22px;
-  font-weight: bold;
-  color: #212121;
-  margin-bottom: 10px;
-`;
-
-const TechStackDescription = styled.p`
-  font-size: 16px;
-  color: #414141;
-  line-height: 1.5;
-  white-space: pre-line;
-`;
-
 const ProjectDetailForm = () => {
   const projectTitle = "프로젝트 설명";
   const projectDescription = `“다른 IT 동아리와 협업하거나, 프로젝트를 함께 할 동료를 구할 수는 없을까?” 
@@ -74,3 +37,42 @@ const ProjectDetailForm = () => {
 };
 
 export default ProjectDetailForm;
+
+
+
+const Title = styled.h2`
+  font-size: 24px;
+  font-weight: bold;
+  color: #212121;
+  margin-bottom: 10px;
+`;
+
+const Description = styled.p`
+  font-size: 16px;
+  color: #414141;
+  line-height: 1.5;
+  margin-bottom: 40px;
+  white-space: pre-line;  
+`;
+
+const SectionWrapper = styled.div`
+  margin-top: 80px;
+`;
+
+const TechStackWrapper = styled.div`
+  margin-top: 80px;
+`;
+
+const TechStackTitle = styled.h3`
+  font-size: 22px;
+  font-weight: bold;
+  color: #212121;
+  margin-bottom: 10px;
+`;
+
+const TechStackDescription = styled.p`
+  font-size: 16px;
+  color: #414141;
+  line-height: 1.5;
+  white-space: pre-line;
+`;

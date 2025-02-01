@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import Calendar from './Calendar';  // 달력 컴포넌트 import
+import Calendar from './Calendar';  
 import { RiCalendarLine } from 'react-icons/ri';
 import styled from 'styled-components';
 
 const DateListContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 추가된 스타일로 간격 조정 */
-  gap: 10px; /* 필요시 간격을 조정할 수 있음 */
+  justify-content: space-between; 
+  gap: 10px; 
   background: #fff;
   padding: 10px 20px;
   width: 150px;
@@ -66,3 +66,17 @@ const DateList = ({ selectedDate, onDateChange, placeholder }) => {
 };
 
 export default DateList;
+
+
+
+/*시작날짜랑 종료날짜 -> DateList만 import해서 쓰시면 됩니다(달력 날짜 선택하는 부분)
+  예) 콜라보레이션 등록페이지
+          <S.InputWrapper>
+            <S.InputLabel>콜라보 마감일<S.RedAsterisk>*</S.RedAsterisk></S.InputLabel>
+            <S.DateContainer>
+              <DateList selectedDate={collabStartDate} onDateChange={setCollabStartDate} placeholder="시작 날짜" />
+              <DateList selectedDate={collabEndDate} onDateChange={setCollabEndDate} placeholder="종료 날짜" />
+            </S.DateContainer>
+          </S.InputWrapper>
+*/
+  

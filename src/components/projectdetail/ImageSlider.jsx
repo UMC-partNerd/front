@@ -1,52 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-
-const SSliderWrapper = styled.div`
-  width: 100%;
-  height: 240px; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  background-color: #E8E8E8; 
-`;
-
-const SSlideContainer = styled.div`
-  width: 38%; 
-  height: 310px; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  position: relative;
-  background-color: #F3F3F3; 
-  border-radius: 4px;
-  z-index: 1; 
-`;
-
-const SSlide = styled.div`
-  width: 100%;
-  height: 100%;
-  background: url(${(props) => props.bgImage}) center center / cover no-repeat;
-  transition: transform 0.5s ease-in-out;
-`;
-
-const SArrow = styled.div`
-  position: absolute;
-  top: ${(props) => (props.left ? '49%' : '51%')}; 
-  ${(props) => (props.left ? 'left: 15px;' : 'right: 15px;')} 
-  transform: translateY(-50%);
-  background-color: white;
-  border-radius: 51%; 
-  padding: 8px;
-  cursor: pointer;
-  z-index: 2; 
-`;
-
-const ArrowIcon = styled.div`
-  font-size: 15px; 
-`;
+import * as S from '../../styled-components/projectdetail-styles/styled-ImageSlider';
 
 const ImageSlider = ({ images }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -60,21 +14,21 @@ const ImageSlider = ({ images }) => {
   };
 
   return (
-    <SSliderWrapper>
-      <SSlideContainer>
-        <SSlide bgImage={images[currentSlide]} />
-        <SArrow left onClick={handlePrevSlide}>
-          <ArrowIcon>
+    <S.SSliderWrapper>
+      <S.SSlideContainer>
+        <S.SSlide bgImage={images[currentSlide]} />
+        <S.SArrow left onClick={handlePrevSlide}>
+          <S.SArrowIcon>
             <FaChevronLeft />
-          </ArrowIcon>
-        </SArrow>
-        <SArrow onClick={handleNextSlide}>
-          <ArrowIcon>
+          </S.SArrowIcon>
+        </S.SArrow>
+        <S.SArrow onClick={handleNextSlide}>
+          <S.SArrowIcon>
             <FaChevronRight />
-          </ArrowIcon>
-        </SArrow>
-      </SSlideContainer>
-    </SSliderWrapper>
+          </S.SArrowIcon>
+        </S.SArrow> 
+      </S.SSlideContainer>
+    </S.SSliderWrapper>
   );
 };
 

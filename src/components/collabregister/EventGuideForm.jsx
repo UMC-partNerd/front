@@ -8,7 +8,7 @@ const EventGuideForm = ({ handleActivityClick }) => {
   const [contactMethods, setContactMethods] = useState([]);
 
   const handleAddContactMethod = () => {
-    setContactMethods([...contactMethods, '']); // 빈 값 추가
+    setContactMethods([...contactMethods, '']); 
   };
 
   return (

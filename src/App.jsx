@@ -15,7 +15,7 @@ import ProjectRecruitment from './components/project-recruitment';
 import ProjectCollaboration from './components/project-collaboration';
 import ProjectPromotion from './components/project-promotion';
 import ProjectRecruitDetail from './pages/project-pages/ProjectRecruitDetail'; 
-//import ProjectPromoteDetail from './pages/project-pages/ProjectPromoteDetail';  
+import ProjectPromoteDetail from './pages/project-pages/ProjectPromoteDetail';  
 import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
 
@@ -98,10 +98,10 @@ const router = createBrowserRouter([
             path: 'recruit/:id',
             element: <ProjectRecruitDetail />, 
           },
-         // {
-           // path: 'promote/:id',
-            //element: <ProjectPromoteDetail />,
-         // },
+          {
+            path: 'promote/:id',
+            element: <ProjectPromoteDetail />,
+          },
           {
             index: true,
             element: <ProjectRecruitment />,

@@ -1,9 +1,8 @@
-// ProjectImageUploadForm.jsx
 import React, { useState } from 'react';
 import ProfileImageUpload from '../common/images/ProfileImageUpload';
 import BannerImageUpload from '../common/images/BannerImageUpload';
-import styled from 'styled-components';
 import ImageRectangle from '../common/images/ImageRectangle';
+import * as S from '../../styled-components/teamregister-styles/styled-ProjectImageUploadForm';
 
 const ProjectImageUploadForm = ({ handleProfileClick, handleBannerClick }) => {
   const [profileImage, setProfileImage] = useState(null);
@@ -18,12 +17,12 @@ const ProjectImageUploadForm = ({ handleProfileClick, handleBannerClick }) => {
   };
 
   return (
-    <FormContainer>
+    <S.SFormContainer>
       {/* 프로젝트 프로필 사진 섹션 */}
-      <Section>
-        <ProfilePictureText>프로젝트 프로필 사진 <RedAsterisk>*</RedAsterisk></ProfilePictureText>
+      <S.SSection>
+        <S.SProfilePictureText>프로젝트 프로필 사진 <S.SRedAsterisk>*</S.SRedAsterisk></S.SProfilePictureText>
         <form>
-          <RecommendationText>추천 사이즈: 960 x 540 | JPG, PNG | 최대 10MB</RecommendationText>
+          <S.SRecommendationText>추천 사이즈: 960 x 540 | JPG, PNG | 최대 10MB</S.SRecommendationText>
           <ProfileImageUpload
             onClick={(file) => setProfileImage(URL.createObjectURL(file))}  // 업로드된 이미지 미리보기 설정
             imagePreview={profileImage}
@@ -31,13 +30,13 @@ const ProjectImageUploadForm = ({ handleProfileClick, handleBannerClick }) => {
           {/* 항상 렌더링되는 ImageRectangle */}
           <ImageRectangle imagePreview={profileImage} onClose={handleProfileClose} />
         </form>
-      </Section>
+      </S.SSection>
 
       {/* 프로젝트 배너 사진 섹션 */}
-      <Section>
-        <ProfilePictureText>프로젝트 배너 사진 <RedAsterisk>*</RedAsterisk></ProfilePictureText>
+      <S.SSection>
+        <S.SProfilePictureText>프로젝트 배너 사진 <S.SRedAsterisk>*</S.SRedAsterisk></S.SProfilePictureText>
         <form>
-          <RecommendationText>추천 사이즈: 1920 x 1080 | JPG, PNG | 최대 10MB</RecommendationText>
+          <S.SRecommendationText>추천 사이즈: 1920 x 1080 | JPG, PNG | 최대 10MB</S.SRecommendationText>
           <BannerImageUpload
             onClick={(file) => setBannerImage(URL.createObjectURL(file))}  // 업로드된 이미지 미리보기 설정
             imagePreview={bannerImage}
@@ -45,44 +44,9 @@ const ProjectImageUploadForm = ({ handleProfileClick, handleBannerClick }) => {
           {/* 항상 렌더링되는 ImageRectangle */}
           <ImageRectangle imagePreview={bannerImage} onClose={handleBannerClose} />
         </form>
-      </Section>
-    </FormContainer>
+      </S.SSection>
+    </S.SFormContainer>
   );
 };
-const FormContainer = styled.div`
-  background-color: white;
-  width: 94%;
-  max-width: 1000px;
-  min-height: 800px;
-  padding: 60px;
-  border-radius: 20px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
-  margin-top: 50px;
-`;
-
-const Section = styled.div`
-  margin-bottom: 40px;
-`;
-
-const ProfilePictureText = styled.div`
-  font-weight: 700;
-  font-size: 26px;
-  line-height: 38px;
-  color: #212121;
-  margin-bottom: 25px;
-`;
-
-const RedAsterisk = styled.span`
-  color: #FF2626;
-`;
-
-const RecommendationText = styled.div`
-  font-family: 'Pretendard';
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 19px;
-  color: #C2C2C2;
-  margin-bottom: 10px;
-`;
 
 export default ProjectImageUploadForm;
