@@ -5,15 +5,16 @@ import React from 'react';
 import {
     BadgeContainer,
     StyledCircle,
+    Circle,
     CountBadge,
 } from '../../styled-components/styled-Badge';
 
 function Badge({ badgeCount }) {
     return (
         <>
-            <BadgeContainer>
+            <BadgeContainer>                
                 <StyledCircle>
-                    <circle/>
+                    <Circle/>
                 </StyledCircle>
                 <CountBadge>{badgeCount}5</CountBadge>
             </BadgeContainer> 

@@ -19,13 +19,12 @@ export const StyledCircle = styled.svg.attrs({
   width: 16px;
   height: 16px;
   fill: none;
+`;
 
-  circle {
-    cx: 8;
-    cy: 8;
-    r: 8;
-    fill: #08d485;
-  }
+export const Circle = styled.circle `
+  cx: 8;
+  cy: 8;
+  r: 8;
 `;
 
 export const CountBadge = styled.p`

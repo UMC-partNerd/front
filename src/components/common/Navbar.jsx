@@ -7,7 +7,7 @@ import { BsChatRightDots } from "react-icons/bs";
 // 알림 배지
 import Badge from "./badge"
 // 알림 창
-import Alarm from "./alarm"
+// import Alarm from "./alarm"
 
 
 function Navbar({ isLoggedIn, badgeCount }) {
@@ -42,6 +42,7 @@ function Navbar({ isLoggedIn, badgeCount }) {
               <IconWrapper>
                 <GoBell />
                 {badgeCount > 0 && <Badge badgeCount={badgeCount} />}
+                {/* <Alarm/> */}
               </IconWrapper>
               <IconWrapper>
                 <MdOutlinePersonOutline />
