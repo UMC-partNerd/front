@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import API from "../../api/axiosInstance";
 
 const KakaoCallback = () => {
 
@@ -40,7 +41,7 @@ const KakaoCallback = () => {
     if (!isRequestSent) {
         isRequestSent = true;  // ✅ 중복 요청 방지
 
-        axios.get(`${API_BASE_URL}/api/auth/login/kakao?code=${authCode}`)
+        API.get(`/api/auth/login/kakao?code=${authCode}`)
             .then(response => {
                 if (response.status === 200 && response.data.isSuccess) {
                     console.log("백엔드 응답 (액세스 토큰):", response.data);
