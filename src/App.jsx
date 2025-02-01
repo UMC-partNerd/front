@@ -4,16 +4,22 @@ import RootLayout from './layout/root-layout';
 import HomePage from './pages/homepage';
 import NotFoundPage from './pages/notfoundpage';
 import { TeamPage } from './pages/TeamPage'; 
-import CollaborationDetailPage from './pages/CollaborationDetailPage'; 
+import CollaborationDetailPage from './pages/collaboration-pages/CollaborationDetailPage'; 
 import TeamRegistration from './pages/TeamRegistration';
 import LoginPage from './pages/loginpage';
 import SignUpPage from './pages/signuppage';
 import SignUpSocialPage from './pages/signupsocial';
+import MyPageDe from './pages/mypages/mypage-default';
+import MyPagePersonal from './pages/mypages/mypage-personal';
+import MyPageTeams from './pages/mypages/mypage-teams';
+import MyPagePosts from './pages/mypages/mypage-mypost';
+import CommunityPage from './pages/Communitypage';
 import PartnerSearch from './components/partnerd-search';
 import ProjectRecruitment from './components/project-recruitment';
 import ProjectCollaboration from './components/project-collaboration';
 import ProjectPromotion from './components/project-promotion';
 import Community from './components/community/Top10-rank';
+import KakaoCallback from './components/login/KakaoCallback';
 
 
 import TestPage from './pages/testPage';
@@ -45,12 +51,12 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: 'collaboration/:id', 
-        element: <CollaborationDetailPage />
-      },
-      {
         path: 'login',
         element: <LoginPage />
+      },
+      {
+        path: 'oauth/kakao/callback',
+        element: <KakaoCallback />
       },
       {
         path: 'register',
@@ -67,7 +73,16 @@ const router = createBrowserRouter([
       },
       {
         path: 'collaboration',
+
+        children: [
+          {
+            path: ':id', 
+            element: <CollaborationDetailPage />,
+          },
+        ],
+
         element: <ProjectCollaboration/>
+
       },
       {
         path: 'project',
@@ -88,7 +103,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'community',
-        element: <Community/>
+        element: <CommunityPage />
       },
       { //마이페이지 경로 
         path: 'mypage',

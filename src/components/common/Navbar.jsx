@@ -1,16 +1,22 @@
+// Navbar.jsx
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { GoBell } from "react-icons/go";
 import { MdOutlinePersonOutline } from "react-icons/md";
 import { BsChatRightDots } from "react-icons/bs";
+import { useState } from 'react';
+import ProfileMenu from '../home/ProfileMenu';
 
 // 알림 배지
 import Badge from "./badge"
 // 알림 창
 // import Alarm from "./alarm"
 
+function Navbar({ isLoggedIn, onLogout, badgeCount }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-function Navbar({ isLoggedIn, badgeCount }) {
+  const toggleMenu = () => setIsMenuOpen(prevState => !prevState);
+
   return (
     <NavbarContainer>
       <NavbarWrapper>
@@ -44,8 +50,9 @@ function Navbar({ isLoggedIn, badgeCount }) {
                 {badgeCount > 0 && <Badge badgeCount={badgeCount} />}
                 {/* <Alarm/> */}
               </IconWrapper>
-              <IconWrapper>
+              <IconWrapper onClick={toggleMenu}>
                 <MdOutlinePersonOutline />
+                {isMenuOpen && <ProfileMenu onLogout={onLogout} />}
               </IconWrapper>
             </>
           ) : (
@@ -65,6 +72,9 @@ function Navbar({ isLoggedIn, badgeCount }) {
 }
 
 export default Navbar;
+
+
+
 
 const NavbarContainer = styled.nav`
   display: flex;

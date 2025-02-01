@@ -1,8 +1,9 @@
+// ProjectImageUploadForm.jsx
 import React, { useState } from 'react';
 import ProfileImageUpload from './ProfileImageUpload';
 import BannerImageUpload from './BannerImageUpload';
 import styled from 'styled-components';
-import ImageRectangle from './ImageRectangle';  // ImageRectangle 컴포넌트 불러오기
+import ImageRectangle from './ImageRectangle';
 
 const ProjectImageUploadForm = ({ handleProfileClick, handleBannerClick }) => {
   const [profileImage, setProfileImage] = useState(null);
@@ -24,27 +25,30 @@ const ProjectImageUploadForm = ({ handleProfileClick, handleBannerClick }) => {
         <form>
           <RecommendationText>추천 사이즈: 960 x 540 | JPG, PNG | 최대 10MB</RecommendationText>
           <ProfileImageUpload
-            onClick={handleProfileClick}
+            onClick={(file) => setProfileImage(URL.createObjectURL(file))}  // 업로드된 이미지 미리보기 설정
+            imagePreview={profileImage}
           />
-          <ImageRectangle onClose={handleProfileClose} />
+          {/* 항상 렌더링되는 ImageRectangle */}
+          <ImageRectangle imagePreview={profileImage} onClose={handleProfileClose} />
         </form>
       </Section>
 
       {/* 프로젝트 배너 사진 섹션 */}
       <Section>
         <ProfilePictureText>프로젝트 배너 사진 <RedAsterisk>*</RedAsterisk></ProfilePictureText>
-       <form>
-        <RecommendationText>추천 사이즈: 1920 x 1080 | JPG, PNG | 최대 10MB</RecommendationText>
-        <BannerImageUpload
-          onClick={handleBannerClick}
-        />
-        <ImageRectangle onClose={handleBannerClose} />
-      </form>
+        <form>
+          <RecommendationText>추천 사이즈: 1920 x 1080 | JPG, PNG | 최대 10MB</RecommendationText>
+          <BannerImageUpload
+            onClick={(file) => setBannerImage(URL.createObjectURL(file))}  // 업로드된 이미지 미리보기 설정
+            imagePreview={bannerImage}
+          />
+          {/* 항상 렌더링되는 ImageRectangle */}
+          <ImageRectangle imagePreview={bannerImage} onClose={handleBannerClose} />
+        </form>
       </Section>
     </FormContainer>
   );
 };
-
 const FormContainer = styled.div`
   background-color: white;
   width: 94%;
