@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { kakaoLogin } from "../../api/authAPi";
 
 const KakaoCallback = () => {
 
@@ -40,34 +41,30 @@ const KakaoCallback = () => {
     if (!isRequestSent) {
         isRequestSent = true;  // ✅ 중복 요청 방지
 
-        axios.get(`${API_BASE_URL}/api/auth/login/kakao?code=${authCode}`)
-            .then(response => {
-                if (response.status === 200 && response.data.isSuccess) {
+        kakaoLogin(authCode)
+        .then(data => {
+            if (data.isSuccess) {
                     console.log("백엔드 응답 (액세스 토큰):", response.data);
 
 
-                    //이메일 정보 저장
-                    const email = response.data.result.email;
-                    const jwtToken = response.data.result.jwtToken;
+                    console.log("백엔드 응답 (액세스 토큰):", data);
 
-                    localStorage.setItem("kakao_access_token", response.data.result.access_token);
-                    localStorage.setItem("used_kakao_code", authCode);
-                    localStorage.setItem("kakao_email", email); // 이메일 저장
-                    localStorage.setItem("jwtToken", jwtToken); //jwt 토큰 저장
+                        // 이메일 & 토큰 저장
+                        localStorage.setItem("kakao_access_token", data.result.access_token);
+                        localStorage.setItem("used_kakao_code", authCode);
+                        localStorage.setItem("kakao_email", data.result.email);
+                        localStorage.setItem("jwtToken", data.result.jwtToken);
 
                     // ✅ URL에서 `code` 제거하여 중복 요청 방지
                     setSearchParams({});
                     navigate("/register/social");
                 } else {
-                    console.error("카카오 로그인 응답 오류:", response.data);
+                    console.error("카카오 로그인 응답 오류:", data);
                     navigate("/login");
                 }
             })
             .catch(error => {
                 console.error("카카오 로그인 처리 실패:", error);
-                if (error.response) {
-                    console.error("서버 응답 데이터:", error.response.data);
-                }
                 navigate("/login");
             });
 
