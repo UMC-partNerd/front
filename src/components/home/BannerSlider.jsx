@@ -45,8 +45,7 @@ const SliderWrapper = styled.div`
   height: 280px;
   text-align: center;
   overflow: hidden;
-  background-color: ${({ bgColor }) => bgColor};
-
+  background-color: ${({ bgColor }) => bgColor}; /* bgColor는 바로 props로 전달됨 */
 
   @media (max-width: 768px) {
     height: 200px;
@@ -60,7 +59,6 @@ const SliderContent = styled.div`
   justify-content: center;
   align-items: center;
 
-
   @media (max-width: 768px) {
     transform: scale(0.8); 
   }
@@ -68,7 +66,6 @@ const SliderContent = styled.div`
     transform: scale(0.6); 
   }
 `;
-
 
 const SliderImage = styled.img`
   width: 100%;
@@ -153,6 +150,7 @@ const PaginationIndicator = styled.span`
     font-size: 0.7rem; 
   }
 `;
+
 
 const Chevron = styled.img`
   transform: ${({ isRight }) => (isRight ? 'rotate(180deg)' : 'none')};
