@@ -10,7 +10,7 @@ display:flex;
 flex-direction:column;
 box-sizing: border-box;
 padding:20px;
-
+margin-top:30px;
 `
 
 export const FeedDate = styled.div`
