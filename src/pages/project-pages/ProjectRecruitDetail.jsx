@@ -1,12 +1,17 @@
+import React from 'react';
+import { useParams } from 'react-router-dom';
 import * as S from '../../styled-components/projectdetail-styles/styled-ProjectRecruitDetail';
-import ImageSlider from '../../components/projectdetail/ImageSlider'; 
+import ImageSlider from '../../components/projectdetail/ImageSlider';
+import ProjectDetailForm from '../../components/projectdetail/ProjectDetailForm';
+import JoinProjectInfo from '../../components/projectdetail/JoinProjectInfo';  
+
+const DefaultImage = '/default-image.png';
 
 const ProjectRecruitDetail = () => {
-  const images = [
-    'path/to/your/image1.jpg',
-    'path/to/your/image2.jpg',
-    'path/to/your/image3.jpg', 
-  ];
+  const { id } = useParams(); // URL에서 id 가져오기
+
+  // 임시 이미지 데이터
+  const images = [DefaultImage, DefaultImage, DefaultImage];
 
   return (
     <S.SContainer>
@@ -18,10 +23,18 @@ const ProjectRecruitDetail = () => {
         </S.STextBox>
       </S.SImageBoxContainer>
 
-  
       <S.SImageSliderWrapper>
         <ImageSlider images={images} />
       </S.SImageSliderWrapper>
+
+      <S.SFormContainer>
+        <ProjectDetailForm /> 
+      </S.SFormContainer>
+
+
+      <S.SJoinProjectInfoWrapper>
+        <JoinProjectInfo /> 
+      </S.SJoinProjectInfoWrapper>
     </S.SContainer>
   );
 };
