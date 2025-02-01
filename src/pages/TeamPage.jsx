@@ -6,6 +6,8 @@ import ProfilePhoto from '../components/teamdetail/ProfilePhoto';
 import TeamInfo from '../components/teamdetail/TeamInfo';
 import Activities from '../components/teamdetail/Activities';
 import CollaborationFeed from '../components/teamdetail/CollaborationFeed';
+import Chatlist from '../components/common/Chatlist_owner';
+import ChatListALL from '../components/common/Chatlist_members';
 
 const DefaultImage = '/default-image.png'; // 기본 이미지 
 
@@ -22,6 +24,13 @@ const TeamPageContainer = styled.div`
   margin-left: 70px;
   box-sizing: border-box;
 `;
+
+const ChatWrapp = styled.div`
+display:flex;
+flex-direction:column;
+height:100%;
+margin:20px;
+`
 
 const TeamPage = () => {
   const { clubId } = useParams();
@@ -82,6 +91,10 @@ const TeamPage = () => {
           <Activities activities={club.activities} images={club.images || []} />
           <CollaborationFeed feed={club.collaborationFeed} />
         </TeamPageContainer>
+        <ChatWrapp>
+          <Chatlist />
+          <ChatListALL />
+        </ChatWrapp>
       </TeamPageWrapper>
     </>
   );
