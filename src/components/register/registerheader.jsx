@@ -1,9 +1,13 @@
 import styled from "styled-components"
-import { Form, FieldGroup, Subup, Input, Subdown } from "../../styles/registerstyles"
+import { InputPass,NicknameWrapper,Form, FieldGroup, Subup, Input, Subdown, NicknameCheck } from "../../styles/registerstyles"
 import { useState } from "react"
 import { useEffect } from "react"
+import axios from "axios"
 
 const RegisterHeader = ({onChange }) => {
+
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
     const [formData, setFormData] = useState({
         name: "",
         birthDate: "",
@@ -17,10 +21,15 @@ const RegisterHeader = ({onChange }) => {
     //     });
     // };
 
+    const [isNicknameAvailable, setIsNicknameAvailable] = useState(null); // 닉네임 상태 (true: 사용 가능, false: 중복됨)
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         const updatedData = { ...formData, [name]: value };
         setFormData(updatedData);
+        if (name === "nickname") {
+            setIsNicknameAvailable(null); // 닉네임 변경 시 상태 초기화
+        }
         onChange(updatedData); // 부모로 데이터 전달
     };
 
@@ -43,6 +52,34 @@ const RegisterHeader = ({onChange }) => {
     //         [name]: value,
     //     }));
     // };
+
+    //닉네임 중복 확인 
+    const handleNicknameSubmit = async () =>{
+        try{
+            const jwtToken = localStorage.getItem("jwtToken"); // JWT 토큰 불러오기
+    
+            if (!jwtToken) {
+                alert("로그인이 필요합니다.");
+                return;
+            }
+
+            const response = await axios.get(`${API_BASE_URL}/api/users/nickname/check?nickname=${formData.nickname}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${jwtToken}`,
+                },
+            });
+
+            if (response.data.result) {
+                setIsNicknameAvailable(false); // 닉네임 중복됨
+            } else {
+                setIsNicknameAvailable(true); // 사용 가능한 닉네임
+            }
+        } catch (error) {
+            console.error("닉네임 중복 확인 오류:", error);
+            setIsNicknameAvailable(null);
+        }
+    };
 
     return (
         <Form>
@@ -70,13 +107,26 @@ const RegisterHeader = ({onChange }) => {
 
             <FieldGroup>
                 <Subup>닉네임</Subup>
-                <Input placeholder="2자 이상 입력해주세요" 
+                <NicknameWrapper  isAvailable={isNicknameAvailable}>
+                <InputPass placeholder="2자 이상 입력해주세요" 
                 type="text"
                 name="nickname" 
                 value={formData.nickname}
                 onChange={handleChange}
+                
                 />
-                <Subdown>닉네임은 중복일 수 없습니다.</Subdown>
+                <NicknameCheck isAvailable={isNicknameAvailable} onClick={handleNicknameSubmit}>
+                중복확인
+                </NicknameCheck>
+                </NicknameWrapper>
+                
+                {isNicknameAvailable === null ? (
+                    <Subdown>닉네임은 중복일 수 없습니다.</Subdown>
+                ) : isNicknameAvailable ? (
+                    <Subdown style={{ color: "#08D485" }}>사용 가능한 닉네임입니다.</Subdown>
+                ) : (
+                    <Subdown>중복된 닉네임 입니다.</Subdown>
+                )}
             </FieldGroup>
 
             <FieldGroup>
@@ -87,12 +137,11 @@ const RegisterHeader = ({onChange }) => {
                 value={formData.email}
                 // onChange={handleChange}
                 />
-                <Subdown>닉네임은 중복일 수 없습니다.</Subdown>
             </FieldGroup>
         </Form>
 
-    )
-}
+    );
+};
 
 
 
