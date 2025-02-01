@@ -3,9 +3,13 @@ import styled from 'styled-components';
 export const BadgeContainer = styled.div`
   width: 16px;
   height: 16px;
-  flex-shrink: 0;
+  position: absolute;
 
-  position: relative;
+  top:20px;
+  right: 164px;
+
+  transform: translate(50%, -50%);
+  z-index: 10;
 `;
 
 export const StyledCircle = styled.svg.attrs({

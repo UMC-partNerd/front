@@ -4,7 +4,13 @@ import { GoBell } from "react-icons/go";
 import { MdOutlinePersonOutline } from "react-icons/md";
 import { BsChatRightDots } from "react-icons/bs";
 
-function Navbar({ isLoggedIn }) {
+// 알림 배지
+import Badge from "./badge"
+// 알림 창
+import Alarm from "./alarm"
+
+
+function Navbar({ isLoggedIn, badgeCount }) {
   return (
     <NavbarContainer>
       <NavbarWrapper>
@@ -35,6 +41,7 @@ function Navbar({ isLoggedIn }) {
               </IconWrapper>
               <IconWrapper>
                 <GoBell />
+                {badgeCount > 0 && <Badge badgeCount={badgeCount} />}
               </IconWrapper>
               <IconWrapper>
                 <MdOutlinePersonOutline />
@@ -139,7 +146,7 @@ const IconContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 15px;
-   margin-right: 55px;
+  margin-right: 55px;
 
   @media (max-width: 1024px) {
     gap: 10px; 
@@ -149,7 +156,6 @@ const IconContainer = styled.div`
     gap: 8px; 
   }
 `;
-
 
 const IconWrapper = styled.div`
   display: flex;
@@ -170,6 +176,8 @@ const IconWrapper = styled.div`
   &:nth-child(3) svg {
     font-size: 1.8rem !important;
   }
+
+  position: relative;
 `;
 
 const AuthButtons = styled.div`

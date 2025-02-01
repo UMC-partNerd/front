@@ -15,7 +15,6 @@ function Badge({ badgeCount }) {
                 <StyledCircle>
                     <circle/>
                 </StyledCircle>
-                {/* {badgeCount > 0 && <CountBadge>{badgeCount}5</CountBadge>} */}
                 <CountBadge>{badgeCount}5</CountBadge>
             </BadgeContainer> 
         </>

@@ -1,6 +1,6 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-import { alarmCountState } from '../../hooks/atom';
+// import { useRecoilValue } from 'recoil';
+// import { alarmCountState } from '../../hooks/atom';
 
 import {
     Container,
