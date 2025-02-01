@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 import * as S from '../../styled-components/collab-styles/styled-EventInfoForm';
-import DateList from './DateList'; 
+import DateList from '../common/DateList'; 
 
 const EventInfoForm = ({ handleActivityClick }) => {
   const [selectedCategories, setSelectedCategories] = useState([]);

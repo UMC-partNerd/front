@@ -2,7 +2,7 @@ import styled from "styled-components"
 import { MainWrapp, Title, PersonalField, StyledHr,SubTitle, SubupSec } from "../../styles/mypagestyles";
 import { Subup } from "../../styles/registerstyles";
 import ButtonWhite from "./button_white";
-import PersonalContact from "../common/contact";
+import PersonalContact from "./contact";
 
 const MyPersonalComp = () =>{
     return(
