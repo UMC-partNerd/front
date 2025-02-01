@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import * as S from '../../styled-components/teamregister-styles/Styled-ActivityImageUpload';
+import * as S from '../../../styled-components/common-styles/Styled-ActivityImageUpload';
 
 
 const ActivityImageUpload = ({ imagePreview, onClick }) => {

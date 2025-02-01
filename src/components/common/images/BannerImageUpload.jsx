@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { getPreSignedUrl, uploadImageToS3 } from '../../utils/imageUtils';
-import * as S from '../../styled-components/teamregister-styles/styled-BannerImageUpload'; 
+import { getPreSignedUrl, uploadImageToS3 } from '../../../utils/imageUtils';
+import * as S from '../../../styled-components/common-styles/styled-BannerImageUpload'; 
 
 const BannerImageUpload = ({ imagePreview, onClick }) => {
   const fileInputRef = useRef(null);

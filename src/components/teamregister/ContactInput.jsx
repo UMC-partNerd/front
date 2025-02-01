@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const ContactInput = ({ onAddContact }) => {
+const ContactInput = () => {
   const [contactMethod, setContactMethod] = useState('');
   const [link, setLink] = useState('');
   const [contacts, setContacts] = useState([]);
@@ -11,72 +11,75 @@ const ContactInput = ({ onAddContact }) => {
 
   const handleSubmit = () => {
     if (contactMethod && link) {
-      const newContact = { contactMethod, link };
-      setContacts([...contacts, newContact]);
+      setContacts([...contacts, { contactMethod, link }]);
       setContactMethod('');
       setLink('');
     }
   };
 
   const handleDelete = (index) => {
-    const updatedContacts = contacts.filter((_, idx) => idx !== index);
-    setContacts(updatedContacts);
+    setContacts(contacts.filter((_, idx) => idx !== index));
   };
 
   return (
-    <div>
-      <ContactInputContainer>
+    <Container>
+      <InputRow>
         <InputField
           type="text"
           value={contactMethod}
           onChange={handleContactChange}
           placeholder="연락 방법 입력"
-          isLink={false}
+          short
         />
         <InputField
           type="text"
           value={link}
           onChange={handleLinkChange}
           placeholder="링크 입력"
-          isLink={true}
         />
         <AddButton onClick={handleSubmit}>등록하기</AddButton>
-      </ContactInputContainer>
+      </InputRow>
 
-      <ContactList>
-        {contacts.map((contact, index) => (
-          <ContactItem key={index}>
-            <ContactBox isLink={true}>{contact.link}</ContactBox>
-            <ContactBox isLink={false}>{contact.contactMethod}</ContactBox>
-            <DeleteButton onClick={() => handleDelete(index)}>X</DeleteButton>
-          </ContactItem>
-        ))}
-      </ContactList>
-    </div>
+      {contacts.map((contact, index) => (
+        <ContactItem key={index}>
+          <ContactBox>{contact.contactMethod}</ContactBox>
+          <ContactBox isLink>{contact.link}</ContactBox>
+          <DeleteButton onClick={() => handleDelete(index)}>X</DeleteButton>
+        </ContactItem>
+      ))}
+    </Container>
   );
 };
 
 export default ContactInput;
 
-const ContactInputContainer = styled.div`
+const Container = styled.div`
   background-color: #F3F3F3;
-  padding: 10px 15px;
+  padding: 15px;
   border-radius: 8px;
   display: flex;
-  align-items: center;
-  gap: 20px;
+  flex-direction: column;
+  gap: 10px;
   width: 100%;
-  box-sizing: border-box; 
+  box-sizing: border-box;
+  margin-bottom:30px;
+`;
+
+const InputRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
 `;
 
 const InputField = styled.input`
-  width: ${({ isLink }) => (isLink ? '50%' : '30%')};
+  flex: ${({ short }) => (short ? '0.3' : '0.7')};
   padding: 8px 10px;
   font-size: 14px;
   border: 1.5px solid #E1E1E1;
   border-radius: 5px;
   outline: none;
-  height: 30px;
+  height: 36px;
   transition: border 0.3s ease;
 
   &:focus {
@@ -89,7 +92,7 @@ const InputField = styled.input`
 `;
 
 const AddButton = styled.button`
-  padding: 10px 14px;
+  padding: 8px 14px;
   background-color: white;
   color: #0D29B7;
   font-size: 14px;
@@ -97,10 +100,8 @@ const AddButton = styled.button`
   border: 1.5px solid #0D29B7;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-  flex-shrink: 0;
   white-space: nowrap;
-  
+
   &:hover {
     background-color: #f0f0f0;
     color: #0B218A;
@@ -108,54 +109,41 @@ const AddButton = styled.button`
   }
 `;
 
-const ContactList = styled.div`
+const ContactItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
   margin-top: 10px;
 `;
 
-const ContactItem = styled.div`
-  background-color: #F3F3F3;
-  padding: 12px 20px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-`;
-
 const ContactBox = styled.div`
-  width: ${({ isLink }) => (isLink ? '32%' : '53%')};
+  flex: ${({ isLink }) => (isLink ? '0.62' : '0.28')};  
   padding: 8px 10px;
   font-size: 14px;
-  border: 1.5px solid #C2C2C2;
+  border: 1.5px solid #E1E1E1; /* 입력 필드와 동일한 테두리 색 */
   border-radius: 5px;
   color: #333;
   background-color: #fff;
   word-break: break-word;
   transition: border 0.3s ease;
-  box-sizing: border-box;
-  height: 50px;
+  height: 30px; /* 원하는 높이 */
   display: flex;
-  align-items: center; 
-
-  ${({ isLink }) =>
-    isLink &&
-    `
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  `}
+  align-items: center;
+  
+  &:focus-within {
+    border: 1.5px solid #0D29B7; /* 입력 필드랑 동일한 포커스 효과 */
+  }
 `;
+
 
 const DeleteButton = styled.button`
   color: #C2C2C2;
   background-color: transparent;
   border: none;
-  font-size: 23px; 
-  font-weight: 400;
+  font-size: 18px;
   cursor: pointer;
   padding: 0;
-  margin-left: 20px; 
-  transition: color 0.3s ease;
 
   &:hover {
     color: #0D29B7;

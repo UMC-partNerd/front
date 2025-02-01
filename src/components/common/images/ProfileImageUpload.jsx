@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { getPreSignedUrl, uploadImageToS3 } from '../../utils/imageUtils';
-import { UploadGroup, UploadRectangle, CenterContainer, ImagePreview, UploadText } from '../../styled-components/teamregister-styles/styled-ProfileImageUpload'; 
+import { getPreSignedUrl, uploadImageToS3 } from '../../../utils/imageUtils';
+import { UploadGroup, UploadRectangle, CenterContainer, ImagePreview, UploadText } from '../../../styled-components/common-styles/styled-ProfileImageUpload'; 
 
 const ProfileImageUpload = ({ onClick, imagePreview }) => {
   const fileInputRef = useRef(null);
