@@ -1,59 +1,67 @@
 import {
-    
-  CollabName,
-  Row,
-  ChatRoomContainer,
-  ChatContainer,
-  LastChat,
-  Time,
-} from "../styled-components/chat/chat-room";
-  
-  const ChatRoom = () =>{
-    // 채팅 목록 - 요소
-    const renderRoomDoor = () => (
-      <RequestWrap >
-        <CollabName>{collabName}</CollabName>
-        
-        <ChatRoomContainer>
-          <Profile type='user'>{profile}</Profile>
-          <Row>
-            <ClubName>{clubName}</ClubName>
-            <ChatContainer>
-              <LastChat>{lastChat}</LastChat>
-              <Time>{time}</Time>
-            </ChatContainer>
-          </Row>
-        </ChatRoomContainer>
-      </RequestWrap>
-    );
+  RoomTitle,
+  Explain,
+  Date,
+  ChatWrap,
+  InputMessage
+} from "../../styled-components/chat/chat-room";
 
-    // 채팅 방 - 개인인
-    const renderDefaultRequest = () => (
-      <RequestWrap >
-        <CollabName>{collabName}</CollabName>
-        
-        <ChatRoomContainer>
-          <Profile type='user'>{profile}</Profile>
-          <Row>
-            <ClubName>{clubName}</ClubName>
-            <ChatContainer>
-              <LastChat>{lastChat}</LastChat>
-              <Time>{time}</Time>
-            </ChatContainer>
-          </Row>
-        </ChatRoomContainer>
-      </RequestWrap>
-    );
-    
-    if (type ===  TYPES.SENDTO) {
-        return renderSendtoRequest();
+export const TYPES = {
+  PERSONAL: 'personal',
+  COLLAB: 'collab',
+};
+
+function ChatRoom ({ who,collabName, date })  {
+  const renderChatRoom = () => {
+    switch (type) {
+      case TYPES.PERSONAL:
+        return (
+          <>
+            <RoomTitle>{who}하디디</RoomTitle>
+            <Date>{date}2025년 1월 6일</Date>
+
+            <ChatWrap>
+              <Bubble who='left'>
+                안녕하세요
+              </Bubble>
+              <Bubble who='right'>
+                안녕하세요
+              </Bubble>
+            </ChatWrap>
+            <InputMessage>
+              메시지를 입력하세요
+              <img src="/send.png" alt="전송" />
+            </InputMessage>
+          </>
+        );
+
+      case TYPES.COLLAB:        
+        return (
+          <>
+            <RoomTitle>{who}UMC</RoomTitle>
+            <Explain>
+              [{collabName}2025 IT 컨퍼런스] 콜라보레이션 채팅에서 협업 관련 세부 계획에 대한 논의를 시작해보세요.
+            </Explain>
+
+            <Date>{date}2025년 1월 6일</Date>
+
+            <ChatWrap>
+              <Bubble who='left'>
+                안녕하세요!연합 해커톤에 대해서 질문있습니다.
+              </Bubble>
+              <Bubble who='right'>
+                네! 반가워요
+              </Bubble>
+            </ChatWrap>
+            <InputMessage>
+              메시지를 입력하세요
+              <img src="/send.png" alt="전송" />
+            </InputMessage>    </>
+        );
       }
-    
-      if (type === TYPES.RECEIVETO) {
-        return renderReceivetoRequest();
-      }
-    
-      return renderDefaultRequest();
-  }
-  
-  export default ChatRoom;
+    };
+
+  return renderChatRoom();
+}
+
+export default ChatRoom;

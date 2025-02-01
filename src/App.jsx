@@ -2,8 +2,7 @@ import './styles/globalstyles.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RootLayout from './layout/root-layout';
 import HomePage from './pages/homepage';
-import CollaborationPage from './pages/CollaborationPage';
-import RequestPage from './pages/RequestPage';
+// import RequestPage from './pages/RequestPage';
 import NotFoundPage from './pages/notfoundpage';
 import { TeamPage } from './pages/TeamPage'; 
 import CollaborationDetailPage from './pages/CollaborationDetailPage'; 
@@ -86,7 +85,7 @@ const router = createBrowserRouter([
           {
             // 협업 요청 확인하기
             path: 'request',
-            element: <RequestPage/>
+            // element: <RequestPage/>
           },
         ],
       },
