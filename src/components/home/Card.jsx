@@ -18,7 +18,16 @@ function Card({ title, content, thumbnail, footer, variant }) {
   const renderProjectCard = () => (
     <CardContainer variant={variant}>
       <Thumbnail variant={variant}>
-        {thumbnail}
+        <img 
+          src={thumbnail} 
+          alt={title}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            borderRadius: '12px'
+          }}
+        />
       </Thumbnail>
       <ContentSection variant={variant}>
         <Title variant={variant}>{title}</Title>
@@ -30,7 +39,16 @@ function Card({ title, content, thumbnail, footer, variant }) {
   const renderClubCard = () => (
     <CardContainer variant={variant}>
       <Thumbnail variant={variant}>
-        {thumbnail}
+        <img 
+          src={thumbnail} 
+          alt={title}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            borderRadius: '16px'
+          }}
+        />
       </Thumbnail>
       <ContentSection variant={variant}>
         <Badge>{footer}</Badge>
@@ -45,7 +63,17 @@ function Card({ title, content, thumbnail, footer, variant }) {
       <Title variant={variant}>{title}</Title>
       <Content variant={variant}>{content}</Content>
       <Footer>
-        <Thumbnail variant={variant}>{thumbnail}</Thumbnail>
+        <Thumbnail variant={variant}>
+          <img 
+            src={thumbnail} 
+            alt={title}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
+          />
+        </Thumbnail>
         {footer}
       </Footer>
     </CardContainer>
