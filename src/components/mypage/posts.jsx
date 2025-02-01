@@ -1,7 +1,6 @@
 import styled from "styled-components"
 import { MainWrapp, Title } from "../../styles/mypagestyles";
 import PostFeed from "./mypost_feed";
-<<<<<<< HEAD
 import { CategoryGroup, CategoryButton } from "../../styled-components/styled-project-recruitment";
 import { useState } from "react";
 
@@ -29,15 +28,10 @@ const MyPostsComp = () =>{
 
 
 
-=======
-
-const MyPostsComp = () =>{
->>>>>>> origin/feat/15
     return(
         <MainWrapp>
         <Title>내가 쓴 글</Title>
 
-<<<<<<< HEAD
         <CategoryGroup>
                     {projectCategories.map(category => (
                     <CategoryButton style={{fontSize:'10px'}}
@@ -53,10 +47,6 @@ const MyPostsComp = () =>{
                     ))}
         </CategoryGroup>
         <PostFeed />
-=======
-        <h3>카테고리 넣을 자리</h3>
-        <PostFeed/>
->>>>>>> origin/feat/15
         </MainWrapp>
     )
 }
