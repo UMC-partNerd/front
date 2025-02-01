@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as S from '../../styled-components/teamrgister-styles/styled-ContactInput';
+import * as S from '../../styled-components/teamregister-styles/styled-ContactInput';
 
 const ContactInput = () => {
   const [contactMethod, setContactMethod] = useState('');
