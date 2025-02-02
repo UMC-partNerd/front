@@ -48,7 +48,7 @@ const KakaoCallback = () => {
 
 
                     //이메일 정보 저장
-                    const email = response.data.result.email;
+                    const email = response.data.result.user.email;
                     const jwtToken = response.data.result.jwtToken;
 
                     localStorage.setItem("kakao_access_token", response.data.result.access_token);
@@ -58,7 +58,13 @@ const KakaoCallback = () => {
 
                     // ✅ URL에서 `code` 제거하여 중복 요청 방지
                     setSearchParams({});
-                    navigate("/register/social");
+
+                    // newUser 여부에 따라 이동 경로 지정
+                if (response.data.result.user.newUser) {
+                    navigate("/register/social"); // 새로운 사용자
+                } else {
+                    navigate("/"); // 기존 사용자
+                }
                 } else {
                     console.error("카카오 로그인 응답 오류:", response.data);
                     navigate("/login");
