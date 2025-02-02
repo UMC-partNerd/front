@@ -48,7 +48,7 @@ const KakaoCallback = () => {
 
 
                     //이메일 정보 저장
-                    const email = response.data.result.user.email;
+                    const email = response.data.result.email;
                     const jwtToken = response.data.result.jwtToken;
 
                     localStorage.setItem("kakao_access_token", response.data.result.access_token);
@@ -60,7 +60,7 @@ const KakaoCallback = () => {
                     setSearchParams({});
 
                     // newUser 여부에 따라 이동 경로 지정
-                if (response.data.result.user.newUser) {
+                if (response.data.result.newUser) {
                     navigate("/register/social"); // 새로운 사용자
                 } else {
                     navigate("/"); // 기존 사용자
