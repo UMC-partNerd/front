@@ -1,4 +1,4 @@
-import Agreement from "../components/register/AgreementForm";
+import Agreement from "../components/register/agreementForm";
 import RegisterHeader from "../components/register/registerheader";
 import {MainWrapp} from "../styles/registerstyles" 
 import styled from "styled-components";
