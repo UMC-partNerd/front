@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FiMoreVertical } from "react-icons/fi";
-import * as S from '../../styled-components/collab-styles/styled-Reply';
+import * as S from '../../../styled-components/collab-styles/styled-Reply';
 
 const Reply = ({ text, user, date, onDelete, onUpdate }) => {
   const [replyText, setReplyText] = useState(text);

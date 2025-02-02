@@ -5,8 +5,8 @@ import BannerPhoto from '../../components/teamdetail/BannerPhoto';
 import InfoSection from '../../components/collaboration-detail/InfoSection';
 import EventOverview from '../../components/collaboration-detail/EventOverview';
 import EventGuide from '../../components/collaboration-detail/EventGuide';
-// import InquiryForm from '../../components/collaboration-detail/InquiryForm';  // InquiryForm 임포트 주석 처리
-// import CommentList from '../../components/collaboration-detail/comments/CommentList';  // CommentList 임포트 주석 처리
+import InquiryForm from '../../components/collaboration-detail/InquiryForm';  // InquiryForm 임포트 주석 처리
+import CommentList from '../../components/collaboration-detail/comments/CommentList';  // CommentList 임포트 주석 처리
 
 const DefaultImage = '/default-image.png';
 
@@ -172,7 +172,7 @@ const CollaborationDetailPage = () => {
       </EventGuideWrapper>
 
       {/* 댓글 및 문의하기 폼 */}
-      {/* <InquiryForm onAddComment={handleAddComment} />
+      <InquiryForm onAddComment={handleAddComment} />
 
       <div style={{ marginTop: '40px' }}>
         <CommentList
@@ -181,7 +181,7 @@ const CollaborationDetailPage = () => {
           onDelete={handleDeleteComment}
           onUpdate={handleUpdateComment}
         />
-      </div> */}
+      </div>
     </>
   );
 };
