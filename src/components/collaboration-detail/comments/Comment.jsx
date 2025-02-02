@@ -3,7 +3,7 @@ import { FiMoreVertical } from "react-icons/fi";
 import { PiArrowElbowDownRightBold } from "react-icons/pi";
 import Reply from './Reply';
 import ReplyInput from './ReplyInput';
-import * as S from '../../styled-components/collab-styles/styled-Comment'; 
+import * as S from '../../../styled-components/collab-styles/styled-Comment'; 
 
 const formatDate = (date) => {
   const d = new Date(date);
