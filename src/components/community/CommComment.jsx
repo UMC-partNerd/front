@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { FiMoreVertical } from "react-icons/fi";
 import { CiHeart } from "react-icons/ci"; 
-import ProjectReply from './ProjectReply'; 
+import CommReply from './CommReply'; 
 import ReplyInput from '../collaboration-detail/comments/ReplyInput'; 
-import * as S from '../../styled-components/projectdetail-styles/styled-ProjectComment';
+import * as S from '../../styled-components/community-styles/styled-CommComment'; 
 
-const ProjectComment = ({ text, user, date, replies = [], onDelete, onUpdate, onReply }) => {
+const CommComment = ({ text, user, date, replies = [], onDelete, onUpdate, onReply }) => {
   const [showReply, setShowReply] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -48,7 +48,6 @@ const ProjectComment = ({ text, user, date, replies = [], onDelete, onUpdate, on
     setReplyList([...replyList, newReply]);
     setShowReply(false);
   };
-  
 
   const handleReplyUpdate = (index, newText) => {
     const updatedReplies = [...replyList];
@@ -86,8 +85,6 @@ const ProjectComment = ({ text, user, date, replies = [], onDelete, onUpdate, on
     const [_, year, month, day] = dateParts;
     return `${year}. ${month}. ${day}`;
   };
-  
-  
 
   const formattedDate = formatDate(date); 
 
@@ -122,7 +119,7 @@ const ProjectComment = ({ text, user, date, replies = [], onDelete, onUpdate, on
 
         {replyList.map((reply, index) => (
           <div key={index} style={{ marginTop: '10px' }}> 
-            <ProjectReply 
+            <CommReply 
               text={reply.text}
               user={reply.user}
               date={reply.date}
@@ -158,4 +155,4 @@ const ProjectComment = ({ text, user, date, replies = [], onDelete, onUpdate, on
   );
 };
 
-export default ProjectComment;
+export default CommComment;

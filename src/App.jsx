@@ -20,7 +20,8 @@ import ProjectRecruitment from './components/project-recruitment';
 import ProjectCollaboration from './components/project-collaboration';
 import ProjectPromotion from './components/project-promotion';
 import ProjectRecruitDetail from './pages/project-pages/ProjectRecruitDetail'; 
-import ProjectPromoteDetail from './pages/project-pages/ProjectPromoteDetail';  
+import ProjectPromoteDetail from './pages/project-pages/ProjectPromoteDetail';
+import TeamMangement from './pages/TeamMangement'  
 import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
 
@@ -40,7 +41,11 @@ const router = createBrowserRouter([
         children: [
           {
             path: ':clubId',
-            element: <TeamPage />,
+            element: <TeamPage />, 
+          },
+          {
+            path: ':clubId/manage',  
+            element: <TeamMangement/>,  
           },
           {
             path: 'team-registration',

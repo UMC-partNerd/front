@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import axios from "axios";
-import { getRedirectURI } from "./redirectURI";
+import { getRedirectURI } from "./RedirectURI";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
