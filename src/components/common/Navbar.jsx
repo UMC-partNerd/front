@@ -67,8 +67,6 @@ function Navbar({ isLoggedIn, onLogout }) {
 export default Navbar;
 
 
-
-
 const NavbarContainer = styled.nav`
   display: flex;
   align-items: center;
