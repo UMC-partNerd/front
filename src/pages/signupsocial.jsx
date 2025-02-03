@@ -1,4 +1,4 @@
-import Agreement from "../components/register/AgreementForm";
+import Agreement from "../components/register/agreementForm";
 import RegisterHeader from "../components/register/registerheader";
 import {MainWrapp} from "../styles/registerstyles" 
 import styled from "styled-components";
@@ -97,7 +97,8 @@ const SignUpSocialPage = () =>{
 }
 
 const CompleteButton = styled.button`
-    width: 100%;
+    width: 70%;
+    max-width:500px;
     height: 50px;
     color: white;
     font-family: 'Pretendard';
