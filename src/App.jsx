@@ -21,6 +21,8 @@ import ProjectPromotion from './components/project-promotion';
 import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
 
+import Alarm from './components/common/alarm/alarm-window';
+
 
 const router = createBrowserRouter([
   {
@@ -127,6 +129,10 @@ const router = createBrowserRouter([
       {
         path: '*',
         element: <NotFoundPage />
+      },
+      {
+        path: 'test',
+        element: <Alarm />
       }
     ]
   }
