@@ -79,6 +79,7 @@ export const InputPass = styled.input`
     background-color:transparent;
     transition: all 0.3s ease;
     text-indent:2px;
+    color: ${({ isAvailable }) => (isAvailable ? "#08D485" : "#000")}; 
 `;
 
 export const Subdown = styled.p`
@@ -88,3 +89,50 @@ export const Subdown = styled.p`
     color: #0D29B7;
     margin-top: 4px;
 `;
+
+
+
+export const NicknameWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    
+    width: 100%;
+    padding: 0 19px 0 5px;
+    border: 1px solid ${({ isAvailable }) => (isAvailable ? "#08D485" : "#ddd")}; 
+    border-radius: 4px;
+    font-size: 12px;
+    color: #333;
+    outline: none;
+    transition: all 0.3s ease;
+
+    &::placeholder {
+        font-size: 11px; 
+        color: #C2C2C2;
+
+    }
+
+    &:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+    }
+
+
+    input:-webkit-autofill {
+    background-color: white !important; /* 배경색을 원하는 색으로 설정 */
+    color: inherit !important; /* 글자색 유지 */
+    box-shadow: 0 0 0px 1000px white inset !important; /* 배경색 덮어쓰기 */
+    
+    transition: background-color 5000s ease-in-out 0s; /* 배경색 애니메이션 제거 */
+}
+    `;
+
+
+export const NicknameCheck = styled.div`
+font-size: 9px;
+    color: ${({ isAvailable }) => (isAvailable ? "#B0B0B0" : "#007bff")}; 
+    width: 50px;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+`

@@ -5,8 +5,8 @@ import BannerPhoto from '../../components/teamdetail/BannerPhoto';
 import InfoSection from '../../components/collaboration-detail/InfoSection';
 import EventOverview from '../../components/collaboration-detail/EventOverview';
 import EventGuide from '../../components/collaboration-detail/EventGuide';
-import InquiryForm from '../../components/collaboration-detail/InquiryForm';
-import CommentList from '../../components/common/CommentList';
+// import InquiryForm from '../../components/collaboration-detail/InquiryForm';  // InquiryForm 임포트 주석 처리
+// import CommentList from '../../components/collaboration-detail/comments/CommentList';  // CommentList 임포트 주석 처리
 
 const DefaultImage = '/default-image.png';
 
@@ -35,6 +35,7 @@ const MoreIconWrapper = styled.div`
   margin-right: 90px;
   margin-top: 0;
   padding: 10px;
+  position: relative; /* Add position relative */
 `;
 
 const SingleDot = styled.div`
@@ -43,6 +44,7 @@ const SingleDot = styled.div`
   background-color: #000;
   border-radius: 50%;
   margin-bottom: 5px;
+  cursor: pointer; /* 클릭 가능하도록 변경 */
 `;
 
 const EventOverviewWrapper = styled.div`
@@ -60,27 +62,52 @@ const EventGuideWrapper = styled.div`
   width: 550px;
 `;
 
-const InquiryWrapper = styled.div`
-  display: flex;
+const MoreOptionsMenu = styled.div`
+  position: absolute;
+  top: 30px; /* Adjusted to position below the dots */
+  left: 0; /* Adjusted to align with the dots */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  display: ${({ show }) => (show ? 'flex' : 'none')};
+  box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.15);
+  width: 120px;
+  height: 100px;
+  padding: 0;
   flex-direction: column;
-  align-items: flex-start;
-  margin-top: 40px;
-  width: 520px;
-  margin-left: 360px;
-  margin-right: auto;
+  justify-content: center;
 `;
 
-const CommentListWrapper = styled.div`
+const MenuItem = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 520px;
-  margin-left: 360px;
-  margin-right: auto;
+  align-items: center;
+  justify-content: center;
+  height: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+`;
+
+const Divider = styled.div`
+  width: 80%;
+  height: 1px;
+  background-color: #ddd;
+  margin: 0 auto;
 `;
 
 const CollaborationDetailPage = () => {
-  const { id } = useParams(); // 경로 매개변수가 올바르게 사용되는지 확인
+  const { id } = useParams();
+  const [showOptions, setShowOptions] = useState(false);
+
+  const toggleOptionsMenu = () => {
+    setShowOptions(!showOptions);
+  };
+
   const [comments, setComments] = useState([
     { text: "참여 인원은 어느 정도 생각하고 계신가요?", user: "하나", date: "2025. 01. 12" },
     // 더 많은 댓글 데이터...
@@ -122,9 +149,15 @@ const CollaborationDetailPage = () => {
         </ImageContainer>
 
         <MoreIconWrapper>
-          <SingleDot />
-          <SingleDot />
-          <SingleDot />
+          <SingleDot onClick={toggleOptionsMenu} />
+          <SingleDot onClick={toggleOptionsMenu} />
+          <SingleDot onClick={toggleOptionsMenu} />
+          {/* 옵션 메뉴를 SingleDot 클릭 시에만 표시 */}
+          <MoreOptionsMenu show={showOptions}>
+            <MenuItem>수정하기</MenuItem>
+            <Divider />
+            <MenuItem>삭제하기</MenuItem>
+          </MoreOptionsMenu>
         </MoreIconWrapper>
 
         <InfoSection />
@@ -138,21 +171,20 @@ const CollaborationDetailPage = () => {
         <EventGuide />
       </EventGuideWrapper>
 
-      {/* 문의하기, 댓글 */}
-      {/*<InquiryWrapper>
-        <InquiryForm onAddComment={handleAddComment} />
-      </InquiryWrapper>
+      {/* 댓글 및 문의하기 폼 */}
+      {/* <InquiryForm onAddComment={handleAddComment} />
 
-      <CommentListWrapper>
+      <div style={{ marginTop: '40px' }}>
         <CommentList
           comments={comments}
           onReply={handleReply}
           onDelete={handleDeleteComment}
           onUpdate={handleUpdateComment}
         />
-      </CommentListWrapper> */}
+      </div> */}
     </>
   );
 };
+
 
 export default CollaborationDetailPage;

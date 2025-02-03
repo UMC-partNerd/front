@@ -1,19 +1,14 @@
 import React, { useState } from 'react';
-import * as S from '../../styled-components/teamregister-styles/styled-ClubInfoForm'; 
-import ImageRectangle from './ImageRectangle';
+import * as S from '../../styled-components/teamregister-styles/styled-ClubInfoForm';
+import ImageRectangle from '../common/images/ImageRectangle';
 import ContactInput from './ContactInput';
-import ActivityImageUpload from './ActivityImageUpload';
+import ActivityImageUpload from '../common/images/ActivityImageUpload';
 
 const ClubInfoForm = ({ handleActivityClick }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [contactMethods, setContactMethods] = useState([]);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(selectedCategory === category ? null : category);
-  };
-
-  const handleAddContactMethod = () => {
-    setContactMethods([...contactMethods, '']); // 빈 값 추가
   };
 
   return (
@@ -57,14 +52,8 @@ const ClubInfoForm = ({ handleActivityClick }) => {
           <S.SmallText>이메일, 오픈채팅방, 인스타그램 등 연락 방법을 입력해주세요</S.SmallText>
         </S.InputContainer>
 
-        <S.ContactBox>
-          {contactMethods.map((_, index) => (
-            <ContactInput key={index} />
-          ))}
-          <S.AddText visible={contactMethods.length === 0} onClick={handleAddContactMethod}>
-            + 추가하기
-          </S.AddText>
-        </S.ContactBox>
+        {/* ContactInput을 바로 표시 */}
+        <ContactInput />
       </S.Section>
 
       {/* 활동 및 프로젝트 섹션 */}

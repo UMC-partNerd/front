@@ -4,7 +4,6 @@ export const FormContainer = styled.div`
   background-color: white;
   width: 94%;
   max-width: 1000px;
-  min-height: 1500px;
   padding: 60px;
   border-radius: 20px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
@@ -53,7 +52,7 @@ export const CategoryButton = styled.button`
 `;
 
 export const InputContainer = styled.div`
-  margin-bottom: 25px;  
+  margin-bottom: 25px;
   color: #E1E1E1;
 `;
 
@@ -112,28 +111,6 @@ export const SmallText = styled.p`
   color: #707070;
   margin-top: 5px;
   margin-bottom: 0; 
-`;
-
-export const ContactBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: #F3F3F3;
-  padding: 15px;
-  border-radius: 8px;
-  height: 250px;  
-  margin-top: -5px; 
-  margin-bottom: 0;  
-  position: relative;  
-`;
-
-export const AddText = styled.div`
-  position: absolute;
-  left: 15px;
-  bottom: 15px;
-  color: #0d29b7;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
 `;
 
 export const TextAreaContainer = styled.div`
