@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import API from "../../api/axiosInstance";
 
 const KakaoCallback = () => {
 
@@ -41,7 +40,7 @@ const KakaoCallback = () => {
     if (!isRequestSent) {
         isRequestSent = true;  // ✅ 중복 요청 방지
 
-        API.get(`/api/auth/login/kakao?code=${authCode}`)
+        axios.get(`${API_BASE_URL}/api/auth/login/kakao?code=${authCode}`)
             .then(response => {
                 if (response.status === 200 && response.data.isSuccess) {
                     console.log("백엔드 응답 (액세스 토큰):", response.data);
@@ -58,7 +57,13 @@ const KakaoCallback = () => {
 
                     // ✅ URL에서 `code` 제거하여 중복 요청 방지
                     setSearchParams({});
-                    navigate("/register/social");
+
+                    // newUser 여부에 따라 이동 경로 지정
+                if (response.data.result.newUser) {
+                    navigate("/register/social"); // 새로운 사용자
+                } else {
+                    navigate("/"); // 기존 사용자
+                }
                 } else {
                     console.error("카카오 로그인 응답 오류:", response.data);
                     navigate("/login");

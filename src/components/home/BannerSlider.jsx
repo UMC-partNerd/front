@@ -45,7 +45,11 @@ const SliderWrapper = styled.div`
   height: 280px;
   text-align: center;
   overflow: hidden;
+<<<<<<< HEAD
+  background-color: ${({ bgColor }) => bgColor}; 
+=======
   background-color: ${({ bgColor }) => bgColor}; /* bgColor는 바로 props로 전달됨 */
+>>>>>>> dev
 
   @media (max-width: 768px) {
     height: 200px;

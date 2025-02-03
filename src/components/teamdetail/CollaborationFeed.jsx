@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import * as S from '../../styled-components/teamdetail-styles/styled-CollaborationFeed';
 
 const CollaborationFeed = ({ feed }) => {
   const navigate = useNavigate();
@@ -11,24 +11,24 @@ const CollaborationFeed = ({ feed }) => {
   };
 
   return (
-    <Container>
-      <Header>
-        <SectionTitle>콜라보레이션 피드</SectionTitle>
+    <S.SContainer>
+      <S.SHeader>
+        <S.SSectionTitle>콜라보레이션 피드</S.SSectionTitle>
         {/* "콜라보레이션 바로가기" 버튼 제거 */}
         {/* <LinkButton onClick={handleGoToCollaboration}>콜라보레이션 바로가기  {'>'}</LinkButton> */}
-      </Header>
-      <FeedList>
+      </S.SHeader>
+      <S.SFeedList>
         {feed.map((item) => (
-          <FeedItem key={item.id} onClick={() => handleFeedClick(item.id)}>
-            <FeedHeader>
-              <FeedTitle>{item.title}</FeedTitle>
-              <FeedDate>{item.date}</FeedDate>
-            </FeedHeader>
-            <FeedDescription>{item.content}</FeedDescription>
-          </FeedItem>
+          <S.SFeedItem key={item.id} onClick={() => handleFeedClick(item.id)}>
+            <S.SFeedHeader>
+              <S.SFeedTitle>{item.title}</S.SFeedTitle>
+              <S.SFeedDate>{item.date}</S.SFeedDate>
+            </S.SFeedHeader>
+            <S.SFeedDescription>{item.content}</S.SFeedDescription>
+          </S.SFeedItem>
         ))}
-      </FeedList>
-    </Container>
+      </S.SFeedList>
+    </S.SContainer>
   );
 };
 
@@ -44,79 +44,3 @@ CollaborationFeed.propTypes = {
 };
 
 export default CollaborationFeed;
-
-const Container = styled.div` 
-  margin: 53px 0; 
-  max-width: 800px; 
-  width: 100%;
-`;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 32px; 
-  font-weight: 700; 
-  color: #212121;
-`;
-
-const FeedList = styled.ul`
-  margin-top: 30px;
-  list-style-type: none;
-  padding: 0;
-`;
-
-const FeedItem = styled.li`
-  margin-bottom: 30px; 
-  padding: 30px; 
-  border: 0.05px solid #f3f3f3; 
-  border-radius: 15px;
-  cursor: pointer;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); 
-  transition: background-color 0.3s, box-shadow 0.3s;
-  min-height: 120px;
-  display: flex;
-  flex-direction: column;
-
-  &:hover {
-    background-color: #f9f9f9;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); 
-  }
-`;
-
-const FeedHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-`;
-
-const FeedTitle = styled.div`
-  font-weight: 600; 
-  font-size: 20px; 
-  color: #0D29B7;
-`;
-
-const FeedDate = styled.div`
-  font-size: 0.8em;
-  color: #888;
-`;
-
-const FeedDescription = styled.div`
-  white-space: pre-line; 
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  color: #414141;
-  margin-top: 10px;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.5;
-`;
