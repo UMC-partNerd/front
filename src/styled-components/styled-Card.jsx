@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { VARIANTS } from '../components/home/Card';
 
 export const CardContainer = styled.div`
-  width: ${({ variant }) => variant === VARIANTS.PROJECT ? '530px' : '480px'};
+  width: 100%;
   height: ${({ variant }) => variant === VARIANTS.PROJECT ? '100px' : '160px'};
   display: flex;
   ${({ variant }) => (variant === VARIANTS.CLUB || variant === VARIANTS.PROJECT) ? `

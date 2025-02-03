@@ -1,41 +1,59 @@
+// Navbar.jsx
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { GoBell } from "react-icons/go";
 import { MdOutlinePersonOutline } from "react-icons/md";
+import { BsChatRightDots } from "react-icons/bs";
+import { useState } from 'react';
+import ProfileMenu from '../home/ProfileMenu';
 
-function Navbar({ isLoggedIn }) {
+function Navbar({ isLoggedIn, onLogout }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => setIsMenuOpen(prevState => !prevState);
+
   return (
     <NavbarContainer>
       <NavbarWrapper>
-        <Logo to="/">
-          <img src="/Frame.png" alt="Logo" />
-        </Logo>
-        <Menu>
-          <MenuItem>
-            <StyledLink to="/find">파트너드 찾기</StyledLink>
-          </MenuItem>
-          <MenuItem>
-            <StyledLink to="/collaboration">콜라보레이션</StyledLink>
-          </MenuItem>
-          <MenuItem>
-            <StyledLink to="/project">프로젝트</StyledLink>
-          </MenuItem>
-          <MenuItem>
-            <StyledLink to="/community">커뮤니티</StyledLink>
-          </MenuItem>
-        </Menu>
+        <LogoMenuGroup>
+          <Logo to="/">
+            <img src="/Frame.png" alt="Logo" />
+          </Logo>
+          <Menu>
+            <MenuItem>
+              <StyledLink to="/find">파트너드 찾기</StyledLink>
+            </MenuItem>
+            <MenuItem>
+              <StyledLink to="/collaboration">콜라보레이션</StyledLink>
+            </MenuItem>
+            <MenuItem>
+              <StyledLink to="/project">프로젝트</StyledLink>
+            </MenuItem>
+            <MenuItem>
+              <StyledLink to="/community">커뮤니티</StyledLink>
+            </MenuItem>
+          </Menu>
+        </LogoMenuGroup>
         <IconContainer>
           {isLoggedIn ? (
             <>
-              <GoBell />
-              <MdOutlinePersonOutline />
+              <IconWrapper>
+                <BsChatRightDots />
+              </IconWrapper>
+              <IconWrapper>
+                <GoBell />
+              </IconWrapper>
+              <IconWrapper onClick={toggleMenu}>
+                <MdOutlinePersonOutline />
+                {isMenuOpen && <ProfileMenu onLogout={onLogout} />}
+              </IconWrapper>
             </>
           ) : (
             <AuthButtons>
               <NavLink to="/login">
                 <LoginButton>로그인</LoginButton>
               </NavLink>
-              <NavLink to="/signup">
+              <NavLink to="/register/social">
                 <SignupButton>회원가입</SignupButton>
               </NavLink>
             </AuthButtons>
@@ -48,29 +66,42 @@ function Navbar({ isLoggedIn }) {
 
 export default Navbar;
 
+
+
+
 const NavbarContainer = styled.nav`
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center; 
   padding: 15px 20px;
   background-color: #f8f9fa;
   border-bottom: 1px solid #dee2e6;
+  width: 100%;
+  overflow-x: hidden; 
+  box-sizing: border-box; 
 `;
 
 const NavbarWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
-  justify-content: center;
-  position: relative;
-  left: -220px;
+  max-width: 1200px; 
+  padding: 0 30px; 
+  box-sizing: border-box; 
+`;
+
+const LogoMenuGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: 30px;
 `;
 
 const Logo = styled(NavLink)`
   display: block;
   width: 100px;
   height: auto;
-  margin-right: 20px;
   img {
     width: 100%;
     height: auto;
@@ -86,7 +117,15 @@ const Menu = styled.ul`
   gap: 30px;
   margin: 0;
   padding: 0;
-  justify-content: center;
+  justify-content: flex-start;
+
+  @media (max-width: 1024px) {
+    gap: 20px; 
+  }
+
+  @media (max-width: 768px) {
+    gap: 15px; 
+  }
 `;
 
 const MenuItem = styled.li`
@@ -110,19 +149,43 @@ const StyledLink = styled(NavLink)`
 const IconContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
-  position: absolute;
-  right: 140px;
+  gap: 15px;
+  margin-right: 55px;
+
+  @media (max-width: 1024px) {
+    gap: 10px; 
+  }
+
+  @media (max-width: 768px) {
+    gap: 8px; 
+  }
+`;
+
+const IconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   svg {
-    font-size: 1.6rem;
+    font-size: 1.8rem !important;
     color: #0D29B7;
     cursor: pointer;
+  }
+  &:first-child svg {
+    font-size: 1.4rem !important;
+  }
+  &:nth-child(2) svg {
+    font-size: 1.6rem !important;
+    margin-left: 7px;
+  }
+  &:nth-child(3) svg {
+    font-size: 1.8rem !important;
   }
 `;
 
 const AuthButtons = styled.div`
   display: flex;
   gap: 15px;
+  margin-left: 50px;
 `;
 
 const LoginButton = styled.button`

@@ -2,78 +2,133 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const BannerSlider = () => {
-  const images = [
-    '/Rectangle.png',
-    '/Rectangle.png',
-    '/Rectangle.png',
-    '/Rectangle.png',
-    '/Rectangle.png'
+  const slides = [
+    { src: '/banner1.png', bgColor: '#0D29B7' },
+    { src: '/banner2.png', bgColor: '#E3EFF5' },
+    { src: '/banner3.png', bgColor: '#121212' },
   ];
 
   const [currentImage, setCurrentImage] = useState(0);
 
   const nextImage = () => {
-    setCurrentImage((currentImage + 1) % images.length);
+    setCurrentImage((currentImage + 1) % slides.length);
   };
 
   const prevImage = () => {
-    setCurrentImage((currentImage - 1 + images.length) % images.length);
+    setCurrentImage((currentImage - 1 + slides.length) % slides.length);
   };
 
   return (
-    <SliderWrapper>
-      <SliderImage src={images[currentImage]} alt={`slide ${currentImage + 1}`} />
+    <SliderWrapper bgColor={slides[currentImage].bgColor}>
+      <SliderContent>
+        <SliderImage src={slides[currentImage].src} alt={`slide ${currentImage + 1}`} />
+      </SliderContent>
       <PaginationWrapper>
-        <PaginationButton onClick={prevImage}>&lt;</PaginationButton>
-        <PaginationIndicator>{currentImage + 1} / {images.length}</PaginationIndicator>
-        <PaginationButton onClick={nextImage}>&gt;</PaginationButton>
+        <PaginationButton onClick={prevImage}>
+          <Chevron src="/chevron.png" alt="left-chevron" />
+        </PaginationButton>
+        <PaginationIndicator>{currentImage + 1} / {slides.length}</PaginationIndicator>
+        <PaginationButton onClick={nextImage}>
+          <Chevron src="/chevron.png" alt="right-chevron" isRight />
+        </PaginationButton>
       </PaginationWrapper>
     </SliderWrapper>
   );
-}
+};
 
 export default BannerSlider;
 
 
 const SliderWrapper = styled.div`
   position: relative;
-  max-width: 1920px;
-  height: 280px; 
+  width: 100%;
+  height: 280px;
   text-align: center;
   overflow: hidden;
-  margin-top: 0;
+  background-color: ${({ bgColor }) => bgColor}; /* bgColor는 바로 props로 전달됨 */
+
+  @media (max-width: 768px) {
+    height: 200px;
+  }
+`;
+
+const SliderContent = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    transform: scale(0.8); 
+  }
+  @media (max-width: 480px) {
+    transform: scale(0.6); 
+  }
 `;
 
 const SliderImage = styled.img`
   width: 100%;
-  height: 100%; 
+  height: 100%;
+  object-fit: cover;
 `;
 
 const PaginationWrapper = styled.div`
   position: absolute;
-  bottom: 0; 
-  right: 400px; 
+  bottom: 0;
+  right: 21%;
   background-color: white;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 0 20px;
+  justify-content: space-between;
+  padding: 0 8px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-  height: 30px;
   font-size: 1rem;
-  width: 100px; 
-  height: 40px; 
-  border-top-left-radius: 25px; 
-  border-top-right-radius: 25px; 
+  height: 44px; 
+  width: 129px;
+  border-top-left-radius: 27px;
+  border-top-right-radius: 27px;
+
+  @media (max-width: 768px) {
+    right: 10%;
+    font-size: 0.8rem; 
+    width: 110px; 
+    height: 38px; 
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem; 
+    width: 90px; 
+    height: 34px; 
+  }
 `;
 
 const PaginationButton = styled.button`
   background-color: transparent;
-  color: black;
+  color: #212121;
   border: none;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 1.2rem;
+  margin: 0 4px;
+  line-height: 1;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    font-size: 1rem; 
+    width: 28px; 
+    height: 28px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem; 
+    width: 24px; 
+    height: 24px;
+  }
 
   &:focus {
     outline: none;
@@ -81,7 +136,25 @@ const PaginationButton = styled.button`
 `;
 
 const PaginationIndicator = styled.span`
-  color: black;
+  color: #212121;
   font-size: 1rem;
-  font-weight: bold;
+  font-weight: 600;
+  margin: 0 3px;
+  display: inline-block;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem; 
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem; 
+  }
+`;
+
+
+const Chevron = styled.img`
+  transform: ${({ isRight }) => (isRight ? 'rotate(180deg)' : 'none')};
+  width: 20px;
+  height: 20px;
+  display: block;
 `;
