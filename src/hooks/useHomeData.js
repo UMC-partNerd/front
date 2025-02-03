@@ -9,7 +9,6 @@ const api = axios.create({
 
 export const useHomeData = () => {
   const [homeData, setHomeData] = useState({
-    collaborations: [],
     clubs: [],
     projects: [],
     promotionProjects: []
@@ -19,7 +18,7 @@ export const useHomeData = () => {
 
   const getImageUrl = async (profileImage) => {
     try {
-      // 백엔드 API로 요청
+      // 백엔드 API로 presigned URL 요청
       const response = await api.get(`/api/s3/preSignedUrl`, {
         params: {
           keyName: profileImage
@@ -50,6 +49,22 @@ export const useHomeData = () => {
     );
   };
 
+  const processCollabImageUrls = async (items) => {
+    return Promise.all(
+      items.map(async (item) => {
+        if (item.clubProfileImage) {
+          const cloudFrontUrl = await getImageUrl(item.clubProfileImage);  // presigned URL 받아오기
+          return {
+            ...item,
+            thumbnail: cloudFrontUrl || '',
+            imageUrl: cloudFrontUrl || ''
+          };
+        }
+        return item;
+      })
+    );
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,10 +74,8 @@ export const useHomeData = () => {
         const processedProjects = await processImageUrls(data.result.recentProjects || []);
         const processedPromotionProjects = await processImageUrls(data.result.popularPromotionProjects || []);
         const processedClubs = await processImageUrls(data.result.popularClubs || []);
-        const processedCollabs = await processImageUrls(data.result.recentCollabPosts || []);
 
         setHomeData({
-          collaborations: processedCollabs,
           clubs: processedClubs,
           projects: processedProjects,
           promotionProjects: processedPromotionProjects

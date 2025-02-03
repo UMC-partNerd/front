@@ -1,10 +1,53 @@
 import { useState, useEffect } from 'react';
 import { BASE_URL } from '../apis/config';
+import axios from 'axios';
+
+// baseURL 설정
+const api = axios.create({
+  baseURL: BASE_URL
+});
 
 export const usePartnerSearch = (category = '전체', order = 'recent', page = 1) => {
   const [partners, setPartners] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // S3 pre-signed URL을 가져오는 함수
+  const getImageUrl = async (profileImage) => {
+    try {
+      if (!profileImage) return null;
+      
+      const response = await api.get(`/api/s3/preSignedUrl`, {
+        params: {
+          keyName: profileImage
+        }
+      });
+      
+      return response.data.result.cloudFrontUrl;
+    } catch (err) {
+      console.error('이미지 URL 가져오기 실패:', err);
+      return null;
+    }
+  };
+
+  // 이미지 URL 처리를 위한 함수
+  const processImageUrls = async (items) => {
+    return Promise.all(
+      items.map(async (item) => {
+        if (item.profileImage) {
+          const cloudFrontUrl = await getImageUrl(item.profileImage);
+          return {
+            ...item,
+            profileImage: cloudFrontUrl || '/default-image.jpg'
+          };
+        }
+        return {
+          ...item,
+          profileImage: '/default-image.jpg'
+        };
+      })
+    );
+  };
 
   useEffect(() => {
     const fetchPartners = async () => {
@@ -16,42 +59,29 @@ export const usePartnerSearch = (category = '전체', order = 'recent', page = 1
           page: page.toString()
         });
 
-        // 환경 변수에서 토큰을 가져옵니다.
         const headers = {
           'Authorization': `Bearer ${import.meta.env.VITE_JWT_TOKEN}`,
           'Content-Type': 'application/json'
         };
-        console.log(import.meta.env.VITE_JWT_TOKEN);
-        console.log('Request URL:', `${BASE_URL}/api/partnerd?${params}`);
-        console.log('Request Headers:', headers);
-        console.log('Request Parameters:', {
-          categoryID: CATEGORY_MAPPING[category],
-          order: order.toLowerCase(),
-          page: page.toString()
-        });
 
         const response = await fetch(`${BASE_URL}/api/partnerd?${params}`, {
           headers: headers
         });
-        
-        console.log('Response Status:', response.status);
-        console.log('Response Status Text:', response.statusText);
 
         if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          console.log('Error Response Data:', errorData);
-          throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
-        console.log('Success Response Data:', data);
-        setPartners(data || []);
+        console.log('Original API Response:', data);
+
+        // 이미지 URL 처리
+        const processedData = await processImageUrls(data.result);
+        console.log('Processed Data with Images:', processedData);
+
+        setPartners(processedData || []);
       } catch (err) {
-        console.error('Detailed Error Information:', {
-          message: err.message,
-          stack: err.stack,
-          name: err.name
-        });
+        console.error('Error fetching partners:', err);
         setError(err);
       } finally {
         setIsLoading(false);

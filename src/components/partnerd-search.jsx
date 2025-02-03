@@ -42,14 +42,11 @@ const PartnerSearch = () => {
     return <div>에러가 발생했습니다: {error.message}</div>;
   }
 
-  // 현재 페이지의 데이터만 선택
-  const currentPartners = partners.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const currentPartners = Array.isArray(partners) 
+    ? partners.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+    : [];
 
-  // 전체 페이지 수 계산
-  const totalPages = Math.ceil(partners.length / itemsPerPage);
+  const totalPages = Math.ceil((partners?.length || 0) / itemsPerPage);
 
   const renderPageButtons = () => {
     const buttons = [];
@@ -65,7 +62,7 @@ const PartnerSearch = () => {
     );
 
     // 현재 페이지를 중심으로 순환하는 페이지 번호 생성
-    let pageNumbers = [];
+    const pageNumbers = new Set(); // 중복 제거를 위한 Set 사용
     for (let i = -2; i <= 2; i++) {
       let pageNum = currentPage + i;
       
@@ -73,11 +70,14 @@ const PartnerSearch = () => {
       if (pageNum <= 0) pageNum = totalPages + pageNum;
       if (pageNum > totalPages) pageNum = pageNum - totalPages;
       
-      pageNumbers.push(pageNum);
+      // 유효한 페이지 번호만 추가 (1부터 totalPages까지)
+      if (pageNum >= 1 && pageNum <= totalPages) {
+        pageNumbers.add(pageNum);
+      }
     }
 
-    // 페이지 버튼 생성
-    pageNumbers.forEach(num => {
+    // Set을 배열로 변환하고 정렬하여 페이지 버튼 생성
+    [...pageNumbers].sort((a, b) => a - b).forEach(num => {
       buttons.push(
         <PageButton
           key={num}
@@ -136,23 +136,37 @@ const PartnerSearch = () => {
       </ButtonContainer>
 
       <PartnerGrid>
-        {currentPartners.map((partner, index) => (
-          <PartnerCard key={index}>
+        {currentPartners.map((partner) => (
+          <PartnerCard key={partner.clubId}>
             <ImagePlaceholder>
-              <img src={partner.imageUrl} alt={partner.title} />
+              <img 
+                src={partner.profileImage} 
+                alt={partner.name}
+                onError={(e) => {
+                  if (!e.target.src.includes('default-image.jpg')) {
+                    e.target.src = '/default-image.jpg';
+                  } else {
+                    e.target.onError = null;
+                    e.target.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+                  }
+                }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
             </ImagePlaceholder>
             <CardContent>
-              <CategoryBadge>{partner.category}</CategoryBadge>
-              <Title>{partner.title}</Title>
-              <Description>{partner.description}</Description>
+              <CategoryBadge>{partner.categoryName}</CategoryBadge>
+              <Title>{partner.name}</Title>
+              <Description>{partner.intro}</Description>
             </CardContent>
           </PartnerCard>
         ))}
       </PartnerGrid>
 
-      <PaginationContainer>
-        {renderPageButtons()}
-      </PaginationContainer>
+      {totalPages > 0 && (
+        <PaginationContainer>
+          {renderPageButtons()}
+        </PaginationContainer>
+      )}
     </PartnerSearchContainer>
   );
 };
