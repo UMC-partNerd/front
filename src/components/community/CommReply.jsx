@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { FiMoreVertical } from "react-icons/fi";
-import * as S from '../../../styled-components/collab-styles/styled-Reply';
+import { CiHeart } from "react-icons/ci";  
+import * as S from '../../styled-components/community-styles/styled-CommReply'; 
 
-const Reply = ({ text, user, date, onDelete, onUpdate }) => {
+const CommReply = ({ text, user, date, onDelete, onUpdate }) => {
   const [replyText, setReplyText] = useState(text);
   const [editMode, setEditMode] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
+  const [liked, setLiked] = useState(false); // 좋아요 상태
+  const [likeCount, setLikeCount] = useState(0); // 좋아요 숫자
 
   const handleOptionsClick = () => {
     setShowOptions((prev) => !prev);
@@ -32,6 +35,14 @@ const Reply = ({ text, user, date, onDelete, onUpdate }) => {
     }
   };
 
+  const handleLikeClick = () => {
+    setLiked((prevLiked) => {
+      const newLiked = !prevLiked;
+      setLikeCount((prevCount) => (newLiked ? prevCount + 1 : prevCount - 1)); // 좋아요 수 증가/감소
+      return newLiked;
+    });
+  };
+
   const formatDate = (date) => {
     const d = new Date(date);
     const month = d.getMonth() + 1;
@@ -46,8 +57,14 @@ const Reply = ({ text, user, date, onDelete, onUpdate }) => {
       <S.SReplyContent>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ fontSize: '16px', fontWeight: '600', marginBottom: '5px' }}>{user}</div>
-          <div style={{ fontSize: '13px', color: '#c2c2c2', fontWeight: '500', marginBottom: '5px' }}>
-            {formatDate(date)}
+          <div style={{ fontSize: '13px', color: '#c2c2c2', fontWeight: '500', marginBottom: '5px', display: 'flex', alignItems: 'center' }}>
+            <S.SDateText>{formatDate(date)}</S.SDateText>
+            <S.SLikeWrapper>
+              <S.SLikeButton onClick={handleLikeClick} liked={liked}>
+                <CiHeart />
+              </S.SLikeButton>
+              <S.SLikeCount>{likeCount}</S.SLikeCount>
+            </S.SLikeWrapper>
           </div>
         </div>
         {editMode ? (
@@ -82,4 +99,4 @@ const Reply = ({ text, user, date, onDelete, onUpdate }) => {
   );
 };
 
-export default Reply;
+export default CommReply;

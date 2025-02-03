@@ -5,7 +5,7 @@ import Footer from '../components/common/Footer';
 import { useState, useEffect } from 'react';
 
 function RootLayout() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   const handleScroll = () => {
@@ -53,3 +53,4 @@ const MainContainer = styled.div`
 const MainContent = styled.main`
   flex: 1;
 `;
+

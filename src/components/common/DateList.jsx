@@ -3,39 +3,6 @@ import Calendar from './Calendar';
 import { RiCalendarLine } from 'react-icons/ri';
 import styled from 'styled-components';
 
-const DateListContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between; 
-  gap: 10px; 
-  background: #fff;
-  padding: 10px 20px;
-  width: 150px;
-  height: 40px;
-  border-radius: 6px;
-  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.15);
-  cursor: pointer;
-  position: relative;
-`;
-
-const DateText = styled.h3`
-  margin: 0;
-  color: #C2C2C2;
-  font-size: 15px;
-  font-weight: 500;
-`;
-
-const CalendarWrapper = styled.div`
-  position: absolute;
-  top: 50px;
-  left: 0;
-  background: white;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
-  border-radius: 6px;
-  z-index: 200;
-  padding: 10px;
-`;
-
 const DateList = ({ selectedDate, onDateChange, placeholder }) => {
   const [showCalendar, setShowCalendar] = useState(false);
 
@@ -80,3 +47,38 @@ export default DateList;
           </S.InputWrapper>
 */
   
+
+
+
+const DateListContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  gap: 10px; 
+  background: #fff;
+  padding: 10px 20px;
+  width: 150px;
+  height: 40px;
+  border-radius: 6px;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  position: relative;
+`;
+
+const DateText = styled.h3`
+  margin: 0;
+  color: #C2C2C2;
+  font-size: 15px;
+  font-weight: 500;
+`;
+
+const CalendarWrapper = styled.div`
+  position: absolute;
+  top: 50px;
+  left: 0;
+  background: white;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  z-index: 200;
+  padding: 10px;
+`;

@@ -8,26 +8,26 @@ const EventImageUploadForm = ({ handleProfileClick, handleBannerClick }) => {
   const [bannerImage, setBannerImage] = useState(null);
 
   const handleProfileClose = () => {
-    setProfileImage(null);  
+    setProfileImage(null);  // 프로필 이미지 삭제
   };
 
   const handleBannerClose = () => {
-    setBannerImage(null);  
+    setBannerImage(null);  // 배너 이미지 삭제
   };
 
   return (
     <FormContainer>
       {/* 프로젝트 배너 사진 섹션 */}
       <Section>
-        <ProfilePictureText>프로젝트 메인 사진 <RedAsterisk>*</RedAsterisk></ProfilePictureText>
+        <ProfilePictureText>프로젝트 배너 사진 <RedAsterisk>*</RedAsterisk></ProfilePictureText>
         <form>
           <RecommendationText>추천 사이즈: 1800 x 300 | JPG, PNG | 최대 10MB</RecommendationText>
           <BannerImageUpload
             onClick={(file) => setBannerImage(URL.createObjectURL(file))}  // 업로드된 이미지 미리보기 설정
             imagePreview={bannerImage}
           />
-          {/* 항상 렌더링되는 ImageRectangle */}
-          <ImageRectangle imagePreview={bannerImage} onClose={handleBannerClose} />
+          {/* 배너 이미지 미리보기가 ImageRectangle에 전달 */}
+          {bannerImage && <ImageRectangle imagePreview={bannerImage} onClose={handleBannerClose} />}
         </form>
       </Section>
 
@@ -40,14 +40,15 @@ const EventImageUploadForm = ({ handleProfileClick, handleBannerClick }) => {
             onClick={(file) => setProfileImage(URL.createObjectURL(file))}  // 업로드된 이미지 미리보기 설정
             imagePreview={profileImage}
           />
-          {/* 항상 렌더링되는 ImageRectangle */}
-          <ImageRectangle imagePreview={profileImage} onClose={handleProfileClose} />
+          {/* 프로필 이미지 미리보기가 ImageRectangle에 전달 */}
+          {profileImage && <ImageRectangle imagePreview={profileImage} onClose={handleProfileClose} />}
         </form>
       </Section>
     </FormContainer>
   );
 };
 
+// Styled components
 const FormContainer = styled.div`
   background-color: white;
   width: 95%;
