@@ -21,10 +21,10 @@ export const COLORS = {
     GRAY: 'gray'
 };
 
-// Set the root element for the modal (important for accessibility)
 Modal.setAppElement('#root');
 
-function CustomModal ({ label, boldface, regular, btn, variant, openModal, setOpenModal }) {
+function CustomModal ({ label, boldface, regular, btn, variant }) {
+    const [openModal, setOpenModal] = useState(false);
     const closeModal = () => setOpenModal(false);
 
     const renderVer3Modal = () => (
