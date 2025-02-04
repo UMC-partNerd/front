@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import API from "../../api/axiosInstance";
 import styled from "styled-components";
-import useUserStore from '../../stores/useUserStore'; // zustand 추가 내용용
+import useUserStore from '../../stores/useUserStore'; // zustand 추가 내용git
 
 const KakaoCallback = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -11,7 +11,7 @@ const KakaoCallback = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   //인가 코드 추출
-  const { setUser } = useUserStore(); // 로그인 상태를 zustand 스토어로 변경경
+  const { setUser } = useUserStore(); // 로그인 상태를 zustand 스토어로 변경
 
   useEffect(() => {
     const authCode = searchParams.get("code");
