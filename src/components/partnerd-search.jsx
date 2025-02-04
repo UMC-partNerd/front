@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-
 import {
   PaginationContainer,
   ArrowButton,
   ArrowIcon,
   PageButton
 } from "../styled-components/styled-common";
-
 import {
   Container as PartnerSearchContainer,
   PartnerGrid,
@@ -26,46 +24,29 @@ import {
   SearchContainer,
   CategoryBadge
 } from "../styled-components/styled-partnerd-search";
-
+import { usePartnerSearch, PARTNER_CATEGORIES, SORT_OPTIONS } from '../hooks/usePartnerSearch';
 
 const PartnerSearch = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState('latest');
+  const [sortBy, setSortBy] = useState(SORT_OPTIONS.RECENT);
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const itemsPerPage = 12;
 
-  // 예시 데이터
-  const partners = Array(50).fill().map((_, index) => ({
-    title: 'UMC',
-    description: 'UMC는 IT연합 동아리입니다.',
-    category: '웹/앱 개발',
-    imageUrl: 'default-image-url.jpg'
-  }));
+  const { partners, isLoading, error } = usePartnerSearch(selectedCategory, sortBy);
 
-  // 카테고리 필터링
-  const filteredPartners = selectedCategory === '전체'
-    ? partners
-    : partners.filter(partner => partner.category === selectedCategory);
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
 
-  // 현재 페이지의 데이터만 선택
-  const currentPartners = filteredPartners.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  if (error) {
+    return <div>에러가 발생했습니다: {error.message}</div>;
+  }
 
-  // 전체 페이지 수 계산
-  const totalPages = Math.ceil(filteredPartners.length / itemsPerPage);
+  const currentPartners = Array.isArray(partners) 
+    ? partners.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+    : [];
 
-  const categories = [
-    '전체',
-    '웹/앱 개발',
-    '인공지능',
-    '데이터',
-    '디자인',
-    '마케팅',
-    '게임',
-    '기타'
-  ];
+  const totalPages = Math.ceil((partners?.length || 0) / itemsPerPage);
 
   const renderPageButtons = () => {
     const buttons = [];
@@ -81,7 +62,7 @@ const PartnerSearch = () => {
     );
 
     // 현재 페이지를 중심으로 순환하는 페이지 번호 생성
-    let pageNumbers = [];
+    const pageNumbers = new Set(); // 중복 제거를 위한 Set 사용
     for (let i = -2; i <= 2; i++) {
       let pageNum = currentPage + i;
       
@@ -89,11 +70,14 @@ const PartnerSearch = () => {
       if (pageNum <= 0) pageNum = totalPages + pageNum;
       if (pageNum > totalPages) pageNum = pageNum - totalPages;
       
-      pageNumbers.push(pageNum);
+      // 유효한 페이지 번호만 추가 (1부터 totalPages까지)
+      if (pageNum >= 1 && pageNum <= totalPages) {
+        pageNumbers.add(pageNum);
+      }
     }
 
-    // 페이지 버튼 생성
-    pageNumbers.forEach(num => {
+    // Set을 배열로 변환하고 정렬하여 페이지 버튼 생성
+    [...pageNumbers].sort((a, b) => a - b).forEach(num => {
       buttons.push(
         <PageButton
           key={num}
@@ -122,7 +106,7 @@ const PartnerSearch = () => {
     <PartnerSearchContainer>
       <CategoryTitle>카테고리</CategoryTitle>
       <CategoryContainer>
-        {categories.map(category => (
+        {PARTNER_CATEGORIES.map(category => (
           <CategoryButton
             key={category}
             isActive={selectedCategory === category}
@@ -136,14 +120,14 @@ const PartnerSearch = () => {
       <ButtonContainer>
         <SortContainer>
           <SortButton
-            isActive={sortBy === 'latest'}
-            onClick={() => setSortBy('latest')}
+            isActive={sortBy === SORT_OPTIONS.RECENT}
+            onClick={() => setSortBy(SORT_OPTIONS.RECENT)}
           >
             최신순
           </SortButton>
           <SortButton
-            isActive={sortBy === 'popular'}
-            onClick={() => setSortBy('popular')}
+            isActive={sortBy === SORT_OPTIONS.POPULAR}
+            onClick={() => setSortBy(SORT_OPTIONS.POPULAR)}
           >
             인기순
           </SortButton>
@@ -152,23 +136,37 @@ const PartnerSearch = () => {
       </ButtonContainer>
 
       <PartnerGrid>
-        {currentPartners.map((partner, index) => (
-          <PartnerCard key={index}>
+        {currentPartners.map((partner) => (
+          <PartnerCard key={partner.clubId}>
             <ImagePlaceholder>
-              <img src={partner.imageUrl} alt={partner.title} />
+              <img 
+                src={partner.profileImage} 
+                alt={partner.name}
+                onError={(e) => {
+                  if (!e.target.src.includes('default-image.jpg')) {
+                    e.target.src = '/default-image.jpg';
+                  } else {
+                    e.target.onError = null;
+                    e.target.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+                  }
+                }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
             </ImagePlaceholder>
             <CardContent>
-              <CategoryBadge>{partner.category}</CategoryBadge>
-              <Title>{partner.title}</Title>
-              <Description>{partner.description}</Description>
+              <CategoryBadge>{partner.categoryName}</CategoryBadge>
+              <Title>{partner.name}</Title>
+              <Description>{partner.intro}</Description>
             </CardContent>
           </PartnerCard>
         ))}
       </PartnerGrid>
 
-      <PaginationContainer>
-        {renderPageButtons()}
-      </PaginationContainer>
+      {totalPages > 0 && (
+        <PaginationContainer>
+          {renderPageButtons()}
+        </PaginationContainer>
+      )}
     </PartnerSearchContainer>
   );
 };

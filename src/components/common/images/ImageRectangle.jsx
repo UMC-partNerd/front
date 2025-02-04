@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const ImageRectangle = ({ imagePreview, onClose }) => {
   return (
     <ImageBox>
       <Rectangle>
-        {imagePreview && <PreviewImage src={imagePreview} alt="미리보기" />}
+        <PreviewImage src={imagePreview || "/default-image.png"} alt="미리보기" />
       </Rectangle>
       {onClose && (
         <CloseIcon onClick={onClose}>
@@ -21,7 +22,8 @@ const ImageBox = styled.div`
   height: 112px;
   position: relative;
   box-sizing: border-box;
-  overflow: visible; 
+  overflow: visible;
+  margin-top: 20px;
 `;
 
 const Rectangle = styled.div`
@@ -61,5 +63,10 @@ const CloseText = styled.span`
   font-weight: 500;
   color: #08D485;
 `;
+
+ImageRectangle.propTypes = {
+  imagePreview: PropTypes.string,
+  onClose: PropTypes.func,
+};
 
 export default ImageRectangle;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { ProfileMenuContainer, ProfileMenuItem, Separator } from '../../styled-components/home-styles/styled-ProfileMenu';
 
 function ProfileMenu({ onLogout }) {
@@ -16,7 +16,6 @@ function ProfileMenu({ onLogout }) {
       </ProfileMenuItem>
       <Separator />
       <ProfileMenuItem>
-
         <button onClick={onLogout}>로그아웃</button>
       </ProfileMenuItem>
     </ProfileMenuContainer>
@@ -24,4 +23,3 @@ function ProfileMenu({ onLogout }) {
 }
 
 export default ProfileMenu;
-

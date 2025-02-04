@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import axios from "axios";
-import { getRedirectURI } from "./redirectURI";
+import { getRedirectURI } from "./RedirectURI";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -27,8 +27,7 @@ const KakaoBtn = () => {
 const ButtonWRapp = styled.div`
 background:	#FEE500;
 width:100%;
-min-height:54px;
-max-width:420px;
+max-height:45px;
 display: inline-block;
 display:flex;
 justify-content: center;
