@@ -14,12 +14,6 @@ const RegisterHeader = ({onChange }) => {
         nickname: "",
     });
 
-    // const handleChange = (e) => {
-    //     setFormData({
-    //         ...formData,
-    //         [e.target.name]: e.target.value,
-    //     });
-    // };
 
     const [isNicknameAvailable, setIsNicknameAvailable] = useState(null); // 닉네임 상태 (true: 사용 가능, false: 중복됨)
 

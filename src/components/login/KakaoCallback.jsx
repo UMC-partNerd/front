@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import API from "../../api/axiosInstance";
+import styled from "styled-components";
 
 const KakaoCallback = () => {
 
@@ -82,7 +83,71 @@ const KakaoCallback = () => {
     }
     }, []);
 
-    return <p>카카오 로그인 처리 중...</p>;
+    return (
+        <main className="loginPage">
+            <MainWrapp>
+                <Logo>
+                <img src="/Frame.png" alt="Logo" />
+                </Logo>
+                <Text>부지런히 연결중...</Text>
+            </MainWrapp>
+        </main>
+    );
 }
+
+const Text = styled.div`
+color:#B1B1B1;
+font-size:10px;
+`
+
+const Logo = styled.div`
+    display: block;
+    width: 200px;
+    height: auto;
+    img {
+        width: 100%;
+        height: auto;
+    }
+    &:hover {
+        opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
+        width: 150px;
+    }
+`;
+
+const MainWrapp = styled.main`
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 60vw;
+    max-width: 2700px;
+    height: 85vh;
+    background: #ffffff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    margin: 50px 100px 70px 100px;
+    padding: 20px;
+
+    @media (max-width: 1024px) {
+        width: 80vw;
+        margin: 30px 50px;
+    }
+
+    @media (max-width: 768px) {
+        width: 100vw;
+        height: 100vh;
+        margin: 20px;
+        padding: 15px;
+    }
+
+    @media (max-width: 480px) {
+        width: 100vw;
+        margin: 10px;
+        padding: 10px;
+    }
+`;
 
 export default KakaoCallback;
