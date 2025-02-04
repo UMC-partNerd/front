@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useEffect } from "react"
 import axios from "axios"
 
-const RegisterHeader = ({onChange }) => {
+const RegisterHeader = ({onChange , onNicknameCheck}) => {
 
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -16,6 +16,8 @@ const RegisterHeader = ({onChange }) => {
 
 
     const [isNicknameAvailable, setIsNicknameAvailable] = useState(null); // 닉네임 상태 (true: 사용 가능, false: 중복됨)
+    //닉네임 체크 확인 여부 
+    const [isNicknameChecked, setIsNicknameChecked] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -23,13 +25,12 @@ const RegisterHeader = ({onChange }) => {
         setFormData(updatedData);
         if (name === "nickname") {
             setIsNicknameAvailable(null); // 닉네임 변경 시 상태 초기화
+            setIsNicknameChecked(false);
+            onNicknameCheck(false);
         }
         onChange(updatedData); // 부모로 데이터 전달
     };
 
-    const handleSubmit = () => {
-        onFormSubmit(formData);
-    };
 
     useEffect(() => {
         // 로컬 스토리지에서 이메일 가져오기
@@ -63,6 +64,10 @@ const RegisterHeader = ({onChange }) => {
                     Authorization: `Bearer ${jwtToken}`,
                 },
             });
+            setIsNicknameChecked(true);
+            onNicknameCheck(true);
+
+            console.log("닉네임이 중복이면 true", response.data.result);
 
             if (response.data.result) {
                 setIsNicknameAvailable(false); // 닉네임 중복됨
@@ -72,6 +77,8 @@ const RegisterHeader = ({onChange }) => {
         } catch (error) {
             console.error("닉네임 중복 확인 오류:", error);
             setIsNicknameAvailable(null);
+            setIsNicknameChecked(false);
+            onNicknameCheck(false);
         }
     };
 

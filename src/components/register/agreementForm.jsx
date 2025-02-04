@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Form } from "../../styles/registerstyles"
 import { useState } from "react";
 
-const Agreement = ({ onChange }) => {
+const Agreement = ({ onChange, onAgreementCheck}) => {
     const [agreements, setAgreements] = useState({
         isAdult: false,
         termsOfService: false,
@@ -34,17 +34,16 @@ const Agreement = ({ onChange }) => {
 
             setAgreements(newAgreements);
             onChange(newAgreements);
+            onAgreementCheck(Object.values(newAgreements).every(Boolean)); // 모든 항목이 체크되었는지 전달
         } else {
             // 개별 체크박스가 변경될 때
             const updatedAgreements = { ...agreements, [name]: checked };
             setAgreements(updatedAgreements);
             onChange(updatedAgreements);
+            onAgreementCheck(Object.values(updatedAgreements).every(Boolean)); // 변경 후 모든 항목 체크 여부 확인
         }
     };
 
-    const handleSubmit = () => {
-        onSubmit(agreements);
-    };
     return (
         <Form>
             <AgreeLine style={{ marginBottom: '0px' }}>
