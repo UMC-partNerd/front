@@ -60,13 +60,12 @@ const KakaoCallback = () => {
                     // ✅ URL에서 `code` 제거하여 중복 요청 방지
                     setSearchParams({});
 
-                    navigate("/register/social");
                     // newUser 여부에 따라 이동 경로 지정
-                // if (response.data.result.newUser) {
-                //     navigate("/register/social"); // 새로운 사용자
-                // } else {
-                //     navigate("/"); // 기존 사용자
-                // }
+                if (response.data.result.newUser) {
+                    navigate("/register/social"); // 새로운 사용자
+                } else {
+                    navigate("/"); // 기존 사용자
+                }
                 } else {
                     console.error("카카오 로그인 응답 오류:", response.data);
                     navigate("/login");
