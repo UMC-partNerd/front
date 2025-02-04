@@ -26,6 +26,11 @@ const SignUpSocialPage = () =>{
         marketingNotify: true,
     });
 
+    //닉네임 체크 상태태
+    const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+    // 약관 체크 상태
+    const [isAgreementChecked, setIsAgreementChecked] = useState(false);
+
         // 사용자 데이터 업데이트
     const handleUserDataChange = (data) => {
         setUserData(data);
@@ -35,6 +40,19 @@ const SignUpSocialPage = () =>{
     const handleAgreementsChange = (data) => {
         setAgreements(data);
     };
+
+    // 닉네임 체크 상태 업데이트
+    const handleNicknameCheck = (isChecked) => {
+        setIsNicknameChecked(isChecked);
+    };
+
+    // 약관 동의 상태 업데이트
+    const handleAgreementCheck = (isChecked) => {
+        setIsAgreementChecked(isChecked);
+    };
+
+    //입력 필드 채워진 경우, or 닉네임 체크 한 경우에만 버튼 활성화 로직 
+    const isFormValid = userData.name && userData.birthDate && userData.nickname && isNicknameChecked && isAgreementChecked;
 
 
     // 완료 버튼 클릭 시 데이터 전송
@@ -88,9 +106,9 @@ const SignUpSocialPage = () =>{
     return(
         <main className="loginPage">
             <MainWrapp>
-                <RegisterHeader onChange={handleUserDataChange}/>
-                <Agreement onChange={handleAgreementsChange}/>
-                <CompleteButton onClick={handleSubmit}>완료</CompleteButton>
+                <RegisterHeader onChange={handleUserDataChange}  onNicknameCheck={handleNicknameCheck}/>
+                <Agreement onChange={handleAgreementsChange} onAgreementCheck={handleAgreementCheck}/>
+                <CompleteButton onClick={handleSubmit}  disabled={!isFormValid}>완료</CompleteButton>
             </MainWrapp>
         </main>
     )
@@ -106,7 +124,7 @@ const CompleteButton = styled.button`
     border: none;
     cursor: pointer;
     margin-top: 30px;
-    background: #0D29B7;
+    background:${({disabled}) =>(disabled ? "#A0A0A0" : "#0D29B7")};
     border-radius: 4px;
 `;
 

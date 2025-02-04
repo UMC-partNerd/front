@@ -35,6 +35,22 @@ export const ProfileMenuItem = styled.div`
       color: #1a73e8;
     }
   }
+
+  button {
+    background: none;
+    border: none;
+    color: black;
+    font-size: 15px;
+    font-family: Pretendard;
+    font-weight: 600;
+    padding-left: 5px;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    &:hover {
+      color: #1a73e8;
+    }
+  }
 `;
 
 export const Separator = styled.div`
