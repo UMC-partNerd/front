@@ -115,7 +115,8 @@ const SignUpSocialPage = () =>{
 }
 
 const CompleteButton = styled.button`
-    width: 100%;
+    width: 70%;
+    max-width:420px;
     height: 50px;
     color: white;
     font-family: 'Pretendard';
