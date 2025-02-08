@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import ButtonBlue from "../mypage/button_blue";
 import { useLocation } from "react-router-dom";
-import ButtonWhite from "../mypage/button_white";
+import Button, { TYPES } from "../common/button";
 
 //contact 컴포넌트 
 const PersonalContact = () =>{
@@ -19,10 +18,17 @@ const PersonalContact = () =>{
             </NameField>
             </SubContainer>
             {isPersonalPage ? (
-        <ButtonBlue style={{ width: "60px", height: "15px" }}>채팅</ButtonBlue>
+                <Button
+                    type={TYPES.PLUS}
+                    text='채팅'
+                    onClick={onClickHandler}
+                />
             ) : (
-                <ButtonWhite style={{ width: "60px", height: "15px" }}>채팅</ButtonWhite>
-                
+                <Button
+                    type={TYPES.PLUS}
+                    text='채팅'
+                    onClick={onClickHandler}
+                />
             )}
         </Container>
     )

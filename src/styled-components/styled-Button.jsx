@@ -7,8 +7,8 @@ export const ButtonContainer = styled.div`
 
   gap: 10px;
 
-  width: 600px;
-  height: 380px;
+  width: 60px;
+  height: 16px;
   flex-shrink: 0;
 
   padding: 20px 32px
