@@ -24,7 +24,6 @@ import ProjectPromoteDetail from './pages/project-pages/ProjectPromoteDetail';
 import TeamMangement from './pages/TeamMangement'  
 import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
-
 const router = createBrowserRouter([
   {
     path: '/',

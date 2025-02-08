@@ -4,7 +4,8 @@ import EventInfoForm from '../../components/collabregister/EventInfoForm';
 import EventGuideForm from '../../components/collabregister/EventGuideForm';  
 import EventImageUploadForm from '../../components/collabregister/EventImageUploadForm';
 import styled from 'styled-components';
-import ButtonBlue from '../../components/mypage/button_blue'; 
+import Button, { TYPES } from "../../components/common/button";
+
 import axios from 'axios';
 
 const CollabRegistration = () => {
@@ -37,7 +38,7 @@ const CollabRegistration = () => {
     }));
   };
 
-  const handleSubmit = async () => {
+  const onClickHandler = async () => {
     setIsLoading(true);
     setErrorMessage('');
 
@@ -94,17 +95,13 @@ const CollabRegistration = () => {
         <EventInfoForm onDataChange={handleEventInfoChange} />
         <EventGuideForm onDataChange={handleEventInfoChange} />
 
-        <ButtonBlue 
-          onClick={handleSubmit} 
-          style={{ 
-            width: '250px', 
-            height: '40px', 
-            marginTop: '20px', 
-            fontSize: '16px' 
-          }}
+        <Button
+            type={TYPES.NEXT}
+            text='최종 등록하기'
+            onClick={onClickHandler}
         >
           {isLoading ? '등록 중...' : '최종 등록하기'}
-        </ButtonBlue>
+        </Button>
 
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </Container>
