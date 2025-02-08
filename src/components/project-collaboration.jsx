@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // 추가
+import Button, { TYPES } from "./common/button";
+
 import {
   PaginationContainer,
   ArrowButton,
@@ -19,7 +21,6 @@ import {
   SortContainer,
   SortButton,
   ButtonContainer,
-  WriteButton,
   CategoryContainer,
   CategoryButton,
   CategoryTitle
@@ -149,7 +150,12 @@ const ProjectCollaboration = () => {
             마감순
           </SortButton>
         </SortContainer>
-        <WriteButton onClick={handleWriteClick}>협업글 작성하기</WriteButton> {/* 버튼에 onClick 추가 */}
+
+        <Button
+            type={TYPES.PLUS}
+            text='협업글 작성하기'
+            onClick={handleWriteClick}
+        />
       </ButtonContainer>
 
       <ProjectGrid>
