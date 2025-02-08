@@ -50,6 +50,24 @@ export const NextContainer = styled.div`
 
   color: #FFFFFF;
 
+  max-width:420px;
+  width: 100%;
+  height: 3.4em;
+  font-size:1em;
+  border:none;
+
+  // background: ${(props) => (props.isValid ? '#FF073D' : 'gray')};
+
+  // cursor: ${(props) => (props.isValid ? 'pointer' : 'not-allowed')};
+  //     transition: background-color 0.3s;
+
+  //     &:disabled {
+  //         background: gray;
+  //     }
+  @media (max-width: 768px) {
+          width: 90%;
+          font-size: 0.9em;
+      }
 `;
 
 export const PlusContainer = styled.div`

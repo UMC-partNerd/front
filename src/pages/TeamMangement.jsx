@@ -4,7 +4,7 @@ import Banner from '../components/common/banner/Banner';
 import ProjectImageUploadForm from '../components/teamregister/ProjectImageUploadForm';
 import ClubInfoForm from '../components/teamregister/ClubInfoForm';
 import axios from 'axios';
-import ButtonBlue from '../components/mypage/button_blue'; 
+import Button, { TYPES } from "../components/common/button";
 
 const TeamManagement = () => {
   const fileInputRefProfile = useRef(null);
@@ -38,7 +38,7 @@ const TeamManagement = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const onClickHandler = async (e) => {
     e.preventDefault();
     
     // 로딩 상태 시작
@@ -94,17 +94,14 @@ const TeamManagement = () => {
           teamInfo={teamInfo}
           setTeamInfo={setTeamInfo}
         />
-       <ButtonBlue 
-        onClick={handleSubmit} 
-        style={{ 
-        width: '250px', 
-        height: '40px', 
-        marginTop: '20px', 
-        fontSize: '16px'   
-     }}
->
-  {isLoading ? '등록 중...' : '최종 등록하기'}
-</ButtonBlue>
+
+        <Button
+          type={TYPES.NEXT}
+          text='최종 등록하기'
+          onClick={onClickHandler}
+        >
+          {isLoading ? '등록 중...' : '최종 등록하기'}
+        </Button>
 
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>} 
       </Container>
