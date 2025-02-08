@@ -12,7 +12,10 @@ const PersonalContact = () =>{
     return(
         <Container>
             <SubContainer>
-            <ImageComp />
+            <ImageComp 
+            src={"/Profile_none.png"}
+                alt = "프로필 이미지"
+            />
             <NameField>
                 <Name>이름</Name>
                 <Explan>설명</Explan>
@@ -64,7 +67,8 @@ justify-content: space-between;
 margin-bottom:50px;
 `
 
-const ImageComp = styled.div`
+const ImageComp = styled.img`
+object-fit: cover;
 border-radius: 50%;
 background:gray;
 min-width: 70px; /* 최소 너비를 고정 */

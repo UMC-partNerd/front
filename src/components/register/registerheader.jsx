@@ -3,6 +3,7 @@ import { InputPass,NicknameWrapper,Form, FieldGroup, Subup, Input, Subdown, Nick
 import { useState } from "react"
 import { useEffect } from "react"
 import axios from "axios"
+import NicknameField from "./NicknameCheck"
 
 const RegisterHeader = ({onChange , onNicknameCheck}) => {
 
@@ -106,7 +107,7 @@ const RegisterHeader = ({onChange , onNicknameCheck}) => {
                 <Subdown>년 / 월 / 일을 입력해주세요.</Subdown>
             </FieldGroup>
 
-            <FieldGroup>
+            {/* <FieldGroup>
                 <Subup>닉네임</Subup>
                 <NicknameWrapper  isAvailable={isNicknameAvailable}>
                 <InputPass placeholder="2자 이상 입력해주세요" 
@@ -128,7 +129,12 @@ const RegisterHeader = ({onChange , onNicknameCheck}) => {
                 ) : (
                     <Subdown>중복된 닉네임 입니다.</Subdown>
                 )}
-            </FieldGroup>
+            </FieldGroup> */}
+            <NicknameField
+                value={formData.nickname}
+                onChange={handleChange}
+                onNicknameCheck={setIsNicknameChecked}
+            />
 
             <FieldGroup>
                 <Subup>이메일</Subup>
