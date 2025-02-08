@@ -82,7 +82,7 @@ const router = createBrowserRouter([
         path: 'collaboration',
         children: [
           {
-            path: ':id',
+            path: ':collabPostId',
             element: <CollaborationDetailPage />,
           },
           {

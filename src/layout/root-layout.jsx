@@ -18,10 +18,13 @@ function RootLayout() {
   };
 
   useEffect(() => {
-    if (token) {
+    const storedToken = localStorage.getItem('jwtToken');
+    if (storedToken) {
       setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
     }
-
+  
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);

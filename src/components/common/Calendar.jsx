@@ -40,17 +40,17 @@ const Calendar = ({ selectedDate, onDateChange, closeCalendar }) => {
 
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
 
+  // 수정된 부분: selectedDate를 Date 객체로 변환
+  const formattedSelectedDate = selectedDate ? new Date(selectedDate) : null;
+
   return (
     <CalendarContainer>
       <Header>
         <Title>{`${currentDate.getFullYear()}년 ${currentDate.getMonth() + 1}월`}</Title>
         <ArrowButtonContainer>
-   
           <ArrowButton onClick={() => changeMonth(1)}>
             <img src="/chevron-right.svg" alt="right arrow" />
           </ArrowButton>
-
-     
           <ArrowButton onClick={() => changeMonth(-1)}>
             <img src="/chevron-right.svg" alt="left arrow" style={{ transform: 'rotate(180deg)' }} />
           </ArrowButton>
@@ -67,7 +67,7 @@ const Calendar = ({ selectedDate, onDateChange, closeCalendar }) => {
           <DateBox
             key={index}
             onClick={() => date && selectDate(date)}
-            isSelected={date && selectedDate && date.toDateString() === selectedDate.toDateString()}
+            isSelected={date && formattedSelectedDate && date.toDateString() === formattedSelectedDate.toDateString()}
           >
             {date ? date.getDate() : ''}
           </DateBox>

@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.66.0",
     "antd": "^5.23.3",
     "axios": "^1.7.9",
     "axios-mock-adapter": "^2.1.0",
@@ -19,8 +20,15 @@
     "react-dom": "18.2.0",
     "react-icons": "^5.4.0",
     "react-infinite-scroll-component": "^6.1.0",
+<<<<<<< HEAD
     "react-modal": "^3.16.3",
     "react-router-dom": "^7.1.1",
+=======
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.1.1",
+    "recoil": "^0.7.7",
+    "redux": "^5.0.1",
+>>>>>>> 80c9914bd49e5d1db0cb7e3c88900d7825454064
     "styled-components": "^6.1.14",
     "zustand": "^5.0.3"
   },
@@ -38,5 +46,9 @@
     "globals": "^15.14.0",
     "prettier": "^3.4.2",
     "vite": "^6.0.5"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "yarn": ">=1.22.0"
   }
 }
