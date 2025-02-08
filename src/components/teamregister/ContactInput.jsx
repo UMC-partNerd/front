@@ -1,24 +1,23 @@
 import React, { useState } from 'react';
 import * as S from '../../styled-components/teamregister-styles/styled-ContactInput';
 
-const ContactInput = () => {
+const ContactInput = ({ contactMethods, setContactMethods }) => {
   const [contactMethod, setContactMethod] = useState('');
   const [link, setLink] = useState('');
-  const [contacts, setContacts] = useState([]);
 
   const handleContactChange = (e) => setContactMethod(e.target.value);
   const handleLinkChange = (e) => setLink(e.target.value);
 
   const handleSubmit = () => {
     if (contactMethod && link) {
-      setContacts([...contacts, { contactMethod, link }]);
+      setContactMethods([...contactMethods, { contactType: contactMethod, contactUrl: link }]);
       setContactMethod('');
       setLink('');
     }
   };
 
   const handleDelete = (index) => {
-    setContacts(contacts.filter((_, idx) => idx !== index));
+    setContactMethods(contactMethods.filter((_, idx) => idx !== index));
   };
 
   return (
@@ -40,10 +39,10 @@ const ContactInput = () => {
         <S.SAddButton onClick={handleSubmit}>등록하기</S.SAddButton>
       </S.SInputRow>
 
-      {contacts.map((contact, index) => (
+      {contactMethods.map((contact, index) => (
         <S.SContactItem key={index}>
-          <S.SContactBox>{contact.contactMethod}</S.SContactBox>
-          <S.SContactBox isLink>{contact.link}</S.SContactBox>
+          <S.SContactBox>{contact.contactType}</S.SContactBox>
+          <S.SContactBox isLink>{contact.contactUrl}</S.SContactBox>
           <S.SDeleteButton onClick={() => handleDelete(index)}>X</S.SDeleteButton>
         </S.SContactItem>
       ))}

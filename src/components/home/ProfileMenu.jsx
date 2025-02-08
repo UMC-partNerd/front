@@ -6,13 +6,13 @@ function ProfileMenu({ onLogout }) {
   return (
     <ProfileMenuContainer>
       <ProfileMenuItem>
-        <NavLink to="/profile">내 프로필</NavLink>
+        <NavLink to="/mypage/profile">내 프로필</NavLink>
       </ProfileMenuItem>
       <ProfileMenuItem>
-        <NavLink to="/personal">퍼스널 페이지</NavLink>
+        <NavLink to="/mypage/personal-page">퍼스널 페이지</NavLink>
       </ProfileMenuItem>
       <ProfileMenuItem>
-        <NavLink to="/team">팀 페이지</NavLink>
+        <NavLink to="/mypage/teams">팀 페이지</NavLink>
       </ProfileMenuItem>
       <Separator />
       <ProfileMenuItem>
