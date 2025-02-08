@@ -3,64 +3,67 @@ import BannerImageUpload from '../../components/common/images/BannerImageUpload'
 import styled from 'styled-components';
 import ImageRectangle from '../common/images/ImageRectangle';
 
-const EventImageUploadForm = ({ handleProfileClick, handleBannerClick }) => {
-  const [profileImageKey, setProfileImageKey] = useState(null);
-  const [bannerImageKey, setBannerImageKey] = useState(null);
+const EventImageUploadForm = ({ setProfileImage, setBannerImage }) => {
   const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [bannerImagePreview, setBannerImagePreview] = useState(null);
 
   const handleProfileClose = () => {
-    setProfileImagePreview(null);  // 프로필 이미지 삭제
+    setProfileImagePreview(null);
   };
 
   const handleBannerClose = () => {
-    setBannerImagePreview(null);  // 배너 이미지 삭제
+    setBannerImagePreview(null);
   };
 
   const getFolderName = (type) => {
-    if (type === 0) return 'collabPost';  // 배너 이미지
-    if (type === 1) return 'collabPost';  // 메인 이미지
-    return 'collabPost';  // 기본 폴더
+    if (type === 0) return 'collabPost'; // 배너 이미지지
+    if (type === 1) return 'collabPost'; // 메인 이미지
+    return 'collabPost/EVENT';  
   };
 
   return (
     <FormContainer>
-      {/* 프로젝트 배너 사진 섹션 */}
+      {/* 배너 이미지 섹션 */}
       <Section>
         <ProfilePictureText>프로젝트 배너 사진 <RedAsterisk>*</RedAsterisk></ProfilePictureText>
         <form>
           <RecommendationText>추천 사이즈: 1800 x 300 | JPG, PNG | 최대 10MB</RecommendationText>
           <BannerImageUpload
-            folderName={getFolderName(0)}  // 배너 사진 폴더
-            type={0}  // 배너 사진
-            setImageKey={(key) => setBannerImageKey(key)}
-            setImagePreview={(preview) => setBannerImagePreview(preview)}
+            folderName={getFolderName(0)} 
+            type={0} 
+            setImageKey={(key) => {
+              setBannerImage(key);  // key 전달
+            }}
+            setImagePreview={(preview) => setBannerImagePreview(preview)} 
           />
-          {/* 배너 이미지 미리보기가 ImageRectangle에 전달 */}
-          {bannerImagePreview && <ImageRectangle imagePreview={bannerImagePreview} onClose={handleBannerClose} />}
         </form>
+        {/* 배너 이미지 미리보기 */}
+        <ImageRectangle imagePreview={bannerImagePreview} onClose={handleBannerClose} />
       </Section>
 
-      {/* 프로젝트 메인 사진 섹션 */}
+      {/* 메인 이미지 섹션 */}
       <Section>
         <ProfilePictureText>프로젝트 메인 사진 <RedAsterisk>*</RedAsterisk></ProfilePictureText>
         <form>
           <RecommendationText>추천 사이즈: 960 x 540 | JPG, PNG | 최대 10MB</RecommendationText>
           <BannerImageUpload
-            folderName={getFolderName(1)}  // 메인 사진 폴더
-            type={1}  // 메인 사진
-            setImageKey={(key) => setProfileImageKey(key)}
-            setImagePreview={(preview) => setProfileImagePreview(preview)}
+            folderName={getFolderName(1)} 
+            type={1} // 메인
+            setImageKey={(key) => {
+              setProfileImage(key);  // key 전달
+            }}
+            setImagePreview={(preview) => setProfileImagePreview(preview)} 
           />
-          {/* 프로필 이미지 미리보기가 ImageRectangle에 전달 */}
-          {profileImagePreview && <ImageRectangle imagePreview={profileImagePreview} onClose={handleProfileClose} />}
         </form>
+        {/* 메인 이미지 미리보기 */}
+        <ImageRectangle imagePreview={profileImagePreview} onClose={handleProfileClose} />
       </Section>
     </FormContainer>
   );
 };
 
-// Styled components
+export default EventImageUploadForm;
+
 const FormContainer = styled.div`
   background-color: white;
   width: 95%;
@@ -70,6 +73,7 @@ const FormContainer = styled.div`
   border-radius: 20px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
   margin-top: 50px;
+  position: relative;  
 `;
 
 const Section = styled.div`
@@ -96,5 +100,3 @@ const RecommendationText = styled.div`
   color: #C2C2C2;
   margin-bottom: 10px;
 `;
-
-export default EventImageUploadForm;
