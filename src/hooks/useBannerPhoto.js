@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const useBannerPhoto = (folderName, bannerImageFile, mainImageFile, eventImageFiles) => {
@@ -8,66 +8,51 @@ const useBannerPhoto = (folderName, bannerImageFile, mainImageFile, eventImageFi
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const fetchPhotoUrl = useCallback(async (file, type) => {
+    try {
+      const response = await axios.get(
+        `https://api.partnerd.site/api/s3/preSignedUrl?keyName=${folderName}%2F${type}%2F${file}`
+      );
+      if (response.data && response.data.result && response.data.result.cloudFrontUrl) {
+        return response.data.result.cloudFrontUrl;
+      } else {
+        throw new Error(`${type} 이미지 URL을 찾을 수 없습니다.`);
+      }
+    } catch (err) {
+      throw new Error('이미지 데이터를 불러오는 중 오류가 발생했습니다.');
+    }
+  }, [folderName]);
+
   useEffect(() => {
     const fetchPhotos = async () => {
       try {
         if (bannerImageFile) {
-          // 배너 이미지 URL 요청
-          const bannerResponse = await axios.get(
-            `https://api.partnerd.site/api/s3/preSignedUrl?keyName=${folderName}%2FBANNER%2F${bannerImageFile}`
-          );
-
-          if (bannerResponse.data && bannerResponse.data.result && bannerResponse.data.result.cloudFrontUrl) {
-            setBannerPhotoUrl(bannerResponse.data.result.cloudFrontUrl); // CloudFront URL 설정
-          } else {
-            setError('배너 이미지 URL을 찾을 수 없습니다.');
-          }
-        } else {
-          setError('배너 이미지 파일이 없습니다.');
+          const bannerUrl = await fetchPhotoUrl(bannerImageFile, 'BANNER');
+          setBannerPhotoUrl(bannerUrl);
         }
 
         if (mainImageFile) {
-          // 메인 이미지 URL 요청
-          const mainResponse = await axios.get(
-            `https://api.partnerd.site/api/s3/preSignedUrl?keyName=${folderName}%2FMAIN%2F${mainImageFile}`
-          );
-
-          if (mainResponse.data && mainResponse.data.result && mainResponse.data.result.cloudFrontUrl) {
-            setMainPhotoUrl(mainResponse.data.result.cloudFrontUrl); // CloudFront URL 설정
-          } else {
-            setError('메인 이미지 URL을 찾을 수 없습니다.');
-          }
-        } else {
-          setError('메인 이미지 파일이 없습니다.');
+          const mainUrl = await fetchPhotoUrl(mainImageFile, 'MAIN');
+          setMainPhotoUrl(mainUrl);
         }
 
         if (eventImageFiles && eventImageFiles.length > 0) {
-          const eventPhotosPromises = eventImageFiles.map(async (file) => {
-            const eventResponse = await axios.get(
-              `https://api.partnerd.site/api/s3/preSignedUrl?keyName=${folderName}%2FEVENT%2F${file}`
-            );
-            if (eventResponse.data && eventResponse.data.result && eventResponse.data.result.cloudFrontUrl) {
-              return eventResponse.data.result.cloudFrontUrl;
-            } else {
-              throw new Error('이벤트 이미지 URL을 찾을 수 없습니다.');
-            }
-          });
-
-          const eventPhotoUrls = await Promise.all(eventPhotosPromises);
-          setEventPhotoUrls(eventPhotoUrls);
+          const eventUrls = await Promise.all(
+            eventImageFiles.map(file => fetchPhotoUrl(file, 'EVENT'))
+          );
+          setEventPhotoUrls(eventUrls);
         }
-
       } catch (err) {
-        setError('이미지 데이터를 불러오는 중 오류가 발생했습니다.');
+        setError(err.message);
       } finally {
         setIsLoading(false);
       }
     };
 
     if (bannerImageFile || mainImageFile || (eventImageFiles && eventImageFiles.length > 0)) {
-      fetchPhotos(); // 이미지 파일이 존재하면 요청 보내기
+      fetchPhotos();
     }
-  }, [folderName, bannerImageFile, mainImageFile, eventImageFiles]); // folderName, imageFile이 변경될 때마다 실행
+  }, [bannerImageFile, mainImageFile, eventImageFiles, fetchPhotoUrl]);
 
   return { bannerPhotoUrl, mainPhotoUrl, eventPhotoUrls, isLoading, error };
 };

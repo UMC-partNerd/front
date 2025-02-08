@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as S from '../../styled-components/teamregister-styles/styled-ContactInput';
 
-const ContactInput = ({ contactMethods, setContactMethods }) => {
+const ContactInput = ({ contactMethods = [], setContactMethods }) => {
   const [contactMethod, setContactMethod] = useState('');
   const [link, setLink] = useState('');
 
@@ -39,13 +39,18 @@ const ContactInput = ({ contactMethods, setContactMethods }) => {
         <S.SAddButton onClick={handleSubmit}>등록하기</S.SAddButton>
       </S.SInputRow>
 
-      {contactMethods.map((contact, index) => (
-        <S.SContactItem key={index}>
-          <S.SContactBox>{contact.contactType}</S.SContactBox>
-          <S.SContactBox isLink>{contact.contactUrl}</S.SContactBox>
-          <S.SDeleteButton onClick={() => handleDelete(index)}>X</S.SDeleteButton>
-        </S.SContactItem>
-      ))}
+      {/* contactMethods가 배열인지 확인 후 map 사용 */}
+      {Array.isArray(contactMethods) && contactMethods.length > 0 ? (
+        contactMethods.map((contact, index) => (
+          <S.SContactItem key={index}>
+            <S.SContactBox>{contact.contactType}</S.SContactBox>
+            <S.SContactBox isLink>{contact.contactUrl}</S.SContactBox>
+            <S.SDeleteButton onClick={() => handleDelete(index)}>X</S.SDeleteButton>
+          </S.SContactItem>
+        ))
+      ) : (
+        <div>연락 방법 정보가 없습니다.</div> 
+      )}
     </S.SContainer>
   );
 };

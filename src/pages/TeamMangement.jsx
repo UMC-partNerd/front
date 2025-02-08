@@ -103,7 +103,7 @@ const TeamManagement = () => {
         fontSize: '16px'   
      }}
 >
-  {isLoading ? '등록 중...' : '최종 등록하기'}
+  {isLoading ? '등록 중...' : '수정하기'}
 </ButtonBlue>
 
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>} 
