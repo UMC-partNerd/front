@@ -1,25 +1,22 @@
 import styled from 'styled-components';
 import { TYPES } from '../components/common/button';
 
-export const ButtonContainer = styled.div`
-  background: ${type => ( type === TYPES.YES ) ? 'var(--main, #0D29B7)' : '#FFFFFF'};
-  border: ${type => ( type === TYPES.PLUS ) ? '1px solid #0D29B7' : ''};
-
-  gap: 10px;
-
+  export const ButtonContainer = styled.div`
   width: 60px;
   height: 16px;
   flex-shrink: 0;
 
   padding: 20px 32px
-  border-radius: 8px;
+  border-radius: 6px;
+  @media (min-width: 120px) {
+    border-radius: 6px;
+  }
 
   display: flex;
   align-items: center;
   justify-content:center;
   padding:10px 10px;
-
-  color: ${type => ( type === TYPES.YES ) ? '#FFFFFF' : 'var(--main, #0D29B7)'};
+  gap: 10px;
 
   font-family: Pretendard;
   font-size: 16px;
@@ -29,6 +26,10 @@ export const ButtonContainer = styled.div`
   letter-spacing: -0.4px;
 
   cursor:pointer;
+
+  background: ${({ type }) => ( type === TYPES.YES ? 'var(--main, #0D29B7)' : '#FFFFFF' )};
+  color: ${({ type }) => ( type === TYPES.YES ? '#FFFFFF' : 'var(--main, #0D29B7)' )};
+
 `;
 
 export const NextContainer = styled.div`
@@ -98,15 +99,4 @@ export const PlusContainer = styled.div`
     margin-right: 6px;
     font-size: 14px;
   }
-`;
-
-export const Text = styled.p`
-  color: ${type => ( type === TYPES.NO ||  type === TYPES.PLUS ) ? ' var(--main, #0D29B7)' : '#FFFFFF'};
-
-  font-family: Pretendard;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  letter-spacing: -0.4px;
 `;
