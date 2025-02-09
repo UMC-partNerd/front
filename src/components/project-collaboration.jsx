@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { fetchCollaborations } from '../apis/collaborationApi';
 import {
   PaginationContainer,
   ArrowButton,
@@ -24,87 +26,87 @@ import {
   CategoryTitle
 } from "../styled-components/styled-project-collaboration";
 
-
 const ProjectCollaboration = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState('latest');
+  const [sortBy, setSortBy] = useState('createdAt');
   const [selectedCategory, setSelectedCategory] = useState('전체');
-  const itemsPerPage = 9;
+  const [collaborations, setCollaborations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [totalPages, setTotalPages] = useState(1);
 
-  // 예시 데이터
-  const projects = Array(50).fill().map((_, index) => ({
-    title: '프로젝트 제목',
-    deadline: '2025. 01. 04 ~ 01. 12',
-    imageUrl: 'default-image-url.jpg',
-    category: '웹/앱 개발'
-  }));
+  const CATEGORY_MAPPING = {
+    '전체': null,
+    '웹/앱 개발': 1,
+    '인공지능': 2,
+    '데이터': 3,
+    '디자인': 4,
+    '마케팅': 5,
+    '게임': 6,
+    '기타': 7
+  };
 
-  const categories = [
-    '전체',
-    '웹/앱 개발',
-    '인공지능',
-    '데이터',
-    '디자인',
-    '마케팅',
-    '게임',
-    '기타'
-  ];
+  useEffect(() => {
+    const loadCollaborations = async () => {
+      try {
+        setIsLoading(true);
+        const categoryId = CATEGORY_MAPPING[selectedCategory];
+        const response = await fetchCollaborations(currentPage, sortBy, categoryId);
+        
+        if (response.isSuccess) {
+          const { collabPostPreviewDTOLList, totalPage } = response.result;
+          setCollaborations(collabPostPreviewDTOLList);
+          setTotalPages(totalPage);
+        } else {
+          throw new Error(response.message);
+        }
+      } catch (err) {
+        setError(err.message);
+        console.error('콜라보레이션 데이터 로딩 실패:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  // 카테고리 필터링
-  const filteredProjects = selectedCategory === '전체'
-    ? projects
-    : projects.filter(project => project.category === selectedCategory);
+    loadCollaborations();
+  }, [currentPage, sortBy, selectedCategory]);
 
-  // 현재 페이지의 데이터만 선택
-  const currentProjects = filteredProjects.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const handleWriteClick = () => {
+    navigate('/collaboration/collab-registration');
+  };
 
-  // 전체 페이지 수 계산
-  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
+  if (isLoading) return <div>로딩 중...</div>;
+  if (error) return <div>에러가 발생했습니다: {error}</div>;
 
   const renderPageButtons = () => {
     const buttons = [];
     
-    // 이전 페이지 버튼
     buttons.push(
       <ArrowButton
         key="prev"
-        onClick={() => setCurrentPage(prev => prev === 1 ? totalPages : prev - 1)}
+        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
       >
         <ArrowIcon className="left" />
       </ArrowButton>
     );
 
-    // 페이지 번호 생성
-    let pageNumbers = [];
-    for (let i = -2; i <= 2; i++) {
-      let pageNum = currentPage + i;
-      
-      if (pageNum <= 0) pageNum = totalPages + pageNum;
-      if (pageNum > totalPages) pageNum = pageNum - totalPages;
-      
-      pageNumbers.push(pageNum);
-    }
-
-    pageNumbers.forEach(num => {
+    for (let i = 1; i <= totalPages; i++) {
       buttons.push(
         <PageButton
-          key={num}
-          $isActive={currentPage === num}
-          onClick={() => setCurrentPage(num)}
+          key={i}
+          $isActive={currentPage === i}
+          onClick={() => setCurrentPage(i)}
         >
-          {num}
+          {i}
         </PageButton>
       );
-    });
+    }
 
-    // 다음 페이지 버튼
     buttons.push(
       <ArrowButton
         key="next"
-        onClick={() => setCurrentPage(prev => prev === totalPages ? 1 : prev + 1)}
+        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
       >
         <ArrowIcon className="right" />
       </ArrowButton>
@@ -117,7 +119,7 @@ const ProjectCollaboration = () => {
     <CollaborationContainer>
       <CategoryTitle>카테고리</CategoryTitle>
       <CategoryContainer>
-        {categories.map(category => (
+        {Object.keys(CATEGORY_MAPPING).map(category => (
           <CategoryButton
             key={category}
             isActive={selectedCategory === category}
@@ -131,31 +133,39 @@ const ProjectCollaboration = () => {
       <ButtonContainer>
         <SortContainer>
           <SortButton
-            isActive={sortBy === 'latest'}
-            onClick={() => setSortBy('latest')}
+            isActive={sortBy === 'createdAt'}
+            onClick={() => setSortBy('createdAt')}
           >
             최신순
           </SortButton>
           <SortButton
-            isActive={sortBy === 'deadline'}
-            onClick={() => setSortBy('deadline')}
+            isActive={sortBy === 'endDate'}
+            onClick={() => setSortBy('endDate')}
           >
             마감순
           </SortButton>
         </SortContainer>
-        <WriteButton>협업글 작성하기</WriteButton>
+        <WriteButton onClick={handleWriteClick}>협업글 작성하기</WriteButton>
       </ButtonContainer>
 
       <ProjectGrid>
-        {currentProjects.map((project, index) => (
-          <ProjectCard key={index}>
+        {collaborations.map((collab) => (
+          <ProjectCard 
+            key={collab.collabPostId}
+            onClick={() => navigate(`/collaboration/${collab.collabPostId}`)}
+          >
             <ImagePlaceholder>
-              <img src={project.imageUrl} alt={project.title} />
+              <img src={collab.imageUrl || "/default-image.png"} alt={collab.title} />
             </ImagePlaceholder>
             <CardContent>
-              <CategoryBadge>{project.category}</CategoryBadge>
-              <Title>{project.title}</Title>
-              <Deadline>{project.deadline}</Deadline>
+              <CategoryBadge>
+                {collab.categoryDTOList[0]?.name || '기타'}
+              </CategoryBadge>
+              <Title>{collab.title}</Title>
+              <Deadline>
+                {new Date(collab.startDate).toLocaleDateString()} ~ 
+                {new Date(collab.endDate).toLocaleDateString()}
+              </Deadline>
             </CardContent>
           </ProjectCard>
         ))}

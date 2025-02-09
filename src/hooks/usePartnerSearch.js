@@ -53,6 +53,14 @@ export const usePartnerSearch = (category = '전체', order = 'recent', page = 1
     const fetchPartners = async () => {
       try {
         setIsLoading(true);
+        
+        // 토큰을 환경변수에서 직접 가져오기
+        const token = import.meta.env.VITE_JWT_TOKEN;
+        
+        if (!token) {
+          throw new Error('인증 토큰이 없습니다.');
+        }
+
         const params = new URLSearchParams({
           categoryID: CATEGORY_MAPPING[category],
           order: order.toLowerCase(),
@@ -60,7 +68,7 @@ export const usePartnerSearch = (category = '전체', order = 'recent', page = 1
         });
 
         const headers = {
-          'Authorization': `Bearer ${import.meta.env.VITE_JWT_TOKEN}`,
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         };
 
@@ -69,6 +77,9 @@ export const usePartnerSearch = (category = '전체', order = 'recent', page = 1
         });
 
         if (!response.ok) {
+          if (response.status === 401) {
+            throw new Error('인증이 만료되었습니다. 다시 로그인해주세요.');
+          }
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
@@ -82,7 +93,7 @@ export const usePartnerSearch = (category = '전체', order = 'recent', page = 1
         setPartners(processedData || []);
       } catch (err) {
         console.error('Error fetching partners:', err);
-        setError(err);
+        setError(err.message);
       } finally {
         setIsLoading(false);
       }
