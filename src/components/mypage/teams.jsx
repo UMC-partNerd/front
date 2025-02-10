@@ -23,7 +23,7 @@ const MyTeamsComp = () => {
                     return;
             }
 
-            const response = await axios.get(`${API_BASE_URL}/api/clubs/mypage`, 
+            const response = await axios.get(`${API_BASE_URL}/api/partnerd/myPartnerdPosts`, 
                 {
                     headers:{
                         "Content-Type": "application/json",
@@ -32,7 +32,7 @@ const MyTeamsComp = () => {
                 });
 
             console.log("마이페이지-팀페이지", response.data.result);
-            setClub(response.data.result);
+            setClub(response.data.result?.clubPreviewDTOList);
         }catch (error) {
             console.error("게시글 불러오기 실패:", error);
             setError("게시글을 불러오는 중 오류가 발생했습니다.");

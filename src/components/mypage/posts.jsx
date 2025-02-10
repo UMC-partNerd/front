@@ -47,8 +47,22 @@ const MyPostsComp = () =>{
             });
 
             console.log("내가 쓴 글", response.data.result);
-            const postList = response.data.result?.[categoryObj.key] || [];
+            console.log("현재 카테고리: ", categoryObj, "엔드포인트" ,categoryObj.endpoint);
+            
+            //각 카테고리에 따른 데이터 필드 정확히 지정 
+            let postList = [];
+            if (category === "콜라보레이션") {
+                postList = response.data.result?.mypageCollabPostPreviewDTOList || [];
+            } else if(category === "프로젝트 모집하기"){
+                postList = response.data.result?.mypagePprojectPreviewDTOList || [];
+            } else if(category === "프로젝트 홍보하기"){
+                postList = response.data.result?.mypagePromotionPprojectPreviewDTOList || [];
+            } else if(category === "프로젝트 홍보하기"){
+                postList = response.data.result?.mypagePromotionPprojectPreviewDTOList || [];
+            } 
+
             setPosts(postList);
+            console.log("카테고리 값", postList);
         }catch (error) {
             console.error("게시글 불러오기 실패:", error);
             setError("게시글을 불러오는 중 오류가 발생했습니다.");
@@ -68,21 +82,6 @@ const MyPostsComp = () =>{
     return(
         <MainWrapp>
         <Title>내가 쓴 글</Title>
-{/* 
-        <CategoryGroup>
-                    {projectCategories.map(category => (
-                    <CategoryButton style={{fontSize:'10px'}}
-                        key={category}
-                        isActive={selectedCategory === category}
-                        onClick={() => {
-                        setSelectedCategory(category);
-                        setCurrentPage(1);
-                        }}
-                    >
-                        {category}
-                    </CategoryButton>
-                    ))}
-        </CategoryGroup> */}
         <CategoryGroup>
                 {projectCategories.map(({ name }) => (
                     <CategoryButton

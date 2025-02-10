@@ -90,7 +90,7 @@ const MyProfile = () => {
                 <ImageComp 
                 src={profileImageUrl} 
                 alt="프로필 이미지" 
-                onError={(e) => { e.target.src = "/Profile_none.png"; }} 
+                onError={(e) => { e.target.src = "/banner1.png"; }} 
                 /> 
                 <ButtonWhite>사진 등록하기</ButtonWhite>
             </ProfileWrapp>

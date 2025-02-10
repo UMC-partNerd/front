@@ -3,8 +3,12 @@ import { MainWrapp, Title, PersonalField, StyledHr,SubTitle, SubupSec } from "..
 import { Subup } from "../../styles/registerstyles";
 import ButtonWhite from "./button_white";
 import PersonalContact from "../common/contact";
+import { useEffect, useState } from "react";
 
 const MyPersonalComp = () =>{
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    
     return(
         <MainWrapp>
         <Title>펄스널 페이지</Title>
