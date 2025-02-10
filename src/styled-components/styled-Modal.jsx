@@ -49,11 +49,3 @@ export const ButtonContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
 `;
-
-export const Button = styled.button`
-  width: ${({ variant }) => variant === VERSIONS.VER3 ? '228px' : '220px'};
-  height: 64px;
-  background-color:${({ variant }) => variant === COLORS.BLUE ? '#0D29B7' : '#F3F3F3'};
-  color:${({ variant }) => variant === COLORS.BLUE ? '#FFFFFF' : '##0D29B7'};
-  border-radius: 16px;
-`;

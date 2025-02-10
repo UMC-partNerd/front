@@ -7,8 +7,8 @@ import {
     Boldface,
     Regular,
     ButtonContainer,
-    Button,
 } from '../styled-components/styled-Modal';
+import Button, { TYPES } from "./common/button";
 
 export const VERSIONS = {
     VER1: 'ver1',   // 파랑 버튼 1개, x 버튼 // 요청 취소 알림 모달
@@ -27,6 +27,10 @@ function CustomModal ({ label, boldface, regular, btn, variant }) {
     const [openModal, setOpenModal] = useState(false);
     const closeModal = () => setOpenModal(false);
 
+    // next, yes, no
+    const onClickHandler = () => {
+    //   navigate('/collaboration/collab-registration');
+    };
     const renderVer3Modal = () => (
         <Modal 
             isOpen={openModal}
@@ -42,7 +46,11 @@ function CustomModal ({ label, boldface, regular, btn, variant }) {
                 <Regular>다른 동아리와 협업해볼까요?</Regular>
                 <ButtonContainer>
                     {/* 페이지 이동 onClick={} 추가 */}
-                    <Button>콜라보레이션 보러가기</Button>
+                    <Button
+                        type={TYPES.NEXT}
+                        text='콜라보레이션 보러가기'
+                        onClick={onClickHandler}
+                    />
                 </ButtonContainer>
             </ModalContainer>
         </Modal>
