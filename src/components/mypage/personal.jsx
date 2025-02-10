@@ -1,19 +1,30 @@
 import styled from "styled-components"
 import { MainWrapp, Title, PersonalField, StyledHr,SubTitle, SubupSec } from "../../styles/mypagestyles";
 import { Subup } from "../../styles/registerstyles";
-import ButtonWhite from "./button_white";
 import PersonalContact from "../common/contact";
 
+import Button, { TYPES } from "../common/button";
+
 const MyPersonalComp = () =>{
+
+    const onClickHandler = () => {
+    //   navigate('/collaboration/collab-registration');
+    };
     return(
         <MainWrapp>
         <Title>펄스널 페이지</Title>
 
         <PersonalContact />
 
-        <ButtonWrapp>
+        <Button
+            type={TYPES.NO}
+            text='작성하기'
+            onClick={onClickHandler}
+        />
+        {/* <ButtonWrapp>
+            
             <ButtonWhite style={{width:'50px', height:'10px'}}>작성하기</ButtonWhite>
-        </ButtonWrapp>
+        </ButtonWrapp> */}
         
 
         <PersonalField>
