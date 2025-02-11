@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import BannerPhoto from '../components/teamdetail/BannerPhoto';
@@ -8,6 +8,8 @@ import Activities from '../components/teamdetail/Activities';
 import CollaborationFeed from '../components/teamdetail/CollaborationFeed';
 import Chatlist from '../components/common/Chatlist_owner';
 import ChatListALL from '../components/common/Chatlist_members';
+import Button, { TYPES } from "../components/common/button";
+import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
 
 const DefaultImage = '/default-image.png'; // 기본 이미지 
 
@@ -76,6 +78,23 @@ const TeamPage = () => {
     return <div>동아리를 찾을 수 없습니다.</div>;
   }
 
+  
+  const [openModal, setOpenModal] = useState(false);
+
+  // 버튼 클릭 시 모달을 띄우는 함수
+  const clubJoinHandler = () => {
+    setOpenModal(true);
+  };
+
+  // 모달: 승인 함수
+  const joinHandler = () => {
+    // 참여 요청 보내기
+
+    // 모달 닫기
+    setOpenModal(false);
+  };
+
+
   return (
     <>
       <BannerPhoto src={club.bannerSrc || DefaultImage} />
@@ -92,6 +111,21 @@ const TeamPage = () => {
           <CollaborationFeed feed={club.collaborationFeed} />
         </TeamPageContainer>
         <ChatWrapp>
+          <Button
+            type={TYPES.NEXT}
+            text='동아리 참여하기'
+            onClick={clubJoinHandler}
+          /> 
+          <CustomModal
+            openModal={openModal} 
+            closeModal={() => setOpenModal(false)}
+           
+            boldface='동아리에 참여하시겠습니까?'
+            regular='동아리 가입을 위해서는 동아리 리저딘의 승인을 기다려야 합니다.'
+            text='참여하기'
+            onClick={joinHandler}
+            variant={VERSIONS.VER3}
+          />
           <Chatlist />
           <ChatListALL />
         </ChatWrapp>

@@ -1,29 +1,31 @@
 import styled from 'styled-components';
-import { VERSIONS } from '../components/CustomModal';
+import { VERSIONS } from '../components/common/modal/CustomModal';
 
 // overlay: 모달창 밖
 export const Background = {
     overlay: {
       backgroundColor: " rgba(0, 0, 0, 0.5)",
       width: "100%",
-      height: "100vh",
-      zIndex: "10",
-      position: "absolute",
-      top: "0",
-      left: "50%",
+      height: "100%",
+      flexShrink: "0",
     },
+    width: "600px",
+    height: "380px",
+    flexShrink: "0",
+  
+    borderRadius: "16px",
+    boxShadow: "0px 2px 8px 0px rgba(0, 0, 0, 0.15)"  
 };
-
-export const Cancel = styled.button`
-  width: 15px;
-  height: 15px;
-  display: fixed;
-  color: #E1E1E1;
-`;
 
 export const ModalContainer = styled.div`
   width: 600px;
   height: 380px;
+  flex-shrink: 0;
+
+  border-radius: 16px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.15);
+
   position: absolute;
   left: 50%;
 `;
@@ -42,6 +44,7 @@ export const Regular = styled.p`
     color: #414141;
 `;
 
+// ver3 버튼 2개 컨테이너
 export const ButtonContainer = styled.div`
   width: 480px;
   height: 64px;

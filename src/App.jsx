@@ -25,8 +25,6 @@ import TeamMangement from './pages/TeamMangement'
 import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
 
-import ModalPage from './pages/modalpage';
-
 const router = createBrowserRouter([
   {
     path: '/',
@@ -148,10 +146,6 @@ const router = createBrowserRouter([
       {
         path: '*',
         element: <NotFoundPage />,
-      },
-      {
-        path: 'test',
-        element: <ModalPage />,
       },
     ],
   },

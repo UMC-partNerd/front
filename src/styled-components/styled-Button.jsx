@@ -45,15 +45,15 @@ export const NextContainer = styled.div`
 
   text-align: center;
 
-  width: 250px; 
-  height: 40px;
+  width:25vw;
+  max-width: 250px;
+  min-height: 40px;
+  height:100%;
+
   marginTop: 20px; 
 
   color: #FFFFFF;
 
-  max-width:420px;
-  width: 100%;
-  height: 3.4em;
   font-size:1em;
   border:none;
 

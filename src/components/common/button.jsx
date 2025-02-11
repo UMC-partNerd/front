@@ -12,22 +12,25 @@ export const TYPES = {
   NO: 'no'      // 거절: 흰색
 };
 
-// import Button, { TYPES } from "../common/button";
-// import { useNavigate } from 'react-router-dom';
+{/* 
 
-// useNavigate 훅을 사용하여 이동 기능 추가
-// const navigate = useNavigate();
-// const onClickHandler = () => {
-//   navigate('/collaboration/collab-registration');
-// };
+  import Button, { TYPES } from "../components/common/button";
+  import { useNavigate } from 'react-router-dom';
 
-// isLoading
+  // useNavigate 훅을 사용하여 이동 기능 추가
+  const navigate = useNavigate();
+  const onClickHandler = () => {
+    navigate('/collaboration/collab-registration');
+  };
 
-{/* <Button
-    type={TYPES.PLUS}
+  isLoading
+  
+  <Button
+    type={TYPES.NEXT}
     text='글 작성하기'
     onClick={onClickHandler}
-/> */}
+  /> 
+*/}
 
 function Button({ type, text, onClick }) {
   const renderDefaultButton = () => (
