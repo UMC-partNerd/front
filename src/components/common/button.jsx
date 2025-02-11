@@ -6,17 +6,11 @@ import {
 } from '../../styled-components/styled-Button';
 
 export const TYPES = {
-<<<<<<< HEAD
   NEXT: 'next', // 큰
   PLUS: 'plus',
   YES: 'yes',   // 승인: 파랑
   NO: 'no'      // 거절: 흰색
-=======
-  NEXT: 'next',
-  PLUS: 'plus',
-  YES: 'yes',
-  NO: 'no'
->>>>>>> feat/52
+
 };
 
 // import Button, { TYPES } from "../common/button";
