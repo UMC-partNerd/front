@@ -8,6 +8,10 @@ const PersonalContact = () =>{
 
     const isPersonalPage = location.pathname === "/mypage/personal-page";
 
+    const onClickHandler = () => {
+    
+    };
+
     return(
         <Container>
             <SubContainer>
