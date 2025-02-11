@@ -49,7 +49,7 @@ const ContactInput = ({ contactMethods = [], setContactMethods }) => {
           </S.SContactItem>
         ))
       ) : (
-        <div>연락 방법 정보가 없습니다.</div> 
+        <div></div> 
       )}
     </S.SContainer>
   );

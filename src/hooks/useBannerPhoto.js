@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-const useBannerPhoto = (folderName, bannerImageFile, mainImageFile, eventImageFiles) => {
+const useBannerPhoto = (folderName, bannerImageFile, mainImageFile, eventImageFiles, thumbnailImageFile, introImageFile) => {
   const [bannerPhotoUrl, setBannerPhotoUrl] = useState(null);
   const [mainPhotoUrl, setMainPhotoUrl] = useState(null);
   const [eventPhotoUrls, setEventPhotoUrls] = useState([]);
+  const [thumbnailPhotoUrl, setThumbnailPhotoUrl] = useState(null); // THUMBNAIL 추가
+  const [introPhotoUrl, setIntroPhotoUrl] = useState(null); // INTRO 추가
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -42,6 +44,18 @@ const useBannerPhoto = (folderName, bannerImageFile, mainImageFile, eventImageFi
           );
           setEventPhotoUrls(eventUrls);
         }
+
+        // THUMBNAIL 처리
+        if (thumbnailImageFile) {
+          const thumbnailUrl = await fetchPhotoUrl(thumbnailImageFile, 'THUMBNAIL');
+          setThumbnailPhotoUrl(thumbnailUrl);
+        }
+
+        // INTRO 처리
+        if (introImageFile) {
+          const introUrl = await fetchPhotoUrl(introImageFile, 'INTRO');
+          setIntroPhotoUrl(introUrl);
+        }
       } catch (err) {
         setError(err.message);
       } finally {
@@ -49,12 +63,18 @@ const useBannerPhoto = (folderName, bannerImageFile, mainImageFile, eventImageFi
       }
     };
 
-    if (bannerImageFile || mainImageFile || (eventImageFiles && eventImageFiles.length > 0)) {
+    if (
+      bannerImageFile || 
+      mainImageFile || 
+      (eventImageFiles && eventImageFiles.length > 0) ||
+      thumbnailImageFile || // THUMBNAIL 파일 처리
+      introImageFile // INTRO 파일 처리
+    ) {
       fetchPhotos();
     }
-  }, [bannerImageFile, mainImageFile, eventImageFiles, fetchPhotoUrl]);
+  }, [bannerImageFile, mainImageFile, eventImageFiles, thumbnailImageFile, introImageFile, fetchPhotoUrl]);
 
-  return { bannerPhotoUrl, mainPhotoUrl, eventPhotoUrls, isLoading, error };
+  return { bannerPhotoUrl, mainPhotoUrl, eventPhotoUrls, thumbnailPhotoUrl, introPhotoUrl, isLoading, error };
 };
 
 export default useBannerPhoto;

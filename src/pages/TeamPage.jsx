@@ -91,7 +91,8 @@ const TeamPage = () => {
             name={club.name} 
             description={club.intro} 
             category={club.category} 
-            contact={club.contactMethod || []} 
+            contact={club.contactMethod || []}
+            clubId={clubId} 
           />
           <Activities activities={club.activity.intro} images={eventPhotoUrls || []} />
           <CollaborationFeed feed={club.collabPosts} />
