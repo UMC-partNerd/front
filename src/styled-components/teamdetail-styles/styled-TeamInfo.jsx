@@ -82,12 +82,19 @@ export const SContactItem = styled.div`
   margin-bottom: 10px;
   display: flex;
   align-items: center;
+  color: #707070;
+  font-family: Pretendard;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.4px;
 `;
 
 export const SContactType = styled.span`
-  font-weight: bold;
+  font-weight: 600; 
   margin-right: 10px;
   color: #212121;
+  letter-spacing: -0.4px;
+  line-height: normal;
 `;
 
 export const SContactLink = styled.span`

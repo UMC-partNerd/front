@@ -6,9 +6,10 @@ const Calendar = ({ selectedDate, onDateChange, closeCalendar }) => {
 
   const changeMonth = (direction) => {
     const newDate = new Date(currentDate);
-    newDate.setMonth(currentDate.getMonth() + direction);
+    newDate.setMonth(currentDate.getMonth() - direction); // 방향 반대로 변경
     setCurrentDate(newDate);
   };
+  
 
   const selectDate = (date) => {
     onDateChange(date);  // 부모 컴포넌트로 날짜 전달
@@ -48,12 +49,13 @@ const Calendar = ({ selectedDate, onDateChange, closeCalendar }) => {
       <Header>
         <Title>{`${currentDate.getFullYear()}년 ${currentDate.getMonth() + 1}월`}</Title>
         <ArrowButtonContainer>
-          <ArrowButton onClick={() => changeMonth(1)}>
-            <img src="/chevron-right.svg" alt="right arrow" />
-          </ArrowButton>
-          <ArrowButton onClick={() => changeMonth(-1)}>
-            <img src="/chevron-right.svg" alt="left arrow" style={{ transform: 'rotate(180deg)' }} />
-          </ArrowButton>
+        <ArrowButton onClick={() => changeMonth(1)}>  
+  <img src="/chevron-right.svg" alt="right arrow" />
+</ArrowButton>
+<ArrowButton onClick={() => changeMonth(-1)}>  
+  <img src="/chevron-right.svg" alt="left arrow" style={{ transform: 'rotate(180deg)' }} />
+</ArrowButton>
+
         </ArrowButtonContainer>
       </Header>
       <Separator />

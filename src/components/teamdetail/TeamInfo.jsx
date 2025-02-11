@@ -16,13 +16,17 @@ const TeamInfo = ({ name, description, category, contact = [], clubId }) => (
     <S.SSubTitle>{description}</S.SSubTitle>
 
     <S.SContactInfoContainer>
-      {contact.length > 0 ? contact.map((item, index) => (
-        <S.SContactItem key={index}>
-          <S.SContactType>{item.type}:</S.SContactType>
-          <S.SContactLink>{item.link}</S.SContactLink>
-        </S.SContactItem>
-      )) : <div>연락처 정보가 없습니다.</div>}
-    </S.SContactInfoContainer>
+  {contact.length > 0 ? contact.map((item, index) => (
+    <S.SContactItem key={index}>
+      {/* contactType과 contactUrl이 올바른 값인지 확인하고, 그렇지 않으면 '알 수 없음'으로 처리 */}
+      <S.SContactType>{item.contactType !== 'string' ? item.contactType : '연락처 정보가 없습니다'}</S.SContactType>
+      <S.SContactLink>{item.contactUrl !== 'string' ? item.contactUrl : ' '}</S.SContactLink>
+    </S.SContactItem>
+  )) : <div>연락처 정보가 없습니다.</div>}
+</S.SContactInfoContainer>
+
+
+
   </S.SContainer>
 );
 
