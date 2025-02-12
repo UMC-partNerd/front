@@ -40,16 +40,20 @@ const TeamPage = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 동아리 정보 로드
+  // 동아리 정보
   useEffect(() => {
-    console.log("클럽 ID:", clubId); // clubId가 변경될 때마다 실행됨
+    console.log("클럽 ID:", clubId); 
     const fetchClubDetails = async () => {
       const token = localStorage.getItem('jwtToken');
       try {
         const response = await axios.get(`https://api.partnerd.site/api/partnerd/${clubId}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        
+        }
         });
-        setClub(response.data.result);  // club 상태 업데이트 -> 리렌더링 발생 가능
+        setClub(response.data.result);  
       } catch (err) {
         setError('동아리 정보를 불러오는 중 오류가 발생했습니다.');
       } finally {
@@ -58,12 +62,12 @@ const TeamPage = () => {
     };
   
     fetchClubDetails();
-  }, [clubId]); // clubId가 바뀔 때만 실행
+  }, [clubId]); 
   
 
-  // club이 로드된 후, useBannerPhoto 훅을 호출
+
   const { bannerPhotoUrl, mainPhotoUrl, eventPhotoUrls, isLoading: bannerLoading, error: bannerError } = useBannerPhoto(
-    'ClubBannerImage',
+    'club',
     club?.bannerImage ? club.bannerImage.split('/').pop() : null,
     club?.profileImage ? club.profileImage.split('/').pop() : null,
     club?.activity?.activityImageKeyNames ? club.activity.activityImageKeyNames.map(key => key.split('/').pop()) : []

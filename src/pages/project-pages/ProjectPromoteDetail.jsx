@@ -3,13 +3,13 @@ import { useParams } from 'react-router-dom';
 import * as S from '../../styled-components/projectdetail-styles/styled-ProjectPromoteDetail';
 import ImageSlider from '../../components/projectdetail/ImageSlider';
 import ProjectPromoteForm from '../../components/projectdetail/ProjectPromoteForm';
-//import ProjectCommentList from '../../components/projectdetail/ProjectCommentList';
-//import CommentForm from '../../components/projectdetail/CommentForm';
+import ProjectCommentList from '../../components/projectdetail/ProjectCommentList';
+import CommentForm from '../../components/projectdetail/CommentForm';
 
 const DefaultImage = '/default-image.png';
 
 const ProjectPromoteDetail = () => {
-  const { id } = useParams();
+  const {promotionProjectId} = useParams();
   const [comments, setComments] = useState([]);
 
   // 임시 이미지 데이터
@@ -56,20 +56,17 @@ const ProjectPromoteDetail = () => {
         <ProjectPromoteForm />
       </S.SFormContainer>
 
-      {/*
-       <S.SCommentFormWrapper>
+     
+ 
         <CommentForm onAddComment={handleAddComment} />
-      </S.SCommentFormWrapper> */}
 
-      {/*
-      <S.SProjectCommentListWrapper>
+
         <ProjectCommentList
           comments={comments}
           onReply={() => {}}
           onDelete={handleDeleteComment}
           onUpdate={handleUpdateComment}
         />
-      </S.SProjectCommentListWrapper> */}
     </S.SContainer>
   );
 };

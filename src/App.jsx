@@ -108,7 +108,7 @@ const router = createBrowserRouter([
             element: <ProjectRecruitDetail />, 
           },
           {
-            path: 'promote/:id',
+            path: 'promote/:promotionProjectId',
             element: <ProjectPromoteDetail />,
           },
           {

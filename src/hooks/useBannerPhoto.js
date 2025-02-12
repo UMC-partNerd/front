@@ -13,7 +13,13 @@ const useBannerPhoto = (folderName, bannerImageFile, mainImageFile, eventImageFi
   const fetchPhotoUrl = useCallback(async (file, type) => {
     try {
       const response = await axios.get(
-        `https://api.partnerd.site/api/s3/preSignedUrl?keyName=${folderName}%2F${type}%2F${file}`
+        `https://api.partnerd.site/api/s3/preSignedUrl?keyName=${folderName}%2F${type}%2F${file}`,
+        
+        {
+          headers: {
+            'Accept': 'application/json',  // 서버에 JSON 응답을 요청
+          },
+        }
       );
       if (response.data && response.data.result && response.data.result.cloudFrontUrl) {
         return response.data.result.cloudFrontUrl;
