@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 import BannerPhoto from '../components/teamdetail/BannerPhoto';
 import ProfilePhoto from '../components/teamdetail/ProfilePhoto';
 import TeamInfo from '../components/teamdetail/TeamInfo';
@@ -8,6 +9,7 @@ import Activities from '../components/teamdetail/Activities';
 import CollaborationFeed from '../components/teamdetail/CollaborationFeed';
 import Chatlist from '../components/common/Chatlist_owner';
 import ChatListALL from '../components/common/Chatlist_members';
+import useBannerPhoto from '../hooks/useBannerPhoto';
 import Button, { TYPES } from "../components/common/button";
 import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
 
@@ -28,51 +30,54 @@ const TeamPageContainer = styled.div`
 `;
 
 const ChatWrapp = styled.div`
-display:flex;
-flex-direction:column;
-height:100%;
-margin:20px;
-`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 20px;
+`;
 
 const TeamPage = () => {
   const { clubId } = useParams();
+  const [club, setClub] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const clubs = [
-    {
-      id: '1',
-      name: 'TechTech',
-      description: '안녕하세요! IT 벤처 연합동아리 TectTect입니다.',
-      category: '웹/앱 개발',
-      contact: [
-        { type: '인스타그램', link: '@tecttect_official' },
-        { type: '오픈채팅방', link: 'tecttect1111' }
-      ],
-      activities: `안녕하세요. IT 벤처 연합 동아리 TectTect 입니다!
-                   주요 활동으로는 연합 해커톤과 데모데이 등이 있습니다. 활동 사진을 참고해주세요:)`,
-      images: [null, null, null],
-      bannerSrc: null,
-      profileSrc: null,
-      collaborationFeed: [
-        {
-          id: 1,
-          title: '2025 IT 컨퍼런스 공동 개최',
-          content: `안녕하세요! 저희는 IT 연합동아리 TectTect 입니다.
-                     2025년 1월에 대학생과 IT 산업 전문가가 함께하는 "IT의 미래를 말하다" 컨퍼런스를 준비 중입니다. 이번 행사를 더욱 풍성하게 만들기 위해 함께 협업할 IT 동아리를 찾고 있습니다. 학생과 사회 초년생을 위한 개발 및 인공지능 컨퍼런스라고 생각해주시면 됩니다.
-                     1월 31일에 개최하는 것을 목표로 하고 있고 연사자 분은 섭외 중입니다.`,
-          date: '2025. 01. 04',
-        },
-        {
-          id: 2,
-          title: 'IT 동아리 협업 네트워킹 플랫폼, ‘투게다’',
-          content: `“다른 IT 동아리와 협업하거나, 프로젝트를 함께 할 동료를 구할 수는 없을까?”
-                     투게다는 IT 동아리 네트워킹 플랫폼으로 타 동아리와의 협업을 촉진하고, 서비스 런칭을 위한 팀원을 모집할 수 있습니다...`,
-          date: '2025. 01. 04',
-        },
-      ]
-    }
-  ];
+  // 동아리 정보 로드
+  useEffect(() => {
+    console.log("클럽 ID:", clubId); // clubId가 변경될 때마다 실행됨
+    const fetchClubDetails = async () => {
+      const token = localStorage.getItem('jwtToken');
+      try {
+        const response = await axios.get(`https://api.partnerd.site/api/partnerd/${clubId}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        setClub(response.data.result);  // club 상태 업데이트 -> 리렌더링 발생 가능
+      } catch (err) {
+        setError('동아리 정보를 불러오는 중 오류가 발생했습니다.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchClubDetails();
+  }, [clubId]); // clubId가 바뀔 때만 실행
+  
 
-  const club = clubs.find(c => c.id === clubId);
+  // club이 로드된 후, useBannerPhoto 훅을 호출
+  const { bannerPhotoUrl, mainPhotoUrl, eventPhotoUrls, isLoading: bannerLoading, error: bannerError } = useBannerPhoto(
+    'ClubBannerImage',
+    club?.bannerImage ? club.bannerImage.split('/').pop() : null,
+    club?.profileImage ? club.profileImage.split('/').pop() : null,
+    club?.activity?.activityImageKeyNames ? club.activity.activityImageKeyNames.map(key => key.split('/').pop()) : []
+  );
+
+  if (isLoading || bannerLoading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (error || bannerError) {
+    return <div>오류: {error || bannerError}</div>;
+  }
 
   if (!club) {
     return <div>동아리를 찾을 수 없습니다.</div>;
@@ -99,18 +104,19 @@ const TeamPage = () => {
 
   return (
     <>
-      <BannerPhoto src={club.bannerSrc || DefaultImage} />
-      <ProfilePhoto src={club.profileSrc || DefaultImage} />
+      <BannerPhoto src={bannerPhotoUrl || DefaultImage} />
+      <ProfilePhoto src={mainPhotoUrl || DefaultImage} />
       <TeamPageWrapper>
         <TeamPageContainer>
           <TeamInfo 
             name={club.name} 
-            description={club.description} 
+            description={club.intro} 
             category={club.category} 
-            contact={club.contact || []} 
+            contact={club.contactMethod || []}
+            clubId={clubId} 
           />
-          <Activities activities={club.activities} images={club.images || []} />
-          <CollaborationFeed feed={club.collaborationFeed} />
+          <Activities activities={club.activity.intro} images={eventPhotoUrls || []} />
+          <CollaborationFeed feed={club.collabPosts} />
         </TeamPageContainer>
         <ChatWrapp>
           <Button
@@ -145,4 +151,4 @@ const TeamPage = () => {
   );
 };
 
-export { TeamPage };  
+export { TeamPage };

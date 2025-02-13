@@ -46,6 +46,7 @@ const ImagesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
+  margin-top: 100px;
 `;
 
 const ActivityImage = styled.img`

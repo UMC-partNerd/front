@@ -58,12 +58,11 @@ const TeamRegistration = () => {
     const token = localStorage.getItem('authToken');
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   
-    console.log("Request URL:", `${API_BASE_URL}/api/partnerd/register`);  // URL 확인
+    console.log("Request URL:", `${API_BASE_URL}/api/partnerd/register`);  
   
     try {
       const response = await axios.post(`${API_BASE_URL}/api/partnerd/register`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`,
         },
       });
@@ -96,7 +95,7 @@ const TeamRegistration = () => {
         <SubmitButton onClick={handleSubmit} disabled={isLoading}>
           {isLoading ? '등록 중...' : '팀 등록'}
         </SubmitButton>
-        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>} {/* 에러 메시지 표시 */}
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>} 
       </Container>
     </>
   );
