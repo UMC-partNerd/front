@@ -1,35 +1,65 @@
 import styled from 'styled-components';
 import { TYPES } from '../components/common/button';
 
-  export const ButtonContainer = styled.div`
-  width: 60px;
-  height: 16px;
-  flex-shrink: 0;
+export const ButtonContainer = styled.div`
+width: 60px;
+height: 16px;
+flex-shrink: 0;
 
-  padding: 20px 32px
+padding: 20px 32px
+border-radius: 6px;
+@media (min-width: 120px) {
   border-radius: 6px;
-  @media (min-width: 120px) {
-    border-radius: 6px;
-  }
+}
 
-  display: flex;
+display: flex;
+align-items: center;
+justify-content:center;
+padding:10px 10px;
+gap: 10px;
+
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+letter-spacing: -0.4px;
+
+cursor:pointer;
+
+background: ${({ type }) => ( type === TYPES.YES ? 'var(--main, #0D29B7)' : '#FFFFFF' )};
+color: ${({ type }) => ( type === TYPES.YES ? '#FFFFFF' : 'var(--main, #0D29B7)' )};
+
+`;
+
+export const VoteContainer = styled.div`
+  display: inline-flex;
+  padding: 8px 32px;
+  justify-content: center;
   align-items: center;
-  justify-content:center;
-  padding:10px 10px;
   gap: 10px;
+  border-radius: 8px;
+  border: 2px solid #08D485;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 8px 0px rgba(9, 131, 84, 0.30);
 
   font-family: Pretendard;
   font-size: 16px;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   line-height: normal;
-  letter-spacing: -0.4px;
+  letter-spacing: -0.48px;
 
-  cursor:pointer;
+  color:${(props) => (props.count ? 'rgba(8, 212, 133, 0.60)' : '#08D485')};
 
-  background: ${({ type }) => ( type === TYPES.YES ? 'var(--main, #0D29B7)' : '#FFFFFF' )};
-  color: ${({ type }) => ( type === TYPES.YES ? '#FFFFFF' : 'var(--main, #0D29B7)' )};
+  flex-shrink: 0;
 
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(8, 212, 133, 0.60);
+    color: #FFFFFF;
+  }
 `;
 
 export const NextContainer = styled.div`

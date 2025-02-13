@@ -1,16 +1,17 @@
 import React from 'react';
 import {
   ButtonContainer,
+  VoteContainer,
   NextContainer,
   PlusContainer,
 } from '../../styled-components/styled-Button';
 
 export const TYPES = {
+  VOTE: 'vote', // 프로젝트 홍보 응원하기
   NEXT: 'next', // 큰
   PLUS: 'plus',
   YES: 'yes',   // 승인: 파랑
   NO: 'no'      // 거절: 흰색
-
 };
 
 // import Button, { TYPES } from "../common/button";
@@ -30,11 +31,17 @@ export const TYPES = {
     onClick={onClickHandler}
 /> */}
 
-function Button({ type, text, onClick }) {
+function Button({ type, text, count, onClick }) {
   const renderDefaultButton = () => (
     <ButtonContainer type={type} onClick={onClick}>
       {text}
     </ButtonContainer>
+  );
+
+  const renderVoteButton = () => (
+    <VoteContainer type={type} onClick={onClick}>
+      응원하기 {count}
+    </VoteContainer>
   );
 
   const renderNextButton = () => (
@@ -48,6 +55,10 @@ function Button({ type, text, onClick }) {
       {text}
     </PlusContainer>
   );
+
+  if (type === TYPES.VOTE) {
+    return renderVoteButton();
+  }
 
   if (type === TYPES.NEXT) {
     return renderNextButton();
