@@ -31,7 +31,7 @@ export const VERSIONS = {
   isLoading
   
 
-    const [openModal, setopenModal] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
   
    const [openFirstModal, setopenFirstModal] = useState(false);
     const [openSecondModal, setOpenSecondModal] = useState(false);
@@ -57,6 +57,7 @@ export const VERSIONS = {
     text='동아리 참여하기'
     onClick={clubJoinHandler}
     /> 
+
     <CustomModal
     openModal={openFirstModal} 
     closeModal={() => setopenFirstModal(false)}
