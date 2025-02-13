@@ -22,7 +22,7 @@ function RootLayout() {
     if (storedToken) {
       setIsLoggedIn(true);
     } else {
-      setIsLoggedIn(false);
+      setIsLoggedIn(false); // 로그인 후 네비게이션바
     }
   
     window.addEventListener('scroll', handleScroll);
@@ -83,4 +83,3 @@ const MainContainer = styled.div`
 const MainContent = styled.main`
   flex: 1;
 `;
-

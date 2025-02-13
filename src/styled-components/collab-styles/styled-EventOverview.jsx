@@ -30,8 +30,9 @@ export const SLabel = styled.span`
   font-weight: 700;
   color: #A0A0A0;
   margin-right: 8px;
-  width: 120px;  
-  text-align: left; 
+  width: 120px;
+  text-align: left;
+  display: inline-block; 
 `;
 
 export const SInfoText = styled.p`
@@ -40,6 +41,7 @@ export const SInfoText = styled.p`
   display: inline;
   color: #414141;
   font-weight: 600;
+  flex: 1; 
 `;
 
 export const SBadgeContainer = styled.div`
@@ -58,7 +60,8 @@ export const SBadge = styled.span`
   line-height: normal;
   letter-spacing: -0.32px;
   display: inline-flex;
-  padding: 2px 6px;
+  padding: 4px 10px;
+  min-width: 10px;
   justify-content: center;
   align-items: center;
   gap: 5px;
@@ -69,10 +72,13 @@ export const SBadge = styled.span`
 export const SOfflineBadge = styled(SBadge)`
   background: #EAF1FF;
   color: #0B2ED9;
+  padding: 4px 10px;
+  min-width: 10px;
 `;
 
 export const SInfoContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
+  justify-content: flex-start; 
 `;

@@ -1,11 +1,11 @@
 import styled from "styled-components"
 import { MainWrapp, Title, SubTitle, SubupSec } from "../../styles/mypagestyles"
-import ButtonWhite from "./button_white"
 import { Subup, Input, Subdown, FieldGroup , InputPass} from "../../styles/registerstyles"
 import React, {useState, useEffect} from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import ButtonBlue from "./button_blue";
 import ToggleButton from "./button_toggle";
+import Button, { TYPES } from "../common/button";
+
 import axios from "axios";
 import NicknameField from "../register/NicknameCheck";
 import useMypageImg from "../../hooks/useMypagesProfileImg";
@@ -42,6 +42,11 @@ const MyProfile = () => {
             }
         };
 
+        // 사진 등록하기
+        // 저장하기
+        const onClickHandler = () => {
+
+        };
         //필드 변경 
         const handleChange = (e) =>{
             const { name, value } = e.target;
@@ -109,7 +114,13 @@ const MyProfile = () => {
                         onError={(e) => { e.target.src = "/banner1.png"; }} // 기본 이미지 처리
                     />
                 )}
-                <ButtonWhite>사진 등록하기</ButtonWhite>
+                
+                <ImageComp />
+                <Button
+                    type={TYPES.PLUS}
+                    text='사진 등록하기'
+                    onClick={onClickHandler}
+                />
             </ProfileWrapp>
 
             <FieldGroup>
@@ -199,8 +210,13 @@ const MyProfile = () => {
             <p></p>
             </FieldGroup>
 
-            <SaveWrapp>
-            <ButtonBlue style={{width : '120px', marginBottom: '30px'}}>저장하기</ButtonBlue>
+            <SaveWrapp>            
+            <Button
+                type={TYPES.YES}
+                text='저장하기'
+                onClick={onClickHandler}
+                style={{width : '120px', marginBottom: '30px'}}
+            />
             <SubupSec style={{textDecoration: 'underline', cursor:'pointer', marginBottom: '30px'}}>파트너드 탈퇴하기</SubupSec>
             </SaveWrapp>
             

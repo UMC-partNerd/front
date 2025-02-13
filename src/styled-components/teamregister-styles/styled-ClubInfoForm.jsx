@@ -8,6 +8,7 @@ export const FormContainer = styled.div`
   border-radius: 20px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
   margin-top: 45px;
+  margin-bottom: 40px;
 `;
 
 export const Section = styled.div`

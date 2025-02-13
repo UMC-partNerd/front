@@ -13,10 +13,10 @@ export const SHeaderText = styled.div`
 `;
 
 export const SInfoBox = styled.div`
-  width: 220px;
-  height: 190px;  
+  width: 232px;
+  height: 188px;  
   flex-shrink: 0;
-  border-radius: 7px;
+  border-radius: 5px;
   background: #F3F4F7;
   display: flex;
   flex-direction: column;  
@@ -33,16 +33,16 @@ export const SInfoRow = styled.div`
 `;
 
 export const SInfoText = styled.span`
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   color: #707070;
-  margin-right: 5px;  
+  margin-right: 3px;  
   min-width: 80px;  
-  margin: 5px;
+  margin: 3px;
 `;
 
 export const SEventInfoText = styled.span`
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: #414141;  
   white-space: nowrap;  
@@ -57,14 +57,16 @@ export const SBadgeContainer = styled.div`
 export const SBadge = styled.div`
   background-color: #DDFCF0;
   color: #08D485;
-  font-size: 11px;
+  font-size: 11px;  
   font-weight: 700;
-  padding: 4px 9px;
-  border-radius: 4px;
+  padding: 5px 12px;  
+  border-radius: 6px;
+  min-width: 8px;  
+  text-align: center;  
 `;
 
 export const SInfoContainer = styled.div`
-  width: 240px; 
+  width: 255px; 
   height: 320px;
   display: flex;
   flex-direction: column;
