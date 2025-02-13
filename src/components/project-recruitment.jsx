@@ -229,6 +229,7 @@ const ProjectRecruitment = () => {
         </FilterContainer>
         <Button
             type={TYPES.PLUS}
+            sign='true'
             text='글 등록하기'
             onClick={buttonHandler}
         />

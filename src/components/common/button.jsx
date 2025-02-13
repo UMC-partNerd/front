@@ -27,27 +27,31 @@ export const TYPES = {
   isLoading
   
   <Button
+    width={width} 
+    height={height} 
+    fontSize={fontSize}
     type={TYPES.NEXT}
+    sign='true'
     text='글 작성하기'
     onClick={onClickHandler}
   /> 
 */}
 
-function Button({ type, text, onClick }) {
+function Button({ width, height, fontSize, type, sign, text, onClick }) {
   const renderDefaultButton = () => (
-    <ButtonContainer type={type} onClick={onClick}>
+    <ButtonContainer width={width} height={height} fontSize={fontSize} type={type} onClick={onClick}>
       {text}
     </ButtonContainer>
   );
 
   const renderNextButton = () => (
-    <NextContainer type={type} onClick={onClick}>
+    <NextContainer width={width} height={height} fontSize={fontSize} type={type} onClick={onClick}>
       {text}
     </NextContainer>
   );
 
   const renderPlusButton = () => (
-    <PlusContainer type={type} onClick={onClick}>
+    <PlusContainer width={width} height={height} fontSize={fontSize} type={type} sign={sign} onClick={onClick}>
       {text}
     </PlusContainer>
   );

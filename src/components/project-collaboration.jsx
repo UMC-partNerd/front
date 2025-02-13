@@ -160,6 +160,7 @@ const ProjectCollaboration = () => {
 
         <Button
             type={TYPES.PLUS}
+            sign='true'
             text='협업글 작성하기'
             onClick={handleWriteClick}
         />

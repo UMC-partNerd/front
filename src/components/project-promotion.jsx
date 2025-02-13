@@ -209,6 +209,7 @@ const ProjectPromotion = () => {
           </SortContainer>
           <Button
             type={TYPES.PLUS}
+            sign='true'
             text='프로젝트 등록하기'
             onClick={buttonHandler}
           />        

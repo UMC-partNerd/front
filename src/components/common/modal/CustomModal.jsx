@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import {
     Background,
-    ModalContainer,
     Boldface,
     Regular,
     ButtonContainer,
@@ -101,17 +100,15 @@ function CustomModal ({ openModal, closeModal, boldface, regular, text, onClickH
             contentLabel= {boldface}   // 스크린더 사용자에게 전달되는 문자열
             shouldCloseOnOverlayClick={false}
         >
-            <ModalContainer>
-                <Boldface>{boldface}취소된 콜라보레이션 요청</Boldface>
-                <Regular>{regular}다른 동아리와 협업해볼까요?</Regular>
-                <ButtonContainer>
-                    <Button
-                        type={TYPES.NEXT}
-                        text='콜라보레이션 하러 가기'
-                        onClick={moveToColab}
-                    />
-                </ButtonContainer>
-            </ModalContainer>
+            <Boldface>{boldface}취소된 콜라보레이션 요청</Boldface>
+            <Regular>{regular}다른 동아리와 협업해볼까요?</Regular>
+            <ButtonContainer>
+                <Button
+                    type={TYPES.NEXT}
+                    text='콜라보레이션 하러 가기'
+                    onClick={moveToColab}
+                />
+            </ButtonContainer>
         </Modal>
     );
 
@@ -124,17 +121,18 @@ function CustomModal ({ openModal, closeModal, boldface, regular, text, onClickH
             contentLabel= {boldface}
             shouldCloseOnOverlayClick={false}
         >
-            <ModalContainer>
-                <Boldface>{boldface}</Boldface>
-                <Regular>{regular}</Regular>
-                <ButtonContainer>
-                    <Button
-                        type={TYPES.NO}
-                        text='닫기'
-                        onClick={closeModal}
-                    />
-                </ButtonContainer>
-            </ModalContainer>
+            <Boldface>{boldface}</Boldface>
+            <Regular>{regular}</Regular>
+            <ButtonContainer>
+                <Button
+                    width='120px' 
+                    height='32px' 
+                    fontSize='24px' 
+                    type={TYPES.NO}
+                    text='닫기'
+                    onClick={closeModal}
+                />
+            </ButtonContainer>
         </Modal>
     );
 
@@ -147,22 +145,26 @@ function CustomModal ({ openModal, closeModal, boldface, regular, text, onClickH
             contentLabel= {boldface}
             shouldCloseOnOverlayClick={false}
         >
-            <ModalContainer>
-                <Boldface>{boldface}</Boldface>
-                <Regular>{regular}</Regular>
-                <ButtonContainer>
-                    <Button
-                        type={TYPES.NO}
-                        text='돌아가기'
-                        onClick={closeModal}
-                    />
-                    <Button
-                        type={TYPES.YES}
-                        text={text}
-                        onClick={onClickHandler}
-                    />
-                </ButtonContainer>
-            </ModalContainer>
+            <Boldface>{boldface}</Boldface>
+            <Regular>{regular}</Regular>
+            <ButtonContainer>
+                <Button
+                    width='120px' 
+                    height='32px' 
+                    fontSize='20px' 
+                    type={TYPES.NO}
+                    text='돌아가기'
+                    onClick={closeModal}
+                />
+                <Button
+                    width='120px' 
+                    height='32px' 
+                    fontSize='20px' 
+                    type={TYPES.YES}
+                    text={text}
+                    onClick={onClickHandler}
+                />
+            </ButtonContainer>
         </Modal>
     );
 
