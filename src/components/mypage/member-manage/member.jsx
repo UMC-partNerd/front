@@ -9,6 +9,36 @@ import {
 } from '../../styled-components/styled-Member';
 
 function Member({ profile, nickname, job, club }) {
+  
+  const onClickHandler = () => {
+    
+  };
+
+  return(
+      <Container>
+          <SubContainer>
+          <ImageComp />
+          <NameField>
+              <Name>이름</Name>
+              <Explan>설명</Explan>
+          </NameField>
+          </SubContainer>
+          {isPersonalPage ? (
+              <Button
+                  type={TYPES.PLUS}
+                  text='채팅'
+                  onClick={onClickHandler}
+              />
+          ) : (
+              <Button
+                  type={TYPES.PLUS}
+                  text='채팅'
+                  onClick={onClickHandler}
+              />
+          )}
+      </Container>
+  )
+}
   const renderIsMember = () => (
     <MemberContainer>
       <Profile profile={profile}/>
