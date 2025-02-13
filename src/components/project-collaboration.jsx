@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // 추가
 import Button, { TYPES } from "./common/button";
+import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
 
 import {
   PaginationContainer,
@@ -114,10 +115,18 @@ const ProjectCollaboration = () => {
     return buttons;
   };
 
+  const [openModal, setOpenModal] = useState(false);
+
+  // 버튼: 협업글 작성하기
+  const handleWriteClick = () => {
+    setOpenModal(true);
+  };
+  
   // useNavigate 훅을 사용하여 이동 기능 추가
   const navigate = useNavigate();
-  const handleWriteClick = () => {
+  const movetoRegister = () => {
     navigate('/collaboration/collab-registration');  // 버튼 클릭 시 이동
+    setOpenModal(flase);
   };
 
   return (
@@ -158,6 +167,16 @@ const ProjectCollaboration = () => {
         />
       </ButtonContainer>
 
+      <CustomModal
+        openModal={openModal} 
+        closeModal={() => setOpenModal(false)}
+
+        boldface='협업을 등록하시겠습니까?'
+        regular='협업의 리더로 콜라보 페이지를 개설하여 협업을 등록할 수 있습니다.'
+        text='개설하기'
+        onClickHandler={movetoRegister}
+        variant={VERSIONS.VER3}
+      />
       <ProjectGrid>
         {currentProjects.map((project, index) => (
           <ProjectCard key={index}>
