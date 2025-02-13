@@ -41,7 +41,7 @@ export const NextContainer = styled.div`
 
   display: flex;
   padding: 10px;
-  border-radius: 4px;
+  border-radius: 8px;
 
   text-align: center;
 

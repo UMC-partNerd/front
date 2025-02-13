@@ -17,6 +17,8 @@ export const VERSIONS = {
 };
 
 {/*
+    import React, { useState } from 'react';
+  import Button, { TYPES } from "../components/common/button";
   import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
   import { useNavigate } from 'react-router-dom';
 
@@ -27,6 +29,9 @@ export const VERSIONS = {
   };
 
   isLoading
+  
+
+    const [openModal, setopenModal] = useState(false);
   
    const [openFirstModal, setopenFirstModal] = useState(false);
     const [openSecondModal, setOpenSecondModal] = useState(false);
