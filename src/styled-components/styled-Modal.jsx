@@ -7,27 +7,32 @@ export const Background = {
       backgroundColor: " rgba(0, 0, 0, 0.5)",
       width: "100%",
       height: "100%",
-      flexShrink: "0",
     },
-    width: "600px",
-    height: "380px",
+    content: {
+      width: "600px",
+      height: "380px",
+      margin: "auto", // 자동 마진으로 중앙정렬
+      borderRadius: "16px",
+      boxShadow: "0px 2px 8px 0px rgba(0, 0, 0, 0.15)",
+      padding: "0",
+      border: "none",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+
+      background: "#FFFFFF",
+
+    },
     flexShrink: "0",
-  
-    borderRadius: "16px",
-    boxShadow: "0px 2px 8px 0px rgba(0, 0, 0, 0.15)"  
 };
 
 export const ModalContainer = styled.div`
-  width: 600px;
-  height: 380px;
-  flex-shrink: 0;
-
-  border-radius: 16px;
-  background: #FFFFFF;
-  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  justify-content: space-between;
 
   position: absolute;
-  left: 50%;
 `;
 
 export const Boldface = styled.h3`

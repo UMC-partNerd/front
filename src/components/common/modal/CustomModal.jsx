@@ -28,14 +28,49 @@ export const VERSIONS = {
 
   isLoading
   
-  <CustomModal
-    boldface='동아리에 참여하시겠습니까?'
-    regular='동아리 가입을 위해서는 동아리 리저딘의 승인을 기다려야 합니다.'
-    text='참여하기'
-    onClick={onClickHandler}
-    variant={VERSIONS.VER3}
-  />
+   const [openFirstModal, setopenFirstModal] = useState(false);
+    const [openSecondModal, setOpenSecondModal] = useState(false);
+  
+    // 버튼 클릭 시 모달1을 띄우는 함수
+    const clubJoinHandler = () => {
+      setopenFirstModal(true);
+    };
+  
+    // 모달: 승인 함수
+    const joinHandler = async () => {
+      // 참여 요청 보내기
+      // await api.joinClub();
+  
+      // 모달2 열기 
+      setOpenSecondModal(true);
+      // 모달1 닫기
+      setopenFirstModal(false);
+    };
 
+  <Button
+    type={TYPES.NEXT}
+    text='동아리 참여하기'
+    onClick={clubJoinHandler}
+    /> 
+    <CustomModal
+    openModal={openFirstModal} 
+    closeModal={() => setopenFirstModal(false)}
+
+    boldface='동아리에 참여하시겠습니까?'
+    regular='동아리 가입을 위해서는 동아리 리더진의 승인을 기다려야 합니다.'
+    text='참여하기'
+    onClickHandler={joinHandler}
+    variant={VERSIONS.VER3}
+    />
+
+    <CustomModal
+    openModal={openSecondModal} 
+    closeModal={() => setOpenSecondModal(false)}
+
+    boldface='동아리 참여 완료!'
+    regular='동아리 가입 신청이 완료되었습니다. 승인 후 자동으로 참여됩니다.'
+    variant={VERSIONS.VER2}
+    />
 // 팝업창 위치 지정 필요
 
 */}
@@ -51,7 +86,7 @@ function CustomModal ({ openModal, closeModal, boldface, regular, text, onClickH
         navigate('/collaboration');
     };
 
-    const renderVer3Modal = () => (
+    const renderVer1Modal = () => (
         <Modal 
             isOpen={openModal}
             onRequestClose={closeModal}
@@ -97,7 +132,7 @@ function CustomModal ({ openModal, closeModal, boldface, regular, text, onClickH
         </Modal>
     );
 
-    const renderVer1Modal = () => (
+    const renderVer3Modal = () => (
         <Modal 
             isOpen={openModal}
             onRequestClose={closeModal}

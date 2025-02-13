@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { TYPES } from '../components/common/button';
 
-  export const ButtonContainer = styled.div`
+export const ButtonContainer = styled.div`
   width: 60px;
   height: 16px;
   flex-shrink: 0;
@@ -27,7 +27,7 @@ import { TYPES } from '../components/common/button';
 
   cursor:pointer;
 
-  background: ${({ type }) => ( type === TYPES.YES ? 'var(--main, #0D29B7)' : '#FFFFFF' )};
+  background: ${({ type }) => ( type === TYPES.YES ? 'var(--main, #0D29B7)' : '#F3F3F3' )};
   color: ${({ type }) => ( type === TYPES.YES ? '#FFFFFF' : 'var(--main, #0D29B7)' )};
 
 `;
