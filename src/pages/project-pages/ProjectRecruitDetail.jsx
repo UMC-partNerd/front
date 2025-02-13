@@ -8,6 +8,8 @@ import JoinProjectInfo from '../../components/projectdetail/JoinProjectInfo';
 import ProjectCommentList from '../../components/projectdetail/ProjectCommentList'; 
 import CommentForm from '../../components/projectdetail/CommentForm';
 import useBannerPhoto from '../../hooks/useBannerPhoto';  // 훅 import
+import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
+import { useNavigate } from 'react-router-dom';
 
 const DefaultImage = '/default-image.png';
 
@@ -71,6 +73,33 @@ const ProjectRecruitDetail = () => {
     return <div>Loading...</div>; // 데이터가 없으면 로딩 화면 표시
   }
 
+  // 수정하기/삭제하기
+
+  // 삭제하기 > 모달
+  const [openFirstModal, setopenFirstModal] = useState(false);
+  const [openSecondModal, setOpenSecondModal] = useState(false);
+  const navigate = useNavigate();
+
+  // 버튼 클릭 시 모달1을 띄우는 함수
+  const buttonHandler = () => {
+    setopenFirstModal(true);
+  };
+
+  // 모달: 삭제하기
+  const deleteHandler = async () => {
+    // 모달2 열기 
+    setOpenSecondModal(true);
+    // 모달1 닫기
+    setopenFirstModal(false);
+
+    // 삭제 요청 보내기
+    // await api.joinClub();
+  };
+
+  // 삭제 성공 시, 
+  // setOpenSecondModal(false);
+  // navigate('/project/recruit');
+  
   return (
     <S.SContainer>
       <S.SImageBoxContainer>
@@ -89,6 +118,28 @@ const ProjectRecruitDetail = () => {
           <S.SDescription>{projectData.intro}</S.SDescription>
         </S.STextBox>
       </S.SImageBoxContainer>
+
+      {/* 수정하기/삭제하기 추가 */}
+
+      <CustomModal
+        openModal={openFirstModal} 
+        closeModal={() => setopenFirstModal(false)}
+
+        boldface='프로젝트 모집 삭제'
+        regular='삭제하기를 누르면 다시 되돌릴 수 없습니다. 정말로 삭제하시겠습니까?'
+        text='삭제하기'
+        onClickHandler={deleteHandler}
+        variant={VERSIONS.VER3}
+      />
+
+      <CustomModal
+        openModal={openSecondModal} 
+        closeModal={() => setOpenSecondModal(false)}
+
+        boldface='프로젝트 모집 삭제'
+        regular='프로젝트가 삭제되었습니다.'
+        variant={VERSIONS.VER2}
+      />
 
       <S.SImageSliderWrapper>
         <ImageSlider images={images} />
