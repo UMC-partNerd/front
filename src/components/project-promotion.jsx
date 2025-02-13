@@ -159,7 +159,7 @@ const ProjectPromotion = () => {
   };
   const navigate = useNavigate();
   const movetoRegister = () => {
-    navigate('project/promotion/promotion-registration');
+    navigate('project/promote/promote-registration');
     setOpenModal(flase);  
   };
 
