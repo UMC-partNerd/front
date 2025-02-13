@@ -4,21 +4,20 @@ import { useLocation } from "react-router-dom";
 import ButtonWhite from "../mypage/button_white";
 
 //contact 컴포넌트 
-const PersonalContact = () =>{
+const PersonalContact = ({profileImageUrl, nickname, explan}) =>{
     const location = useLocation();
-
     const isPersonalPage = location.pathname === "/mypage/personal-page";
 
     return(
         <Container>
             <SubContainer>
             <ImageComp 
-            src={"/Profile_none.png"}
+            src={profileImageUrl}
                 alt = "프로필 이미지"
             />
             <NameField>
-                <Name>이름</Name>
-                <Explan>설명</Explan>
+                <Name>{nickname || "이름 없음"}</Name>
+                <Explan>{explan||"설명"}</Explan>
             </NameField>
             </SubContainer>
             {isPersonalPage ? (

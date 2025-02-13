@@ -8,6 +8,7 @@ import ButtonBlue from "./button_blue";
 import ToggleButton from "./button_toggle";
 import axios from "axios";
 import NicknameField from "../register/NicknameCheck";
+import useMypageImg from "../../hooks/useMypagesProfileImg";
 
 const MyProfile = () => {
     // 비밀번호 상태
@@ -41,6 +42,18 @@ const MyProfile = () => {
             }
         };
 
+        //필드 변경 
+        const handleChange = (e) =>{
+            const { name, value } = e.target;
+            const updatedData = { ...profile, [name]: value };
+            setProfile(updatedData);
+            if (name === "nickname") {
+                setIsNicknameAvailable(null); // 닉네임 변경 시 상태 초기화
+                setIsNicknameChecked(false);
+                onNicknameCheck(false);
+            }
+        }
+
         const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
         //내 프로필 조회 api 
@@ -73,10 +86,8 @@ const MyProfile = () => {
             getMyProfile();
         }, []);
 
-        //프로필 이미지 불러오기
-        const profileImageUrl = profile?.profileKeyName
-        ? `${API_BASE_URL}/${profile.profileKeyName}` // 백엔드의 API_BASE_URL과 경로 조합
-        : "/Profile_none.png"; // 기본 프로필 이미지
+        //프로필 이미지 가져오기
+        const {profileImageUrl, isLoading, error} = useMypageImg(profile?.profileKeyName)
 
     return (
         <MainWrapp>
@@ -87,18 +98,26 @@ const MyProfile = () => {
             <SubTitle>프로필 사진</SubTitle>
 
             <ProfileWrapp>
-                <ImageComp 
-                src={profileImageUrl} 
-                alt="프로필 이미지" 
-                onError={(e) => { e.target.src = "/banner1.png"; }} 
-                /> 
+            {isLoading ? (
+                    <p>로딩 중...</p>
+                ) : error ? (
+                    <p>이미지를 불러올 수 없습니다.</p>
+                ) : (
+                    <ImageComp
+                        src={profileImageUrl}
+                        alt="프로필 이미지"
+                        onError={(e) => { e.target.src = "/banner1.png"; }} // 기본 이미지 처리
+                    />
+                )}
                 <ButtonWhite>사진 등록하기</ButtonWhite>
             </ProfileWrapp>
 
             <FieldGroup>
                 <Subup>이름</Subup>
                 <Input placeholder="이름(실명)을 입력해주세요"
-                value={profile?.name || ""}
+                name="name"
+                value={profile?.name|| ""}
+                onChange={handleChange}
                 ></Input>
             </FieldGroup>
 
@@ -107,7 +126,10 @@ const MyProfile = () => {
             <FieldGroup>
             <Subup>생년월일</Subup>
             <Input placeholder="생년월일을 입력해주세요"
-            value={profile?.birth || ""}
+            type="text"
+            name="birthDate"
+            onChange={handleChange}
+            value={profile?.birth?.slice(0, 10) || ""}
             ></Input>
             </FieldGroup>
 
@@ -116,7 +138,9 @@ const MyProfile = () => {
                 <Subup>이메일</Subup>
                 <Input placeholder="이메일을 입력해주세요"
                 value={profile?.email || ""}
-                type="email" />
+                type="text"
+                name="email"
+                onChange={handleChange} />
             </FieldGroup>
 
             <FieldGroup>
@@ -125,6 +149,8 @@ const MyProfile = () => {
                     <InputPass
                         placeholder="영문, 숫자, 특수문자를 8자 이상 조합하여 입력해주세요"
                         type={passwordType}
+                        onChange={handleChange}
+                        value={profile?.email || ""}
                     />
                     <IconButton onClick={handleTogglePassword}>
                         {passwordIcon}

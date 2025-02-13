@@ -33,8 +33,12 @@ const NicknameField = ({ value, onChange, onNicknameCheck }) =>{
 
             if (response.data.result) {
                 setIsNicknameAvailable(false); // 닉네임 중복됨
+                setIsNicknameChecked(false);
+                onNicknameCheck(false);
             } else {
                 setIsNicknameAvailable(true); // 사용 가능한 닉네임
+                setIsNicknameChecked(true);
+                onNicknameCheck(true); // ✅ 닉네임 사용 가능할 때만 true
             }
         } catch (error) {
             console.error("닉네임 중복 확인 오류:", error);
