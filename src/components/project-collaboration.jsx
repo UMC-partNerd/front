@@ -121,8 +121,6 @@ const ProjectCollaboration = () => {
   const handleWriteClick = () => {
     setOpenModal(true);
   };
-  
-  // useNavigate 훅을 사용하여 이동 기능 추가
   const navigate = useNavigate();
   const movetoRegister = () => {
     navigate('/collaboration/collab-registration');  // 버튼 클릭 시 이동
