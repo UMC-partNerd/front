@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
-import * as S from '../../../styled-components/common-styles/Styled-ActivityImageUpload';
+import styled from 'styled-components';
+import axios from 'axios';
 
-const ActivityImageUpload = ({ folderName, type, setImageKey, setImagePreview }) => {
+const ActivityImageUpload = ({ folderName, type, setImageKey }) => {
   const fileInputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
-  const [imagePreview, setImagePreviewState] = useState(null);
 
   const handleClick = () => {
     fileInputRef.current.click();
@@ -14,63 +14,97 @@ const ActivityImageUpload = ({ folderName, type, setImageKey, setImagePreview })
     const file = e.target.files[0];
     if (!file) return;
 
+    if (file.size > 10 * 1024 * 1024) {
+      alert('파일 크기는 10MB를 초과할 수 없습니다.');
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      alert('이미지 파일만 업로드 가능합니다.');
+      return;
+    }
+
     setUploading(true);
     try {
-      const response = await fetch('https://api.partnerd.site/api/s3/preSignedUrl', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const token = localStorage.getItem('jwtToken');
+      if (!token) {
+        alert('로그인이 필요합니다.');
+        return;
+      }
+
+      const presignedResponse = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/s3/preSignedUrl`,
+        {
+          folderName: folderName,
+          type: type,
           filename: file.name,
-          folderName,
-          type,
-          contentType: file.type,
-        }),
-      });
-
-      const data = await response.json();
-      const { preSignedUrl, keyName } = data.result;
-
-      setImageKey(keyName);
-
-      await fetch(preSignedUrl, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': file.type,
+          contentType: file.type
         },
-        body: file,
-      });
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
 
-      const imageUrl = URL.createObjectURL(file);
-      setImagePreview(imageUrl);
-      setImagePreviewState(imageUrl);
+      await axios.put(
+        presignedResponse.data.result.preSignedUrl,
+        file,
+        {
+          headers: {
+            'Content-Type': file.type,
+            'x-amz-meta-cache-control': 'max-age=31536000'
+          }
+        }
+      );
 
-      console.log('이미지 업로드 완료:', imageUrl);
+      setImageKey(presignedResponse.data.result.keyName);
+
     } catch (error) {
       console.error('이미지 업로드 중 오류 발생', error);
+      alert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
     } finally {
       setUploading(false);
     }
   };
 
   return (
-    <S.UploadGroup>
-      <S.UploadRectangle onClick={handleClick}>
-        <S.CenterContainer>
-          <S.ImagePreview src='/image.png' alt='Icon' /> 
-          <S.UploadText>이미지 업로드하기</S.UploadText>
-        </S.CenterContainer>
-      </S.UploadRectangle>
+    <UploadContainer>
       <input
-        type='file'
+        type="file"
         ref={fileInputRef}
-        style={{ display: 'none' }}
         onChange={handleFileChange}
+        accept="image/*"
+        style={{ display: 'none' }}
       />
-      {uploading && <p>업로드 중...</p>}
-    </S.UploadGroup>
+      <UploadButton onClick={handleClick} disabled={uploading}>
+        {uploading ? '업로드 중...' : '이미지 업로드'}
+      </UploadButton>
+    </UploadContainer>
   );
 };
+
+const UploadContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+`;
+
+const UploadButton = styled.button`
+  padding: 10px 20px;
+  background-color: #0D29B7;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+`;
 
 export default ActivityImageUpload;

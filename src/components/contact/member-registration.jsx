@@ -1,132 +1,117 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import {
+    Container,
+    Title,
+    Description,
+    MainSection,
+    SearchSection,
+    SearchInputWrapper,
+    SearchInput,
+    SearchButton,
+    TagsSection,
+    TagGroup,
+    TagLabel,
+    TagsWrapper,
+    LeaderContainer,
+    MemberContainer,
+    LeaderTag,
+    MemberTag,
+    DeleteButton,
+    SearchResultsList,
+    SearchResultItem,
+    ProfileImage,
+    ResultNickname
+} from '../../styled-components/contact/styled-member-registration';
 
-const TeamMemberRegistration = ({ onMembersUpdate }) => {
-  // ... 기존 코드 유지 ...
+const TeamMemberSearch = ({ 
+  teamMembers = [], 
+  leader = null,
+  setTeamMembers = () => {}, 
+  searchResults = [], 
+  handleSearch = () => {}, 
+  handleAddMember = () => {}, 
+  handleRemoveMember = () => {} 
+}) => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearchInput = (e) => {
+    setSearchQuery(e.target.value);
+    handleSearch(e.target.value);
+  };
+
+  return (
+    <Container>
+      <Title>함께 한 팀원</Title>
+      <Description>프로젝트를 함께하고 있는 팀원이 있다면 추가해주세요.</Description>
+      
+      <MainSection>
+        <SearchSection>
+          <SearchInputWrapper>
+            <SearchInput
+              placeholder="닉네임을 검색하여 추가해주세요"
+              value={searchQuery}
+              onChange={handleSearchInput}
+            />
+            <SearchButton>
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="20" viewBox="0 0 19 20" fill="none">
+                <path d="M7.38863 14.4335C10.917 14.4335 13.7773 11.5732 13.7773 8.04488C13.7773 4.51654 10.917 1.65625 7.38863 1.65625C3.86029 1.65625 1 4.51654 1 8.04488C1 11.5732 3.86029 14.4335 7.38863 14.4335Z" stroke="#0D29B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M17.1212 18.1427L12.0684 13.0898" stroke="#0D29B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </SearchButton>
+          </SearchInputWrapper>
+          
+          {searchResults?.length > 0 && (
+            <SearchResultsList>
+              {searchResults.map(result => (
+                <SearchResultItem key={result.id} onClick={() => handleAddMember(result)}>
+                  <ProfileImage src={result.profileImage} alt={result.nickname} />
+                  <ResultNickname>{result.nickname}</ResultNickname>
+                </SearchResultItem>
+              ))}
+            </SearchResultsList>
+          )}
+        </SearchSection>
+
+        <TagsSection>
+          <LeaderContainer>
+            <TagLabel>리더</TagLabel>
+            {leader && <LeaderTag>{leader.nickname}</LeaderTag>}
+          </LeaderContainer>
+
+          <MemberContainer>
+            <TagLabel>팀원</TagLabel>
+            <TagsWrapper>
+              {teamMembers?.map(member => (
+                <MemberTag key={member.id}>
+                  {member.nickname}
+                  <DeleteButton onClick={() => handleRemoveMember(member.id)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M12 4L4 12" stroke="#0D29B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M4 4L12 12" stroke="#0D29B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </DeleteButton>
+                </MemberTag>
+              ))}
+            </TagsWrapper>
+          </MemberContainer>
+        </TagsSection>
+      </MainSection>
+    </Container>
+  );
 };
 
-export default TeamMemberRegistration;
+TeamMemberSearch.propTypes = {
+  teamMembers: PropTypes.array,
+  leader: PropTypes.shape({
+    id: PropTypes.number,
+    nickname: PropTypes.string
+  }),
+  setTeamMembers: PropTypes.func,
+  searchResults: PropTypes.array,
+  handleSearch: PropTypes.func,
+  handleAddMember: PropTypes.func,
+  handleRemoveMember: PropTypes.func
+};
 
-// Styled Components
-const TeamMemberWrapper = styled.div`  // Container -> TeamMemberWrapper
-  margin-bottom: 40px;
-`;
-
-const Title = styled.h2`
-  font-weight: 700;
-  font-size: 26px;
-  line-height: 38px;
-  color: #212121;
-  margin-bottom: 8px;
-`;
-
-const Description = styled.p`
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 20px;
-`;
-
-const SearchSection = styled.div`
-  position: relative;
-  margin-bottom: 20px;
-`;
-
-const SearchInputWrapper = styled.div`
-  position: relative;
-`;
-
-const SearchInput = styled.input`
-  width: 100%;
-  padding: 12px;
-  padding-right: 40px;
-  border: 1px solid #E1E1E1;
-  border-radius: 4px;
-  font-size: 14px;
-
-  &:focus {
-    border-color: #0D29B7;
-    outline: none;
-  }
-`;
-
-const SearchIcon = styled.div`
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-`;
-
-const SearchResultsList = styled.div`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #E1E1E1;
-  border-radius: 4px;
-  margin-top: 4px;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 1000;
-`;
-
-const SearchResultItem = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #F8F9FA;
-  }
-`;
-
-const ProfileImage = styled.img`
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  margin-right: 12px;
-`;
-
-const ResultNickname = styled.span`
-  font-size: 14px;
-  color: #212121;
-`;
-
-const MembersList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-const MemberItem = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  background-color: #F8F9FA;
-  border-radius: 4px;
-`;
-
-const MemberInfo = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const MemberNickname = styled.span`
-  font-weight: 600;
-  color: #212121;
-`;
-
-const DeleteButton = styled.button`
-  background: none;
-  border: none;
-  color: #666;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 4px 8px;
-
-  &:hover {
-    color: #FF2626;
-  }
-`;
+export default TeamMemberSearch;

@@ -1,6 +1,10 @@
+import { useState } from 'react';
 import axios from 'axios';
 
-const useProjectRecruit = () => {
+const useProjectPromote = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const checkAuth = () => {
     const token = localStorage.getItem("jwtToken");
     if (!token) {
@@ -38,8 +42,7 @@ const useProjectRecruit = () => {
         file,
         {
           headers: {
-            'Content-Type': file.type,
-            'x-amz-meta-cache-control': 'max-age=31536000' // S3 메타데이터 추가
+            'Content-Type': file.type
           }
         }
       );
@@ -47,9 +50,6 @@ const useProjectRecruit = () => {
       return presignedResponse.data.result.keyName;
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
-      if (error.response) {
-        console.error('에러 응답:', error.response.data);
-      }
       throw error;
     }
   };
@@ -59,8 +59,9 @@ const useProjectRecruit = () => {
     if (!token) return null;
 
     try {
+      setLoading(true);
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/api/project/recruit`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/project/promotion`,
         projectData,
         {
           headers: {
@@ -69,25 +70,24 @@ const useProjectRecruit = () => {
           }
         }
       );
-
       return response.data;
     } catch (error) {
-      console.error('프로젝트 등록 실패:', error);
-      if (error.response) {
-        console.error('에러 응답:', error.response.data);
-      }
+      setError('프로젝트 등록 실패');
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
   // 프로젝트 수정 API
-  const updateProject = async (recruitProjectId, projectData) => {
+  const updateProject = async (promotionProjectId, projectData) => {
     const token = checkAuth();
     if (!token) return null;
 
     try {
+      setLoading(true);
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/api/project/recruit/${recruitProjectId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/project/promotion/${promotionProjectId}`,
         projectData,
         {
           headers: {
@@ -96,40 +96,36 @@ const useProjectRecruit = () => {
           }
         }
       );
-
       return response.data;
     } catch (error) {
-      console.error('프로젝트 수정 실패:', error);
-      if (error.response) {
-        console.error('에러 응답:', error.response.data);
-      }
+      setError('프로젝트 수정 실패');
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
   // 프로젝트 삭제 API
-  const deleteProject = async (recruitProjectId) => {
+  const deleteProject = async (promotionProjectId) => {
     const token = checkAuth();
     if (!token) return null;
 
     try {
+      setLoading(true);
       const response = await axios.delete(
-        `${import.meta.env.VITE_API_BASE_URL}/api/project/recruit/${recruitProjectId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/project/promotion/${promotionProjectId}`,
         {
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+            'Authorization': `Bearer ${token}`
           }
         }
       );
-
       return response.data;
     } catch (error) {
-      console.error('프로젝트 삭제 실패:', error);
-      if (error.response) {
-        console.error('에러 응답:', error.response.data);
-      }
+      setError('프로젝트 삭제 실패');
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -137,8 +133,10 @@ const useProjectRecruit = () => {
     uploadImage,
     registerProject,
     updateProject,
-    deleteProject
+    deleteProject,
+    loading,
+    error
   };
 };
 
-export default useProjectRecruit; 
+export default useProjectPromote; 
