@@ -174,8 +174,10 @@ const CollaborationDetailPage = () => {
 
         {isLoadingCollab ? <div>로딩 중...</div> :
           errorCollab ? <div>{errorCollab}</div> :
-            <InfoSection collabData={collabData} />}
-      </Wrapper>
+          <InfoSectionWrapper>
+          <InfoSection collabData={collabData} />
+        </InfoSectionWrapper>}
+        </Wrapper>
 
       <EventOverviewWrapper>
         {collabData ? <EventOverview eventData={collabData} /> : <div>데이터를 불러오는 중...</div>}
@@ -222,6 +224,15 @@ const Wrapper = styled.div`
   margin-right: auto;
   width: 1000px;
 `;
+
+const InfoSectionWrapper = styled.div`
+  margin-left: 100px; 
+  width: 555px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
 
 const ImageContainer = styled.div`
   border-radius: 4px;

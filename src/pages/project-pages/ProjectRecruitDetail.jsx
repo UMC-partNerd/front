@@ -7,14 +7,14 @@ import ProjectDetailForm from '../../components/projectdetail/ProjectDetailForm'
 import JoinProjectInfo from '../../components/projectdetail/JoinProjectInfo';
 import ProjectCommentList from '../../components/projectdetail/ProjectCommentList'; 
 import CommentForm from '../../components/projectdetail/CommentForm';
-import useBannerPhoto from '../../hooks/useBannerPhoto';  // 훅 import
+import useBannerPhoto from '../../hooks/useBannerPhoto';  
 
 const DefaultImage = '/default-image.png';
 
 const ProjectRecruitDetail = () => {
-  const { recruitProjectId } = useParams(); // URL에서 recruitProjectId 가져오기
-  const [projectData, setProjectData] = useState(null); // 프로젝트 데이터 상태 관리
-  const [comments, setComments] = useState([]); // 댓글 상태 관리
+  const { recruitProjectId } = useParams(); 
+  const [projectData, setProjectData] = useState(null); 
+  const [comments, setComments] = useState([]); 
 
   // API 호출
   useEffect(() => {
@@ -31,18 +31,25 @@ const ProjectRecruitDetail = () => {
       });
   }, [recruitProjectId]);
 
-  // useBannerPhoto 훅 사용 (folderName: 'projects', 썸네일만 사용)
-  const { thumbnailUrl, introPhotoUrl, isLoading, error } = useBannerPhoto(
-    'projects', // 폴더 이름
-    projectData?.thumbnailKeyName, // THUMBNAIL
-    null, // MAIN (없으면 null)
-    null, // EVENT (없으면 null)
-    projectData?.thumbnailKeyName, // THUMBNAIL
-    projectData?.introKeyName // INTRO
+  const { thumbnailPhotoUrl, introPhotoUrl, isLoading, error } = useBannerPhoto(
+    'projects',
+    null, 
+    null, 
+    [], 
+    projectData?.thumbnailKeyName, // 썸네일 이미지
+    projectData?.projectImgKeyNameList[0] // intro 이미지
   );
-
+  
+  console.log('Intro Image URL:', introPhotoUrl);  
+  
+  
   // 임시 이미지 데이터
   const images = projectData?.projectImgKeyNameList || [DefaultImage, DefaultImage, DefaultImage];
+
+  // introPhotoUrl을 이미지 리스트에 포함
+  if (introPhotoUrl) {
+    images.unshift(introPhotoUrl);  // introPhotoUrl을 첫 번째 이미지로 넣음
+  }
 
   // 댓글 추가 함수
   const handleAddComment = (newComment) => {
@@ -81,7 +88,7 @@ const ProjectRecruitDetail = () => {
           ) : error ? (
             <p>Error loading image: {error}</p>
           ) : (
-            <img src={thumbnailUrl || DefaultImage} alt="Project Thumbnail" />
+            <img src={thumbnailPhotoUrl || DefaultImage} alt="Project Thumbnail" />
           )}
         </S.SImageBox>
         <S.STextBox>
@@ -91,16 +98,21 @@ const ProjectRecruitDetail = () => {
       </S.SImageBoxContainer>
 
       <S.SImageSliderWrapper>
+        {/* ImageSlider에 images 배열을 전달 */}
         <ImageSlider images={images} />
       </S.SImageSliderWrapper>
 
+      <S.SFormWrapper>
       <S.SFormContainer>
-        <ProjectDetailForm description={projectData.description} />
-      </S.SFormContainer>
+    <ProjectDetailForm projectData={projectData} />
+  </S.SFormContainer>
 
-      <S.SJoinProjectInfoWrapper>
-        <JoinProjectInfo leaderInfo={projectData.leaderInfo} />
-      </S.SJoinProjectInfoWrapper>
+  <S.SJoinProjectInfoWrapper>
+    <JoinProjectInfo projectData={projectData} />
+  </S.SJoinProjectInfoWrapper>
+</S.SFormWrapper>
+ 
+
 
       {/* 댓글 폼  */}
       <S.SCommentFormWrapper>
@@ -119,4 +131,4 @@ const ProjectRecruitDetail = () => {
   );
 };
 
-export default ProjectRecruitDetail;
+export default ProjectRecruitDetail; 

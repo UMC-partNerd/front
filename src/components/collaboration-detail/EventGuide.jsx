@@ -11,13 +11,12 @@ const EventGuide = ({ collabData }) => {
   return (
     <S.SEventGuideContainer>
       <S.SEventGuideHeader>행사 안내</S.SEventGuideHeader>
-      
-      {/* 하이라이트 텍스트로 intro 부분을 강조 */}
+
       <S.SEventDescription>
         <S.SHighlightText>{intro}</S.SHighlightText>
       </S.SEventDescription>
       
-      {/* description 부분은 이어서 출력 */}
+
       <S.SEventDescription>
         {description.split('\n').map((line, index) => (
           <React.Fragment key={index}>

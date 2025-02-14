@@ -44,9 +44,12 @@ const ActivityImageUpload = ({ folderName, type, setImageKey, setImagePreview, s
       // 실제 파일을 S3로 업로드
       await fetch(preSignedUrl, {
         method: 'PUT',
-        body: file,  // 업로드할 파일
+        headers: {
+          'Content-Type': file.type,  
+          'x-amz-meta-cache-control': 'max-age=864000'  // 캐시 제어 헤더 추가
+        },
+        body: file,
       });
-
    
       setImageUrlForClubInfo(keyName);  
 
@@ -67,7 +70,7 @@ const ActivityImageUpload = ({ folderName, type, setImageKey, setImagePreview, s
         </S.CenterContainer>
       </S.UploadRectangle>
 
-      {/* 파일 입력은 숨김 */}
+    
       <input
         type='file'
         ref={fileInputRef}
