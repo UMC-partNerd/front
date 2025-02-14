@@ -2,7 +2,10 @@ import React from 'react';
 import * as S from '../../styled-components/collab-styles/styled-EventGuide';
 
 const EventGuide = ({ collabData }) => {
+<<<<<<< HEAD
   // collabData가 존재하는지 확인 후 비구조화 할당
+=======
+>>>>>>> b4bb8dd3ea557fcc162f42e9498664b467fd7a91
   if (!collabData) {
     return <div>데이터를 불러오는 중...</div>;
   }

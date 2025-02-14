@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // 추가
 import {
   PaginationContainer,
   ArrowButton,
@@ -19,13 +18,11 @@ import {
   SortContainer,
   SortButton,
   ButtonContainer,
-  WriteButton,
   CategoryContainer,
   CategoryButton,
   CategoryTitle
 } from "../styled-components/styled-project-collaboration";
 
-import useProjectCollaboration from '../hooks/useProjectCollaboration';
 
 const ProjectCollaboration = () => {
   const {
@@ -50,12 +47,31 @@ const ProjectCollaboration = () => {
       alert('로그인이 필요합니다.');
       return;
     }
-    navigate('/collaboration/collab-registration');
-  };
 
-  if (loading) {
-    return <div>로딩 중...</div>;
-  }
+    pageNumbers.forEach(num => {
+      buttons.push(
+        <PageButton
+          key={num}
+          $isActive={currentPage === num}
+          onClick={() => setCurrentPage(num)}
+        >
+          {num}
+        </PageButton>
+      );
+    });
+
+    // 다음 페이지 버튼
+    buttons.push(
+      <ArrowButton
+        key="next"
+        onClick={() => setCurrentPage(prev => prev === totalPages ? 1 : prev + 1)}
+      >
+        <ArrowIcon className="right" />
+      </ArrowButton>
+    );
+
+    return buttons;
+  };
 
   return (
     <CollaborationContainer>
@@ -87,9 +103,19 @@ const ProjectCollaboration = () => {
             마감순
           </SortButton>
         </SortContainer>
-        <WriteButton onClick={handleWriteClick}>협업글 작성하기</WriteButton>
+        <WriteButton>협업글 작성하기</WriteButton>
       </ButtonContainer>
 
+      <CustomModal
+        openModal={openModal} 
+        closeModal={() => setOpenModal(false)}
+
+        boldface='협업을 등록하시겠습니까?'
+        regular='협업의 리더로 콜라보 페이지를 개설하여 협업을 등록할 수 있습니다.'
+        text='개설하기'
+        onClickHandler={movetoRegister}
+        variant={VERSIONS.VER3}
+      />
       <ProjectGrid>
         {projects.map((project) => (
           <ProjectCard key={project.collabPostId}>

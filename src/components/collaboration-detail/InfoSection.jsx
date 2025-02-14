@@ -1,6 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as S from '../../styled-components/collab-styles/styled-InfoSection';
+import Button, { TYPES } from "../common/button";
 
+const InfoSection = ({ collabData, buttonHandler }) => {
+  if (!collabData) return null;  // 데이터가 없으면 렌더링하지 않음
+
+  const formatDate = (dateString) => {
+    return dateString ? new Date(dateString).toLocaleDateString() : '정보 없음';
+  };
+
+<<<<<<< HEAD
 const InfoSection = ({ collabData }) => {
   if (!collabData) return null;  // 데이터가 없으면 렌더링하지 않음
 
@@ -8,6 +17,8 @@ const InfoSection = ({ collabData }) => {
     return dateString ? new Date(dateString).toLocaleDateString() : '정보 없음';
   };
 
+=======
+>>>>>>> b4bb8dd3ea557fcc162f42e9498664b467fd7a91
   return (
     <S.SInfoContainer>
       <S.SHeaderText>{collabData.title || '제목 없음'}</S.SHeaderText>
@@ -37,6 +48,13 @@ const InfoSection = ({ collabData }) => {
           <S.SEventInfoText>{collabData.collabTarget || '정보 없음'}</S.SEventInfoText>
         </S.SInfoRow>
       </S.SInfoBox>
+
+      <Button
+        type={TYPES.NEXT}
+        text='협업 요청하기'
+        onClick={buttonHandler}
+      /> 
+
     </S.SInfoContainer>
   );
 };

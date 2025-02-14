@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 
 import {
   PaginationContainer,
@@ -131,6 +130,17 @@ const ProjectPromotion = () => {
 
     return buttons;
   };
+  const [openModal, setOpenModal] = useState(false);
+
+  // 버튼: 프로젝트 등록하기
+  const buttonHandler = () => {
+    setOpenModal(true);
+  };
+  const navigate = useNavigate();
+  const movetoRegister = () => {
+    navigate('project/promote/promote-registration');
+    setOpenModal(flase);  
+  };
 
   return (
     <PromotionContainer>
@@ -176,9 +186,20 @@ const ProjectPromotion = () => {
               최신순
             </SortButton>
           </SortContainer>
-          <RegisterButton onClick={handleRegisterClick}>프로젝트 등록하기</RegisterButton>
+          <RegisterButton>프로젝트 등록하기</RegisterButton>
         </ButtonContainer>
       </SectionHeader>
+
+      <CustomModal
+        openModal={openModal} 
+        closeModal={() => setOpenModal(false)}
+
+        boldface='프로젝트 홍보를 등록하시겠습니까?'
+        regular='프로젝트의 리더로 프로젝트 페이지를 개설하여 프로젝트를 등록할 수 있습니다.'
+        text='개설하기'
+        onClickHandler={movetoRegister}
+        variant={VERSIONS.VER3}
+      />
 
       {loading ? (
         <div>로딩 중...</div>
