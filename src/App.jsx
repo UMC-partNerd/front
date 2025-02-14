@@ -1,5 +1,5 @@
 import './styles/globalstyles.css';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Routes, Route } from 'react-router-dom';
 import RootLayout from './layout/root-layout';
 import HomePage from './pages/homepage';
 import NotFoundPage from './pages/notfoundpage';
@@ -24,6 +24,8 @@ import ProjectPromoteDetail from './pages/project-pages/ProjectPromoteDetail';
 import TeamMangement from './pages/TeamMangement'  
 import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
+import RecruitmentRegister from './components/recruit-register/recruitment-register';
+import PromotionRegister from './components/promote-register/promotion-register';
 
 const router = createBrowserRouter([
   {
@@ -113,6 +115,10 @@ const router = createBrowserRouter([
             element: <ProjectPromoteDetail />,
           },
           {
+            path: 'promote/register',
+            element: <PromotionRegister />,
+          },
+          {
             index: true,
             element: <ProjectRecruitment />,
           },
@@ -142,6 +148,10 @@ const router = createBrowserRouter([
             element: <MyPagePosts />
           }
         ]
+      },
+      {
+        path: 'project/recruit/register',
+        element: <RecruitmentRegister />,
       },
       {
         path: '*',

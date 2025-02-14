@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';  // 추가
 import {
   PaginationContainer,
   ArrowButton,
@@ -24,112 +25,49 @@ import {
   CategoryTitle
 } from "../styled-components/styled-project-collaboration";
 
+import useProjectCollaboration from '../hooks/useProjectCollaboration';
+
 const ProjectCollaboration = () => {
+  const {
+    projects,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    sortBy,
+    setSortBy,
+    selectedCategory,
+    setSelectedCategory,
+    categories,
+    loading,
+    getImageUrl
+  } = useProjectCollaboration();
+
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState('createdAt');
-  const [selectedCategory, setSelectedCategory] = useState('전체');
-  const [collaborations, setCollaborations] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [totalPages, setTotalPages] = useState(1);
-
-  const CATEGORY_MAPPING = {
-    '전체': null,
-    '웹/앱 개발': 1,
-    '인공지능': 2,
-    '데이터': 3,
-    '디자인': 4,
-    '마케팅': 5,
-    '게임': 6,
-    '기타': 7
-  };
-
-  useEffect(() => {
-    const loadCollaborations = async () => {
-      try {
-        setIsLoading(true);
-        const categoryId = CATEGORY_MAPPING[selectedCategory];
-        const response = await fetchCollaborations(currentPage, sortBy, categoryId);
-        
-        if (response.isSuccess) {
-          const { collabPostPreviewDTOLList, totalPage } = response.result;
-          setCollaborations(collabPostPreviewDTOLList);
-          setTotalPages(totalPage);
-        } else {
-          throw new Error(response.message);
-        }
-      } catch (err) {
-        setError(err.message);
-        console.error('콜라보레이션 데이터 로딩 실패:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadCollaborations();
-  }, [currentPage, sortBy, selectedCategory]);
 
   const handleWriteClick = () => {
+    const jwtToken = localStorage.getItem('jwtToken');
+    if (!jwtToken) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
     navigate('/collaboration/collab-registration');
   };
 
-  if (isLoading) return <div>로딩 중...</div>;
-  if (error) return <div>에러가 발생했습니다: {error}</div>;
-
-  const renderPageButtons = () => {
-    const buttons = [];
-    
-    buttons.push(
-      <ArrowButton
-        key="prev"
-        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-      >
-        <ArrowIcon className="left" />
-      </ArrowButton>
-    );
-
-    for (let i = 1; i <= totalPages; i++) {
-      buttons.push(
-        <PageButton
-          key={i}
-          $isActive={currentPage === i}
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </PageButton>
-      );
-    }
-
-    buttons.push(
-      <ArrowButton
-        key="next"
-        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-      >
-        <ArrowIcon className="right" />
-      </ArrowButton>
-    );
-
-    return buttons;
-  };
-
-  // useNavigate 훅을 사용하여 이동 기능 추가
-  const navigate = useNavigate();
-  const handleWriteClick = () => {
-    navigate('/collaboration/collab-registration');  // 버튼 클릭 시 이동
-  };
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
     <CollaborationContainer>
       <CategoryTitle>카테고리</CategoryTitle>
       <CategoryContainer>
-        {Object.keys(CATEGORY_MAPPING).map(category => (
+        {categories.map(category => (
           <CategoryButton
-            key={category}
-            isActive={selectedCategory === category}
-            onClick={() => setSelectedCategory(category)}
+            key={category.id}
+            isActive={selectedCategory === category.id}
+            onClick={() => setSelectedCategory(category.id)}
           >
-            {category}
+            {category.name}
           </CategoryButton>
         ))}
       </CategoryContainer>
@@ -149,26 +87,32 @@ const ProjectCollaboration = () => {
             마감순
           </SortButton>
         </SortContainer>
-        <WriteButton>협업글 작성하기</WriteButton>
+        <WriteButton onClick={handleWriteClick}>협업글 작성하기</WriteButton>
       </ButtonContainer>
 
       <ProjectGrid>
-        {collaborations.map((collab) => (
-          <ProjectCard 
-            key={collab.collabPostId}
-            onClick={() => navigate(`/collaboration/${collab.collabPostId}`)}
-          >
+        {projects.map((project) => (
+          <ProjectCard key={project.collabPostId}>
             <ImagePlaceholder>
-              <img src={collab.imageUrl || "/default-image.png"} alt={collab.title} />
+              {project.imageKeyName && (
+                <img 
+                  src={getImageUrl(project.imageKeyName)} 
+                  alt={project.title}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '/default-image.png'; // 기본 이미지 경로
+                  }}
+                />
+              )}
             </ImagePlaceholder>
             <CardContent>
               <CategoryBadge>
-                {collab.categoryDTOList[0]?.name || '기타'}
+                {project.categoryDTOList.map(cat => cat.name).join(', ')}
               </CategoryBadge>
-              <Title>{collab.title}</Title>
+              <Title>{project.title}</Title>
               <Deadline>
-                {new Date(collab.startDate).toLocaleDateString()} ~ 
-                {new Date(collab.endDate).toLocaleDateString()}
+                {new Date(project.startDate).toLocaleDateString()} ~ 
+                {new Date(project.endDate).toLocaleDateString()}
               </Deadline>
             </CardContent>
           </ProjectCard>
@@ -176,7 +120,29 @@ const ProjectCollaboration = () => {
       </ProjectGrid>
 
       <PaginationContainer>
-        {renderPageButtons()}
+        <ArrowButton
+          onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+          disabled={currentPage === 1}
+        >
+          <ArrowIcon className="left" />
+        </ArrowButton>
+        
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+          <PageButton
+            key={page}
+            $isActive={currentPage === page}
+            onClick={() => setCurrentPage(page)}
+          >
+            {page}
+          </PageButton>
+        ))}
+
+        <ArrowButton
+          onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+          disabled={currentPage === totalPages}
+        >
+          <ArrowIcon className="right" />
+        </ArrowButton>
       </PaginationContainer>
     </CollaborationContainer>
   );
