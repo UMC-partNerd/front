@@ -1,8 +1,12 @@
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 
-const ToggleButton = () =>{
-    const [isOn, setIsOn] = useState(false); // 초기 상태는 Off
+const ToggleButton = ({ initialState }) =>{
+    const [isOn, setIsOn] = useState(initialState); // 초기값을 `initialOn`으로 설정
+
+    useEffect(() => {
+        setIsOn(initialState); // props 값이 바뀌면 동기화
+    }, [initialState]);
 
     const handleToggle = () => {
         setIsOn((prev) => !prev); // 상태를 반전

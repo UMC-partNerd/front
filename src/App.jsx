@@ -25,6 +25,9 @@ import TeamMangement from './pages/TeamMangement';
 import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
 
+import PersonalEditComp from './components/mypage/PersonalEditComp';
+import MyPagePersonalEdit from './pages/mypages/Personal-EditPage';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -140,6 +143,10 @@ const router = createBrowserRouter([
           {
             path:'personal-page',
             element: <MyPagePersonal />,
+          },
+          {
+            path:'personal-page-edit',
+            element: <MyPagePersonalEdit />
           },
           {
             path:'teams',

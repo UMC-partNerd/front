@@ -13,6 +13,7 @@ const Agreement = ({ onChange, onAgreementCheck}) => {
         marketingNotify: false,
     });
 
+    
      // 모든 항목이 체크되었는지 확인하는 함수
     const isAllChecked = Object.values(agreements).every(Boolean);
 
