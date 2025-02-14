@@ -54,46 +54,45 @@ export const usePartnerSearch = (category = '전체', order = 'recent', page = 1
       try {
         setIsLoading(true);
         
-        // 토큰을 환경변수에서 직접 가져오기
-        const token = import.meta.env.VITE_JWT_TOKEN;
+        const token = localStorage.getItem('jwtToken');
         
         if (!token) {
-          throw new Error('인증 토큰이 없습니다.');
+          alert('로그인이 필요합니다.');
+          setError('로그인이 필요합니다.');
+          return;
         }
 
         const params = new URLSearchParams({
-          categoryID: CATEGORY_MAPPING[category],
-          order: order.toLowerCase(),
-          page: page.toString()
+          page: page.toString(),
+          sort: order === 'recent' ? 'latest' : 'popular'
         });
 
-        const headers = {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        };
-
-        const response = await fetch(`${BASE_URL}/api/partnerd?${params}`, {
-          headers: headers
-        });
-
-        if (!response.ok) {
-          if (response.status === 401) {
-            throw new Error('인증이 만료되었습니다. 다시 로그인해주세요.');
-          }
-          throw new Error(`HTTP error! status: ${response.status}`);
+        if (category !== '전체') {
+          params.append('categoryID', CATEGORY_MAPPING[category]);
         }
 
-        const data = await response.json();
-        console.log('Original API Response:', data);
+        const response = await api.get(`/api/partnerd?${params}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
 
-        // 이미지 URL 처리
-        const processedData = await processImageUrls(data.result);
-        console.log('Processed Data with Images:', processedData);
+        // 응답 데이터 확인
+        if (!response.data.isSuccess) {
+          throw new Error(response.data.message || '데이터를 불러오는데 실패했습니다.');
+        }
 
-        setPartners(processedData || []);
+        // API 응답의 result 배열 처리
+        const processedData = await processImageUrls(response.data.result);
+        setPartners(processedData);
+        
       } catch (err) {
-        console.error('Error fetching partners:', err);
-        setError(err.message);
+        console.error('Error:', err);
+        if (err.response?.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+        }
+        setError(err.message || '데이터를 불러오는데 실패했습니다.');
       } finally {
         setIsLoading(false);
       }

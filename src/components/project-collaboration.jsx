@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { fetchCollaborations } from '../apis/collaborationApi';
+import React, { useState } from 'react';
 import {
   PaginationContainer,
   ArrowButton,
@@ -115,6 +113,12 @@ const ProjectCollaboration = () => {
     return buttons;
   };
 
+  // useNavigate 훅을 사용하여 이동 기능 추가
+  const navigate = useNavigate();
+  const handleWriteClick = () => {
+    navigate('/collaboration/collab-registration');  // 버튼 클릭 시 이동
+  };
+
   return (
     <CollaborationContainer>
       <CategoryTitle>카테고리</CategoryTitle>
@@ -145,7 +149,7 @@ const ProjectCollaboration = () => {
             마감순
           </SortButton>
         </SortContainer>
-        <WriteButton onClick={handleWriteClick}>협업글 작성하기</WriteButton>
+        <WriteButton>협업글 작성하기</WriteButton>
       </ButtonContainer>
 
       <ProjectGrid>

@@ -12,12 +12,24 @@ const DateList = ({ selectedDate, onDateChange, placeholder }) => {
     console.log("달력 상태:", !showCalendar); // 상태 변경 로그 확인
   };
 
+  const handleDateChange = (date) => {
+    // 날짜를 ISO 형식으로 변환하여 onDateChange 호출
+    const isoDate = new Date(date).toISOString();
+    onDateChange(isoDate);
+  };
+
+  const handleCloseCalendar = () => {
+    setShowCalendar(false);
+  };
+
+  const formatSelectedDate = selectedDate ? new Date(selectedDate) : null;
+
   return (
     <div style={{ position: 'relative' }}>
       <DateListContainer onClick={handleCalendarToggle} tabIndex="0">
         <DateText>
-          {selectedDate
-            ? selectedDate.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+          {formatSelectedDate
+            ? formatSelectedDate.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })
             : placeholder}
         </DateText>
         <RiCalendarLine size={18} color="#C2C2C2" />
@@ -25,7 +37,7 @@ const DateList = ({ selectedDate, onDateChange, placeholder }) => {
 
       {showCalendar && (
         <CalendarWrapper>
-          <Calendar selectedDate={selectedDate} onDateChange={onDateChange} />
+          <Calendar selectedDate={selectedDate} onDateChange={handleDateChange} closeCalendar={handleCloseCalendar} />
         </CalendarWrapper>
       )}
     </div>
@@ -33,7 +45,6 @@ const DateList = ({ selectedDate, onDateChange, placeholder }) => {
 };
 
 export default DateList;
-
 
 
 /*시작날짜랑 종료날짜 -> DateList만 import해서 쓰시면 됩니다(달력 날짜 선택하는 부분)

@@ -32,7 +32,7 @@ const PartnerSearch = () => {
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const itemsPerPage = 12;
 
-  const { partners, isLoading, error } = usePartnerSearch(selectedCategory, sortBy);
+  const { partners, isLoading, error } = usePartnerSearch(selectedCategory, sortBy, currentPage);
 
   if (isLoading) {
     return <div>로딩 중...</div>;

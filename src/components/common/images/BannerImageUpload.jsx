@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { getPreSignedUrl, uploadImageToS3 } from '../../../utils/imageUtils';
-import * as S from '../../../styled-components/common-styles/styled-BannerImageUpload'; 
+import * as S from '../../../styled-components/common-styles/styled-BannerImageUpload';
 
-const BannerImageUpload = ({ imagePreview, onClick }) => {
+const BannerImageUpload = ({ folderName, type, setImageKey, setImagePreview }) => {
   const fileInputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
+  const [imagePreview, setImagePreviewState] = useState(null);
 
   const handleClick = () => {
     fileInputRef.current.click();
@@ -16,18 +16,39 @@ const BannerImageUpload = ({ imagePreview, onClick }) => {
 
     setUploading(true);
     try {
-      // 1단계: preSignedUrl 요청
-      const preSignedUrl = await getPreSignedUrl(file);
+      const response = await fetch('https://api.partnerd.site/api/s3/preSignedUrl', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          filename: file.name,
+          folderName,
+          type,
+          contentType: file.type,
+        }),
+      });
 
-      // 2단계: S3에 파일 업로드
-      await uploadImageToS3(file, preSignedUrl);
+      const data = await response.json();
+      const { preSignedUrl, keyName } = data.result;
 
-      // 업로드 성공 후 이미지 미리보기 설정
-      onClick(URL.createObjectURL(file));
+      setImageKey(keyName);
 
-      console.log("배너 이미지 업로드 완료");
+      await fetch(preSignedUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type,
+        },
+        body: file,
+      });
+
+      const imageUrl = URL.createObjectURL(file);
+      setImagePreview(imageUrl);
+      setImagePreviewState(imageUrl);
+
+      console.log('이미지 업로드 완료:', imageUrl);
     } catch (error) {
-      console.error("배너 이미지 업로드 중 오류 발생", error);
+      console.error('이미지 업로드 중 오류 발생', error);
     } finally {
       setUploading(false);
     }
@@ -37,18 +58,17 @@ const BannerImageUpload = ({ imagePreview, onClick }) => {
     <S.UploadGroup>
       <S.UploadRectangle onClick={handleClick}>
         <S.CenterContainer>
-          <S.ImagePreview src={imagePreview || "/image.png"} alt="Banner Image" />
+          <S.ImagePreview src='/image.png' alt='Icon' /> 
           <S.UploadText>이미지 업로드하기</S.UploadText>
         </S.CenterContainer>
       </S.UploadRectangle>
       <input
-        type="file"
+        type='file'
         ref={fileInputRef}
         style={{ display: 'none' }}
         onChange={handleFileChange}
       />
-      {uploading ? <p>업로드 중...</p> : null}
-      {imagePreview && <img src={imagePreview} alt="미리보기" />}
+      {uploading && <p>업로드 중...</p>}
     </S.UploadGroup>
   );
 };
