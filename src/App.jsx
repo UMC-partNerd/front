@@ -24,6 +24,7 @@ import ProjectPromoteDetail from './pages/project-pages/ProjectPromoteDetail';
 import TeamMangement from './pages/TeamMangement';  
 import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -102,6 +103,14 @@ const router = createBrowserRouter([
           {
             path: 'promote',
             element: <ProjectPromotion />,
+          },
+          {
+            path: 'recruit-registration',
+            // element: <ProjectRecruitment />,
+          },
+          {
+            path: 'promote-registration',
+            // element: <ProjectPromotion />,
           },
           {
             path: 'recruit/:recruitProjectId',

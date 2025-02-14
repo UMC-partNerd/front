@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import * as S from '../../styled-components/projectdetail-styles/styled-ProjectRecruitDetail';
 import ImageSlider from '../../components/projectdetail/ImageSlider';
@@ -7,7 +7,8 @@ import ProjectDetailForm from '../../components/projectdetail/ProjectDetailForm'
 import JoinProjectInfo from '../../components/projectdetail/JoinProjectInfo';
 import ProjectCommentList from '../../components/projectdetail/ProjectCommentList'; 
 import CommentForm from '../../components/projectdetail/CommentForm';
-import useBannerPhoto from '../../hooks/useBannerPhoto';  
+import useBannerPhoto from '../../hooks/useBannerPhoto';
+import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
 
 const DefaultImage = '/default-image.png';
 
@@ -39,9 +40,8 @@ const ProjectRecruitDetail = () => {
     projectData?.thumbnailKeyName, // 썸네일 이미지
     projectData?.projectImgKeyNameList[0] // intro 이미지
   );
-  
+
   console.log('Intro Image URL:', introPhotoUrl);  
-  
   
   // 임시 이미지 데이터
   const images = projectData?.projectImgKeyNameList || [DefaultImage, DefaultImage, DefaultImage];
@@ -74,6 +74,31 @@ const ProjectRecruitDetail = () => {
     setComments(updatedComments);
   };
 
+  // 삭제 관련 모달 상태
+  const [openFirstModal, setopenFirstModal] = useState(false); // 첫 번째 모달 (삭제 확인)
+  const [openSecondModal, setOpenSecondModal] = useState(false); // 두 번째 모달 (삭제 완료)
+  const navigate = useNavigate();
+
+  // 삭제 버튼 클릭 시 첫 번째 모달 띄우기
+  const buttonHandler = () => {
+    setopenFirstModal(true);
+  };
+
+  // 삭제 모달에서 삭제 버튼 클릭 시
+  const deleteHandler = async () => {
+    // 삭제 요청을 보낼 수 있는 로직 추가 (예: axios.delete)
+    // axios.delete(`/api/project/recruit/${recruitProjectId}`); // 예시
+    
+    // 모달2 열기 (삭제 완료)
+    setOpenSecondModal(true);
+
+    // 모달1 닫기
+    setopenFirstModal(false);
+
+    // 삭제 완료 후 프로젝트 목록 페이지로 이동
+    // navigate('/project/recruit');
+  };
+
   if (!projectData) {
     return <div>Loading...</div>; // 데이터가 없으면 로딩 화면 표시
   }
@@ -97,24 +122,41 @@ const ProjectRecruitDetail = () => {
         </S.STextBox>
       </S.SImageBoxContainer>
 
+      {/* 삭제 확인 모달 */}
+      <CustomModal
+        openModal={openFirstModal} 
+        closeModal={() => setopenFirstModal(false)}
+        boldface='프로젝트 모집 삭제'
+        regular='삭제하기를 누르면 다시 되돌릴 수 없습니다. 정말로 삭제하시겠습니까?'
+        text='삭제하기'
+        onClickHandler={deleteHandler}
+        variant={VERSIONS.VER3}
+      />
+
+      {/* 삭제 완료 모달 */}
+      <CustomModal
+        openModal={openSecondModal} 
+        closeModal={() => setOpenSecondModal(false)}
+        boldface='프로젝트 모집 삭제'
+        regular='프로젝트가 삭제되었습니다.'
+        variant={VERSIONS.VER2}
+      />
+
       <S.SImageSliderWrapper>
-        {/* ImageSlider에 images 배열을 전달 */}
         <ImageSlider images={images} />
       </S.SImageSliderWrapper>
 
       <S.SFormWrapper>
-      <S.SFormContainer>
-    <ProjectDetailForm projectData={projectData} />
-  </S.SFormContainer>
+        <S.SFormContainer>
+          <ProjectDetailForm projectData={projectData} />
+        </S.SFormContainer>
 
-  <S.SJoinProjectInfoWrapper>
-    <JoinProjectInfo projectData={projectData} />
-  </S.SJoinProjectInfoWrapper>
-</S.SFormWrapper>
- 
+        <S.SJoinProjectInfoWrapper>
+          <JoinProjectInfo projectData={projectData} />
+        </S.SJoinProjectInfoWrapper>
+      </S.SFormWrapper>
 
-
-      {/* 댓글 폼  */}
+      {/* 댓글 폼 */}
       <S.SCommentFormWrapper>
         <CommentForm onAddComment={handleAddComment} />
       </S.SCommentFormWrapper>
@@ -127,8 +169,11 @@ const ProjectRecruitDetail = () => {
           onUpdate={handleUpdateComment}
         />
       </S.SProjectCommentListWrapper>
+
+      {/* 삭제 버튼 */}
+      <S.SDeleteButton onClick={buttonHandler}>삭제하기</S.SDeleteButton>
     </S.SContainer>
   );
 };
 
-export default ProjectRecruitDetail; 
+export default ProjectRecruitDetail;

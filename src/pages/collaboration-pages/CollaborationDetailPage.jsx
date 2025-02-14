@@ -11,6 +11,7 @@ import useBannerPhoto from '../../hooks/useBannerPhoto';
 import axios from 'axios';
 import PersonalContact from '../../components/common/contact';
 import EventOverview from '../../components/collaboration-detail/EventOverview';
+import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
 
 const DefaultImage = '/default-image.png';
 
@@ -158,6 +159,22 @@ const CollaborationDetailPage = () => {
     );
     setComments(updatedComments);
   };
+  const [openModal, setOpenModal] = useState(false);
+
+   // 버튼: 협업 요청하기 클릭
+   const collabRequestHandler = () => {
+    setOpenModal(true);
+  };
+
+  // 모달: 보내기
+  const sendHandler = async () => {
+    // 협업 요청 보내기
+    // await api.joinClub();
+
+    // 모달 닫기
+    setOpenModal(false);
+  };
+
 
   return (
     <>
@@ -208,6 +225,17 @@ const CollaborationDetailPage = () => {
         />
         </div>
       </InquiryAndCommentsWrapper>
+
+      <CustomModal
+        openModal={openModal} 
+        closeModal={() => setOpenModal(false)}
+
+        boldface='협업 요청하기'
+        regular='협업하기 요청을 보내시겠습니까?'
+        text='보내기'
+        onClickHandler={sendHandler}
+        variant={VERSIONS.VER3}
+      />
     </>
   );
 };
