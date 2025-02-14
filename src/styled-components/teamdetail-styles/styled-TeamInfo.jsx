@@ -57,23 +57,6 @@ export const SBadge = styled.span`
   line-height: 1.5; 
 `;
 
-export const SManageLink = styled.button`
-  background: none;
-  border:none;
-  color: #A0A0A0;
-  font-size: 15px;
-  font-weight: 500;
-  padding: 10px 20px;
-  cursor: pointer;
-  position: absolute;
-  right: 20px;
-  top: 15px;
-  white-space: nowrap; 
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
 export const SContactInfoContainer = styled.div`
   margin-top: 20px;
 `;
@@ -103,4 +86,42 @@ export const SContactLink = styled.span`
   &:hover {
     text-decoration: none;
   }
+`;
+
+export const SMoreOptionsMenu = styled.div`
+  position: absolute;
+  right: 0px;  /* right 값을 0px로 설정하여 아이콘 바로 아래에 배치 */
+  top: 20px;  /* top 값을 수정하여 아이콘 바로 밑으로 위치시키기 */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  display: ${({ show }) => (show ? 'flex' : 'none')};
+  box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.15);
+  width: 130px;
+  height: 110px;
+  padding: 0;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+export const SMenuItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+`;
+
+export const SDivider = styled.div`
+  width: 80%;
+  height: 1px;
+  background-color: #ddd;
+  margin-left: 10px;
 `;

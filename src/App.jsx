@@ -24,8 +24,10 @@ import ProjectPromoteDetail from './pages/project-pages/ProjectPromoteDetail';
 import TeamMangement from './pages/TeamMangement';  
 import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
+
 import PersonalEditComp from './components/mypage/PersonalEditComp';
 import MyPagePersonalEdit from './pages/mypages/Personal-EditPage';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -106,11 +108,19 @@ const router = createBrowserRouter([
             element: <ProjectPromotion />,
           },
           {
+            path: 'recruit-registration',
+            // element: <ProjectRecruitment />,
+          },
+          {
+            path: 'promote-registration',
+            // element: <ProjectPromotion />,
+          },
+          {
             path: 'recruit/:recruitProjectId',
             element: <ProjectRecruitDetail />, 
           },
           {
-            path: 'promote/:id',
+            path: 'promote/:promotionProjectId',
             element: <ProjectPromoteDetail />,
           },
           {
