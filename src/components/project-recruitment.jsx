@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-
+import Button, { TYPES } from "./common/button";
+import { useNavigate } from 'react-router-dom';
 import {
   PaginationContainer,
   ArrowButton,
@@ -20,7 +21,6 @@ import {
   SortContainer,
   SortButton,
   ButtonContainer,
-  RegisterButton,
   CategoryContainer,
   CategoryButton,
   CategoryTitle,
@@ -161,6 +161,12 @@ const ProjectRecruitment = () => {
     return buttons;
   };
 
+  // useNavigate 훅을 사용하여 이동 기능 추가
+  const navigate = useNavigate();
+  const onClickHandler = () => {
+    // navigate('/collaboration/collab-registration');
+  };
+
   return (
     <RecruitmentContainer>
       <ProjectTypeContainer>
@@ -214,7 +220,11 @@ const ProjectRecruitment = () => {
             ))}
           </CategoryGroup>
         </FilterContainer>
-        <RegisterButton>글 등록하기</RegisterButton>
+        <Button
+            type={TYPES.PLUS}
+            text='글 등록하기'
+            onClick={onClickHandler}
+        />
       </SearchContainer>
 
       <PartnerGrid>

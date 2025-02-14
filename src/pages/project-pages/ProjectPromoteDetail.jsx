@@ -6,6 +6,8 @@ import ProjectPromoteForm from '../../components/projectdetail/ProjectPromoteFor
 //import ProjectCommentList from '../../components/projectdetail/ProjectCommentList';
 //import CommentForm from '../../components/projectdetail/CommentForm';
 
+import Button, { TYPES } from "../../components/common/button";
+
 const DefaultImage = '/default-image.png';
 
 const ProjectPromoteDetail = () => {
@@ -38,6 +40,14 @@ const ProjectPromoteDetail = () => {
     setComments(updatedComments);
   };
 
+  // 응원하기
+  const [cheers, setCheers] = useState(0); 
+  const [cheered, setCheered] = useState(false); 
+  const onClickHandler = () => {
+    setCheers(cheers + (cheered ? -1 : 1)); 
+    setCheered(!cheered);
+  }
+
   return (
     <S.SContainer>
       <S.SImageBoxContainer>
@@ -47,6 +57,12 @@ const ProjectPromoteDetail = () => {
           <S.SDescription>당신의 프로젝트를 홍보하세요!</S.SDescription>
         </S.STextBox>
       </S.SImageBoxContainer>
+
+      <Button
+        type = {TYPES.VOTE}
+        count={cheers}
+        onClick={onClickHandler}
+      />
 
       <S.SImageSliderWrapper>
         <ImageSlider images={images} />

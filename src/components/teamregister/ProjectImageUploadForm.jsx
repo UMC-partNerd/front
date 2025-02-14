@@ -1,49 +1,78 @@
-import React, { useState } from 'react';
-import ProfileImageUpload from '../common/images/ProfileImageUpload';
-import BannerImageUpload from '../common/images/BannerImageUpload';
+import React, { useState, useEffect } from 'react';
+import ProfileImageUpload from '../../components/common/images/ProfileImageUpload';
+import BannerImageUpload from '../../components/common/images/BannerImageUpload';
 import ImageRectangle from '../common/images/ImageRectangle';
 import * as S from '../../styled-components/teamregister-styles/styled-ProjectImageUploadForm';
 
-const ProjectImageUploadForm = ({ handleProfileClick, handleBannerClick }) => {
-  const [profileImage, setProfileImage] = useState(null);
-  const [bannerImage, setBannerImage] = useState(null);
+const ProjectImageUploadForm = ({ setProfileImage, setBannerImage, profileImageUrl, bannerImageUrl }) => {
+  const [profileImagePreview, setProfileImagePreview] = useState(profileImageUrl || null);
+  const [bannerImagePreview, setBannerImagePreview] = useState(bannerImageUrl || null);
 
   const handleProfileClose = () => {
-    setProfileImage(null);  
+    setProfileImagePreview(null);
   };
 
   const handleBannerClose = () => {
-    setBannerImage(null);  
+    setBannerImagePreview(null);
   };
+
+ 
+
+  useEffect(() => {
+    if (profileImageUrl) {
+      setProfileImagePreview(profileImageUrl); // 수정 페이지에서 초기 이미지 URL 설정
+    }
+    if (bannerImageUrl) {
+      setBannerImagePreview(bannerImageUrl); // 수정 페이지에서 초기 이미지 URL 설정
+    }
+  }, [profileImageUrl, bannerImageUrl]);
 
   return (
     <S.SFormContainer>
-      {/* 프로젝트 프로필 사진 섹션 */}
+      {/* 프로젝트 프로필 이미지 섹션 */}
       <S.SSection>
-        <S.SProfilePictureText>프로젝트 프로필 사진 <S.SRedAsterisk>*</S.SRedAsterisk></S.SProfilePictureText>
+        <S.SProfilePictureText>
+          프로젝트 프로필 사진 <S.SRedAsterisk>*</S.SRedAsterisk>
+        </S.SProfilePictureText>
         <form>
-          <S.SRecommendationText>추천 사이즈: 960 x 540 | JPG, PNG | 최대 10MB</S.SRecommendationText>
+          <S.SRecommendationText>
+            추천 사이즈: 960 x 540 | JPG, PNG | 최대 10MB
+          </S.SRecommendationText>
           <ProfileImageUpload
-            onClick={(file) => setProfileImage(URL.createObjectURL(file))}  // 업로드된 이미지 미리보기 설정
-            imagePreview={profileImage}
+            folderName="clubImage"
+            type={1}  // 숫자 1로 변경
+            setImageKey={(key) => setProfileImage(key)}  // 프로필 이미지 키 전달
+            setImagePreview={(preview) => setProfileImagePreview(preview)}  // 프로필 이미지 미리보기 전달
           />
-          {/* 항상 렌더링되는 ImageRectangle */}
-          <ImageRectangle imagePreview={profileImage} onClose={handleProfileClose} />
         </form>
+        {/* 프로필 이미지 미리보기: 항상 표시되도록 */}
+        <ImageRectangle 
+          imagePreview={profileImagePreview} 
+          onClose={handleProfileClose} 
+        />
       </S.SSection>
 
-      {/* 프로젝트 배너 사진 섹션 */}
+      {/* 프로젝트 배너 이미지 섹션 */}
       <S.SSection>
-        <S.SProfilePictureText>프로젝트 배너 사진 <S.SRedAsterisk>*</S.SRedAsterisk></S.SProfilePictureText>
+        <S.SProfilePictureText>
+          프로젝트 배너 사진 <S.SRedAsterisk>*</S.SRedAsterisk>
+        </S.SProfilePictureText>
         <form>
-          <S.SRecommendationText>추천 사이즈: 1920 x 1080 | JPG, PNG | 최대 10MB</S.SRecommendationText>
+          <S.SRecommendationText>
+            추천 사이즈: 1920 x 1080 | JPG, PNG | 최대 10MB
+          </S.SRecommendationText>
           <BannerImageUpload
-            onClick={(file) => setBannerImage(URL.createObjectURL(file))}  // 업로드된 이미지 미리보기 설정
-            imagePreview={bannerImage}
+            folderName="clubBannerImage"
+            type={0}  // 숫자 0으로 변경
+            setImageKey={(key) => setBannerImage(key)}  // 배너 이미지 키 전달
+            setImagePreview={(preview) => setBannerImagePreview(preview)}  // 배너 이미지 미리보기 전달
           />
-          {/* 항상 렌더링되는 ImageRectangle */}
-          <ImageRectangle imagePreview={bannerImage} onClose={handleBannerClose} />
         </form>
+ 
+        <ImageRectangle 
+          imagePreview={bannerImagePreview} 
+          onClose={handleBannerClose} 
+        />
       </S.SSection>
     </S.SFormContainer>
   );
