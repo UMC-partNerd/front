@@ -7,36 +7,28 @@ import {
     Info,
     Cancel,
 } from '../../styled-components/styled-Member';
+import useProfilePhoto from '../../../hooks/useProfilePhoto'; // useProfilePhoto 훅 import
 
-function Member({ profile, nickname, job, club }) {
+// const DefaultImage = '/default-image.png';
+
+function Member({ nickname, explain }) {
   
+  const { profileImageUrl } = useProfilePhoto(user.userId); // 사용자 프로필 사진 가져오기
+
   const onClickHandler = () => {
     
   };
 
-  return(
-      <Container>
-          <SubContainer>
-          <ImageComp />
-          <NameField>
-              <Name>이름</Name>
-              <Explan>설명</Explan>
-          </NameField>
-          </SubContainer>
-          {isPersonalPage ? (
-              <Button
-                  type={TYPES.PLUS}
-                  text='채팅'
-                  onClick={onClickHandler}
-              />
-          ) : (
-              <Button
-                  type={TYPES.PLUS}
-                  text='채팅'
-                  onClick={onClickHandler}
-              />
-          )}
-      </Container>
+  const renderDefaultMember = () => (
+    <Container>
+        <SubContainer>
+        <ImageComp src={profileImageUrl || DefaultImage} alt="프로필" />
+        <NameField>
+            <Name>{nickname}닉네임</Name>
+            <Explan>{explain}설명</Explan>
+        </NameField>
+        </SubContainer>
+    </Container>
   )
 }
   const renderIsMember = () => (

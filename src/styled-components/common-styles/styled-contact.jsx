@@ -1,27 +1,27 @@
 import styled from "styled-components";
 
-const Name = styled.div`
+export const Name = styled.div`
 font-size:16px;
 `
 
-const Explan = styled.div`
+export const Explan = styled.div`
 margin-top:10px;
 font-size:14px;
 `
 
-const SubContainer = styled.div`
+export const SubContainer = styled.div`
 display:flex;
 flex-direction:row;
 align-items:center;
 `
 
-const NameField = styled.div`
+export const NameField = styled.div`
 display:flex;
 flex-direction:column;
 margin-left:20px;
 `
 
-const Container = styled.main`
+export const Container = styled.main`
 width: 100%;
 height: 110px;
 background: #FFFFFF;
@@ -36,7 +36,7 @@ justify-content: space-between;
 margin-bottom:50px;
 `
 
-const ImageComp = styled.div`
+export const ImageComp = styled.div`
 border-radius: 50%;
 background:gray;
 min-width: 70px; /* 최소 너비를 고정 */
