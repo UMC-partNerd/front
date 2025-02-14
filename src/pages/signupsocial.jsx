@@ -3,7 +3,7 @@ import RegisterHeader from "../components/register/registerheader";
 import {MainWrapp} from "../styles/registerstyles" 
 import styled from "styled-components";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignUpSocialPage = () =>{
@@ -52,7 +52,12 @@ const SignUpSocialPage = () =>{
     };
 
     //입력 필드 채워진 경우, or 닉네임 체크 한 경우에만 버튼 활성화 로직 
-    const isFormValid = userData.name && userData.birthDate && userData.nickname && isNicknameChecked && isAgreementChecked;
+    const isFormValid = 
+    userData.name && 
+    userData.birthDate && 
+    userData.nickname && 
+    isNicknameChecked && 
+    isAgreementChecked;
 
 
     // 완료 버튼 클릭 시 데이터 전송
@@ -102,6 +107,22 @@ const SignUpSocialPage = () =>{
         }
     };
 
+    // //값 제대로 넘어와지는지 체크
+    // useEffect(() => {
+    //     console.log("userData:", userData);
+    //     console.log("isNicknameChecked:", isNicknameChecked);
+    //     console.log("isAgreementChecked:", isAgreementChecked);
+    
+    //     const isValid =
+    //         userData.name.trim() !== "" &&
+    //         userData.birthDate.trim() !== "" &&
+    //         userData.nickname.trim() !== "" &&
+    //         isNicknameChecked &&
+    //         isAgreementChecked;
+    
+    //     console.log("isFormValid:", isValid);
+    // }, [userData, isNicknameChecked, isAgreementChecked]);
+
 
     return(
         <main className="loginPage">
@@ -119,7 +140,6 @@ const CompleteButton = styled.button`
     max-width:420px;
     height: 50px;
     color: white;
-    font-family: 'Pretendard';
     font-size: 16px;
     font-weight: bold;
     border: none;

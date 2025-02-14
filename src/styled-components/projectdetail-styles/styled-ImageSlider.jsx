@@ -2,25 +2,49 @@ import styled from 'styled-components';
 
 export const SSliderWrapper = styled.div`
   width: 100%;
-  height: 240px; 
+  height: 320px; /* 전체 슬라이더 높이 */
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  background-color: #E8E8E8; 
 `;
 
-export const SSlideContainer = styled.div`
-  width: 44%; 
-  height: 310px; 
+export const SLeftImageContainer = styled.div`
+  width: 30%;
+  height: 85%;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  position: absolute;
+  left: 0;
+  z-index: 1;
+  background-color: #e0e0e0; /* 왼쪽 이미지 컨테이너 배경 색 */
+  border-radius: 7px;
+`;
+
+export const SCenterImageContainer = styled.div`
+  width: 40%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
-  background-color: #F3F3F3; 
-  border-radius: 4px;
-  z-index: 1; 
+  z-index: 2;
+  background-color: #f3f3f3; /* 중앙 이미지 컨테이너 배경 색 */
+  border-radius: 8px;
+`;
+
+export const SRightImageContainer = styled.div`
+  width: 30%;
+  height: 85%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  z-index: 1;
+  background-color: #e0e0e0; 
+  border-radius: 7px;
 `;
 
 export const SSlide = styled.div`
@@ -28,8 +52,8 @@ export const SSlide = styled.div`
   height: 100%;
   background: url(${(props) => props.bgImage}) center center / cover no-repeat;
   transition: transform 0.5s ease-in-out;
+  border-radius: 4px;
 `;
-
 export const SArrow = styled.div`
   position: absolute;
   top: ${(props) => (props.left ? '49%' : '51%')}; 

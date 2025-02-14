@@ -21,6 +21,13 @@ line-height: 14px;
 letter-spacing: -0.02em;
 
 color: #A0A0A0;
+
+// 글씨 숨김 처리 추가
+overflow: hidden; /* 넘치는 텍스트 숨김 */
+    display: -webkit-box; /* flex 기반의 클리핑 박스 생성 */
+    -webkit-box-orient: vertical; /* 텍스트 방향 설정 (수직) */
+    -webkit-line-clamp: 3; /* 최대 줄 수를 3줄로 제한 */
+    text-overflow: ellipsis; /* 줄임표(...) 표시 */
 `
 
 export const FeedTop = styled.div`
