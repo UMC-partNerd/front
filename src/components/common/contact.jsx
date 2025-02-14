@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import Button, { TYPES } from "../common/button";
 
 //contact 컴포넌트 
-const PersonalContact = ({profileImageUrl, nickname, explan}) =>{
+const PersonalContact = ({profileImageUrl, nickname, explan, intro}) =>{
     const location = useLocation();
     const isPersonalPage = location.pathname === "/mypage/personal-page";
 
@@ -13,32 +13,60 @@ const PersonalContact = ({profileImageUrl, nickname, explan}) =>{
 
     return(
         <Container>
-            <SubContainer>
-            <ImageComp 
-            src={profileImageUrl}
-                alt = "프로필 이미지"
-            />
-            <NameField>
-                <Name>{nickname || "이름 없음"}</Name>
-                <Explan>{explan||"설명"}</Explan>
-            </NameField>
-            </SubContainer>
+            <LeftContainer>
+                <SubContainer>
+                    <ImageComp 
+                    src={profileImageUrl}
+                        alt = "프로필 이미지"
+                    />
+                    <NameField>
+                        <Name>{nickname || "이름 없음"}</Name>
+                        <Explan>{explan||"설명"}</Explan>
+                    </NameField>
+                </SubContainer>
             {isPersonalPage ? (
                 <Button
-                    type={TYPES.PLUS}
+                    styled={{fontSize:'5px'}}
+                    type={TYPES.YES}
                     text='채팅'
                     onClick={onClickHandler}
                 />
             ) : (
                 <Button
-                    type={TYPES.PLUS}
+                    styled={{fontSize:'5px'}}
+                    type={TYPES.YES}
                     text='채팅'
                     onClick={onClickHandler}
                 />
             )}
+            
+            </LeftContainer>
+            {intro && <>
+                        <Divider />
+                        <IntroText>{intro}</IntroText>
+                    </>}
         </Container>
     )
 }
+
+const LeftContainer = styled.div`
+display:flex;
+flex-direction:row;
+`
+
+const Divider = styled.hr`
+    width: 100%;
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin: 8px 0;
+`;
+
+
+const IntroText = styled.p`
+    font-size: 12px;
+    color: #555;
+    margin-top: 4px;
+`;
 
 const Name = styled.div`
 font-size:16px;
@@ -68,7 +96,7 @@ background: #FFFFFF;
 box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
 border-radius: 8px;
 display:flex;
-flex-direction:row;
+flex-direction:column;
 align-items:center;
 padding:10px 20px 10px 20px;
 box-sizing: border-box;

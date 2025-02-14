@@ -56,10 +56,7 @@ export const Input = styled.input`
 
     }
 
-    &:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
-    }
+    
 
     input:-webkit-autofill {
     background-color: white !important; /* 배경색을 원하는 색으로 설정 */
