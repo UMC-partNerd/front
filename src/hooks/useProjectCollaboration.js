@@ -45,9 +45,14 @@ const useProjectCollaboration = () => {
 
       if (response.data.isSuccess) {
         const result = response.data.result;
-        setProjects(result.collabPostPreviewDTOLList || []);
+        const projectsArray = Array.isArray(result.collabPostPreviewDTOLList)
+          ? result.collabPostPreviewDTOLList
+          : [];
+        setProjects(projectsArray);
         setTotalPages(result.totalPage || 1);
       }
+      
+      
     } catch (err) {
       setError(err.message);
       console.error('프로젝트 데이터 조회 실패:', err);
@@ -55,6 +60,7 @@ const useProjectCollaboration = () => {
       setLoading(false);
     }
   };
+  
 
   const getImageUrl = async (keyName) => {
     const jwtToken = localStorage.getItem('jwtToken');

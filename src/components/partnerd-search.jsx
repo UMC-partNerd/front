@@ -25,12 +25,14 @@ import {
   CategoryBadge
 } from "../styled-components/styled-partnerd-search";
 import { usePartnerSearch, PARTNER_CATEGORIES, SORT_OPTIONS } from '../hooks/usePartnerSearch';
+import { useNavigate } from 'react-router-dom';
 
 const PartnerSearch = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState(SORT_OPTIONS.RECENT);
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const itemsPerPage = 12;
+  const navigate = useNavigate();
 
   const { partners, isLoading, error } = usePartnerSearch(selectedCategory, sortBy, currentPage);
 
@@ -137,7 +139,11 @@ const PartnerSearch = () => {
 
       <PartnerGrid>
         {currentPartners.map((partner) => (
-          <PartnerCard key={partner.clubId}>
+          <PartnerCard 
+            key={partner.clubId}
+            onClick={() => navigate(`/find/${partner.clubId}`)}
+            style={{ cursor: 'pointer' }}
+          >
             <ImagePlaceholder>
               <img 
                 src={partner.profileImage} 

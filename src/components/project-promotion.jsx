@@ -77,6 +77,10 @@ const ProjectPromotion = () => {
     navigate('/project/promote/register');
   };
 
+  const handleCardClick = (promotionProjectId) => {
+    navigate(`/project/promote/${promotionProjectId}`);
+  };
+
   const renderPageButtons = () => {
     const buttons = [];
     
@@ -187,7 +191,10 @@ const ProjectPromotion = () => {
           {sortBy === 'popular' && currentPage === 1 && topProjects.length > 0 && (
             <TopProjectsGrid>
               {topProjects.map((project, index) => (
-                <TopProjectCard key={project.promotionProjectId}>
+                <TopProjectCard 
+                  key={project.promotionProjectId}
+                  onClick={() => handleCardClick(project.promotionProjectId)}
+                >
                   <TopImagePlaceholder>
                     <TopRankNumber>{index + 1}</TopRankNumber>
                     <img src={project.imageUrl} alt={project.title} />
@@ -203,7 +210,10 @@ const ProjectPromotion = () => {
 
           <ProjectGrid>
             {projects.map((project) => (
-              <ProjectCard key={project.promotionProjectId}>
+              <ProjectCard 
+                key={project.promotionProjectId}
+                onClick={() => handleCardClick(project.promotionProjectId)}
+              >
                 <ImagePlaceholder>
                   <img src={project.imageUrl} alt={project.title} />
                 </ImagePlaceholder>

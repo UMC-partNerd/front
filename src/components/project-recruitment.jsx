@@ -170,6 +170,10 @@ const ProjectRecruitment = () => {
     navigate('/project/recruit/register');
   };
 
+  const handleCardClick = (projectId) => {
+    navigate(`/project/recruit/${projectId}`);
+  };
+
   return (
     <RecruitmentContainer>
       <ProjectTypeContainer>
@@ -238,7 +242,10 @@ const ProjectRecruitment = () => {
           <div>로딩 중...</div>
         ) : (
           currentProjects.map((project) => (
-            <PartnerCard key={project.projectId}>
+            <PartnerCard 
+              key={project.projectId} 
+              onClick={() => handleCardClick(project.projectId)}
+            >
               <ImagePlaceholder>
                 <RecruitmentStatus status={project.projectStatus === '모집중' ? 'recruiting' : 'completed'}>
                   {project.projectStatus}

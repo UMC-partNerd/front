@@ -53,6 +53,10 @@ const ProjectCollaboration = () => {
     navigate('/collaboration/collab-registration');
   };
 
+  const handleCardClick = (id) => {
+    navigate(`/collaboration/${id}`);
+  };
+
   if (loading) {
     return <div>로딩 중...</div>;
   }
@@ -92,7 +96,10 @@ const ProjectCollaboration = () => {
 
       <ProjectGrid>
         {projects.map((project) => (
-          <ProjectCard key={project.collabPostId}>
+          <ProjectCard 
+            key={project.collabPostId}
+            onClick={() => handleCardClick(project.collabPostId)}
+          >
             <ImagePlaceholder>
               {project.imageKeyName && (
                 <img 
@@ -111,8 +118,8 @@ const ProjectCollaboration = () => {
               </CategoryBadge>
               <Title>{project.title}</Title>
               <Deadline>
-                {new Date(project.startDate).toLocaleDateString()} ~ 
-                {new Date(project.endDate).toLocaleDateString()}
+                {new Date(project.start_date).toLocaleDateString()} ~ 
+                {new Date(project.end_date).toLocaleDateString()}
               </Deadline>
             </CardContent>
           </ProjectCard>
