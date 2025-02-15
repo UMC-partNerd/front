@@ -3,6 +3,7 @@ import { InputPass,NicknameWrapper,Form, FieldGroup, Subup, Input, Subdown, Nick
 import { useState } from "react"
 import { useEffect } from "react"
 import axios from "axios"
+import NicknameField from "./NicknameCheck"
 
 const RegisterHeader = ({onChange , onNicknameCheck}) => {
 
@@ -105,30 +106,30 @@ const RegisterHeader = ({onChange , onNicknameCheck}) => {
                 />
                 <Subdown>년 / 월 / 일을 입력해주세요.</Subdown>
             </FieldGroup>
-
+            
             <FieldGroup>
-                <Subup>닉네임</Subup>
-                <NicknameWrapper  isAvailable={isNicknameAvailable}>
-                <InputPass placeholder="2자 이상 입력해주세요" 
-                type="text"
-                name="nickname" 
-                value={formData.nickname}
-                onChange={handleChange}
-                
-                />
-                <NicknameCheck isAvailable={isNicknameAvailable} onClick={handleNicknameSubmit}>
-                중복확인
-                </NicknameCheck>
-                </NicknameWrapper>
-                
-                {isNicknameAvailable === null ? (
-                    <Subdown>닉네임은 중복일 수 없습니다.</Subdown>
-                ) : isNicknameAvailable ? (
-                    <Subdown style={{ color: "#08D485" }}>사용 가능한 닉네임입니다.</Subdown>
-                ) : (
-                    <Subdown>중복된 닉네임 입니다.</Subdown>
-                )}
-            </FieldGroup>
+                    <Subup>닉네임</Subup>
+                    <NicknameWrapper  isAvailable={isNicknameAvailable}>
+                    <InputPass placeholder="2자 이상 입력해주세요" 
+                    type="text"
+                    name="nickname" 
+                    value={formData.nickname}
+                    onChange={handleChange}
+                    
+                    />
+                    <NicknameCheck isAvailable={isNicknameAvailable} onClick={handleNicknameSubmit}>
+                    중복확인
+                    </NicknameCheck>
+                    </NicknameWrapper>
+                    
+                    {isNicknameAvailable === null ? (
+                        <Subdown>닉네임은 중복일 수 없습니다.</Subdown>
+                    ) : isNicknameAvailable ? (
+                        <Subdown style={{ color: "#08D485" }}>사용 가능한 닉네임입니다.</Subdown>
+                    ) : (
+                        <Subdown>중복된 닉네임 입니다.</Subdown>
+                    )}
+                </FieldGroup>
 
             <FieldGroup>
                 <Subup>이메일</Subup>

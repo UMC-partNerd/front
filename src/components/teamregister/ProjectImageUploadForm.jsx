@@ -16,8 +16,6 @@ const ProjectImageUploadForm = ({ setProfileImage, setBannerImage, profileImageU
     setBannerImagePreview(null);
   };
 
- 
-
   useEffect(() => {
     if (profileImageUrl) {
       setProfileImagePreview(profileImageUrl); // 수정 페이지에서 초기 이미지 URL 설정
@@ -39,10 +37,10 @@ const ProjectImageUploadForm = ({ setProfileImage, setBannerImage, profileImageU
             추천 사이즈: 960 x 540 | JPG, PNG | 최대 10MB
           </S.SRecommendationText>
           <ProfileImageUpload
-            folderName="clubImage"
-            type={1}  // 숫자 1로 변경
-            setImageKey={(key) => setProfileImage(key)}  // 프로필 이미지 키 전달
-            setImagePreview={(preview) => setProfileImagePreview(preview)}  // 프로필 이미지 미리보기 전달
+            folderName="club"
+            type={1}  
+            setImageKey={(key) => setProfileImage(key)}  
+            setImagePreview={(preview) => setProfileImagePreview(preview)}  
           />
         </form>
         {/* 프로필 이미지 미리보기: 항상 표시되도록 */}
@@ -62,10 +60,10 @@ const ProjectImageUploadForm = ({ setProfileImage, setBannerImage, profileImageU
             추천 사이즈: 1920 x 1080 | JPG, PNG | 최대 10MB
           </S.SRecommendationText>
           <BannerImageUpload
-            folderName="clubBannerImage"
-            type={0}  // 숫자 0으로 변경
-            setImageKey={(key) => setBannerImage(key)}  // 배너 이미지 키 전달
-            setImagePreview={(preview) => setBannerImagePreview(preview)}  // 배너 이미지 미리보기 전달
+            folderName="club"
+            type={0}  
+            setImageKey={(key) => setBannerImage(key)} 
+            setImagePreview={(preview) => setBannerImagePreview(preview)} 
           />
         </form>
  
