@@ -1,11 +1,11 @@
-import {
-    Name,
-    Explan,
-    SubContainer,
-    NameField,
-    Container,
-    ImageComp
-} from "../../styled-components/common-styles/styled-contact";
+// import {
+//     Name,
+//     Explan,
+//     SubContainer,
+//     NameField,
+//     Container,
+//     ImageComp
+// } from "../../styled-components/common-styles/styled-contact";
 import { useLocation } from "react-router-dom";
 import Button, { TYPES } from "../common/button";
 
