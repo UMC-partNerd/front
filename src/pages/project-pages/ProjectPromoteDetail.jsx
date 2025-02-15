@@ -8,9 +8,6 @@ import ProjectCommentList from '../../components/projectdetail/ProjectCommentLis
 import CommentForm from '../../components/projectdetail/CommentForm';
 import useBannerPhoto from '../../hooks/useBannerPhoto';  
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
-//import ProjectCommentList from '../../components/projectdetail/ProjectCommentList';
-//import CommentForm from '../../components/projectdetail/CommentForm';
-
 import Button, { TYPES } from "../../components/common/button";
 
 const DefaultImage = '/default-image.png';
@@ -86,9 +83,37 @@ const ProjectPromoteDetail = () => {
   };
 
   const deleteHandler = async () => {
-    setOpenSecondModal(true);
-    setopenFirstModal(false);
-    // 삭제 요청 보내기
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      console.error("로그인이 필요합니다.");
+      return;
+    }
+  
+    try {
+      const response = await axios.delete(
+        `https://api.partnerd.site/api/project/promotion/${promotionProjectId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Attach token to request
+          },
+        }
+      );
+  
+      if (response.data.isSuccess) {
+        console.log("삭제 성공:", response.data.message);
+        setOpenSecondModal(true);
+        setopenFirstModal(false);
+  
+        setTimeout(() => {
+          navigate("/project/promote");
+        }, 1000);
+      } else {
+        console.error("삭제 실패:", response.data.message);
+      }
+    } catch (error) {
+      console.error("삭제 요청 중 오류 발생:", error);
+    }
   };
 
   if (!projectData) {
@@ -98,10 +123,29 @@ const ProjectPromoteDetail = () => {
   // 응원하기
   const [cheers, setCheers] = useState(0); 
   const [cheered, setCheered] = useState(false); 
-  const onClickHandler = () => {
-    setCheers(cheers + (cheered ? -1 : 1)); 
-    setCheered(!cheered);
-  }
+
+  const onClickHandler = async () => {
+    try {
+      const response = await axios.patch(
+        `https://api.partnerd.site/api/project/promotion/${promotionProjectId}/votes`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      if (response.data.isSuccess) {
+        setCheers(cheers ? prev - 1 : prev + 1);
+        setCheered(!cheered);
+      } else {
+        console.error("응원 실패:", response.data.message);
+      }
+    } catch (error) {
+      console.error("응원 중 오류 발생:", error);
+    }
+  };
 
   return (
     <S.SContainer>
