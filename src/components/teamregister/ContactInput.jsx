@@ -11,12 +11,14 @@ const ContactInput = ({ contactMethods, setContactMethods }) => {
   const handleSubmit = () => {
     if (contactMethod && link) {
       setContactMethods([...contactMethods, { contactType: contactMethod, contactUrl: link }]);
+      setContactMethods([...contactMethods, { contactType: contactMethod, contactUrl: link }]);
       setContactMethod('');
       setLink('');
     }
   };
 
   const handleDelete = (index) => {
+    setContactMethods(contactMethods.filter((_, idx) => idx !== index));
     setContactMethods(contactMethods.filter((_, idx) => idx !== index));
   };
 

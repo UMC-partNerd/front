@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Button, { TYPES } from "./common/button";
+import CustomModal, { VERSIONS } from "./common/modal/CustomModal";
 import {
   PaginationContainer,
   ArrowButton,
@@ -21,7 +23,6 @@ import {
   SortContainer,
   SortButton,
   ButtonContainer,
-  RegisterButton,
   CategoryContainer,
   CategoryButton,
   CategoryTitle,
@@ -236,6 +237,17 @@ const ProjectRecruitment = () => {
         </FilterContainer>
         <RegisterButton onClick={handleRegisterClick}>글 등록하기</RegisterButton>
       </SearchContainer>
+      
+      <CustomModal
+        openModal={openModal} 
+        closeModal={() => setOpenModal(false)}
+
+        boldface='프로젝트 모집을 등록하시겠습니까?'
+        regular='프로젝트의 리더로 프로젝트 페이지를 개설하여 프로젝트를 등록할 수 있습니다.'
+        text='개설하기'
+        onClickHandler={movetoRegister}
+        variant={VERSIONS.VER3}
+      />
 
       <PartnerGrid>
         {loading ? (

@@ -3,7 +3,7 @@ import RegisterHeader from "../components/register/registerheader";
 import {MainWrapp} from "../styles/registerstyles" 
 import styled from "styled-components";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignUpSocialPage = () =>{
@@ -26,7 +26,7 @@ const SignUpSocialPage = () =>{
         marketingNotify: true,
     });
 
-    //닉네임 체크 상태태
+    //닉네임 체크 상태
     const [isNicknameChecked, setIsNicknameChecked] = useState(false);
     // 약관 체크 상태
     const [isAgreementChecked, setIsAgreementChecked] = useState(false);
@@ -102,10 +102,29 @@ const SignUpSocialPage = () =>{
         }
     };
 
+    // //값 제대로 넘어와지는지 체크
+    // useEffect(() => {
+    //     console.log("userData:", userData);
+    //     console.log("isNicknameChecked:", isNicknameChecked);
+    //     console.log("isAgreementChecked:", isAgreementChecked);
+    
+    //     const isValid =
+    //         userData.name.trim() !== "" &&
+    //         userData.birthDate.trim() !== "" &&
+    //         userData.nickname.trim() !== "" &&
+    //         isNicknameChecked &&
+    //         isAgreementChecked;
+    
+    //     console.log("isFormValid:", isValid);
+    // }, [userData, isNicknameChecked, isAgreementChecked]);
+
 
     return(
         <main className="loginPage">
             <MainWrapp>
+                <RegisterHeader onChange={handleUserDataChange}  onNicknameCheck={handleNicknameCheck}/>
+                <Agreement onChange={handleAgreementsChange} onAgreementCheck={handleAgreementCheck}/>
+                <CompleteButton onClick={handleSubmit}  disabled={!isFormValid}>완료</CompleteButton>
                 <RegisterHeader onChange={handleUserDataChange}  onNicknameCheck={handleNicknameCheck}/>
                 <Agreement onChange={handleAgreementsChange} onAgreementCheck={handleAgreementCheck}/>
                 <CompleteButton onClick={handleSubmit}  disabled={!isFormValid}>완료</CompleteButton>
@@ -117,14 +136,16 @@ const SignUpSocialPage = () =>{
 const CompleteButton = styled.button`
     width: 70%;
     max-width:420px;
+    width: 70%;
+    max-width:420px;
     height: 50px;
     color: white;
-    font-family: 'Pretendard';
     font-size: 16px;
     font-weight: bold;
     border: none;
     cursor: pointer;
     margin-top: 30px;
+    background:${({disabled}) =>(disabled ? "#A0A0A0" : "#0D29B7")};
     background:${({disabled}) =>(disabled ? "#A0A0A0" : "#0D29B7")};
     border-radius: 4px;
 `;

@@ -21,11 +21,14 @@ import ProjectCollaboration from './components/project-collaboration';
 import ProjectPromotion from './components/project-promotion';
 import ProjectRecruitDetail from './pages/project-pages/ProjectRecruitDetail'; 
 import ProjectPromoteDetail from './pages/project-pages/ProjectPromoteDetail';
-import TeamMangement from './pages/TeamMangement'  
+import TeamMangement from './pages/TeamMangement';  
 import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
 import RecruitmentRegister from './components/recruit-register/recruitment-register';
 import PromotionRegister from './components/promote-register/promotion-register';
+
+import PersonalEditComp from './components/mypage/PersonalEditComp';
+import MyPagePersonalEdit from './pages/mypages/Personal-EditPage';
 
 const router = createBrowserRouter([
   {
@@ -45,7 +48,7 @@ const router = createBrowserRouter([
           },
           {
             path: ':clubId/manage',  
-            element: <TeamMangement/>,  
+            element: <TeamMangement />,  
           },
           {
             path: 'team-registration',
@@ -107,11 +110,19 @@ const router = createBrowserRouter([
             element: <ProjectPromotion />,
           },
           {
-            path: 'recruit/:id',
+            path: 'recruit-registration',
+            // element: <ProjectRecruitment />,
+          },
+          {
+            path: 'promote-registration',
+            // element: <ProjectPromotion />,
+          },
+          {
+            path: 'recruit/:recruitProjectId',
             element: <ProjectRecruitDetail />, 
           },
           {
-            path: 'promote/:id',
+            path: 'promote/:promotionProjectId',
             element: <ProjectPromoteDetail />,
           },
           {
@@ -126,28 +137,32 @@ const router = createBrowserRouter([
       },
       {
         path: 'community',
-        element: <CommunityPage />
+        element: <CommunityPage />,
       },
-      { //마이페이지 경로 
+      { // 마이페이지 경로
         path: 'mypage',
         children: [
           {
-            path:'profile', //디폴트는 내 페이지 
-            element: <MyPageDe/>,
+            path:'profile', // 디폴트는 내 페이지
+            element: <MyPageDe />,
           },
           {
             path:'personal-page',
-            element: <MyPagePersonal />
+            element: <MyPagePersonal />,
+          },
+          {
+            path:'personal-page-edit',
+            element: <MyPagePersonalEdit />
           },
           {
             path:'teams',
-            element: <MyPageTeams />
+            element: <MyPageTeams />,
           },
           {
             path:'my-posts',
-            element: <MyPagePosts />
-          }
-        ]
+            element: <MyPagePosts />,
+          },
+        ],
       },
       {
         path: 'project/recruit/register',

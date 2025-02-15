@@ -1,55 +1,77 @@
 import React, { useState, useRef } from 'react';
-import { getPreSignedUrl, uploadImageToS3 } from '../../../utils/imageUtils';
-import { UploadGroup, UploadRectangle, CenterContainer, ImagePreview, UploadText } from '../../../styled-components/common-styles/styled-ProfileImageUpload'; 
+import * as S from '../../../styled-components/common-styles/styled-ProfileImageUpload'; 
 
-const ProfileImageUpload = ({ onClick, imagePreview }) => {
+const ProfileImageUpload = ({ folderName, type, setImageKey, setImagePreview }) => {
   const fileInputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
+  const [imagePreview, setImagePreviewState] = useState(null);
 
   const handleClick = () => {
-    fileInputRef.current.click(); // 파일 업로드 버튼 클릭 시 파일 선택 창 띄우기
+    fileInputRef.current.click(); // 이미지 파일 선택
   };
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    setUploading(true); // 업로드 시작 시 loading 상태
+    setUploading(true);
     try {
-      // 1단계: pre-signed URL 요청
-      const preSignedUrl = await getPreSignedUrl(file);
+      const response = await fetch('https://api.partnerd.site/api/s3/preSignedUrl', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          filename: file.name,
+          folderName,
+          type,
+          contentType: file.type,
+        }),
+      });
 
-      // 2단계: S3에 파일 업로드
-      await uploadImageToS3(file, preSignedUrl);
+      const data = await response.json();
+      const { preSignedUrl, keyName } = data.result;
 
-      // 업로드 성공 후 이미지 미리보기 설정
-      onClick(URL.createObjectURL(file)); // onClick을 이용해 이미지 미리보기 설정
+      setImageKey(keyName); // 서버로 이미지 키 전송
 
-      console.log("이미지 업로드 완료");
+      await fetch(preSignedUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type,  
+          'x-amz-meta-cache-control': 'max-age=864000'  // 캐시 제어 헤더 추가
+        },
+        body: file,
+      });
+      
+      // 로컬 미리보기 업데이트
+      const imageUrl = URL.createObjectURL(file);
+      setImagePreview(imageUrl); 
+      setImagePreviewState(imageUrl);
+
+      console.log('이미지 업로드 완료:', imageUrl);
     } catch (error) {
-      console.error("이미지 업로드 중 오류 발생", error);
+      console.error('이미지 업로드 중 오류 발생', error);
     } finally {
-      setUploading(false); // 업로드 완료 후 loading 상태 해제
+      setUploading(false);
     }
   };
 
   return (
-    <UploadGroup>
-      <UploadRectangle onClick={handleClick}>
-        <CenterContainer>
-          <ImagePreview src={imagePreview || "/image.png"} alt="Profile Image" />
-          <UploadText>이미지 업로드하기</UploadText>
-        </CenterContainer>
-      </UploadRectangle>
+    <S.UploadGroup>
+      <S.UploadRectangle onClick={handleClick}>
+        <S.CenterContainer>
+          <S.ImagePreview src='/image.png' alt='Icon' /> 
+          <S.UploadText>이미지 업로드하기</S.UploadText>
+        </S.CenterContainer>
+      </S.UploadRectangle>
       <input
-        type="file"
+        type='file'
         ref={fileInputRef}
-        style={{ display: 'none' }} // 파일 input 숨기기
-        onChange={handleFileChange}  // 파일 선택 후 처리
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
       />
-      {uploading ? <p>업로드 중...</p> : null}  {/* 업로드 중 표시 */}
-      {imagePreview && <img src={imagePreview} alt="미리보기" />}
-    </UploadGroup>
+      {uploading && <p>업로드 중...</p>}
+    </S.UploadGroup>
   );
 };
 

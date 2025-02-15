@@ -7,7 +7,7 @@ const BannerImageUpload = ({ folderName, type, setImageKey, setImagePreview }) =
   const [imagePreview, setImagePreviewState] = useState(null);
 
   const handleClick = () => {
-    fileInputRef.current.click();
+    fileInputRef.current.click(); // 이미지 파일 선택
   };
 
   const handleFileChange = async (e) => {
@@ -47,7 +47,9 @@ const BannerImageUpload = ({ folderName, type, setImageKey, setImagePreview }) =
       setImagePreviewState(imageUrl);
 
       console.log('이미지 업로드 완료:', imageUrl);
+      console.log('이미지 업로드 완료:', imageUrl);
     } catch (error) {
+      console.error('이미지 업로드 중 오류 발생', error);
       console.error('이미지 업로드 중 오류 발생', error);
     } finally {
       setUploading(false);
@@ -59,15 +61,18 @@ const BannerImageUpload = ({ folderName, type, setImageKey, setImagePreview }) =
       <S.UploadRectangle onClick={handleClick}>
         <S.CenterContainer>
           <S.ImagePreview src='/image.png' alt='Icon' /> 
+          <S.ImagePreview src='/image.png' alt='Icon' /> 
           <S.UploadText>이미지 업로드하기</S.UploadText>
         </S.CenterContainer>
       </S.UploadRectangle>
       <input
         type='file'
+        type='file'
         ref={fileInputRef}
         style={{ display: 'none' }}
         onChange={handleFileChange}
       />
+      {uploading && <p>업로드 중...</p>}
       {uploading && <p>업로드 중...</p>}
     </S.UploadGroup>
   );

@@ -103,31 +103,6 @@ export const ButtonContainer = styled.div`
   max-width: 1200px;
 `;
 
-export const WriteButton = styled.button`
-  display: flex;
-  align-items: center;
-  padding: 8px 16px;
-  border-radius: 6px;
-  border: 1.5px solid #0D29B7;
-  background: transparent;
-  color: #0D29B7;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  margin-left: auto;
-
-  &:hover {
-    background: #0D29B7;
-    color: white;
-  }
-
-  &:before {
-    content: '+';
-    margin-right: 6px;
-    font-size: 14px;
-  }
-`;
-
 export const CategoryContainer = styled.div`
   display: flex;
   gap: 12px;

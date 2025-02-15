@@ -5,7 +5,9 @@ import ProjectImageUploadForm from '../teamregister/ProjectImageUploadForm';
 import ActivityImageUpload from '../common/images/ActivityImageUpload';
 import ImageRectangle from '../common/images/ImageRectangle';
 import DateList from '../common/DateList';
-import ButtonBlue from '../mypage/button_blue';
+import Button, { TYPES } from "../common/button";
+
+
 import TeamMemberRegistration from '../contact/member-registration';
 import ContactForm from '../contact/contactForm';
 import ProfileImageUpload from '../common/images/ProfileImageUpload';
@@ -123,38 +125,16 @@ const RecruitmentRegister = () => {
     try {
       const { uploadImage, registerProject } = useProjectRecruit();
 
-      // 필수 필드 검증
-      if (!projectInfo.name || !projectInfo.intro || !projectInfo.description || 
-          !projectInfo.developmentStatus || !profileImage) {
-        alert('필수 항목을 모두 입력해주세요.');
-        return;
-      }
-
       // 프로필 이미지 업로드
       let thumbnailKeyName = null;
       if (profileImage) {
-        try {
-          thumbnailKeyName = await uploadImage(profileImage, 3);
-        } catch (error) {
-          console.error('프로필 이미지 업로드 실패:', error);
-          alert('프로필 이미지 업로드에 실패했습니다.');
-          return;
-        }
+        thumbnailKeyName = await uploadImage(profileImage, 3);
       }
 
       // 서비스 소개 이미지들 업로드
-      const projectImgKeyNameList = [];
-      for (const image of serviceImages) {
-        try {
-          const keyName = await uploadImage(image, 4);
-          if (keyName) {
-            projectImgKeyNameList.push(keyName);
-          }
-        } catch (error) {
-          console.error('서비스 이미지 업로드 실패:', error);
-          continue;
-        }
-      }
+      const projectImgKeyNameList = await Promise.all(
+        serviceImages.map(image => uploadImage(image, 4))
+      );
 
       const projectData = {
         title: projectInfo.name,
@@ -209,8 +189,8 @@ const RecruitmentRegister = () => {
             <Title>프로젝트 프로필 사진<Required>*</Required></Title>
             <SmallText>추천 사이즈: 960 x 540 | JPG, PNG | 최대 10MB</SmallText>
             <ProfileImageUpload 
-              folderName="projects"
-              type={3}
+              folderName="projectPost"
+              type={1}
               setImageKey={handleProfileImageUpload}
             />
             <PreviewBox>
@@ -251,8 +231,8 @@ const RecruitmentRegister = () => {
               <Label>서비스 소개 사진</Label>
               <SmallText>사진은 최대 10장까지 가능합니다</SmallText>
               <ActivityImageUpload 
-                folderName="projects"
-                type={4}
+                folderName="projectPost"
+                type={2}
                 setImageKey={handleImageUpload}
               />
               <ImageGrid>
@@ -440,17 +420,12 @@ const RecruitmentRegister = () => {
           />
         </FormGroup>
 
-        <ButtonBlue 
+        <Button
+          type={TYPES.PLUS}
+          sign='true'
+          text='프로젝트 등록하기'
           onClick={handleSubmit}
-          style={{ 
-            width: '250px', 
-            height: '40px', 
-            marginTop: '20px', 
-            fontSize: '16px' 
-          }}
-        >
-          프로젝트 등록하기
-        </ButtonBlue>
+        /> 
       </Container>
     </>
   );

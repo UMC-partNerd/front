@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Button, { TYPES } from "./common/button";
+import CustomModal, { VERSIONS } from "./common/modal/CustomModal";
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -134,6 +136,16 @@ const ProjectPromotion = () => {
     );
 
     return buttons;
+  };
+  const [openModal, setOpenModal] = useState(false);
+
+  // 버튼: 프로젝트 등록하기
+  const buttonHandler = () => {
+    setOpenModal(true);
+  };
+  const movetoRegister = () => {
+    navigate('project/promote/promote-registration');
+    setOpenModal(flase);  
   };
 
   return (

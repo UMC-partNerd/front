@@ -8,6 +8,7 @@ export const FormContainer = styled.div`
   border-radius: 20px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
   margin-top: 45px;
+  margin-bottom: 40px;
 `;
 
 export const Section = styled.div`
@@ -80,6 +81,7 @@ export const InputField = styled.input`
 
   &::placeholder {
     color: #B0B0B0;
+     font-family: 'Pretendard', sans-serif;
   }
 `;
 
@@ -92,6 +94,8 @@ export const TextAreaField = styled.textarea`
   border-radius: 5px;
   outline: none;
   transition: border 0.3s ease;
+  font-family: 'Pretendard', sans-serif;
+  letter-spacing: 2px; 
 
   &:focus {
     border: 1px solid #0D29B7;
@@ -99,6 +103,8 @@ export const TextAreaField = styled.textarea`
 
   &::placeholder {
     color: #C2C2C2;
+    font-family: 'Pretendard', sans-serif;
+    letter-spacing: 2px; 
   }
 
   height: 200px; 

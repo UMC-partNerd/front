@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import Button, { TYPES } from "../components/common/button";
+import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
+import { useNavigate } from 'react-router-dom';
+
 import {
   PaginationContainer,
   ArrowButton,
@@ -25,7 +29,6 @@ import {
   CategoryBadge
 } from "../styled-components/styled-partnerd-search";
 import { usePartnerSearch, PARTNER_CATEGORIES, SORT_OPTIONS } from '../hooks/usePartnerSearch';
-import { useNavigate } from 'react-router-dom';
 
 const PartnerSearch = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -104,6 +107,19 @@ const PartnerSearch = () => {
     return buttons;
   };
 
+  const [openModal, setOpenModal] = useState(false);
+  const buttonHandler = () => {
+    setOpenModal(true);
+  };
+
+  // 모달: 동아리 등록하기
+  const onClickHandler = async () => {
+    
+    setOpenModal(false);
+    navigate('/find/team-registration');
+  };
+
+
   return (
     <PartnerSearchContainer>
       <CategoryTitle>카테고리</CategoryTitle>
@@ -135,8 +151,24 @@ const PartnerSearch = () => {
           </SortButton>
         </SortContainer>
         <RegisterButton>동아리 등록하기</RegisterButton>
-      </ButtonContainer>
 
+        <Button    
+          type={TYPES.PLUS}
+          sign='true'
+          text='동아리 등록하기'
+          onClick={buttonHandler}
+        /> 
+      </ButtonContainer>
+      <CustomModal
+        openModal={openModal} 
+        closeModal={() => setOpenModal(false)}
+
+        boldface='동아리를 등록하시겠습니까?'
+        regular='동아리의 리더로 팀페이지를 개설하여 동아리를 등록할 수 있습니다.'
+        text='개설하기'
+        onClickHandler={onClickHandler}
+        variant={VERSIONS.VER3}
+      />
       <PartnerGrid>
         {currentPartners.map((partner) => (
           <PartnerCard 

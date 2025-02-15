@@ -59,6 +59,7 @@ const ActivityImageUpload = ({ folderName, type, setImageKey, setImagePreview })
       <S.UploadRectangle onClick={handleClick}>
         <S.CenterContainer>
           <S.ImagePreview src='/image.png' alt='Icon' /> 
+          <S.ImagePreview src='/image.png' alt='Icon' /> 
           <S.UploadText>이미지 업로드하기</S.UploadText>
         </S.CenterContainer>
       </S.UploadRectangle>

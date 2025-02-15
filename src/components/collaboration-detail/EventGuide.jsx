@@ -16,6 +16,7 @@ const EventGuide = ({ collabData }) => {
       {/* 하이라이트 텍스트로 intro 부분을 강조 */}
       <S.SEventDescription>
         <S.SHighlightText>{intro}</S.SHighlightText>
+        <S.SHighlightText>{intro}</S.SHighlightText>
       </S.SEventDescription>
       
       {/* description 부분은 이어서 출력 */}

@@ -6,7 +6,7 @@ import ActivityImageUpload from '../common/images/ActivityImageUpload';
 import ImageRectangle from '../common/images/ImageRectangle';
 import TeamMemberRegistration from '../contact/member-registration';
 import ContactForm from '../contact/contactForm';
-import ButtonBlue from '../mypage/button_blue';
+import Button, { TYPES } from "../common/button";
 
 const PromotionRegister = () => {
   const [projectInfo, setProjectInfo] = useState({
@@ -134,17 +134,12 @@ const PromotionRegister = () => {
           <ContactForm />
         </FormGroup>
 
-        <ButtonBlue 
+        <Button
+          type={TYPES.PLUS}
+          sign='true'
+          text='프로젝트 등록하기'
           onClick={handleSubmit}
-          style={{ 
-            width: '250px', 
-            height: '40px', 
-            marginTop: '20px', 
-            fontSize: '16px' 
-          }}
-        >
-          프로젝트 등록하기
-        </ButtonBlue>
+        /> 
       </Container>
     </>
   );

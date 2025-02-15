@@ -163,6 +163,15 @@ const Wrapper = styled.div`
   width: 1000px;
 `;
 
+const InfoSectionWrapper = styled.div`
+  margin-left: 100px; 
+  width: 555px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+
 const ImageContainer = styled.div`
   border-radius: 4px;
   background: #d9d9d9;
@@ -180,6 +189,7 @@ const MoreIconWrapper = styled.div`
   margin-top: 0;
   padding: 10px;
   position: relative;
+  position: relative;
 `;
 
 const SingleDot = styled.div`
@@ -189,6 +199,7 @@ const SingleDot = styled.div`
   border-radius: 50%;
   margin-bottom: 5px;
   cursor: pointer; 
+  cursor: pointer; 
 `;
 
 const EventOverviewWrapper = styled.div`
@@ -196,7 +207,9 @@ const EventOverviewWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   margin-top: 70px;
+  margin-top: 70px;
   margin-left: 360px;
+  width: 555px;
   width: 555px;
 `;
 
@@ -215,6 +228,8 @@ const EventImagesWrapper = styled.div`
 
 const MoreOptionsMenu = styled.div`
   position: absolute;
+  top: 30px; 
+  left: 0; 
   top: 30px; 
   left: 0; 
   background-color: #fff;
