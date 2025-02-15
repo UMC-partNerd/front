@@ -7,6 +7,7 @@ import axios from "axios";
 import useMypageImg from "../../hooks/useMypagesProfileImg";
 import { useNavigate } from "react-router-dom";
 import Button, { TYPES } from "../common/button";
+import PersonalProject from "./PersonalProject";
 
 const MyPersonalComp = () =>{
 
@@ -79,51 +80,119 @@ const MyPersonalComp = () =>{
         <PersonalField>
             <Subup>등록한 프로젝트</Subup>
             <StyledHr />
-            <SubupSec style={{marginTop:'50px', justifyContent:'center', display:'flex'}}>
-                {"등록한 프로젝트가 없습니다"}
-                </SubupSec>
+            <PersonalProject />
         </PersonalField>
 
         <PersonalField>
             <Subup>경력</Subup>
             <StyledHr />
-            <SubupSec style={{marginTop:'50px', justifyContent:'center', display:'flex'}}>
-                {personal?.personalHistory||"등록한 경력이 없습니다"}
+            {personal?.personalHistory ? (
+                <TextBox>{personal?.personalHistory}</TextBox>
+            ):(
+                <SubupSec style={{marginTop:'50px', justifyContent:'center', display:'flex'}}>
+                {"등록한 경력이 없습니다"}
                 </SubupSec>
+            )}
+            
         </PersonalField>
 
         <PersonalField>
             <Subup>학력</Subup>
             <StyledHr />
-            <SubupSec style={{marginTop:'50px', justifyContent:'center', display:'flex'}}>
-                {personal?.education||"등록한 학력이 없습니다"}
+                {personal?.education ? (
+                <TextBox>{personal?.education}</TextBox>
+            ):(
+                <SubupSec style={{marginTop:'50px', justifyContent:'center', display:'flex'}}>
+                {"등록한 학력력이 없습니다"}
                 </SubupSec>
+            )}
         </PersonalField>
 
         <PersonalField>
             <Subup>활동 프로젝트</Subup>
             <StyledHr />
-            <SubupSec style={{marginTop:'50px', justifyContent:'center', display:'flex'}}>
-                {personal?.activityProject||"등록한 활동 프로젝트가 없습니다"}
+            {personal?.activityProject ? (
+                <TextBox>{personal?.activityProject}</TextBox>
+            ):(
+                <SubupSec style={{marginTop:'50px', justifyContent:'center', display:'flex'}}>
+                {"등록한 활동 프로젝트가 없습니다."}
                 </SubupSec>
+            )}
         </PersonalField>
 
         <PersonalField>
             <Subup>스킬</Subup>
             <StyledHr />
-            <SubupSec style={{marginTop:'50px', justifyContent:'center', display:'flex'}}>
-                {personal?.skill||"등록한 스킬이 없습니다"}
+            {personal?.skill ? (
+                <SkillContainer>
+                {personal.skill.split(',').map((skill, index) => (
+                    <SkillTag key={index}>{skill.trim()}</SkillTag>
+                ))}
+            </SkillContainer>
+            ):(
+                <SubupSec style={{marginTop:'50px', justifyContent:'center', display:'flex'}}>
+                {"등록한 스킬이이 없습니다."}
                 </SubupSec>
+            )}
         </PersonalField>
 
         <PersonalField>
             <Subup>링크</Subup>
             <StyledHr />
-            <SubupSec style={{marginTop:'50px', justifyContent:'center', display:'flex'}}>등록한 링크가 없습니다</SubupSec>
+            {personal?.personalLinkList  && personal.personalLinkList.length > 0 ? (
+                <LinkContainer>
+                    {personal?.personalLinkList.map((link, index) => (
+                        <LinkItem key={index} href={link.linkUrl} target="_blank" rel="noopener noreferrer">
+                        {link.linkUrl}
+                    </LinkItem>
+                    ))}
+                </LinkContainer>
+            ):(
+                <SubupSec style={{marginTop:'50px', justifyContent:'center', display:'flex'}}>
+                {"등록한 링크가 없습니다."}
+                </SubupSec>
+            )}
         </PersonalField>
         </MainWrapp>
     )
 }
+
+const LinkContainer = styled.div`
+    display: flex;
+    flex-direction: column;  // 한 줄씩 정렬
+    gap: 8px;  // 링크 간 간격
+    align-items: start;
+`;
+
+const LinkItem = styled.a`
+    text-decoration: none;
+    color:rgb(0, 0, 0);
+    font-size: 11px;
+    word-break: break-all;  // 긴 URL이 잘리도록 설정
+    &:hover {
+        text-decoration: underline;
+    }
+`;
+
+const SkillContainer = styled.div`
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;  // 넘칠 경우 자동 줄바꿈
+    justify-content: start;
+`;
+
+const SkillTag = styled.div`
+    background-color: #f5f5f5;
+    color: #333;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+`;
+
+const TextBox = styled.div`
+font-size:11px;
+`
 
 const ButtonWrapp = styled.div`
 display:flex;
