@@ -4,7 +4,7 @@ import { PiArrowElbowDownRightBold } from "react-icons/pi";
 export const SReplyWrapper = styled.div`
   display: flex;
   align-items: flex-start;
-  width: 660px;
+  width: 550px;
   height: 110px;
   padding: 10px;
   background-color: #F6F6F6;

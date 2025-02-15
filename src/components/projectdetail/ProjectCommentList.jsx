@@ -4,7 +4,7 @@ import ProjectComment from './ProjectComment';
 
 const ProjectCommentListWrapper = styled.div`
   margin-top: 20px;
-  width: 680px;
+  width: 600px;
 `;
 
 const ProjectCommentList = ({ comments, onReply, onDelete, onUpdate }) => {

@@ -126,5 +126,5 @@ export const SProjectCommentListWrapper = styled.div`
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  margin-left: 260px;
+  margin-left: 300px;
 `;

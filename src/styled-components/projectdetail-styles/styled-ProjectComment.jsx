@@ -123,11 +123,13 @@ export const SMoreOptionsMenu = styled.div`
   border: 1px solid #ddd;
   border-radius: 10px;
   display: ${({ show }) => (show ? 'flex' : 'none')};
-  box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.15);
   width: 120px;
+  height: 100px;
   padding: 0;
   flex-direction: column;
   justify-content: center;
+  z-index: 10;
 `;
 
 export const SMenuItem = styled.div`
@@ -138,7 +140,6 @@ export const SMenuItem = styled.div`
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
-  letter-spacing: -0.4px;
 
   &:hover {
     background-color: #f5f5f5;
@@ -149,4 +150,5 @@ export const SDivider = styled.div`
   width: 80%;
   height: 1px;
   background-color: #ddd;
+  margin: 0 auto;
 `;

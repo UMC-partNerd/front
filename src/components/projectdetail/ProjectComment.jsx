@@ -143,7 +143,7 @@ const ProjectComment = ({ text, user, date, replies = [], onDelete, onUpdate, on
         onClick={handleOptionsClick}
         style={{
           position: 'absolute',
-          right: '-15px',
+          right: '30px',
           top: '-2px',
           cursor: 'pointer',
         }}

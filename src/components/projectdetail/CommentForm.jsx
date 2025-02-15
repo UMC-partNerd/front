@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-
-const CommentForm = ({ onAddComment }) => {
+const CommentForm = ({ onAddComment, type }) => {
   const [text, setText] = useState('');
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       if (text.trim()) {
-        onAddComment(text);
+        onAddComment(text, type);  // 댓글 내용과 type을 함께 전달
         setText('');
       }
     }
@@ -29,6 +28,7 @@ const CommentForm = ({ onAddComment }) => {
 };
 
 export default CommentForm;
+
 
 
 
