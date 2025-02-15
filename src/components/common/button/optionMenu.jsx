@@ -4,6 +4,12 @@ import {
 } from '../../../styled-components/button/Styled-OptionMenu';
 import CustomModal, { VERSIONS } from "../modal/CustomModal";
 
+/*
+import OptionMenu from '../../components/common/button/optionMenu';
+
+<OptionMenu/>
+*/
+
 const optionMenu = ({ post }) => {
     const [showOptions, setShowOptions] = useState(false);
     const menuRef = useRef(null); // 메뉴를 감지할 ref 추가

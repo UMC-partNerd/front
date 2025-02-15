@@ -8,8 +8,8 @@ import ProjectCommentList from '../../components/projectdetail/ProjectCommentLis
 import CommentForm from '../../components/projectdetail/CommentForm';
 import useBannerPhoto from '../../hooks/useBannerPhoto';  
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
-
 import Button, { TYPES } from "../../components/common/button";
+import OptionMenu from '../../components/common/button/optionMenu';
 
 const DefaultImage = '/default-image.png';
 
@@ -169,27 +169,33 @@ const ProjectPromoteDetail = () => {
 
   return (
     <S.SContainer>
-      <S.SImageBoxContainer>
-        <S.SImageBox>
-          {isLoading ? (
-            <p>Loading...</p>
-          ) : error ? (
-            <p>Error loading image: {error}</p>
-          ) : (
-            <img src={thumbnailPhotoUrl || DefaultImage} alt="Project Thumbnail" />
-          )}
-        </S.SImageBox>
-        <S.STextBox>
-          <S.STitle>{projectData.title}</S.STitle>
-          <S.SDescription>{projectData.intro}</S.SDescription>
-        </S.STextBox>
-      </S.SImageBoxContainer>
+      <S.SHeaderBox>
+        <S.SButtonBox/>
+        <S.SImageBoxContainer>
+          <S.SImageBox>
+            {isLoading ? (
+              <p>Loading...</p>
+            ) : error ? (
+              <p>Error loading image: {error}</p>
+            ) : (
+              <img src={thumbnailPhotoUrl || DefaultImage} alt="Project Thumbnail" />
+            )}
+          </S.SImageBox>
+          <S.STextBox>
+            <S.STitle>{projectData.title}</S.STitle>
+            <S.SDescription>{projectData.intro}</S.SDescription>
+          </S.STextBox>
+        </S.SImageBoxContainer>
+        <S.SButtonBox>
+          <OptionMenu/>
 
-      <Button
-        type = {TYPES.VOTE}
-        count={cheers}
-        onClick={onClickHandler}
-      />
+          <Button
+            type = {TYPES.VOTE}
+            count={cheers}
+            onClick={onClickHandler}
+          />
+        </S.SButtonBox>
+      </S.SHeaderBox>
 
       {/* 모달 1: 삭제 확인 */}
       <CustomModal
