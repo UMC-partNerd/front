@@ -6,6 +6,7 @@ import ClubInfoForm from '../components/teamregister/ClubInfoForm';
 import Banner from '../components/common/banner/Banner';
 import ProjectImageUploadForm from '../components/teamregister/ProjectImageUploadForm';
 import styled from 'styled-components';
+import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
 
 const TeamManagement = () => {
   const { clubId } = useParams();
@@ -50,6 +51,8 @@ const TeamManagement = () => {
     setTeamInfo((prevState) => ({ ...prevState, ...updatedData }));
   };
 
+  // 버튼: 수정하기
+  const [openModal, setOpenModal] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -81,11 +84,14 @@ const TeamManagement = () => {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       console.log('팀 수정 성공:', response.data);
+      setOpenModal(true);
+
     } catch (error) {
       console.error('팀 수정 실패:', error);
       setErrorMessage('팀 수정에 실패했습니다. 다시 시도해 주세요.');
     } finally {
       setIsLoading(false);
+      setOpenModal(false);
     }
   };
 
@@ -120,6 +126,16 @@ const TeamManagement = () => {
           onClick={handleSubmit}
           disabled={isLoading}
         />
+
+        <CustomModal
+          openModal={openModal} 
+          closeModal={() => setOpenModal(false)}
+
+          boldface='팀페이지 수정 완료!'
+          regular='팀페이지 수정 완료되었습니다.'
+          variant={VERSIONS.VER2}
+        />
+        
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </Container>
     </>

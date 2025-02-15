@@ -45,7 +45,7 @@ const InquiryTitle = styled.h2`
 
 const Textarea = styled.textarea`
   display: flex;
-  width: 700px;
+  width: 600px;
   height: 60px;
   padding: 0 10px;
   align-items: center;
