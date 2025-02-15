@@ -14,7 +14,6 @@ const useBannerPhoto = (folderName, bannerImageFile, mainImageFile, eventImageFi
     console.log('Fetching URL for keyName:', keyName); 
     try {
       const encodedKeyName = encodeURIComponent(keyName);
-      console.log('Encoded keyName:', encodedKeyName);  
       const response = await axios.get(
         `https://api.partnerd.site/api/s3/preSignedUrl?keyName=${encodedKeyName}`,
         {

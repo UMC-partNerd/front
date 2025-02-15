@@ -5,60 +5,51 @@ import ProjectReply from './ProjectReply';
 import ReplyInput from '../collaboration-detail/comments/ReplyInput'; 
 import * as S from '../../styled-components/projectdetail-styles/styled-ProjectComment';
 
-const ProjectComment = ({ text, user, date, replies = [], onDelete, onUpdate, onReply }) => {
+const ProjectComment = ({ commentId, text, user, date, replies = [], onDelete, onUpdate, onReply, type }) => {
   const [showReply, setShowReply] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [editedText, setEditedText] = useState(text);
+  const [editedText, setEditedText] = useState(text); // 댓글 수정 상태
   const [replyList, setReplyList] = useState(replies); 
   const [likes, setLikes] = useState(0); 
   const [liked, setLiked] = useState(false); 
 
   const handleReplyClick = () => setShowReply(prev => !prev);
   const handleOptionsClick = () => setShowOptions(prev => !prev);
+
+  // 수정 버튼 클릭 시
   const handleEditClick = () => {
-    setEditMode(true);
-    setShowOptions(false);
+    setEditMode(true); 
+    setShowOptions(false); 
+    setEditedText(text); 
   };
-  const handleEditChange = (e) => setEditedText(e.target.value);
+
+  const handleEditChange = (e) => setEditedText(e.target.value); // 수정 내용 반영
+
   const handleEditSubmit = () => {
+    console.log("Edited Text in handleEditSubmit:", editedText);  // 이 값이 잘 출력되는지 확인
     if (editedText.trim()) {
-      onUpdate(editedText);
+      console.log("Sending edited text:", editedText); // 이 로그도 추가해서 editedText가 제대로 전달되는지 확인
+      onUpdate(commentId, editedText, type);  // 여기서 newText가 제대로 전달되는지 확인
       setEditMode(false);
     }
   };
 
   const handleReplySubmit = (replyText) => {
-    if (!replyText.trim()) {
-      return;  // 빈 댓글이 추가되지 않도록 방지
-    }
-  
+    if (!replyText.trim()) return;  // 빈 댓글 방지
+
     const today = new Date();
-    const year = today.getFullYear();
-    const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const day = today.getDate().toString().padStart(2, '0');
-    const formattedDate = `${year}. ${month}. ${day}`;
-  
+    const formattedDate = `${today.getFullYear()}. ${today.getMonth() + 1}. ${today.getDate()}`;
+    
     const newReply = {
       text: replyText,
       user: "사용자 이름",
-      date: formattedDate,  // 오늘 날짜를 사용
+      date: formattedDate,  
     };
-  
+
     setReplyList([...replyList, newReply]);
     setShowReply(false);
-  };
-  
-
-  const handleReplyUpdate = (index, newText) => {
-    const updatedReplies = [...replyList];
-    updatedReplies[index].text = newText;
-    setReplyList(updatedReplies);
-  };
-
-  const handleReplyDelete = (index) => {
-    const updatedReplies = replyList.filter((_, i) => i !== index);
-    setReplyList(updatedReplies);
+    onReply(commentId, replyText, type); // 대댓글 추가 시 부모로 전달
   };
 
   const handleLike = () => {
@@ -67,27 +58,13 @@ const ProjectComment = ({ text, user, date, replies = [], onDelete, onUpdate, on
   };
 
   const formatDate = (date) => {
-    // date가 비어있을 경우 오늘 날짜로 설정
     if (!date) {
       const today = new Date();
-      const year = today.getFullYear();
-      const month = (today.getMonth() + 1).toString().padStart(2, '0');
-      const day = today.getDate().toString().padStart(2, '0');
-      return `${year}. ${month}. ${day}`;
+      return `${today.getFullYear()}. ${today.getMonth() + 1}. ${today.getDate()}`;
     }
-  
-    // 기존 date 값이 있으면 포맷을 맞추기
     const dateParts = date.match(/(\d{4})\.\s*([\d]{1,2})\.\s*([\d]{1,2})/);
-    if (!dateParts) {
-      console.log('Invalid date format:', date);
-      return "Invalid Date"; // 잘못된 형식 처리
-    }
-  
-    const [_, year, month, day] = dateParts;
-    return `${year}. ${month}. ${day}`;
+    return dateParts ? `${dateParts[1]}. ${dateParts[2]}. ${dateParts[3]}` : "Invalid Date";
   };
-  
-  
 
   const formattedDate = formatDate(date); 
 
@@ -110,8 +87,8 @@ const ProjectComment = ({ text, user, date, replies = [], onDelete, onUpdate, on
             <S.SCommentInput
               type="text"
               value={editedText}
-              onChange={handleEditChange}
-              onBlur={handleEditSubmit}
+              onChange={handleEditChange} // 수정 내용 반영
+              onBlur={handleEditSubmit} // 수정 제출
               autoFocus
             />
           ) : (
@@ -126,8 +103,6 @@ const ProjectComment = ({ text, user, date, replies = [], onDelete, onUpdate, on
               text={reply.text}
               user={reply.user}
               date={reply.date}
-              onUpdate={(newText) => handleReplyUpdate(index, newText)}
-              onDelete={() => handleReplyDelete(index)}
             />
           </div>
         ))}
@@ -152,7 +127,7 @@ const ProjectComment = ({ text, user, date, replies = [], onDelete, onUpdate, on
       <S.SMoreOptionsMenu show={showOptions}>
         <S.SMenuItem onClick={handleEditClick}>수정하기</S.SMenuItem>
         <S.SDivider />
-        <S.SMenuItem onClick={onDelete}>삭제하기</S.SMenuItem>
+        <S.SMenuItem onClick={() => onDelete(commentId, type)}>삭제하기</S.SMenuItem>
       </S.SMoreOptionsMenu>
     </S.SCommentWrapper>
   );

@@ -8,8 +8,8 @@ const CommentForm = ({ onAddComment, type }) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       if (text.trim()) {
-        onAddComment(text, type);  // 댓글 내용과 type을 함께 전달
-        setText('');
+        onAddComment(text, type);  // 댓글 내용과 type을 전달
+        setText(''); // 댓글 입력란 초기화
       }
     }
   };
@@ -20,14 +20,15 @@ const CommentForm = ({ onAddComment, type }) => {
       <Textarea
         placeholder="댓글을 입력하세요"
         value={text}
-        onChange={(e) => setText(e.target.value)}
-        onKeyDown={handleKeyDown}
+        onChange={(e) => setText(e.target.value)} // 댓글 입력받기
+        onKeyDown={handleKeyDown} 
       />
     </form>
   );
 };
 
 export default CommentForm;
+
 
 
 
