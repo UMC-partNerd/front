@@ -12,6 +12,7 @@ import axios from 'axios';
 import PersonalContact from '../../components/common/contact';
 import EventOverview from '../../components/collaboration-detail/EventOverview';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
+import OptionMenu from '../../components/common/button/optionMenu';
 
 const DefaultImage = '/default-image.png';
 
@@ -189,12 +190,14 @@ const CollaborationDetailPage = () => {
               <img src={mainPhotoUrl || DefaultImage} alt="Main" style={{ width: '100%', height: '100%', borderRadius: '8px' }} />}
         </ImageContainer>
 
+        <OptionMenu/>
+
         {isLoadingCollab ? <div>로딩 중...</div> :
           errorCollab ? <div>{errorCollab}</div> :
           <InfoSectionWrapper>
           <InfoSection collabData={collabData} />
         </InfoSectionWrapper>}
-        </Wrapper>
+      </Wrapper>
 
       <EventOverviewWrapper>
         {collabData ? <EventOverview eventData={collabData} /> : <div>데이터를 불러오는 중...</div>}
