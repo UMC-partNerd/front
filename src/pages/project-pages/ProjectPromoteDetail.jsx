@@ -78,28 +78,93 @@ const ProjectPromoteDetail = () => {
     setComments(updatedComments);
   };
 
-<<<<<<< HEAD
   // 응원하기
   const [cheers, setCheers] = useState(0); 
   const [cheered, setCheered] = useState(false); 
-  const onClickHandler = () => {
-    setCheers(cheers + (cheered ? -1 : 1)); 
-    setCheered(!cheered);
-=======
+  // const onClickHandler = () => {
+  //   setCheers(cheers + (cheered ? -1 : 1)); 
+  //   setCheered(!cheered);
+  // }
+
+  const onClickHandler = async () => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      if (!token) {
+        console.error("로그인이 필요합니다.");
+        return;
+      }
+
+      const response = await axios.patch(
+        `https://api.partnerd.site/api/project/promotion/${promotionProjectId}/votes`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (response.data.isSuccess) {
+        console.log("응원 성공: ", response.data.message);
+        setCheers((prev) => (cheered ? prev - 1 : prev + 1));
+        setCheered((prev) => !prev);
+      } else {
+        console.error("응원 실패:", response.data.message);
+      }
+    } catch (error) {
+      console.error("응원 중 오류 발생:", error);
+
+      if (error.response) {
+        console.error("서버 응답 상태 코드:", error.response.status);
+        console.error("서버 응답 데이터:", error.response.data);
+      } else {
+        console.error("요청이 전송되지 않았습니다.");
+      }
+    }
+  };
+    
   // 모달: 삭제하기
   const buttonHandler = () => {
     setopenFirstModal(true);
   };
 
   const deleteHandler = async () => {
-    setOpenSecondModal(true);
-    setopenFirstModal(false);
-    // 삭제 요청 보내기
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      console.error("로그인이 필요합니다.");
+      return;
+    }
+  
+    try {
+      const response = await axios.delete(
+        `https://api.partnerd.site/api/project/promotion/${promotionProjectId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (response.data.isSuccess) {
+        console.log("삭제 성공:", response.data.message);
+        setOpenSecondModal(true);
+        setopenFirstModal(false);
+  
+        setTimeout(() => {
+          navigate("/project/promote");
+        }, 1000);
+      } else {
+        console.error("삭제 실패:", response.data.message);
+      }
+    } catch (error) {
+      console.error("삭제 요청 중 오류 발생:", error);
+    }
   };
 
   if (!projectData) {
     return <div>Loading...</div>; 
->>>>>>> c1c70ae727aa971e68c08a0a8dcb514d9fae5344
   }
 
   return (
@@ -120,14 +185,12 @@ const ProjectPromoteDetail = () => {
         </S.STextBox>
       </S.SImageBoxContainer>
 
-<<<<<<< HEAD
       <Button
         type = {TYPES.VOTE}
         count={cheers}
         onClick={onClickHandler}
       />
 
-=======
       {/* 모달 1: 삭제 확인 */}
       <CustomModal
         openModal={openFirstModal}
@@ -149,7 +212,6 @@ const ProjectPromoteDetail = () => {
       />
 
       {/* 이미지 슬라이더 */}
->>>>>>> c1c70ae727aa971e68c08a0a8dcb514d9fae5344
       <S.SImageSliderWrapper>
         <ImageSlider images={images} />
       </S.SImageSliderWrapper>
@@ -176,5 +238,6 @@ const ProjectPromoteDetail = () => {
     </S.SContainer>
   );
 };
+
 
 export default ProjectPromoteDetail;

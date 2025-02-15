@@ -38,11 +38,7 @@ export const TYPES = {
   /> 
 */}
 
-<<<<<<< HEAD
-function Button({ type, text, count, onClick }) {
-=======
-function Button({ width, height, fontSize, type, sign, text, onClick }) {
->>>>>>> c1c70ae727aa971e68c08a0a8dcb514d9fae5344
+function Button({ width, height, fontSize, type, count, sign, text, onClick }) {
   const renderDefaultButton = () => (
     <ButtonContainer width={width} height={height} fontSize={fontSize} type={type} onClick={onClick}>
       {text}
