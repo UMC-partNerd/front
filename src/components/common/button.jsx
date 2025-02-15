@@ -14,26 +14,37 @@ export const TYPES = {
   NO: 'no'      // 거절: 흰색
 };
 
-// import Button, { TYPES } from "../common/button";
-// import { useNavigate } from 'react-router-dom';
+{/* 
 
-// useNavigate 훅을 사용하여 이동 기능 추가
-// const navigate = useNavigate();
-// const onClickHandler = () => {
-//   navigate('/collaboration/collab-registration');
-// };
+  import Button, { TYPES } from "../components/common/button";
+  import { useNavigate } from 'react-router-dom';
 
-// isLoading
+  // useNavigate 훅을 사용하여 이동 기능 추가
+  const navigate = useNavigate();
+  const onClickHandler = () => {
+    navigate('/collaboration/collab-registration');
+  };
 
-{/* <Button
-    type={TYPES.PLUS}
+  isLoading
+  
+  <Button
+    width={width} 
+    height={height} 
+    fontSize={fontSize}
+    type={TYPES.NEXT}
+    sign='true'
     text='글 작성하기'
     onClick={onClickHandler}
-/> */}
+  /> 
+*/}
 
+<<<<<<< HEAD
 function Button({ type, text, count, onClick }) {
+=======
+function Button({ width, height, fontSize, type, sign, text, onClick }) {
+>>>>>>> c1c70ae727aa971e68c08a0a8dcb514d9fae5344
   const renderDefaultButton = () => (
-    <ButtonContainer type={type} onClick={onClick}>
+    <ButtonContainer width={width} height={height} fontSize={fontSize} type={type} onClick={onClick}>
       {text}
     </ButtonContainer>
   );
@@ -45,13 +56,13 @@ function Button({ type, text, count, onClick }) {
   );
 
   const renderNextButton = () => (
-    <NextContainer type={type} onClick={onClick}>
+    <NextContainer width={width} height={height} fontSize={fontSize} type={type} onClick={onClick}>
       {text}
     </NextContainer>
   );
 
   const renderPlusButton = () => (
-    <PlusContainer type={type} onClick={onClick}>
+    <PlusContainer width={width} height={height} fontSize={fontSize} type={type} sign={sign} onClick={onClick}>
       {text}
     </PlusContainer>
   );
