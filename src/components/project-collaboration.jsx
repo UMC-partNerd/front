@@ -3,10 +3,6 @@ import { useNavigate } from 'react-router-dom';  // 추가
 import Button, { TYPES } from "./common/button";
 import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
 
-import { useNavigate } from 'react-router-dom';  // 추가
-import Button, { TYPES } from "./common/button";
-import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
-
 import {
   PaginationContainer,
   ArrowButton,
