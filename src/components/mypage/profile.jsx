@@ -19,8 +19,25 @@ const MyProfile = () => {
         const [confirmPasswordType, setConfirmPasswordType] = useState('password');
         const [confirmPasswordIcon, setConfirmPasswordIcon] = useState(<FaRegEyeSlash size={15} />);
 
+        //비밀번호 확인 상태 추가
+        const [confirmPassword, setConfirmPassword] = useState("");
+
         //프로필 데이터 상태
-        const [profile, setProfile] = useState(null);
+        const [profile, setProfile] = useState({
+            marketing_notify:false,
+        });
+
+        //업로드된 이미지 키 저장 
+        const [imageKey, setImageKey] = useState(null);
+
+        // 닉네임 중복 확인 상태 추가
+        const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+
+        const handleNicknameCheck = (isAvailable) =>{
+            setIsNicknameChecked(isAvailable);
+        }
+
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     
         const handleTogglePassword = () => {
             if (passwordType === 'password') {
@@ -47,19 +64,9 @@ const MyProfile = () => {
         const onClickHandler = () => {
 
         };
-        //필드 변경 
-        const handleChange = (e) =>{
-            const { name, value } = e.target;
-            const updatedData = { ...profile, [name]: value };
-            setProfile(updatedData);
-            if (name === "nickname") {
-                setIsNicknameAvailable(null); // 닉네임 변경 시 상태 초기화
-                setIsNicknameChecked(false);
-                onNicknameCheck(false);
-            }
-        }
+        
 
-        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+        
 
         //내 프로필 조회 api 
         const getMyProfile = async () =>{
@@ -91,8 +98,93 @@ const MyProfile = () => {
             getMyProfile();
         }, []);
 
+        // 이미지 업로드 후 URL 업데이트
+        const handleImageUpload = (imageUrl) => {
+            setProfile((prevProfile) => ({
+                ...prevProfile,
+                profile_url: imageUrl, // 이미지 URL을 profile에 업데이트
+            }));
+        };
+
+        //필드 변경 
+        const handleChange = (e) =>{
+            const { name, value } = e.target;
+            // const updatedData = { ...profile, [name]: value };
+            // setProfile(updatedData);
+            // if (name === "nickname") {
+            //     setIsNicknameAvailable(null); // 닉네임 변경 시 상태 초기화
+            //     setIsNicknameChecked(false);
+            //     onNicknameCheck(false);
+            // }
+            if (name === "confirmPassword") {
+                setConfirmPassword(value);
+            } else {
+                setProfile((prevProfile) => ({
+                    ...prevProfile,
+                    [name]: value,
+                }));
+            }
+        }
+
+        // 마케팅 수신 동의 값 변경 함수
+        const onToggleMarketingNotify = (newState) => {
+            setProfile((prevProfile) => ({
+                ...prevProfile,
+                marketing_notify: newState, // ✅ ToggleButton에서 받은 값으로 업데이트
+                
+            }));
+            console.log("마케팅 수신 동의 여부", newState)
+        
+        };
+
         //프로필 이미지 가져오기
         const {profileImageUrl, isLoading, error} = useMypageImg(profile?.profileKeyName)
+
+        //프로필 수정 API 
+        const handleSaveProfile = async() =>{
+            // 비밀번호와 비밀번호 확인 값 비교 
+            if (profile.password !== confirmPassword) {
+                alert("비밀번호가 일치하지 않습니다");
+                return;
+            }
+
+            try{
+                const jwtToken = localStorage.getItem("jwtToken");
+                if (!jwtToken) {
+                    alert("로그인이 필요합니다.");
+                    return;
+                }
+
+                const updatedProfile = {
+                    profile_url: profile?.profile_url || "", // 새로 업로드된 이미지 URL
+                    name: profile?.name || "",
+                    nickname: profile?.nickname || "",
+                    birth: profile?.birth || "",
+                    email: profile?.email || "",
+                    password: profile?.password || "", // 비밀번호는 선택 입력 가능
+                    belong_to_club: profile?.belong_to_club || "",
+                    occupation_of_interest: profile?.occupation_of_interest || "",
+                    marketing_notify: profile?.marketing_notify || false,
+                };
+
+                console.log("백엔드로 전송할 데이터:", updatedProfile); // ✅ 콘솔 로그로 확인
+
+
+                const response = await axios.patch(`${API_BASE_URL}/api/users/me/info`, updatedProfile, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${jwtToken}`,
+                    },
+                });
+    
+                console.log("프로필 수정 성공:", response.data);
+                alert("프로필이 성공적으로 수정되었습니다.");
+
+            } catch (error) {
+                console.error("프로필 수정 실패:", error);
+                alert("프로필 수정 중 오류가 발생했습니다.");
+            }
+        };
 
     return (
         <MainWrapp>
@@ -114,13 +206,15 @@ const MyProfile = () => {
                         onError={(e) => { e.target.src = "/banner1.png"; }} // 기본 이미지 처리
                     />
                 )}
+
+                <ButtonWrapp>
+                    <Button
+                        type={TYPES.PLUS}
+                        text='사진 등록하기'
+                        onClick={onClickHandler}
+                    />
+                </ButtonWrapp>
                 
-                <ImageComp />
-                <Button
-                    type={TYPES.PLUS}
-                    text='사진 등록하기'
-                    onClick={onClickHandler}
-                />
             </ProfileWrapp>
 
             <FieldGroup>
@@ -132,13 +226,18 @@ const MyProfile = () => {
                 ></Input>
             </FieldGroup>
 
-            <NicknameField />
+            <NicknameField 
+                value={profile?.nickname}
+                onChange={handleChange}
+                onNicknameCheck={handleNicknameCheck}
+                currentNickname={profile?.nickname}
+                />
 
             <FieldGroup>
             <Subup>생년월일</Subup>
             <Input placeholder="생년월일을 입력해주세요"
             type="text"
-            name="birthDate"
+            name="birth"
             onChange={handleChange}
             value={profile?.birth?.slice(0, 10) || ""}
             ></Input>
@@ -160,8 +259,10 @@ const MyProfile = () => {
                     <InputPass
                         placeholder="영문, 숫자, 특수문자를 8자 이상 조합하여 입력해주세요"
                         type={passwordType}
+                        name="password"
+                        value={profile?.password || ""}
                         onChange={handleChange}
-                        value={profile?.email || ""}
+                        
                     />
                     <IconButton onClick={handleTogglePassword}>
                         {passwordIcon}
@@ -175,6 +276,9 @@ const MyProfile = () => {
                     <InputPass
                         placeholder="영문, 숫자, 특수문자를 8자 이상 조합하여 입력해주세요"
                         type={confirmPasswordType}
+                        name="confirmPassword"
+                        onChange={handleChange}
+                        
                     />
                     <IconButton onClick={handleToggleConfirmPassword}>
                         {confirmPasswordIcon}
@@ -188,7 +292,8 @@ const MyProfile = () => {
                 <SubupSec>대표 1가지만 등록할 수 있습니다.</SubupSec>
                 <Input placeholder="소속 동아리를 입력헤주세요" 
                 value={profile?.belong_to_club || ""}
-                type="email" />
+                name="belong_to_club"
+                onChange={handleChange} />
             </FieldGroup>
 
             <FieldGroup>
@@ -196,7 +301,8 @@ const MyProfile = () => {
                 <SubupSec>대표 1가지만 등록할 수 있습니다.</SubupSec>
                 <Input placeholder="예) PM, Android 개발자 등" 
                 value={profile?.occupation_of_interest || ""}
-                type="email" />
+                name="occupation_of_interest"
+                onChange={handleChange} />
             </FieldGroup>
 
             <FieldGroup style={{marginTop:'50px'}}>
@@ -205,25 +311,36 @@ const MyProfile = () => {
                 <SubTitle style={{fontSize:'12px'}}>
                 파트너드의 신규 서비스 오픈, 변경사항 등 서비스 소식과 정보를 받아볼래요
                 </SubTitle>
-                <ToggleButton  initialState={profile?.marketing_notify}/>
+                <ToggleButton  
+                initialState={profile?.marketing_notify}
+                onToggle={onToggleMarketingNotify}
+                />
+                
             </MarketingField>
             <p></p>
             </FieldGroup>
 
             <SaveWrapp>            
             <Button
+                width={'25%'}
                 type={TYPES.YES}
                 text='저장하기'
-                onClick={onClickHandler}
+                onClick={handleSaveProfile} 
                 style={{width : '120px', marginBottom: '30px'}}
             />
-            <SubupSec style={{textDecoration: 'underline', cursor:'pointer', marginBottom: '30px'}}>파트너드 탈퇴하기</SubupSec>
+            <SubupSec style={{textDecoration: 'underline', cursor:'pointer', marginBottom: '30px', marginTop:'30px'}}>파트너드 탈퇴하기</SubupSec>
             </SaveWrapp>
             
             
         </MainWrapp>
     )
 }
+
+const ButtonWrapp = styled.div`
+display:flex;
+align-items: center;
+    margin-left: 10px; /* 이미지와 버튼 사이 여백 */
+`
 
 const MarketingField = styled.div`
 display:flex;
@@ -290,11 +407,12 @@ const IconButton = styled.span`
 
 const ProfileWrapp = styled.div`
 display:flex;
+width:100%;
 flex-direction:row;
-
+justify-content:start;
 margin-top:20px;
 align-items:center;
-gap: 50px;
+gap: 10px;
 height:100%;
 margin-bottom:40px;
 `

@@ -6,12 +6,27 @@ import axios from "axios"
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const NicknameField = ({ value, onChange, onNicknameCheck }) =>{
+const NicknameField = ({ value, onChange, onNicknameCheck , currentNickname}) =>{
     const [isNicknameAvailable, setIsNicknameAvailable] = useState(null);
     const [isNicknameChecked, setIsNicknameChecked] = useState(false);
 
+    //닉네임 변경 시 중복 확인 상태 초기화
+    const handleInputChange = (e) =>{
+        onChange(e);
+        setIsNicknameAvailable(null); //중복 확인 상태 초기화
+        setIsNicknameChecked(false); //중복 확인 버튼 다시 활성화
+        onNicknameCheck(false); //닉네임 중복 체크 상태 초기화
+    }
+
     //닉네임 중복 확인 
     const handleNicknameSubmit = async () =>{
+        //닉네임이 현재 사용중인 경우 API 요청을 생략함 
+        if(value === currentNickname) {
+            setIsNicknameAvailable(true);
+            setIsNicknameChecked(true);
+            onNicknameCheck(true);
+            return;
+        }
         try{
             const jwtToken = localStorage.getItem("jwtToken"); // JWT 토큰 불러오기
     
@@ -56,17 +71,23 @@ const NicknameField = ({ value, onChange, onNicknameCheck }) =>{
                     type="text"
                     name="nickname" 
                     value={value}
-                    onChange={onChange}
+                    onChange={handleInputChange}
                     
                     />
-                    <NicknameCheck isAvailable={isNicknameAvailable} onClick={handleNicknameSubmit}>
+                    <NicknameCheck 
+                    isAvailable={isNicknameAvailable} 
+                    onClick={handleNicknameSubmit}
+                    disabled = {isNicknameChecked}
+                    >
                     중복확인
                     </NicknameCheck>
                     </NicknameWrapper>
                     
                     {isNicknameAvailable === null ? (
                         <Subdown>닉네임은 중복일 수 없습니다.</Subdown>
-                    ) : isNicknameAvailable ? (
+                    ):value === currentNickname ? (
+                        <Subdown style={{ color: "#08D485" }}>현재 사용 중인 닉네임입니다.</Subdown>
+                    ): isNicknameAvailable ? (
                         <Subdown style={{ color: "#08D485" }}>사용 가능한 닉네임입니다.</Subdown>
                     ) : (
                         <Subdown>중복된 닉네임 입니다.</Subdown>

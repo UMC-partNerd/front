@@ -47,7 +47,7 @@ const PersonalProject = () => {
         fetchProjects();
     }, []);
 return(
-    <>
+    <CardWrapp>
         {/* 로딩 상태 표시 */}
         {loading && <p>팀 데이터를 불러오는 중입니다...</p>}
 
@@ -60,6 +60,10 @@ return(
                 {"등록한 경력이 없습니다"}
             </SubupSec>
         )}
+
+        <SelectButtonWrapp>
+            
+        </SelectButtonWrapp>
 
         <CardGrid>
             {!loading && !error && projects.length > 0 ? (
@@ -80,8 +84,35 @@ return(
                 ))
             ) : null}
         </CardGrid>
-    </>
+    </CardWrapp>
 )
 }
+
+const SelectButton = styled.div`
+
+position: absolute;
+width: 46px;
+height: 46px;
+left: 1445px;
+top: 758px;
+
+filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.15));
+transform: matrix(-1, 0, 0, 1, 0, 0);
+
+
+`
+
+const SelectButtonWrapp = styled.div`
+display:flex;
+flex-direction:end;
+
+`
+
+const CardWrapp = styled.main`
+display:flex;
+margin-bottom:30px;
+flex-direction:column;
+
+`
 
 export default PersonalProject;

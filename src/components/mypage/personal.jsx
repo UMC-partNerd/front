@@ -77,10 +77,13 @@ const MyPersonalComp = () =>{
         />
         </ButtonWrapp>
 
-        <PersonalField>
+        <PersonalField style={{ marginBottom: "150px" }}>
             <Subup>등록한 프로젝트</Subup>
             <StyledHr />
-            <PersonalProject />
+            <CardWrapp>
+                <PersonalProject />
+            </CardWrapp>
+            
         </PersonalField>
 
         <PersonalField>
@@ -131,7 +134,7 @@ const MyPersonalComp = () =>{
             </SkillContainer>
             ):(
                 <SubupSec style={{marginTop:'50px', justifyContent:'center', display:'flex'}}>
-                {"등록한 스킬이이 없습니다."}
+                {"등록한 스킬이 없습니다."}
                 </SubupSec>
             )}
         </PersonalField>
@@ -156,6 +159,12 @@ const MyPersonalComp = () =>{
         </MainWrapp>
     )
 }
+
+const CardWrapp = styled.main`
+display:flex;
+margin-bottom:30px;
+
+`
 
 const LinkContainer = styled.div`
     display: flex;
