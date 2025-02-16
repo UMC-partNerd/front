@@ -6,55 +6,61 @@ import {
 } from '../../styled-components/styled-Button';
 
 export const TYPES = {
-  NEXT: 'next', // 큰
+  CANCEL: 'cancel', // x
+  NEXT: 'next',     // 큰
   PLUS: 'plus',
-  YES: 'yes',   // 승인: 파랑
-  NO: 'no'      // 거절: 흰색
+  YES: 'yes',     // 승인: 파랑
+  NO: 'no'        // 거절: 흰색
 
 };
 
-{/* 
+// import Button, { TYPES } from "../common/button";
+// import { useNavigate } from 'react-router-dom';
 
-  import Button, { TYPES } from "../components/common/button";
-  import { useNavigate } from 'react-router-dom';
+// useNavigate 훅을 사용하여 이동 기능 추가
+// const navigate = useNavigate();
+// const onClickHandler = () => {
+//   navigate('/collaboration/collab-registration');
+// };
 
-  // useNavigate 훅을 사용하여 이동 기능 추가
-  const navigate = useNavigate();
-  const onClickHandler = () => {
-    navigate('/collaboration/collab-registration');
-  };
+// isLoading
 
-  isLoading
-  
-  <Button
-    width={width} 
-    height={height} 
-    fontSize={fontSize}
-    type={TYPES.NEXT}
-    sign='true'
+{/* <Button
+    type={TYPES.PLUS}
     text='글 작성하기'
     onClick={onClickHandler}
-  /> 
-*/}
+/> */}
 
-function Button({ width, height, fontSize, type, sign, text, onClick }) {
+const XButton = '/xBtn.png'; // 기본 이미지
+
+function Button({ type, text, onClick }) {
   const renderDefaultButton = () => (
-    <ButtonContainer width={width} height={height} fontSize={fontSize} type={type} onClick={onClick}>
+    <ButtonContainer type={type} onClick={onClick}>
       {text}
     </ButtonContainer>
   );
 
+  const renderCancelButton = () => (
+    <div type={type} onClick={onClick}>
+      <img src={XButton} />
+    </div>
+  );
+
   const renderNextButton = () => (
-    <NextContainer width={width} height={height} fontSize={fontSize} type={type} onClick={onClick}>
+    <NextContainer type={type} onClick={onClick}>
       {text}
     </NextContainer>
   );
 
   const renderPlusButton = () => (
-    <PlusContainer width={width} height={height} fontSize={fontSize} type={type} sign={sign} onClick={onClick}>
+    <PlusContainer type={type} onClick={onClick}>
       {text}
     </PlusContainer>
   );
+
+  if (type === TYPES.CANCEL) {
+    return renderCancelButton();
+  }
 
   if (type === TYPES.NEXT) {
     return renderNextButton();

@@ -28,6 +28,8 @@ import KakaoCallback from './components/login/KakaoCallback';
 import PersonalEditComp from './components/mypage/PersonalEditComp';
 import MyPagePersonalEdit from './pages/mypages/Personal-EditPage';
 
+import ManageWindow from './components/mypage/member-manage/manageWindow';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -161,6 +163,10 @@ const router = createBrowserRouter([
       {
         path: '*',
         element: <NotFoundPage />,
+      },
+      {
+        path: 'test',
+        element: <ManageWindow />,
       },
     ],
   },

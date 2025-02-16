@@ -6,6 +6,7 @@
 //     Container,
 //     ImageComp
 // } from "../../styled-components/common-styles/styled-contact";
+import styled from 'styled-components';
 import { useLocation } from "react-router-dom";
 import Button, { TYPES } from "../common/button";
 
@@ -57,8 +58,8 @@ const PersonalContact = ({profileImageUrl, nickname, explan, intro}) =>{
 }
 
 const LeftContainer = styled.div`
-display:flex;
-flex-direction:row;
+    display:flex;
+    flex-direction:row;
 `
 
 const Divider = styled.hr`
