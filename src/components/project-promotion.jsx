@@ -192,9 +192,37 @@ const ProjectPromotion = () => {
               최신순
             </SortButton>
           </SortContainer>
+          <Button
+            type={TYPES.PLUS}
+            sign='true'
+            text='프로젝트 등록하기'
+            onClick={buttonHandler}
+          />        
           <RegisterButton onClick={handleRegisterClick}>프로젝트 등록하기</RegisterButton>
         </ButtonContainer>
       </SectionHeader>
+
+      <CustomModal
+        openModal={openModal} 
+        closeModal={() => setOpenModal(false)}
+
+        boldface='프로젝트 홍보를 등록하시겠습니까?'
+        regular='프로젝트의 리더로 프로젝트 페이지를 개설하여 프로젝트를 등록할 수 있습니다.'
+        text='개설하기'
+        onClickHandler={movetoRegister}
+        variant={VERSIONS.VER3}
+      />
+
+      <CustomModal
+        openModal={openModal} 
+        closeModal={() => setOpenModal(false)}
+
+        boldface='프로젝트 홍보를 등록하시겠습니까?'
+        regular='프로젝트의 리더로 프로젝트 페이지를 개설하여 프로젝트를 등록할 수 있습니다.'
+        text='개설하기'
+        onClickHandler={movetoRegister}
+        variant={VERSIONS.VER3}
+      />
 
       {loading ? (
         <div>로딩 중...</div>

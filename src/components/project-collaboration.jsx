@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';  // 추가
 import Button, { TYPES } from "./common/button";
 import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
 
+import { useNavigate } from 'react-router-dom';  // 추가
+import Button, { TYPES } from "./common/button";
+import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
+
 import {
   PaginationContainer,
   ArrowButton,
@@ -44,9 +48,9 @@ const ProjectCollaboration = () => {
     getImageUrl
   } = useProjectCollaboration();
 
-  const navigate = useNavigate();
-
+  // 버튼: 협업글 작성하기
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleWriteClick = () => {
     const jwtToken = localStorage.getItem('jwtToken');

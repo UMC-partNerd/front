@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
 import Button, { TYPES } from "./common/button";
 import CustomModal, { VERSIONS } from "./common/modal/CustomModal";
+import { useNavigate } from 'react-router-dom';
 import {
   PaginationContainer,
   ArrowButton,
@@ -167,6 +166,18 @@ const ProjectRecruitment = () => {
     return buttons;
   };
 
+  const [openModal, setOpenModal] = useState(false);
+
+  // 버튼: 글 등록하기
+  const buttonHandler = () => {
+    setOpenModal(true);
+  };
+
+  const movetoRegister = () => {
+    navigate('project/recruit/recruit-registration');
+    setOpenModal(flase);  
+  };
+
   const handleRegisterClick = () => {
     navigate('/project/recruit/register');
   };
@@ -235,7 +246,12 @@ const ProjectRecruitment = () => {
             ))}
           </CategoryGroup>
         </FilterContainer>
-        <RegisterButton onClick={handleRegisterClick}>글 등록하기</RegisterButton>
+        <Button
+            type={TYPES.PLUS}
+            sign='true'
+            text='글 등록하기'
+            onClick={buttonHandler} // handleRegisterClick
+        />
       </SearchContainer>
       
       <CustomModal

@@ -32,24 +32,24 @@ const BannerImageUpload = ({ folderName, type, setImageKey, setImagePreview }) =
       const data = await response.json();
       const { preSignedUrl, keyName } = data.result;
 
-      setImageKey(keyName);
+      setImageKey(keyName); // 서버로 이미지 키 전송
 
       await fetch(preSignedUrl, {
         method: 'PUT',
         headers: {
-          'Content-Type': file.type,
+          'Content-Type': 'application/json',
+          'x-amz-meta-cache-control': 'max-age=864000'
         },
         body: file,
       });
 
+      // 로컬 미리보기 업데이트
       const imageUrl = URL.createObjectURL(file);
-      setImagePreview(imageUrl);
+      setImagePreview(imageUrl);  // 미리보기 이미지를 업데이트
       setImagePreviewState(imageUrl);
 
       console.log('이미지 업로드 완료:', imageUrl);
-      console.log('이미지 업로드 완료:', imageUrl);
     } catch (error) {
-      console.error('이미지 업로드 중 오류 발생', error);
       console.error('이미지 업로드 중 오류 발생', error);
     } finally {
       setUploading(false);
@@ -61,18 +61,15 @@ const BannerImageUpload = ({ folderName, type, setImageKey, setImagePreview }) =
       <S.UploadRectangle onClick={handleClick}>
         <S.CenterContainer>
           <S.ImagePreview src='/image.png' alt='Icon' /> 
-          <S.ImagePreview src='/image.png' alt='Icon' /> 
           <S.UploadText>이미지 업로드하기</S.UploadText>
         </S.CenterContainer>
       </S.UploadRectangle>
       <input
         type='file'
-        type='file'
         ref={fileInputRef}
         style={{ display: 'none' }}
         onChange={handleFileChange}
       />
-      {uploading && <p>업로드 중...</p>}
       {uploading && <p>업로드 중...</p>}
     </S.UploadGroup>
   );

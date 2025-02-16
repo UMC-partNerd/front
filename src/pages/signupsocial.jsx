@@ -25,13 +25,12 @@ const SignUpSocialPage = () =>{
         marketingConsent: true,
         marketingNotify: true,
     });
-
     //닉네임 체크 상태
     const [isNicknameChecked, setIsNicknameChecked] = useState(false);
     // 약관 체크 상태
     const [isAgreementChecked, setIsAgreementChecked] = useState(false);
 
-        // 사용자 데이터 업데이트
+    // 사용자 데이터 업데이트
     const handleUserDataChange = (data) => {
         setUserData(data);
     };
@@ -52,9 +51,12 @@ const SignUpSocialPage = () =>{
     };
 
     //입력 필드 채워진 경우, or 닉네임 체크 한 경우에만 버튼 활성화 로직 
-    const isFormValid = userData.name && userData.birthDate && userData.nickname && isNicknameChecked && isAgreementChecked;
-
-
+    const isFormValid = userData.name && 
+                        userData.birthDate && 
+                        userData.nickname && 
+                        isNicknameChecked && 
+                        isAgreementChecked;
+                        
     // 완료 버튼 클릭 시 데이터 전송
     const handleSubmit = async () => {
         try {
@@ -118,13 +120,9 @@ const SignUpSocialPage = () =>{
     //     console.log("isFormValid:", isValid);
     // }, [userData, isNicknameChecked, isAgreementChecked]);
 
-
     return(
         <main className="loginPage">
             <MainWrapp>
-                <RegisterHeader onChange={handleUserDataChange}  onNicknameCheck={handleNicknameCheck}/>
-                <Agreement onChange={handleAgreementsChange} onAgreementCheck={handleAgreementCheck}/>
-                <CompleteButton onClick={handleSubmit}  disabled={!isFormValid}>완료</CompleteButton>
                 <RegisterHeader onChange={handleUserDataChange}  onNicknameCheck={handleNicknameCheck}/>
                 <Agreement onChange={handleAgreementsChange} onAgreementCheck={handleAgreementCheck}/>
                 <CompleteButton onClick={handleSubmit}  disabled={!isFormValid}>완료</CompleteButton>
@@ -136,8 +134,6 @@ const SignUpSocialPage = () =>{
 const CompleteButton = styled.button`
     width: 70%;
     max-width:420px;
-    width: 70%;
-    max-width:420px;
     height: 50px;
     color: white;
     font-size: 16px;
@@ -145,7 +141,6 @@ const CompleteButton = styled.button`
     border: none;
     cursor: pointer;
     margin-top: 30px;
-    background:${({disabled}) =>(disabled ? "#A0A0A0" : "#0D29B7")};
     background:${({disabled}) =>(disabled ? "#A0A0A0" : "#0D29B7")};
     border-radius: 4px;
 `;
