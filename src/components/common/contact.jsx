@@ -13,45 +13,69 @@ const PersonalContact = ({profileImageUrl, nickname, explan, intro}) =>{
 
     return(
         <Container>
-            <LeftContainer>
-                <SubContainer>
-                    <ImageComp 
-                    src={profileImageUrl}
-                        alt = "프로필 이미지"
-                    />
-                    <NameField>
-                        <Name>{nickname || "이름 없음"}</Name>
-                        <Explan>{explan||"설명"}</Explan>
-                    </NameField>
-                </SubContainer>
-            {isPersonalPage ? (
-                <Button
-                    styled={{fontSize:'5px'}}
-                    type={TYPES.YES}
-                    text='채팅'
-                    onClick={onClickHandler}
-                />
-            ) : (
-                <Button
-                    styled={{fontSize:'5px'}}
-                    type={TYPES.YES}
-                    text='채팅'
-                    onClick={onClickHandler}
-                />
-            )}
+            <TopContainer>
+                {/* 이미지 */}
+                <ImageComp 
+                        src={profileImageUrl}
+                            alt = "프로필 이미지"
+                        />
+                <CenterContainer>
+                        <NameField>
+                            <Name>{nickname || "이름 없음"}</Name>
+                            <Explan>{explan||"설명"}</Explan>
+                        </NameField>
+                    
+                </CenterContainer>
+                {isPersonalPage ? (
+                    <ButtonWrapper>
+                    <Button
+                        styled={{fontSize:'5px'}}
+                        type={TYPES.YES}
+                        text='채팅'
+                        onClick={onClickHandler}
+                    /></ButtonWrapper>
+                ) : (
+                    <ButtonWrapper>
+                    <Button
+                        styled={{fontSize:'5px'}}
+                        type={TYPES.YES}
+                        text='채팅'
+                        onClick={onClickHandler}
+                    /></ButtonWrapper>
+                )}
+            </TopContainer>
             
-            </LeftContainer>
-            {intro && <>
+            {intro && <BottomContainer>
                         <Divider />
                         <IntroText>{intro}</IntroText>
-                    </>}
+                    </BottomContainer>}
         </Container>
     )
 }
 
-const LeftContainer = styled.div`
+const BottomContainer = styled.div`
+display:flex;
+width:62%;
+flex-direction:column;
+
+`
+
+const ButtonWrapper = styled.div`
+    margin-left: auto; /* 버튼을 오른쪽 끝으로 이동 */
+`;
+
+const TopContainer = styled.div`
 display:flex;
 flex-direction:row;
+align-items:center;
+width: 100%;  
+justify-content: flex-start; 
+
+`
+
+const CenterContainer = styled.div`
+display:flex;
+flex-direction:column;
 `
 
 const Divider = styled.hr`
@@ -86,12 +110,13 @@ align-items:center;
 const NameField = styled.div`
 display:flex;
 flex-direction:column;
-margin-left:20px;
+margin-left:15px;
 `
 
 const Container = styled.main`
 width: 100%;
-height: 110px;
+max-width:405px;
+min-height: 110px;
 background: #FFFFFF;
 box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
 border-radius: 8px;
@@ -108,10 +133,11 @@ const ImageComp = styled.img`
 object-fit: cover;
 border-radius: 50%;
 background:gray;
-min-width: 70px; /* 최소 너비를 고정 */
-  max-width: 70px; /* 최대 너비를 고정 */
-  min-height: 70px; /* 최소 높이를 고정 */
-  max-height: 70px; /* 최대 높이를 고정 */
+width: 50px; /* 최소 너비를 고정 */
+  max-width: 50px; /* 최대 너비를 고정 */
+  min-height: 50px; /* 최소 높이를 고정 */
+  max-height: 50px; /* 최대 높이를 고정 */
+margin-left:0;
 `
 
 export default PersonalContact;
