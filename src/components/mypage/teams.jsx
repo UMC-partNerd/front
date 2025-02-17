@@ -5,13 +5,19 @@ import { ClubContainer, CardGrid, ClubCard, ImagePlaceholder, CardContent,
 } from "../../styled-components/styled-Club";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import useMypageImg from "../../hooks/useMypagesProfileImg";
+
 
 const MyTeamsComp = () => {
+    
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+    const [clubImages, setClubImages] = useState({}); // 이미지 URL 저장
     const [clubs, setClub] = useState([]);
     const [loading, setLoading] = useState(false); // 로딩 상태
     const [error, setError] = useState(null); // 에러 상태
+
+    
 
     const fetchClubs = async () =>{
         try{
@@ -55,38 +61,34 @@ const MyTeamsComp = () => {
             {/* 에러 메시지 표시 */}
             {error && <p style={{ color: "red" }}>{error}</p>}
 
-            {/* <CardGrid>
-                {homeData.clubs.map((club, index) => (
-                    <ClubCard key={index}>
-                        <ImagePlaceholder>
-                            <img src={club.imageUrl} alt={club.name} />
-                        </ImagePlaceholder>
-                        <CardContent>
-                            <CategoryBadge>{club.categoryName}</CategoryBadge>
-                            <ClubTitle>{club.name}</ClubTitle>
-                            <Description>{club.intro}</Description>
-                        </CardContent>
-                    </ClubCard>
-                ))}
-            </CardGrid> */}
+            
             <CardGrid>
-                {!loading && !error && clubs.length > 0 ? (
-                    clubs.map((club) => (
-                        <ClubCard key={club.clubId}>
-                            <ImagePlaceholder>
-                                {/* 이미지 URL 생성 */}
-                                <img
-                                    src={`${API_BASE_URL}/${club.profileKeyName}`}
-                                    alt={club.name}
-                                />
-                            </ImagePlaceholder>
-                            <CardContent>
-                                <CategoryBadge>{club.category}</CategoryBadge>
-                                <ClubTitle>{club.name}</ClubTitle>
-                                <Description>{club.intro}</Description>
-                            </CardContent>
-                        </ClubCard>
-                    ))
+            {!loading && !error && clubs.length > 0 ? (
+                    clubs.map((club) => {
+                        const clubImage = clubImages[club.clubId] || {};
+
+                        return (
+                            <ClubCard key={club.clubId}>
+                                <ImagePlaceholder>
+                                    {clubImage.isLoading ? (
+                                        <p>이미지 로딩 중...</p>
+                                    ) : clubImage.error ? (
+                                        <p style={{ color: "red" }}>이미지를 불러올 수 없습니다.</p>
+                                    ) : (
+                                        <img 
+                                            src={clubImage.profileImageUrl || "/default-image.png"} 
+                                            alt={club.name} 
+                                        />
+                                    )}
+                                </ImagePlaceholder>
+                                <CardContent>
+                                    <CategoryBadge>{club.category}</CategoryBadge>
+                                    <ClubTitle>{club.name}</ClubTitle>
+                                    <Description>{club.intro}</Description>
+                                </CardContent>
+                            </ClubCard>
+                        );
+                    })
                 ) : (
                     !loading && !error && <p>등록된 팀이 없습니다.</p>
                 )}

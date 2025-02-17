@@ -4,6 +4,7 @@ import { MainWrapp, Title, PersonalField, StyledHr, SubTitle, SubupSec } from ".
 import { Subup } from "../../styles/registerstyles";
 import { useNavigate } from "react-router-dom";
 import { Input } from "../../styles/registerstyles";
+import PersonalProject from "./PersonalProject";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -186,15 +187,15 @@ const PersonalEditComp = () => {
                 }}
             ></Input>
 
-            <PersonalField>
+            <PersonalField >
                 <Subup>등록한 프로젝트</Subup>
                 <StyledHr />
-                <SubupSec style={{ marginTop: '50px', justifyContent: 'center', display: 'flex' }}>
-                    {"등록한 프로젝트가 없습니다"}
-                </SubupSec>
+                <CardWrapp>
+                    <PersonalProject />
+                </CardWrapp>
             </PersonalField>
 
-            <PersonalField>
+            <PersonalField style ={{marginTop:'140px'}}>
                 <Subup>경력</Subup>
                 <StyledHr />
                 <InputArea placeholder="인턴쉽 경험 등 자신의 경력에 대해 작성해주세요"
@@ -204,8 +205,8 @@ const PersonalEditComp = () => {
                 </InputArea>
             </PersonalField>
 
-            <PersonalField>
-                <Subup>학력</Subup>
+            <PersonalField >
+                <Subup >학력</Subup>
                 <StyledHr />
                 <InputArea placeholder="자신의 학력 및 교육 경험에 대해 작성해주세요"
                 value={education}
@@ -295,6 +296,15 @@ const PersonalEditComp = () => {
         </MainWrapp>
     )
 }
+
+const CardWrapp = styled.main`
+display:flex;
+margin-bottom:60px;
+width:100%;
+flex-wrap:wrap;
+max-height:20%;
+position:relative;
+`
 
 const ListContainer = styled.div`
 display:flex;

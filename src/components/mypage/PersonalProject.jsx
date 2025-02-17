@@ -1,20 +1,26 @@
 import { ClubContainer, CardGrid, ClubCard, ImagePlaceholder, CardContent,
-    CategoryBadge, ClubTitle, Description
+    CategoryBadge, ClubTitle, Description,
+    CardGridPersonal
 } from "../../styled-components/styled-Club";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { SubupSec } from "../../styles/mypagestyles";
+import { SlArrowLeft } from "react-icons/sl";
+import { SlArrowRight } from "react-icons/sl";
 
 const PersonalProject = () => {
 
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const pageSize = 4; //한 페이지 당 프로젝트 개수 
 
     const [projects, setProject] = useState([]);
     const [loading, setLoading] = useState(false); // 로딩 상태
     const [error, setError] = useState(null); // 에러 상태
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
-    const fetchProjects = async () =>{
+    const fetchProjects = async (pageNumber) =>{
         try{
             const jwtToken = localStorage.getItem("jwtToken"); 
 
@@ -26,7 +32,7 @@ const PersonalProject = () => {
 
             const response = await axios.get(`${API_BASE_URL}/api/project/promotion/personal`, 
                 {
-                    params: { page: 1 },
+                    params: { page: pageNumber, pageSize },
                     headers:{
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${jwtToken}`,
@@ -35,6 +41,10 @@ const PersonalProject = () => {
 
             console.log("마이페이지-퍼스널페이지:프로젝트", response.data.result);
             setProject(response.data.result?.promotionProjectPreviewDTOList || []);
+
+            //페이지 수 계산
+            const totalElements = response.data.result?.totalElements || 0;
+            setTotalPages(Math.ceil(totalElements / pageSize));
         }catch (error) {
             console.error("게시글 불러오기 실패:", error);
             setError("게시글을 불러오는 중 오류가 발생했습니다.");
@@ -44,8 +54,22 @@ const PersonalProject = () => {
     }
 
     useEffect(() => {
-        fetchProjects();
-    }, []);
+        fetchProjects(page);
+    }, [page]);
+
+
+    //이전 페이지로 이동 
+    const handlePrevPage = () =>{
+        if(page >1) 
+            setPage(page -1);
+    }
+
+     // 다음 페이지 이동
+    const handleNextPage = () => {
+        if (page < totalPages) {
+            setPage(page + 1);
+        }
+    };
 return(
     <CardWrapp>
         {/* 로딩 상태 표시 */}
@@ -62,10 +86,15 @@ return(
         )}
 
         <SelectButtonWrapp>
-            
+            <SelectButton
+                onClick={handlePrevPage} disabled = {page ===1}
+            ><SlArrowLeft size="0.7em"/></SelectButton>
+            <SelectButton
+                onClick={handleNextPage} disabled = {page === totalPages}
+            >< SlArrowRight size="0.7em"/></SelectButton>
         </SelectButtonWrapp>
 
-        <CardGrid>
+        <CardGridPersonal>
             {!loading && !error && projects.length > 0 ? (
                 projects.map((project) => (
                     <ClubCard key={project.promotionProjectId}>
@@ -83,35 +112,38 @@ return(
                     </ClubCard>
                 ))
             ) : null}
-        </CardGrid>
+        </CardGridPersonal>
     </CardWrapp>
 )
 }
 
 const SelectButton = styled.div`
-
-position: absolute;
-width: 46px;
-height: 46px;
-left: 1445px;
-top: 758px;
-
-filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.15));
-transform: matrix(-1, 0, 0, 1, 0, 0);
-
+display:flex;
+justify-content:center;
+align-items:center;
+background: #FFFFFF;
+width:30px;
+height:30px;
+border-radius:50%;
+filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.15));
+cursor:pointer;
 
 `
 
 const SelectButtonWrapp = styled.div`
 display:flex;
-flex-direction:end;
+justify-content:end;
+margin-bottom:15px;
+gap:20px;
 
 `
 
 const CardWrapp = styled.main`
 display:flex;
-margin-bottom:30px;
+margin-bottom:10px;
 flex-direction:column;
+width:100%;
+max-height:40px;
 
 `
 

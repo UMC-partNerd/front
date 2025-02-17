@@ -6,6 +6,8 @@ const useMypageImg = (profileKeyName) => {
     const [profileImageUrl, setProfileImageUrl] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    
     const getProfileImageUrl = useCallback(async () => {
         if (!profileKeyName) {
             console.error("profileKeyName이 설정되지 않았습니다.");
@@ -14,8 +16,11 @@ const useMypageImg = (profileKeyName) => {
         }
     
         try {
+            const encodedKeyName = encodeURIComponent(decodeURIComponent(profileKeyName));
+            console.log(`🔄 요청하는 파일명: ${encodedKeyName}`);
+
             const response = await axios.get(
-                `${API_BASE_URL}/api/s3/preSignedUrl?keyName=${encodeURIComponent(profileKeyName)}` //encodeURIComponent(
+                `${API_BASE_URL}/api/s3/preSignedUrl?keyName=${encodedKeyName}` //encodeURIComponent(
             );
     
             if (response.data?.result?.cloudFrontUrl) {
@@ -35,9 +40,9 @@ const useMypageImg = (profileKeyName) => {
     // 프로필 이미지 가져오기 실행
     useEffect(() => {
         if (profileKeyName) {
-            getProfileImageUrl(profileKeyName, "jpeg");
+            getProfileImageUrl();
         }
-    }, [profileKeyName]);
+    }, [profileKeyName, getProfileImageUrl]);
 
     return { profileImageUrl, isLoading, error };
 
