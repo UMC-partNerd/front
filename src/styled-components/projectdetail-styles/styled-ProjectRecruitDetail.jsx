@@ -77,7 +77,7 @@ export const SFormWrapper = styled.div`
   width: 100%;
   max-width: 1200px; 
   margin: 0 auto; 
-  gap: 30px;  
+  gap: 20px;  
 `;
 
 export const SFormContainer = styled.div`

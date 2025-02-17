@@ -1,17 +1,26 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-const useBannerPhoto = (folderName, bannerImageFile, mainImageFile, eventImageFiles, thumbnailImageFile, introImageFile) => {
+const useBannerPhoto = (
+  folderName,
+  bannerImageFile,
+  mainImageFile,
+  eventImageFiles,
+  thumbnailImageFile,
+  introImageFile,
+  profileImageFile // 추가된 부분
+) => {
   const [bannerPhotoUrl, setBannerPhotoUrl] = useState(null);
   const [mainPhotoUrl, setMainPhotoUrl] = useState(null);
   const [eventPhotoUrls, setEventPhotoUrls] = useState([]);
   const [thumbnailPhotoUrl, setThumbnailPhotoUrl] = useState(null);
   const [introPhotoUrl, setIntroPhotoUrl] = useState(null);
+  const [profilePhotoUrl, setProfilePhotoUrl] = useState(null); // 프로필 사진 상태 추가
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const fetchPhotoUrl = useCallback(async (keyName) => {
-    console.log('Fetching URL for keyName:', keyName); 
+    console.log('Fetching URL for keyName:', keyName);
     try {
       const encodedKeyName = encodeURIComponent(keyName);
       const response = await axios.get(
@@ -23,18 +32,17 @@ const useBannerPhoto = (folderName, bannerImageFile, mainImageFile, eventImageFi
         }
       );
       console.log('API Response:', response.data); // API 응답 확인
-  
+
       if (response.data && response.data.result && response.data.result.cloudFrontUrl) {
         return response.data.result.cloudFrontUrl;
       } else {
         throw new Error('이미지 URL을 찾을 수 없습니다.');
       }
     } catch (err) {
-      console.error("Error fetching URL:", err); 
+      console.error("Error fetching URL:", err);
       throw new Error('이미지 데이터를 불러오는 중 오류가 발생했습니다.');
     }
   }, []);
-  
 
   useEffect(() => {
     const fetchPhotos = async () => {
@@ -63,11 +71,17 @@ const useBannerPhoto = (folderName, bannerImageFile, mainImageFile, eventImageFi
           setThumbnailPhotoUrl(thumbnailUrl);
         }
 
-        // 인트로 이미지 처리 (중요)
+        // 인트로 이미지 처리
         if (introImageFile) {
-          console.log('Requesting intro image URL with keyName:', introImageFile); 
+          console.log('Requesting intro image URL with keyName:', introImageFile);
           const introUrl = await fetchPhotoUrl(introImageFile);
           setIntroPhotoUrl(introUrl);
+        }
+
+        // 프로필 이미지 처리
+        if (profileImageFile) {
+          const profileUrl = await fetchPhotoUrl(profileImageFile);
+          setProfilePhotoUrl(profileUrl);
         }
       } catch (err) {
         setError(err.message);
@@ -81,13 +95,31 @@ const useBannerPhoto = (folderName, bannerImageFile, mainImageFile, eventImageFi
       mainImageFile || 
       (eventImageFiles && eventImageFiles.length > 0) ||
       thumbnailImageFile || 
-      introImageFile 
+      introImageFile ||
+      profileImageFile // 프로필 이미지 추가
     ) {
       fetchPhotos();
     }
-  }, [bannerImageFile, mainImageFile, eventImageFiles, thumbnailImageFile, introImageFile, fetchPhotoUrl]);
+  }, [
+    bannerImageFile,
+    mainImageFile,
+    eventImageFiles,
+    thumbnailImageFile,
+    introImageFile,
+    profileImageFile,
+    fetchPhotoUrl
+  ]);
 
-  return { bannerPhotoUrl, mainPhotoUrl, eventPhotoUrls, thumbnailPhotoUrl, introPhotoUrl, isLoading, error };
+  return { 
+    bannerPhotoUrl, 
+    mainPhotoUrl, 
+    eventPhotoUrls, 
+    thumbnailPhotoUrl, 
+    introPhotoUrl,
+    profilePhotoUrl,  // 프로필 이미지 URL 반환
+    isLoading, 
+    error 
+  };
 };
 
 export default useBannerPhoto;

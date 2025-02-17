@@ -14,14 +14,13 @@ export const SReplyWrapper = styled.div`
   margin-bottom: 8px;
 `;
 
-export const SProfileImageReply = styled.div`
-  width: 30px;
-  height: 30px;
+export const SProfileImageReply = styled.img`
+  width: 35px;
+  height: 35px;
   flex-shrink: 0;
   border-radius: 50%;
-  background-color: lightgray;
-  margin-right: 10px;
-  margin-top: 10px;
+  margin-right: 15px;
+  object-fit: cover;  
 `;
 
 export const SReplyContent = styled.div`
