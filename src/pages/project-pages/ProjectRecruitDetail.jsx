@@ -325,4 +325,3 @@ const ProjectRecruitDetail = () => {
 
 export default ProjectRecruitDetail;
 
-

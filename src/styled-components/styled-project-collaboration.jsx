@@ -18,6 +18,13 @@ export const ProjectCard = styled.div`
   border: 1px solid #EAEAEA;
   border-radius: 8px;
   overflow: hidden;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 export const ImagePlaceholder = styled.div`

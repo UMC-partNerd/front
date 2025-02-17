@@ -53,36 +53,46 @@ export const usePartnerSearch = (category = '전체', order = 'recent', page = 1
     const fetchPartners = async () => {
       try {
         setIsLoading(true);
-        const params = new URLSearchParams({
-          categoryID: CATEGORY_MAPPING[category],
-          order: order.toLowerCase(),
-          page: page.toString()
-        });
-
-        const headers = {
-          'Authorization': `Bearer ${import.meta.env.VITE_JWT_TOKEN}`,
-          'Content-Type': 'application/json'
-        };
-
-        const response = await fetch(`${BASE_URL}/api/partnerd?${params}`, {
-          headers: headers
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        
+        const token = localStorage.getItem('jwtToken');
+        
+        if (!token) {
+          alert('로그인이 필요합니다.');
+          setError('로그인이 필요합니다.');
+          return;
         }
 
-        const data = await response.json();
-        console.log('Original API Response:', data);
+        const params = new URLSearchParams({
+          page: page.toString(),
+          sort: order === 'recent' ? 'latest' : 'popular'
+        });
 
-        // 이미지 URL 처리
-        const processedData = await processImageUrls(data.result);
-        console.log('Processed Data with Images:', processedData);
+        if (category !== '전체') {
+          params.append('categoryID', CATEGORY_MAPPING[category]);
+        }
 
-        setPartners(processedData || []);
+        const response = await api.get(`/api/partnerd?${params}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        // 응답 데이터 확인
+        if (!response.data.isSuccess) {
+          throw new Error(response.data.message || '데이터를 불러오는데 실패했습니다.');
+        }
+
+        // API 응답의 result 배열 처리
+        const processedData = await processImageUrls(response.data.result);
+        setPartners(processedData);
+        
       } catch (err) {
-        console.error('Error fetching partners:', err);
-        setError(err);
+        console.error('Error:', err);
+        if (err.response?.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+        }
+        setError(err.message || '데이터를 불러오는데 실패했습니다.');
       } finally {
         setIsLoading(false);
       }

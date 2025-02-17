@@ -3,8 +3,9 @@ import { InputPass,NicknameWrapper,Form, FieldGroup, Subup, Input, Subdown, Nick
 import { useState } from "react"
 import { useEffect } from "react"
 import axios from "axios"
+import NicknameField from "./NicknameCheck"
 
-const RegisterHeader = ({onChange , onNicknameCheck}) => {
+const RegisterHeader = ({ onChange, onNicknameCheck = () => {} }) => {
 
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -26,7 +27,9 @@ const RegisterHeader = ({onChange , onNicknameCheck}) => {
         if (name === "nickname") {
             setIsNicknameAvailable(null); // 닉네임 변경 시 상태 초기화
             setIsNicknameChecked(false);
-            onNicknameCheck(false);
+            if (typeof onNicknameCheck === "function") {
+                onNicknameCheck(false);
+            }
         }
         onChange(updatedData); // 부모로 데이터 전달
     };
@@ -65,7 +68,9 @@ const RegisterHeader = ({onChange , onNicknameCheck}) => {
                 },
             });
             setIsNicknameChecked(true);
-            onNicknameCheck(true);
+            if (typeof onNicknameCheck === "function") {
+                onNicknameCheck(true);
+            }
 
             console.log("닉네임이 중복이면 true", response.data.result);
 
@@ -78,7 +83,9 @@ const RegisterHeader = ({onChange , onNicknameCheck}) => {
             console.error("닉네임 중복 확인 오류:", error);
             setIsNicknameAvailable(null);
             setIsNicknameChecked(false);
-            onNicknameCheck(false);
+            if (typeof onNicknameCheck === "function") {
+                onNicknameCheck(false);
+            }
         }
     };
 
@@ -105,30 +112,40 @@ const RegisterHeader = ({onChange , onNicknameCheck}) => {
                 />
                 <Subdown>년 / 월 / 일을 입력해주세요.</Subdown>
             </FieldGroup>
+            
+            {/* <FieldGroup>
+                    <Subup>닉네임</Subup>
+                    <NicknameWrapper  isAvailable={isNicknameAvailable}>
+                    <InputPass placeholder="2자 이상 입력해주세요" 
+                    type="text"
+                    name="nickname" 
+                    value={formData.nickname}
+                    onChange={handleChange}
+                    
+                    />
+                    <NicknameCheck isAvailable={isNicknameAvailable} onClick={handleNicknameSubmit}>
+                    중복확인
+                    </NicknameCheck>
+                    </NicknameWrapper>
+                    
+                    {formData.nickname.length <2 ? (
+                        <Subdown >
+                        닉네임은 2글자 이상이어야 합니다.</Subdown>
+                    ) : isNicknameAvailable === null ? (
+                        <Subdown>닉네임은 중복일 수 없습니다.</Subdown>
+                    ) : isNicknameAvailable ? (
+                        <Subdown style={{ color: "#08D485" }}>사용 가능한 닉네임입니다.</Subdown>
+                    ) : (
+                        <Subdown>중복된 닉네임 입니다.</Subdown>
+                    )}
+                </FieldGroup> */}
 
-            <FieldGroup>
-                <Subup>닉네임</Subup>
-                <NicknameWrapper  isAvailable={isNicknameAvailable}>
-                <InputPass placeholder="2자 이상 입력해주세요" 
-                type="text"
-                name="nickname" 
+            <NicknameField 
                 value={formData.nickname}
                 onChange={handleChange}
-                
+                onNicknameCheck={onNicknameCheck}
+                currentNickname={formData.nickname}
                 />
-                <NicknameCheck isAvailable={isNicknameAvailable} onClick={handleNicknameSubmit}>
-                중복확인
-                </NicknameCheck>
-                </NicknameWrapper>
-                
-                {isNicknameAvailable === null ? (
-                    <Subdown>닉네임은 중복일 수 없습니다.</Subdown>
-                ) : isNicknameAvailable ? (
-                    <Subdown style={{ color: "#08D485" }}>사용 가능한 닉네임입니다.</Subdown>
-                ) : (
-                    <Subdown>중복된 닉네임 입니다.</Subdown>
-                )}
-            </FieldGroup>
 
             <FieldGroup>
                 <Subup>이메일</Subup>
