@@ -5,8 +5,7 @@ import { ClubContainer, CardGrid, ClubCard, ImagePlaceholder, CardContent,
 } from "../../styled-components/styled-Club";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import useMypageImg from "../../hooks/useMypagesProfileImg";
-
+import { useHomeData } from "../../hooks/useHomeData";
 
 const MyTeamsComp = () => {
     
@@ -16,7 +15,7 @@ const MyTeamsComp = () => {
     const [clubs, setClub] = useState([]);
     const [loading, setLoading] = useState(false); // 로딩 상태
     const [error, setError] = useState(null); // 에러 상태
-
+    const {homeData, isLoading} = useHomeData();
     
 
     const fetchClubs = async () =>{

@@ -2,10 +2,11 @@ import axios from "axios";
 import { useEffect, useState, useCallback } from "react";
 
 const useMypageImg = (profileKeyName) => {
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const API_BASE_URL = `https://api.partnerd.site`;
     const [profileImageUrl, setProfileImageUrl] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [imageType, setImageType] = useState("image/jpeg"); // 기본 MIME 타입 설정
 
     
     const getProfileImageUrl = useCallback(async () => {
@@ -23,13 +24,24 @@ const useMypageImg = (profileKeyName) => {
                 `${API_BASE_URL}/api/s3/preSignedUrl?keyName=${encodedKeyName}` //encodeURIComponent(
             );
     
-            if (response.data?.result?.cloudFrontUrl) {
-                setProfileImageUrl(response.data.result.cloudFrontUrl);
-            } else {
-                throw new Error("이미지 URL을 찾을 수 없습니다.");
-            }
-    
-            console.log("이미지 불러오기 성공:", response.data.result.cloudFrontUrl);
+                if (response.data?.result?.cloudFrontUrl) {
+                const url = response.data.result.cloudFrontUrl;
+                setProfileImageUrl(url);
+
+                // 🔍 확장자로 MIME 타입 추정
+                const extension = url.split('.').pop().toLowerCase();
+                let mimeType = "image/jpeg"; // 기본값
+                
+                if (extension === "png") mimeType = "image/png";
+                if (extension === "jpg" || extension === "jpeg") mimeType = "image/jpeg";
+                if (extension === "gif") mimeType = "image/gif";
+                if (extension === "webp") mimeType = "image/webp";
+
+                setImageType(mimeType);
+                } else {
+                    throw new Error("이미지 URL을 찾을 수 없습니다.");
+                }
+                console.log("✅ 이미지 불러오기 성공:", response.data.result.cloudFrontUrl);
         } catch (err) {
             console.error("이미지 데이터를 불러오는 중 오류 발생:", err);
             setError("이미지 데이터를 불러오는 중 오류가 발생했습니다.");
@@ -44,7 +56,7 @@ const useMypageImg = (profileKeyName) => {
         }
     }, [profileKeyName, getProfileImageUrl]);
 
-    return { profileImageUrl, isLoading, error };
+    return { profileImageUrl, isLoading, error , imageType};
 
 }
 
