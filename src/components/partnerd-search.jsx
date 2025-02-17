@@ -147,7 +147,6 @@ const PartnerSearch = () => {
             인기순
           </SortButton>
         </SortContainer>
-
         <Button    
           type={TYPES.PLUS}
           sign='true'
