@@ -183,17 +183,19 @@ const ProjectPromoteDetail = () => {
   // 댓글 수정 함수 (PATCH)
   const handleUpdateComment = async (commentId, newText) => {
     const jwtToken = localStorage.getItem('jwtToken');
-
+  
     if (!jwtToken) {
       alert("로그인을 해주세요!");
       return;
     }
-
+  
     if (!newText || newText.trim() === "") {
       alert("댓글 내용을 입력해주세요!");
       return;
     }
-
+  
+    console.log("업데이트할 댓글 ID:", commentId);  // commentId가 제대로 전달되는지 로그로 확인
+  
     try {
       const response = await axios.patch(
         `https://api.partnerd.site/api/project/promotion/comment/${commentId}`,
@@ -205,16 +207,16 @@ const ProjectPromoteDetail = () => {
           },
         }
       );
-
+  
       if (response.data.isSuccess) {
         const updatedComment = response.data.result;
-
+  
         const updatedComments = comments.map((comment) =>
           comment.projectCommentId === updatedComment.projectCommentId
             ? { ...comment, contents: updatedComment.contents }
             : comment
         );
-
+  
         setComments(updatedComments);
         console.log('댓글 수정 성공:', updatedComment);
       } else {
@@ -224,6 +226,7 @@ const ProjectPromoteDetail = () => {
       console.error('댓글 수정 중 오류 발생:', error);
     }
   };
+  
 
   // 삭제 버튼 클릭 시 첫 번째 모달 띄우기
   const buttonHandler = () => {
@@ -291,8 +294,8 @@ const ProjectPromoteDetail = () => {
         <ProjectCommentList
           comments={comments}
           onReply={handleAddReply}
-          onDelete={handleDeleteComment} // 댓글 삭제
-          onUpdate={handleUpdateComment} // 댓글 수정
+          onDelete={handleDeleteComment} 
+          onUpdate={handleUpdateComment} 
         />
       </S.SProjectCommentListWrapper>
     </S.SContainer>

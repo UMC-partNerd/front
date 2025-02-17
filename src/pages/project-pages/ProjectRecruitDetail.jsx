@@ -11,6 +11,7 @@ import useBannerPhoto from '../../hooks/useBannerPhoto';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
 
 const DefaultImage = '/default-image.png';
+const DefaultProfileImage = '/default-profile.png'; 
 
 const ProjectRecruitDetail = () => {
   const { recruitProjectId } = useParams();
@@ -63,6 +64,8 @@ const ProjectRecruitDetail = () => {
   if (introPhotoUrl) {
     images.unshift(introPhotoUrl);
   }
+
+  const profileKeyName = projectData?.user?.profileImageUrl || DefaultProfileImage;
 
   // 댓글 추가 함수 (POST)
   const handleAddComment = async (newComment, type) => {
@@ -312,6 +315,7 @@ const ProjectRecruitDetail = () => {
           onDelete={(commentId) => handleDeleteComment(commentId)}  // 댓글 삭제
           onUpdate={(commentId, newText, type) => handleUpdateComment(commentId, newText, type)}
           type="recruit"
+          profileImageUrl={profileKeyName}
         />
       </S.SProjectCommentListWrapper>
 

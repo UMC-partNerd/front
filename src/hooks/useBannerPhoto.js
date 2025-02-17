@@ -8,14 +8,14 @@ const useBannerPhoto = (
   eventImageFiles,
   thumbnailImageFile,
   introImageFile,
-  profileImageFile // 추가된 부분
+  profileImageFile 
 ) => {
   const [bannerPhotoUrl, setBannerPhotoUrl] = useState(null);
   const [mainPhotoUrl, setMainPhotoUrl] = useState(null);
   const [eventPhotoUrls, setEventPhotoUrls] = useState([]);
   const [thumbnailPhotoUrl, setThumbnailPhotoUrl] = useState(null);
   const [introPhotoUrl, setIntroPhotoUrl] = useState(null);
-  const [profilePhotoUrl, setProfilePhotoUrl] = useState(null); // 프로필 사진 상태 추가
+  const [profilePhotoUrl, setProfilePhotoUrl] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -96,7 +96,7 @@ const useBannerPhoto = (
       (eventImageFiles && eventImageFiles.length > 0) ||
       thumbnailImageFile || 
       introImageFile ||
-      profileImageFile // 프로필 이미지 추가
+      profileImageFile 
     ) {
       fetchPhotos();
     }
@@ -116,7 +116,7 @@ const useBannerPhoto = (
     eventPhotoUrls, 
     thumbnailPhotoUrl, 
     introPhotoUrl,
-    profilePhotoUrl,  // 프로필 이미지 URL 반환
+    profilePhotoUrl, 
     isLoading, 
     error 
   };

@@ -1,3 +1,4 @@
+// ProjectCommentList.jsx
 import React from 'react';
 import styled from 'styled-components';
 import ProjectComment from './ProjectComment';
@@ -7,7 +8,7 @@ const ProjectCommentListWrapper = styled.div`
   width: 600px;
 `;
 
-const ProjectCommentList = ({ comments, onReply, onDelete, onUpdate, type }) => {
+const ProjectCommentList = ({ comments, onReply, onDelete, onUpdate, type, profileImageUrl }) => {
   return (
     <ProjectCommentListWrapper>
       {comments.map((comment) => (
@@ -18,6 +19,7 @@ const ProjectCommentList = ({ comments, onReply, onDelete, onUpdate, type }) => 
           user={comment.user}
           date={comment.createdDate}
           replies={comment.children || []}
+          profileImageUrl={profileImageUrl} // 프로필 이미지 URL 전달
           onReply={(replyText) => {
             console.log("onReply 호출됨:", replyText);
             onReply(comment.projectCommentId, replyText, type);
@@ -30,8 +32,8 @@ const ProjectCommentList = ({ comments, onReply, onDelete, onUpdate, type }) => 
   );
 };
 
-
 export default ProjectCommentList;
+
 
 
 
