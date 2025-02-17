@@ -142,8 +142,8 @@ const ProjectCollaboration = () => {
               </CategoryBadge>
               <Title>{project.title}</Title>
               <Deadline>
-                {new Date(project.start_date).toLocaleDateString()} ~ 
-                {new Date(project.end_date).toLocaleDateString()}
+                {new Date(project.startDate).toLocaleDateString()} ~ 
+                {new Date(project.endDate).toLocaleDateString()}
               </Deadline>
             </CardContent>
           </ProjectCard>

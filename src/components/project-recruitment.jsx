@@ -168,18 +168,13 @@ const ProjectRecruitment = () => {
 
   const [openModal, setOpenModal] = useState(false);
 
-  // 버튼: 글 등록하기
+  const movetoRegister = () => {
+    navigate('/project/recruit/recruit-registration');
+    setOpenModal(false);
+  };
+
   const buttonHandler = () => {
     setOpenModal(true);
-  };
-
-  const movetoRegister = () => {
-    navigate('project/recruit/recruit-registration');
-    setOpenModal(flase);  
-  };
-
-  const handleRegisterClick = () => {
-    navigate('/project/recruit/register');
   };
 
   const handleCardClick = (projectId) => {
@@ -250,14 +245,13 @@ const ProjectRecruitment = () => {
             type={TYPES.PLUS}
             sign='true'
             text='글 등록하기'
-            onClick={buttonHandler} // handleRegisterClick
+            onClick={buttonHandler}
         />
       </SearchContainer>
       
       <CustomModal
         openModal={openModal} 
         closeModal={() => setOpenModal(false)}
-
         boldface='프로젝트 모집을 등록하시겠습니까?'
         regular='프로젝트의 리더로 프로젝트 페이지를 개설하여 프로젝트를 등록할 수 있습니다.'
         text='개설하기'

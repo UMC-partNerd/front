@@ -34,24 +34,11 @@ const PartnerSearch = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState(SORT_OPTIONS.RECENT);
   const [selectedCategory, setSelectedCategory] = useState('전체');
+  const [openModal, setOpenModal] = useState(false);
   const itemsPerPage = 12;
   const navigate = useNavigate();
 
   const { partners, isLoading, error } = usePartnerSearch(selectedCategory, sortBy, currentPage);
-
-  if (isLoading) {
-    return <div>로딩 중...</div>;
-  }
-
-  if (error) {
-    return <div>에러가 발생했습니다: {error.message}</div>;
-  }
-
-  const currentPartners = Array.isArray(partners) 
-    ? partners.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-    : [];
-
-  const totalPages = Math.ceil((partners?.length || 0) / itemsPerPage);
 
   const renderPageButtons = () => {
     const buttons = [];
@@ -107,18 +94,28 @@ const PartnerSearch = () => {
     return buttons;
   };
 
-  const [openModal, setOpenModal] = useState(false);
   const buttonHandler = () => {
     setOpenModal(true);
   };
 
-  // 모달: 동아리 등록하기
   const onClickHandler = async () => {
-    
     setOpenModal(false);
     navigate('/find/team-registration');
   };
 
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (error) {
+    return <div>에러가 발생했습니다: {error.message}</div>;
+  }
+
+  const currentPartners = Array.isArray(partners) 
+    ? partners.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+    : [];
+
+  const totalPages = Math.ceil((partners?.length || 0) / itemsPerPage);
 
   return (
     <PartnerSearchContainer>
