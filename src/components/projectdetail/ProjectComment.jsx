@@ -58,15 +58,15 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
     
     // 새로운 대댓글 객체 생성
     const newReply = {
-      contents: replyText,  // 대댓글 내용
-      nickname: displayName,  // 대댓글 작성자 닉네임
-      profileKeyName: profileKeyName,  // 프로필 이미지 URL
-      projectCommentId: commentId,  // 부모 댓글 ID
-      date: formattedDate,  // 대댓글 작성 날짜
+      contents: replyText,  
+      nickname: displayName,  
+      profileKeyName: profileKeyName,  
+      projectCommentId: commentId, 
+      date: formattedDate,  
     };
   
-    // 대댓글을 부모 컴포넌트로 전달 (onReply는 실제 서버 API 호출 함수로 대체해야 함)
-    onReply(replyText, commentId, type);  // 이제 replyText가 첫 번째로, 부모 댓글 ID가 두 번째로 전달됩니다.
+    // 대댓글을 부모 컴포넌트로 전달 
+    onReply(replyText, commentId, type); 
   
     // 대댓글을 UI에 추가
     setReplyList([...replyList, newReply]);
