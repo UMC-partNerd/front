@@ -147,7 +147,6 @@ const PartnerSearch = () => {
             인기순
           </SortButton>
         </SortContainer>
-        <RegisterButton>동아리 등록하기</RegisterButton>
 
         <Button    
           type={TYPES.PLUS}
