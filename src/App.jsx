@@ -110,12 +110,12 @@ const router = createBrowserRouter([
             element: <ProjectPromotion />,
           },
           {
-            path: 'recruit-registration',
+            path: 'recruit/recruit-registration',
             // element: <ProjectRecruitment />,
           },
           {
-            path: 'promote-registration',
-            // element: <ProjectPromotion />,
+            path: 'promote/promote-registration',
+            element: <PromotionRegister />,
           },
           {
             path: 'recruit/:recruitProjectId',

@@ -74,11 +74,7 @@ const ProjectPromotion = () => {
     setSortBy(newSortBy);
     setCurrentPage(1);
   };
-
-  const handleRegisterClick = () => {
-    navigate('/project/promote/register');
-  };
-
+  
   const handleCardClick = (promotionProjectId) => {
     navigate(`/project/promote/${promotionProjectId}`);
   };
@@ -143,8 +139,8 @@ const ProjectPromotion = () => {
   const buttonHandler = () => {
     setOpenModal(true);
   };
-  const movetoRegister = () => {
-    navigate('project/promote/promote-registration');
+  const handleRegisterClick = () => {
+    navigate('/project/promote/register');
     setOpenModal(flase);  
   };
 
@@ -198,7 +194,6 @@ const ProjectPromotion = () => {
             text='프로젝트 등록하기'
             onClick={buttonHandler}
           />        
-          <RegisterButton onClick={handleRegisterClick}>프로젝트 등록하기</RegisterButton>
         </ButtonContainer>
       </SectionHeader>
 
@@ -209,21 +204,9 @@ const ProjectPromotion = () => {
         boldface='프로젝트 홍보를 등록하시겠습니까?'
         regular='프로젝트의 리더로 프로젝트 페이지를 개설하여 프로젝트를 등록할 수 있습니다.'
         text='개설하기'
-        onClickHandler={movetoRegister}
+        onClickHandler={handleRegisterClick}
         variant={VERSIONS.VER3}
       />
-
-      <CustomModal
-        openModal={openModal} 
-        closeModal={() => setOpenModal(false)}
-
-        boldface='프로젝트 홍보를 등록하시겠습니까?'
-        regular='프로젝트의 리더로 프로젝트 페이지를 개설하여 프로젝트를 등록할 수 있습니다.'
-        text='개설하기'
-        onClickHandler={movetoRegister}
-        variant={VERSIONS.VER3}
-      />
-
       {loading ? (
         <div>로딩 중...</div>
       ) : (
