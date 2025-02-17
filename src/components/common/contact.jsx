@@ -32,6 +32,7 @@ const PersonalContact = ({profileImageUrl, nickname, explan, intro}) =>{
                         <Explan>{explan||"설명"}</Explan>
                     </NameField>
                 </SubContainer>
+                
             {isPersonalPage ? (
                 <Button
                     styled={{fontSize:'5px'}}

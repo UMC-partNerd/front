@@ -11,7 +11,6 @@ export const TYPES = {
   PLUS: 'plus',
   YES: 'yes',     // 승인: 파랑
   NO: 'no'        // 거절: 흰색
-
 };
 
 // import Button, { TYPES } from "../common/button";

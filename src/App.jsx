@@ -29,6 +29,8 @@ import PersonalEditComp from './components/mypage/PersonalEditComp';
 import MyPagePersonalEdit from './pages/mypages/Personal-EditPage';
 
 import ManageWindow from './components/mypage/member-manage/manageWindow';
+import MemberList from './components/mypage/member-manage/memberList';
+import Member from './components/mypage/member-manage/member';
 
 const router = createBrowserRouter([
   {
@@ -166,7 +168,9 @@ const router = createBrowserRouter([
       },
       {
         path: 'test',
-        element: <ManageWindow />,
+        // element: <ManageWindow />,
+        // element: <Member />,
+        element: <MemberList />,
       },
     ],
   },
