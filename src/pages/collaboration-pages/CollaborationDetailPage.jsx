@@ -180,7 +180,6 @@ const CollaborationDetailPage = () => {
     setOpenModal(false);
   };
 
-
   return (
     <>
       {bannerLoading ? <div>로딩 중...</div> :
@@ -194,7 +193,11 @@ const CollaborationDetailPage = () => {
               <img src={mainPhotoUrl || DefaultImage} alt="Main" style={{ width: '100%', height: '100%', borderRadius: '8px' }} />}
         </ImageContainer>
 
-        <OptionMenu/>
+        <OptionMenu
+          id={collabPostId}
+          apiURL='https://api.partnerd.site/api/Partnerd/${collabPostId}'
+          moveToUrl='/collaboration'
+        />
 
         {isLoadingCollab ? <div>로딩 중...</div> :
           errorCollab ? <div>{errorCollab}</div> :
