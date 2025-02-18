@@ -4,7 +4,6 @@ import Reply from './Reply';
 import ReplyInput from './ReplyInput';
 import * as S from '../../../styled-components/collab-styles/styled-Comment';
 import axios from 'axios';
-import useProfilePhoto from '../../../hooks/useProfilePhoto'; // useProfilePhoto 훅 import
 import CustomModal, { VERSIONS } from "../../common/modal/CustomModal";
 
 const formatDate = (date) => {

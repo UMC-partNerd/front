@@ -1,5 +1,5 @@
 import './styles/globalstyles.css';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Routes, Route } from 'react-router-dom';
 import RootLayout from './layout/root-layout';
 import HomePage from './pages/homepage';
 import NotFoundPage from './pages/notfoundpage';
@@ -24,6 +24,8 @@ import ProjectPromoteDetail from './pages/project-pages/ProjectPromoteDetail';
 import TeamMangement from './pages/TeamMangement';  
 import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
+import RecruitmentRegister from './components/recruit-register/recruitment-register';
+import PromotionRegister from './components/promote-register/promotion-register';
 
 import PersonalEditComp from './components/mypage/PersonalEditComp';
 import MyPagePersonalEdit from './pages/mypages/Personal-EditPage';
@@ -108,12 +110,12 @@ const router = createBrowserRouter([
             element: <ProjectPromotion />,
           },
           {
-            path: 'recruit-registration',
-            // element: <ProjectRecruitment />,
+            path: 'recruit/recruit-registration',
+            element: <RecruitmentRegister />,
           },
           {
-            path: 'promote-registration',
-            // element: <ProjectPromotion />,
+            path: 'promote/promote-registration',
+            element: <PromotionRegister />,
           },
           {
             path: 'recruit/:recruitProjectId',
@@ -122,6 +124,10 @@ const router = createBrowserRouter([
           {
             path: 'promote/:promotionProjectId',
             element: <ProjectPromoteDetail />,
+          },
+          {
+            path: 'promote/register',
+            element: <PromotionRegister />,
           },
           {
             index: true,
@@ -157,6 +163,10 @@ const router = createBrowserRouter([
             element: <MyPagePosts />,
           },
         ],
+      },
+      {
+        path: 'project/recruit/register',
+        element: <RecruitmentRegister />,
       },
       {
         path: '*',

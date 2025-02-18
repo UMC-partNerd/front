@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import * as S from '../../styled-components/projectdetail-styles/styled-ProjectPromoteDetail';
 import ImageSlider from '../../components/projectdetail/ImageSlider';
 import ProjectPromoteForm from '../../components/projectdetail/ProjectPromoteForm';
-import ProjectCommentList from '../../components/projectdetail/ProjectCommentList'; 
+import ProjectCommentList from '../../components/projectdetail/ProjectCommentList';
 import CommentForm from '../../components/projectdetail/CommentForm';
-import useBannerPhoto from '../../hooks/useBannerPhoto';  
+import useBannerPhoto from '../../hooks/useBannerPhoto';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
 import Button, { TYPES } from "../../components/common/button";
 import OptionMenu from '../../components/common/button/optionMenu';
@@ -14,25 +14,40 @@ import OptionMenu from '../../components/common/button/optionMenu';
 const DefaultImage = '/default-image.png';
 
 const ProjectPromoteDetail = () => {
-  const { promotionProjectId } = useParams(); 
+  const { promotionProjectId } = useParams();
   const [projectData, setProjectData] = useState(null);
   const [comments, setComments] = useState([]);
-  const [openFirstModal, setopenFirstModal] = useState(false);
-  const [openSecondModal, setOpenSecondModal] = useState(false);
-  const navigate = useNavigate();
+  const [openFirstModal, setOpenFirstModal] = useState(false); // 첫 번째 모달 (삭제 확인)
+  const [openSecondModal, setOpenSecondModal] = useState(false); // 두 번째 모달 (삭제 완료)
 
-  // API 호출
+  // 프로젝트 및 댓글 데이터 조회
   useEffect(() => {
+    // 프로젝트 데이터 조회
     axios.get(`https://api.partnerd.site/api/project/promotion/${promotionProjectId}`)
       .then((response) => {
         if (response.data.isSuccess) {
           setProjectData(response.data.result);
         } else {
-          console.error('API 호출 실패');
+          console.error('프로젝트 데이터 조회 실패');
         }
       })
       .catch((error) => {
-        console.error('API 호출 중 오류 발생:', error);
+        console.error('프로젝트 데이터 조회 중 오류 발생:', error);
+      });
+
+    // 댓글 데이터 조회
+    axios.get(`https://api.partnerd.site/api/project/promotion/${promotionProjectId}/comment`)
+      .then((response) => {
+        if (response.data.isSuccess) {
+          // 삭제된 댓글 제외하고 상태에 저장
+          const filteredComments = response.data.result.filter(comment => !comment.isDeleted);
+          setComments(filteredComments);
+        } else {
+          console.error('댓글 조회 실패');
+        }
+      })
+      .catch((error) => {
+        console.error('댓글 조회 중 오류 발생:', error);
       });
   }, [promotionProjectId]);
 
@@ -42,40 +57,176 @@ const ProjectPromoteDetail = () => {
     null, 
     [], 
     projectData?.thumbnailKeyName, 
-    projectData?.projectImgKeyNameList[0] 
+    projectData?.projectImgKeyNameList[0]
   );
 
-  console.log('Intro Image URL:', introPhotoUrl);
-
-  // 이미지 데이터
   const images = projectData?.projectImgKeyNameList || [DefaultImage, DefaultImage, DefaultImage];
   if (introPhotoUrl) {
-    images.unshift(introPhotoUrl); 
+    images.unshift(introPhotoUrl);
   }
 
-  // 댓글 추가
-  const handleAddComment = (newComment) => {
-    setComments([
-      ...comments,
-      {
-        text: newComment,
-        user: '사용자',
-        date: new Date().toLocaleString(),
-        replies: [],
-      },
-    ]);
+  // 댓글 추가 함수 (POST)
+  const handleAddComment = async (newComment) => {
+    const jwtToken = localStorage.getItem('jwtToken');
+
+    if (!jwtToken) {
+      alert("로그인을 해주세요!");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `https://api.partnerd.site/api/project/promotion/${promotionProjectId}/comment`,
+        { contents: newComment },
+        {
+          headers: {
+            'Authorization': `Bearer ${jwtToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.data.isSuccess) {
+        const addedComment = response.data.result;
+        setComments([...comments, addedComment]);
+        console.log('댓글 추가 성공:', addedComment);
+      } else {
+        console.error('댓글 추가 실패:', response.data.message);
+      }
+    } catch (error) {
+      console.error('댓글 추가 중 오류 발생:', error);
+    }
   };
 
-  // 댓글 삭제
-  const handleDeleteComment = (index) => {
-    setComments(comments.filter((_, i) => i !== index));
+  // 대댓글 추가 함수 (POST)
+  const handleAddReply = async (parentId, replyText) => {
+    const jwtToken = localStorage.getItem('jwtToken');
+
+    if (!jwtToken) {
+      alert("로그인을 해주세요!");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `https://api.partnerd.site/api/project/promotion/${promotionProjectId}/${parentId}/comment`,
+        { contents: replyText }, 
+        {
+          headers: {
+            'Authorization': `Bearer ${jwtToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.data.isSuccess) {
+        const addedReply = response.data.result;
+
+        // 댓글 목록에서 해당 댓글을 찾아 대댓글을 추가
+        setComments((prevComments) =>
+          prevComments.map((comment) =>
+            comment.projectCommentId === parentId
+              ? { 
+                  ...comment, 
+                  replies: [...(comment.replies || []), addedReply] 
+                }
+              : comment
+          )
+        );
+        console.log('대댓글 추가 성공:', addedReply);
+      } else {
+        console.error('대댓글 추가 실패:', response.data.message);
+      }
+    } catch (error) {
+      console.error('대댓글 추가 중 오류 발생:', error);
+    }
   };
 
-  // 댓글 수정
-  const handleUpdateComment = (index, newText) => {
-    const updatedComments = [...comments];
-    updatedComments[index].text = newText;
-    setComments(updatedComments);
+  // 댓글 삭제 함수 (DELETE)
+  const handleDeleteComment = async (commentId) => {
+    const jwtToken = localStorage.getItem('jwtToken');
+
+    if (!jwtToken) {
+      alert("로그인을 해주세요!");
+      return;
+    }
+
+    try {
+      const response = await axios.delete(
+        `https://api.partnerd.site/api/project/promotion/comment/${commentId}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${jwtToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log('API 응답:', response.data);
+
+      if (response.data.isSuccess) {
+        console.log('댓글 삭제 성공:', commentId);
+
+        // 삭제 후 댓글 목록 재조회
+        const updatedResponse = await axios.get(`https://api.partnerd.site/api/project/promotion/${promotionProjectId}/comment`);
+        if (updatedResponse.data.isSuccess) {
+          const filteredComments = updatedResponse.data.result.filter(comment => !comment.isDeleted);
+          setComments(filteredComments);
+        } else {
+          console.error('댓글 재조회 실패');
+        }
+      } else {
+        console.error('댓글 삭제 실패:', response.data.message);
+      }
+    } catch (error) {
+      console.error('댓글 삭제 중 오류 발생:', error);
+    }
+  };
+
+  // 댓글 수정 함수 (PATCH)
+  const handleUpdateComment = async (commentId, newText) => {
+    const jwtToken = localStorage.getItem('jwtToken');
+  
+    if (!jwtToken) {
+      alert("로그인을 해주세요!");
+      return;
+    }
+  
+    if (!newText || newText.trim() === "") {
+      alert("댓글 내용을 입력해주세요!");
+      return;
+    }
+  
+    console.log("업데이트할 댓글 ID:", commentId);  // commentId가 제대로 전달되는지 로그로 확인
+  
+    try {
+      const response = await axios.patch(
+        `https://api.partnerd.site/api/project/promotion/comment/${commentId}`,
+        { contents: newText },
+        {
+          headers: {
+            'Authorization': `Bearer ${jwtToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      if (response.data.isSuccess) {
+        const updatedComment = response.data.result;
+  
+        const updatedComments = comments.map((comment) =>
+          comment.projectCommentId === updatedComment.projectCommentId
+            ? { ...comment, contents: updatedComment.contents }
+            : comment
+        );
+  
+        setComments(updatedComments);
+        console.log('댓글 수정 성공:', updatedComment);
+      } else {
+        console.error('댓글 수정 실패:', response.data.message);
+      }
+    } catch (error) {
+      console.error('댓글 수정 중 오류 발생:', error);
+    }
   };
 
   // 응원하기
@@ -126,9 +277,10 @@ const ProjectPromoteDetail = () => {
     
   // 모달: 삭제하기
   const buttonHandler = () => {
-    setopenFirstModal(true);
+    setOpenFirstModal(true);
   };
 
+    // 삭제 모달에서 삭제 버튼 클릭 시
   const deleteHandler = async () => {
     const token = localStorage.getItem("jwtToken");
     if (!token) {
@@ -164,7 +316,7 @@ const ProjectPromoteDetail = () => {
   };
 
   if (!projectData) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   return (
@@ -197,10 +349,10 @@ const ProjectPromoteDetail = () => {
         </S.SButtonBox>
       </S.SHeaderBox>
 
-      {/* 모달 1: 삭제 확인 */}
+      {/* 삭제 확인 모달 */}
       <CustomModal
-        openModal={openFirstModal}
-        closeModal={() => setopenFirstModal(false)}
+        openModal={openFirstModal} 
+        closeModal={() => setOpenFirstModal(false)}
         boldface='프로젝트 홍보 삭제'
         regular='삭제하기를 누르면 다시 되돌릴 수 없습니다. 정말로 삭제하시겠습니까?'
         text='삭제하기'
@@ -208,37 +360,36 @@ const ProjectPromoteDetail = () => {
         variant={VERSIONS.VER3}
       />
 
-      {/* 모달 2: 삭제 성공 */}
+      {/* 삭제 완료 모달 */}
       <CustomModal
-        openModal={openSecondModal}
+        openModal={openSecondModal} 
         closeModal={() => setOpenSecondModal(false)}
         boldface='프로젝트 홍보 삭제'
         regular='프로젝트가 삭제되었습니다.'
         variant={VERSIONS.VER2}
       />
 
-      {/* 이미지 슬라이더 */}
       <S.SImageSliderWrapper>
         <ImageSlider images={images} />
       </S.SImageSliderWrapper>
 
-      {/* 프로젝트 홍보 폼 */}
-      <S.SFormContainer>
-        <ProjectPromoteForm projectData={projectData} />
-      </S.SFormContainer>
+      <S.SFormWrapper>
+        <S.SFormContainer>
+          <ProjectPromoteForm projectData={projectData} />
+        </S.SFormContainer>
+      </S.SFormWrapper>
 
-      {/* 댓글 추가 폼 */}
+      {/* 댓글 폼 */}
       <S.SCommentFormWrapper>
         <CommentForm onAddComment={handleAddComment} />
       </S.SCommentFormWrapper>
 
-      {/* 댓글 리스트 */}
       <S.SProjectCommentListWrapper>
         <ProjectCommentList
           comments={comments}
-          onReply={() => {}}
-          onDelete={handleDeleteComment}
-          onUpdate={handleUpdateComment}
+          onReply={handleAddReply}
+          onDelete={handleDeleteComment} 
+          onUpdate={handleUpdateComment} 
         />
       </S.SProjectCommentListWrapper>
     </S.SContainer>
