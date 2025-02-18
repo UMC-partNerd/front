@@ -6,6 +6,7 @@ import ProjectImageUploadForm from '../components/teamregister/ProjectImageUploa
 import styled from 'styled-components';
 import Button, { TYPES } from "../components/common/button";
 import axios from 'axios';
+import { PermissionRegistration } from '../components/contact/permission-registration';
 
 const TeamRegistration = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -111,17 +112,19 @@ const TeamRegistration = () => {
           setBannerImage={setBannerImage}
         />
         <ClubInfoForm 
-          teamInfo={teamInfo}  // teamInfo를 넘겨주기
-          handleNameChange={handleNameChange}  // 이름 변경 함수
-          handleIntroChange={handleIntroChange}  // 한 줄 소개 변경 함수
-          handleCategoryChange={handleCategoryChange}  // 카테고리 변경 함수
-          handleContactMethodsChange={handleContactMethodsChange}  // 연락처 변경 함수
-          handleActivityIntroChange={handleActivityIntroChange} // 활동 소개 변경 함수
-          handleActivityImageChange={handleActivityImageChange} // 활동 이미지 변경 함수
-          activityIntro={activityIntro} // 활동 소개
-          activityImageKeyNames={activityImageKeyNames} // 활동 이미지
-          isEditMode={isEditMode}  // 수정 모드 여부
+          teamInfo={teamInfo}
+          handleNameChange={handleNameChange}
+          handleIntroChange={handleIntroChange}
+          handleCategoryChange={handleCategoryChange}
+          handleContactMethodsChange={handleContactMethodsChange}
+          handleActivityIntroChange={handleActivityIntroChange}
+          handleActivityImageChange={handleActivityImageChange}
+          activityIntro={activityIntro}
+          activityImageKeyNames={activityImageKeyNames}
+          isEditMode={isEditMode}
         />
+        
+        <PermissionRegistration />
         
         <Button
           type={TYPES.NEXT}

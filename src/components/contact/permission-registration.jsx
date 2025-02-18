@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTeamMembers } from '../../hooks/useTeamMembers';
 
 import {
   Container,
@@ -30,23 +31,14 @@ import {
 export const PermissionRegistration = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [permissions, setPermissions] = useState([]); // 빈 배열로 초기화
-  const [leader] = useState({ nickname: '노브' }); // 고정 리더
+  const [permissions, setPermissions] = useState([]);
+  const { currentUser, searchMembers } = useTeamMembers();
+  const [leader] = useState({ nickname: currentUser?.nickname }); // 현재 로그인한 사용자의 닉네임 사용
 
-  // 임시 사용자 데이터베이스
-  const userDatabase = [
-    { id: 3, nickname: '에이치', profileImage: '/path/to/image1.jpg' },
-    { id: 4, nickname: '에이호', profileImage: '/path/to/image2.jpg' },
-    { id: 5, nickname: '에이든', profileImage: '/path/to/image3.jpg' },
-  ];
-
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     setSearchQuery(e.target.value);
     if (e.target.value.trim()) {
-      const results = userDatabase.filter(user => 
-        user.nickname.toLowerCase().includes(e.target.value.toLowerCase())
-      );
-      setSearchResults(results);
+      await searchMembers(e.target.value);
     } else {
       setSearchResults([]);
     }
@@ -108,7 +100,7 @@ export const PermissionRegistration = () => {
 
         <LeaderSection>
           <LeaderLabel>리더</LeaderLabel>
-          <LeaderName>{leader.nickname}</LeaderName>
+          <LeaderName>{currentUser?.nickname}</LeaderName>
           <SubleaderLabel>부리더</SubleaderLabel>
           {permissions.map(permission => (
             <PermissionTag key={permission.id}>

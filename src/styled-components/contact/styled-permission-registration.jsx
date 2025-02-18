@@ -1,7 +1,12 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  width: 863px;
+  width: 1040px;
+  padding: 40px;
+  border-radius: 20px;
+  background: #FFF;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.10);
+  margin-bottom: 30px;
 `;
 
 export const TitleWrapper = styled.div`
