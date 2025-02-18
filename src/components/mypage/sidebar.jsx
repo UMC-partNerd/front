@@ -15,7 +15,7 @@ const Sidebar = () =>{
                 onClick={() => navigate("/mypage/profile")}>내 프로필
             </List>
             <List
-                isActive = {location.pathname === "/mypage/personal-page"}
+                isActive = {location.pathname === "/mypage/personal-page" || location.pathname === "/mypage/personal-page-edit"}
                 onClick={() => navigate('/mypage/personal-page')}>퍼스널 페이지
             </List>
             <List 
