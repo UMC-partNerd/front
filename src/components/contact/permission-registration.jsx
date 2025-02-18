@@ -45,21 +45,20 @@ export const PermissionRegistration = () => {
   };
 
   const handleAddPermission = (user) => {
-    // 부리더가 이미 한 명 있는 경우 추가하지 않음
     if (permissions.length >= 1) {
       alert('부리더는 최대 1명만 지정할 수 있습니다.');
       return;
     }
     
-    if (!permissions.find(p => p.id === user.id)) {
+    if (!permissions.find(p => p.nickname === user.nickname)) {
       setPermissions([...permissions, user]);
     }
     setSearchResults([]);
     setSearchQuery('');
   };
 
-  const handleRemovePermission = (userId) => {
-    setPermissions(permissions.filter(permission => permission.id !== userId));
+  const handleRemovePermission = (nickname) => {
+    setPermissions(permissions.filter(permission => permission.nickname !== nickname));
   };
 
   return (
@@ -89,8 +88,14 @@ export const PermissionRegistration = () => {
           {searchResults.length > 0 && (
             <SearchResultsList>
               {searchResults.map(result => (
-                <SearchResultItem key={result.id} onClick={() => handleAddPermission(result)}>
-                  <ProfileImage src={result.profileImage} alt={result.nickname} />
+                <SearchResultItem 
+                  key={result.nickname} 
+                  onClick={() => handleAddPermission(result)}
+                >
+                  <ProfileImage 
+                    src={result.profileImage || '/default-profile.png'} 
+                    alt={result.nickname} 
+                  />
                   <ResultNickname>{result.nickname}</ResultNickname>
                 </SearchResultItem>
               ))}
@@ -103,9 +108,9 @@ export const PermissionRegistration = () => {
           <LeaderName>{currentUser?.nickname}</LeaderName>
           <SubleaderLabel>부리더</SubleaderLabel>
           {permissions.map(permission => (
-            <PermissionTag key={permission.id}>
+            <PermissionTag key={permission.nickname}>
               {permission.nickname}
-              <DeleteButton onClick={() => handleRemovePermission(permission.id)}>
+              <DeleteButton onClick={() => handleRemovePermission(permission.nickname)}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M12 4L4 12" stroke="#0D29B7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M4 4L12 12" stroke="#0D29B7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
