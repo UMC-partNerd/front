@@ -61,13 +61,13 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
       contents: replyText,  
       nickname: displayName,  
       profileKeyName: profileKeyName,  
-      projectCommentId: commentId, 
+      projectCommentId: commentId, // 'commentId'가 'recruit' 또는 'promote'에 맞는 ID로 변경되어야 함
       date: formattedDate,  
     };
   
     // 대댓글을 부모 컴포넌트로 전달 
-    onReply(replyText, commentId, type); 
-  
+    onReply(replyText, commentId, type); // 'type'에 따라 처리
+    
     // 대댓글을 UI에 추가
     setReplyList([...replyList, newReply]);
     setShowReply(false);  // 대댓글 입력 폼 닫기
@@ -95,6 +95,9 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
   };
 
   const formattedDate = formatDate(date);
+
+  // 댓글 ID와 대댓글 ID를 type에 따라 처리
+  const currentCommentId = type === 'recruit' ? commentId : commentId;
 
   return (
     <S.SCommentWrapper>
@@ -177,4 +180,3 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
 };
 
 export default ProjectComment;
-

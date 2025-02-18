@@ -7,6 +7,7 @@ import ProjectDetailForm from '../../components/projectdetail/ProjectDetailForm'
 import JoinProjectInfo from '../../components/projectdetail/JoinProjectInfo';
 import ProjectCommentList from '../../components/projectdetail/ProjectCommentList';
 import CommentForm from '../../components/projectdetail/CommentForm';
+import MemberForm from '../../components/projectdetail/MemberForm';
 import useBannerPhoto from '../../hooks/useBannerPhoto';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
 
@@ -302,6 +303,10 @@ const ProjectRecruitDetail = () => {
           <JoinProjectInfo projectData={projectData} />
         </S.SJoinProjectInfoWrapper>
       </S.SFormWrapper>
+
+      <S.SMemberFormWrapper>
+          <MemberForm />
+      </S.SMemberFormWrapper>
 
       {/* 댓글 폼 */}
       <S.SCommentFormWrapper>

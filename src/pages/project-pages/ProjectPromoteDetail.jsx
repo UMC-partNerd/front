@@ -123,7 +123,7 @@ const ProjectPromoteDetail = () => {
         // 댓글 목록에서 해당 댓글을 찾아 대댓글을 추가
         setComments((prevComments) =>
           prevComments.map((comment) =>
-            comment.projectCommentId === parentId
+            comment.promotionProjectCommentId === parentId
               ? { 
                   ...comment, 
                   replies: [...(comment.replies || []), addedReply] 
@@ -212,7 +212,7 @@ const ProjectPromoteDetail = () => {
         const updatedComment = response.data.result;
   
         const updatedComments = comments.map((comment) =>
-          comment.projectCommentId === updatedComment.projectCommentId
+          comment.promotionProjectCommentId === updatedComment.promotionProjectCommentId
             ? { ...comment, contents: updatedComment.contents }
             : comment
         );
@@ -296,6 +296,7 @@ const ProjectPromoteDetail = () => {
           onReply={handleAddReply}
           onDelete={handleDeleteComment} 
           onUpdate={handleUpdateComment} 
+          type="promote"  // type 추가
         />
       </S.SProjectCommentListWrapper>
     </S.SContainer>
