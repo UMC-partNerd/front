@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Banner from '../components/common/banner/Banner';
 import ClubInfoForm from '../components/teamregister/ClubInfoForm'; 
 import ProjectImageUploadForm from '../components/teamregister/ProjectImageUploadForm';  
@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import Button, { TYPES } from "../components/common/button";
 import axios from 'axios';
 import { PermissionRegistration } from '../components/contact/permission-registration';
+import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
 
 const TeamRegistration = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -65,7 +66,11 @@ const TeamRegistration = () => {
     setActivityImageKeyNames(imageKeyNames);
   };
 
-  const onClickHandler = async () => {
+  // 모달: 최종 등록하기
+  const [openModal, setOpenModal] = useState(false);
+  const navigate = useNavigate();
+
+  const buttonHandler = async () => {
     setIsLoading(true);
     setErrorMessage('');
 
@@ -92,12 +97,19 @@ const TeamRegistration = () => {
         },
       });
       console.log('등록 성공', response.data);
+
+      setOpenModal(true);
     } catch (error) {
       console.error('등록 실패', error);
       setErrorMessage('팀 등록에 실패했습니다.');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const moveTOFind = () => {
+    setOpenModal(false);
+    navigate('/find');
   };
 
   return (
@@ -129,7 +141,16 @@ const TeamRegistration = () => {
         <Button
           type={TYPES.NEXT}
           text={isLoading ? '등록 중...' : isEditMode ? '수정 완료' : '최종 등록하기'}
-          onClick={onClickHandler}
+          onClick={buttonHandler}
+        />
+
+        <CustomModal
+            openModal={openModal} 
+            closeModal={moveTOFind}
+
+            boldface='동아리 등록 완료!'
+            regular='팀 페이지 관리는 마이페이지 > 팀페이지에서 가능합니다.'
+            variant={VERSIONS.VER2}
         />
 
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}

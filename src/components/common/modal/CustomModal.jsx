@@ -36,7 +36,7 @@ export const VERSIONS = {
     const [openSecondModal, setOpenSecondModal] = useState(false);
   
     // 버튼 클릭 시 모달1을 띄우는 함수
-    const clubJoinHandler = () => {
+    const buttonHandler = () => {
       setopenFirstModal(true);
     };
   
