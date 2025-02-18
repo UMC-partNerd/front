@@ -54,6 +54,7 @@ const KakaoCallback = () => {
             localStorage.setItem("used_kakao_code", authCode);
             localStorage.setItem("kakao_email", email); // 이메일 저장
             localStorage.setItem("jwtToken", jwtToken); // JWT 토큰 저장
+            localStorage.setItem("sessionId", sessionId);
 
             //zustand로 로그인 상태 업데이트(추가한 부분)
             setUser(email, jwtToken); // 로그인 상태 업데이트
