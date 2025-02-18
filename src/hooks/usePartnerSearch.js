@@ -14,52 +14,44 @@ export const usePartnerSearch = (category = '전체', order = 'recent', page = 1
 
   // S3 pre-signed URL을 가져오는 함수
   const getImageUrl = async (profileImage) => {
+    if (!profileImage) return '/default-image.jpg';
+    if (profileImage.startsWith('http')) return profileImage; // 이미 URL인 경우 그대로 반환
+    
     try {
-      if (!profileImage) return null;
-      
       const response = await api.get(`/api/s3/preSignedUrl`, {
-        params: {
-          keyName: profileImage
-        }
+        params: { keyName: profileImage }
       });
-      
       return response.data.result.cloudFrontUrl;
     } catch (err) {
       console.error('이미지 URL 가져오기 실패:', err);
-      return null;
+      return '/default-image.jpg';
     }
   };
 
   // 이미지 URL 처리를 위한 함수
   const processImageUrls = async (items) => {
-    return Promise.all(
+    const processedItems = await Promise.all(
       items.map(async (item) => {
-        if (item.profileImage) {
-          const cloudFrontUrl = await getImageUrl(item.profileImage);
-          return {
-            ...item,
-            profileImage: cloudFrontUrl || '/default-image.jpg'
-          };
-        }
+        const imageUrl = await getImageUrl(item.profileImage);
         return {
           ...item,
-          profileImage: '/default-image.jpg'
+          profileImage: imageUrl
         };
       })
     );
+    return processedItems;
   };
 
   useEffect(() => {
+    let isMounted = true; // 컴포넌트 마운트 상태 추적
+
     const fetchPartners = async () => {
       try {
         setIsLoading(true);
-        
         const token = localStorage.getItem('jwtToken');
         
         if (!token) {
-          alert('로그인이 필요합니다.');
-          setError('로그인이 필요합니다.');
-          return;
+          throw new Error('로그인이 필요합니다.');
         }
 
         const params = new URLSearchParams({
@@ -78,34 +70,38 @@ export const usePartnerSearch = (category = '전체', order = 'recent', page = 1
           }
         });
 
-        // 응답 데이터 확인
         if (!response.data.isSuccess) {
           throw new Error(response.data.message || '데이터를 불러오는데 실패했습니다.');
         }
 
-        // API 응답의 result 배열 처리
-        const processedData = await processImageUrls(response.data.result);
-        setPartners(processedData);
+        if (isMounted) {
+          const processedData = await processImageUrls(response.data.result);
+          setPartners(processedData);
+        }
         
       } catch (err) {
         console.error('Error:', err);
         if (err.response?.status === 401) {
           alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
         }
-        setError(err.message || '데이터를 불러오는데 실패했습니다.');
+        if (isMounted) {
+          setError(err.message || '데이터를 불러오는데 실패했습니다.');
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
     fetchPartners();
+
+    return () => {
+      isMounted = false; // 클린업 함수
+    };
   }, [category, order, page]);
 
-  return {
-    partners,
-    isLoading,
-    error,
-  };
+  return { partners, isLoading, error };
 };
 
 // 카테고리와 정렬 옵션을 상수로 관리
