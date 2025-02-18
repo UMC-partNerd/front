@@ -5,17 +5,16 @@ import { ClubContainer, CardGrid, ClubCard, ImagePlaceholder, CardContent,
 } from "../../styled-components/styled-Club";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useHomeData } from "../../hooks/useHomeData";
+import useMypageImg from "../../hooks/useMypagesProfileImg";
 
 const MyTeamsComp = () => {
     
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     const [clubImages, setClubImages] = useState({}); // 이미지 URL 저장
-    const [clubs, setClub] = useState([]);
+    const [clubs, setClubs] = useState([]);
     const [loading, setLoading] = useState(false); // 로딩 상태
     const [error, setError] = useState(null); // 에러 상태
-    const {homeData, isLoading} = useHomeData();
     
 
     const fetchClubs = async () =>{
@@ -37,7 +36,8 @@ const MyTeamsComp = () => {
                 });
 
             console.log("마이페이지-팀페이지", response.data.result);
-            setClub(response.data.result?.clubPreviewDTOList);
+            const clubData = response.data.result?.clubPreviewDTOList || [];
+            setClubs(clubData); // 
         }catch (error) {
             console.error("게시글 불러오기 실패:", error);
             setError("게시글을 불러오는 중 오류가 발생했습니다.");
@@ -49,6 +49,24 @@ const MyTeamsComp = () => {
     useEffect(() => {
         fetchClubs();
     }, []);
+
+    useEffect(() => {
+        clubs.forEach((club) => {
+            if (club.profileKeyName && !clubImages[club.clubId]) { // 중복 요청 방지
+                // ✅ 개별적으로 useState 활용하여 S3 이미지 URL 가져오기
+                const fetchImage = async () => {
+                    const { profileImageUrl, isLoading, error } = useMypageImg(club.profileKeyName);
+                    
+                    setClubImages((prev) => ({
+                        ...prev,
+                        [club.clubId]: { profileImageUrl, isLoading, error },
+                    }));
+                };
+
+                fetchImage();
+            }
+        });
+    }, [clubs]);
 
     return (
         <MainWrapp>
@@ -63,6 +81,8 @@ const MyTeamsComp = () => {
             
             <CardGrid>
             {!loading && !error && clubs.length > 0 ? (
+
+                    
                     clubs.map((club) => {
                         const clubImage = clubImages[club.clubId] || {};
 

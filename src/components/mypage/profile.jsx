@@ -35,6 +35,9 @@ const MyProfile = () => {
             marketing_notify:false,
         });
 
+        //프로필 이미지 키 저장 상태 
+        const [originalProfileKey, setOriginalProfileKey] = useState(null);
+
         
         // 닉네임 중복 확인 상태 추가
         const [isNicknameChecked, setIsNicknameChecked] = useState(false);
@@ -83,6 +86,9 @@ const MyProfile = () => {
 
                 console.log("프로필 데이터", response.data.result);
                 setProfile(response.data.result); //상태 업데이트 
+
+                //프로필 이미지 키 저장 (변경 전 값 유지)
+                setOriginalProfileKey(response.data.result.profileKeyName || null);
             }
             catch (error) {
                 console.error("프로필 불러오기 실패:", error);
@@ -152,7 +158,7 @@ const MyProfile = () => {
                 }
 
                 const updatedProfile = {
-                    profileKeyName: imageKey ||profile?.profile_url || "", // 새로 업로드된 이미지 URL
+                    profileKeyName: imageKey ?? originalProfileKey, // 새로 업로드된 이미지 URL
                     name: profile?.name || "",
                     nickname: profile?.nickname || "",
                     birth: profile?.birth || "",

@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { SubupSec } from "../../styles/mypagestyles";
 import { SlArrowLeft } from "react-icons/sl";
 import { SlArrowRight } from "react-icons/sl";
+import useMypageImg from "../../hooks/useMypagesProfileImg";
 
 const PersonalProject = () => {
 
@@ -70,6 +71,9 @@ const PersonalProject = () => {
             setPage(page + 1);
         }
     };
+
+    //이미지 가져오기 
+    // const {thumnailImageUrl, isLoading, error} = useMypageImg(project?.thumbnailKeyName)
 return(
     <CardWrapp>
         {/* 로딩 상태 표시 */}
