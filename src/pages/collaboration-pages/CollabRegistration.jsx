@@ -77,6 +77,7 @@ const CollabRegistration = () => {
         },
       });
       console.log('등록 성공', response.data);
+      
       setOpenModal(true);
     } catch (error) {
       console.error('등록 실패', error);
@@ -86,7 +87,7 @@ const CollabRegistration = () => {
     }
   };
 
-  const closeModal = () => {
+  const moveToColab = () => {
     setOpenModal(false);
     navigate('/collaboration');
 };
@@ -114,7 +115,7 @@ const CollabRegistration = () => {
         </Button>
         <CustomModal
           openModal={openModal} 
-          closeModal={closeModal}
+          closeModal={moveToColab}
 
           boldface='협업 등록 완료!'
           regular='협업 페이지 관리는 마이페이지 > 콜라보레이션에서 가능합니다.'

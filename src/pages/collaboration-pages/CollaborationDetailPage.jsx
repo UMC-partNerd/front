@@ -16,15 +16,14 @@ import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal
 const DefaultImage = '/default-image.png';
 
 
-/*
-주석 안 한 부분이 dev 코드 입니다.
-*/
 const CollaborationDetailPage = () => {
   const { collabPostId } = useParams();
   const [collabData, setCollabData] = useState(null);
   const [isLoadingCollab, setIsLoadingCollab] = useState(true);
   const [errorCollab, setErrorCollab] = useState(null);
   const [comments, setComments] = useState([]);
+
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const fetchCollabData = async () => {
@@ -171,14 +170,37 @@ const CollaborationDetailPage = () => {
   };
 
   // 모달: 보내기
-  const sendHandler = async () => {
-    // 협업 요청 보내기
-    // await api.joinClub();
+  const sendHandler = async(collabPostId) => {
+    setErrorMessage('');
+    
+    const token = localStorage.getItem('jwtToken');
+    if (!token) {
+      console.error("❌ JWT 토큰이 없습니다. 로그인 상태를 확인하세요.");
+      return;
+    }
 
-    // 모달 닫기
-    setOpenModal(false);
+    if (!collabPostId) {
+      console.error("❌ collabPostId가 제공되지 않았습니다.");
+      return;
+    }
+
+    try {
+      const response = await axios.post('https://api.partnerd.site/api/collabAsk/${collabPostId}', null, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('협업 요청 성공', response.data);
+      
+      setOpenModal(false);
+    } catch (error) {
+      console.error('협업 요청 실패', error);
+      setErrorMessage('협업 요청에 실패했습니다.');
+    } finally {
+      setOpenModal(false);
+    }
   };
-
 
   return (
     <>
@@ -196,9 +218,20 @@ const CollaborationDetailPage = () => {
         {isLoadingCollab ? <div>로딩 중...</div> :
           errorCollab ? <div>{errorCollab}</div> :
           <InfoSectionWrapper>
-          <InfoSection collabData={collabData} />
+          <InfoSection collabData={collabData} buttonHandler={collabRequestHandler} />
         </InfoSectionWrapper>}
         </Wrapper>
+          
+        <CustomModal
+          openModal={openModal} 
+          closeModal={() => setOpenModal(false)}
+
+          boldface='협업 요청하기'
+          regular='협업하기 요청을 보내시겠습니까?'
+          text='보내기'
+          onClickHandler={sendHandler}
+          variant={VERSIONS.VER3}
+        />
 
       <EventOverviewWrapper>
         {collabData ? <EventOverview eventData={collabData} /> : <div>데이터를 불러오는 중...</div>}
@@ -229,17 +262,6 @@ const CollaborationDetailPage = () => {
         />
         </div>
       </InquiryAndCommentsWrapper>
-
-      <CustomModal
-        openModal={openModal} 
-        closeModal={() => setOpenModal(false)}
-
-        boldface='협업 요청하기'
-        regular='협업하기 요청을 보내시겠습니까?'
-        text='보내기'
-        onClickHandler={sendHandler}
-        variant={VERSIONS.VER3}
-      />
     </>
   );
 };
