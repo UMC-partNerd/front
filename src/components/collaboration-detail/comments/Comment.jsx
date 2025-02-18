@@ -4,7 +4,7 @@ import Reply from './Reply';
 import ReplyInput from './ReplyInput';
 import * as S from '../../../styled-components/collab-styles/styled-Comment';
 import axios from 'axios';
-import useProfilePhoto from '../../../hooks/useProfilePhoto'; // useProfilePhoto 훅 import
+import CustomModal, { VERSIONS } from "../../common/modal/CustomModal";
 
 const formatDate = (date) => {
   const d = new Date(date);
@@ -71,6 +71,13 @@ const Comment = ({ collabPostId, collabInquiryId, text, user, date, replies = []
     }
   };
 
+  const [openModal, setOpenModal] = useState(false);
+
+  // 댓글 삭제하기
+  const deleteComment = () => {
+    setOpenModal(true);
+  };
+
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem('jwtToken');
@@ -95,6 +102,8 @@ const Comment = ({ collabPostId, collabInquiryId, text, user, date, replies = []
       }
     } catch (error) {
       setError('댓글을 삭제하는 중 오류가 발생했습니다.');
+    } finally {
+      setOpenModal(false);
     }
   };
 
@@ -174,8 +183,20 @@ const Comment = ({ collabPostId, collabInquiryId, text, user, date, replies = []
       <S.SMoreOptionsMenu show={showOptions}>
         <S.SMenuItem onClick={handleEditClick}>수정하기</S.SMenuItem>
         <S.SDivider />
-        <S.SMenuItem onClick={handleDelete}>삭제하기</S.SMenuItem>
+        <S.SMenuItem onClick={deleteComment}>삭제하기</S.SMenuItem>
       </S.SMoreOptionsMenu>
+
+      <CustomModal
+        openModal={setOpenModal} 
+        closeModal={() => setOpenModal(false)}
+
+        boldface='댓글을 삭제하시겠습니까?'
+        regular='삭제하기를 누르면 다시 되돌릴 수 없습니다. 정말로 삭제하시겠습니까?'
+        text='삭제하기'
+        onClickHandler={handleDelete}
+        variant={VERSIONS.VER3}
+      />
+
 
       {error && <S.SErrorMessage>{error}</S.SErrorMessage>}
     </S.SCommentWrapper>

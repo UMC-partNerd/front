@@ -1,25 +1,31 @@
+// ProjectCommentList.jsx
 import React from 'react';
 import styled from 'styled-components';
-import ProjectComment from './ProjectComment'; 
+import ProjectComment from './ProjectComment';
 
 const ProjectCommentListWrapper = styled.div`
   margin-top: 20px;
-  width: 680px;
+  width: 600px;
 `;
 
-const ProjectCommentList = ({ comments, onReply, onDelete, onUpdate }) => {
+const ProjectCommentList = ({ comments, onReply, onDelete, onUpdate, type, profileImageUrl }) => {
   return (
     <ProjectCommentListWrapper>
-      {comments.map((comment, index) => (
+      {comments.map((comment) => (
         <ProjectComment
-          key={index}
-          text={comment.text}
+          key={comment.projectCommentId}
+          commentId={comment.projectCommentId}
+          text={comment.contents}
           user={comment.user}
-          date={comment.date}
-          replies={comment.replies}
-          onReply={(replyText) => onReply(index, replyText)}
-          onDelete={() => onDelete(index)}
-          onUpdate={(newText) => onUpdate(index, newText)}
+          date={comment.createdDate}
+          replies={comment.children || []}
+          profileImageUrl={profileImageUrl} // 프로필 이미지 URL 전달
+          onReply={(replyText) => {
+            console.log("onReply 호출됨:", replyText);
+            onReply(comment.projectCommentId, replyText, type);
+          }}
+          onDelete={() => onDelete(comment.projectCommentId, type)}  // 댓글 삭제
+          onUpdate={(commentId, newText, type) => onUpdate(commentId, newText, type)} // 댓글 수정
         />
       ))}
     </ProjectCommentListWrapper>
@@ -27,3 +33,8 @@ const ProjectCommentList = ({ comments, onReply, onDelete, onUpdate }) => {
 };
 
 export default ProjectCommentList;
+
+
+
+
+

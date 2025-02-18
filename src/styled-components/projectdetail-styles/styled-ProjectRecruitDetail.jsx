@@ -14,21 +14,30 @@ export const SImageBoxContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 45px;
+  margin-top: 100px;
   text-align: center;
 `;
 
 export const SImageBox = styled.div`
-  width: 185px;
-  height: 145px;
+  width: 200px;  
+  height: 150px; 
   flex-shrink: 0;
-  border-radius: 5px;
-  background: url('<path-to-image>') lightgray 50% / cover no-repeat;
+  border-radius: 7px;
+  background: lightgray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 100%;  
+    height: 100%; 
+    object-fit: cover;
+    border-radius: 7px;
+  }
 `;
 
 export const STextBox = styled.div`
   text-align: center;
-  margin-top: 20px;
   color: #212121;
   font-style: normal;
   font-weight: 600;
@@ -43,6 +52,7 @@ export const STitle = styled.h2`
   font-weight: 700;
   line-height: normal;
   letter-spacing: -0.8px;
+  margin-top: 60px;
 `;
 
 export const SDescription = styled.p`
@@ -59,28 +69,41 @@ export const SImageSliderWrapper = styled.div`
   margin-bottom: 100px;
 `;
 
+export const SFormWrapper = styled.div`
+  display: flex;
+  flex-direction: column; 
+  justify-content: flex-start; 
+  align-items: center;  
+  width: 100%;
+  max-width: 1200px; 
+  margin: 0 auto; 
+  gap: 20px;  
+`;
+
 export const SFormContainer = styled.div`
-  width: 94%;
-  max-width: 1000px;
+  width: 100%;  
+  max-width: 1000px;  
   padding: 40px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;  
+  align-items: flex-start;  
   flex-direction: column;
   margin-top: 30px;
+  margin-right: -320px;  
 `;
 
 export const SJoinProjectInfoWrapper = styled.div`
-  margin-top: 5px;
-  width: 94%;
-  max-width: 1000px;
+  width: 100%;  
+  max-width: 1000px; 
   padding: 40px;
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: flex-start; 
+  align-items: flex-start;  
   flex-direction: column;
-  margin-left: 260px;
+  margin-right: -320px; 
 `;
+
+
 
 export const SCommentFormWrapper = styled.div`
   width: 94%;
@@ -91,7 +114,7 @@ export const SCommentFormWrapper = styled.div`
   align-items: center;
   flex-direction: column;
   margin-top: 20px;
-  margin-left: -22px;  
+  margin-left: -70px;  
 `;
 
 
@@ -103,5 +126,5 @@ export const SProjectCommentListWrapper = styled.div`
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  margin-left: 260px;
+  margin-left: 300px;
 `;

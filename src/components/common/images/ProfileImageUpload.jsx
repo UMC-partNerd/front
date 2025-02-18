@@ -14,7 +14,6 @@ const ProfileImageUpload = ({ folderName, type, setImageKey, setImagePreview }) 
     const file = e.target.files[0];
     if (!file) return;
 
-   
     setUploading(true);
     try {
       const response = await fetch('https://api.partnerd.site/api/s3/preSignedUrl', {
@@ -33,18 +32,20 @@ const ProfileImageUpload = ({ folderName, type, setImageKey, setImagePreview }) 
       const data = await response.json();
       const { preSignedUrl, keyName } = data.result;
 
-      setImageKey(keyName);
+      setImageKey(keyName); // 서버로 이미지 키 전송
 
       await fetch(preSignedUrl, {
         method: 'PUT',
         headers: {
-          'Content-Type': file.type,
+          'Content-Type': file.type,  
+          'x-amz-meta-cache-control': 'max-age=864000'  // 캐시 제어 헤더 추가
         },
         body: file,
       });
-
+      
+      // 로컬 미리보기 업데이트
       const imageUrl = URL.createObjectURL(file);
-      setImagePreview(imageUrl);
+      setImagePreview(imageUrl); 
       setImagePreviewState(imageUrl);
 
       console.log('이미지 업로드 완료:', imageUrl);

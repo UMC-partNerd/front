@@ -3,17 +3,22 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import BannerPhoto from '../../components/teamdetail/BannerPhoto';
 import InfoSection from '../../components/collaboration-detail/InfoSection';
+import PersonalContact from '../../components/common/contact';
 import EventGuide from '../../components/collaboration-detail/EventGuide';
 import InquiryForm from '../../components/collaboration-detail/InquiryForm';
 import CommentList from '../../components/collaboration-detail/comments/CommentList';
 import EventImages from '../../components/collaboration-detail/EventImages';
 import useBannerPhoto from '../../hooks/useBannerPhoto';
 import axios from 'axios';
-import PersonalContact from '../../components/common/contact';
 import EventOverview from '../../components/collaboration-detail/EventOverview';
+import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
 
 const DefaultImage = '/default-image.png';
 
+
+/*
+주석 안 한 부분이 dev 코드 입니다.
+*/
 const CollaborationDetailPage = () => {
   const { collabPostId } = useParams();
   const [collabData, setCollabData] = useState(null);
@@ -158,6 +163,22 @@ const CollaborationDetailPage = () => {
     );
     setComments(updatedComments);
   };
+  const [openModal, setOpenModal] = useState(false);
+
+   // 버튼: 협업 요청하기 클릭
+   const collabRequestHandler = () => {
+    setOpenModal(true);
+  };
+
+  // 모달: 보내기
+  const sendHandler = async () => {
+    // 협업 요청 보내기
+    // await api.joinClub();
+
+    // 모달 닫기
+    setOpenModal(false);
+  };
+
 
   return (
     <>
@@ -174,8 +195,10 @@ const CollaborationDetailPage = () => {
 
         {isLoadingCollab ? <div>로딩 중...</div> :
           errorCollab ? <div>{errorCollab}</div> :
-            <InfoSection collabData={collabData} />}
-      </Wrapper>
+          <InfoSectionWrapper>
+          <InfoSection collabData={collabData} />
+        </InfoSectionWrapper>}
+        </Wrapper>
 
       <EventOverviewWrapper>
         {collabData ? <EventOverview eventData={collabData} /> : <div>데이터를 불러오는 중...</div>}
@@ -206,13 +229,162 @@ const CollaborationDetailPage = () => {
         />
         </div>
       </InquiryAndCommentsWrapper>
+
+      <CustomModal
+        openModal={openModal} 
+        closeModal={() => setOpenModal(false)}
+
+        boldface='협업 요청하기'
+        regular='협업하기 요청을 보내시겠습니까?'
+        text='보내기'
+        onClickHandler={sendHandler}
+        variant={VERSIONS.VER3}
+      />
     </>
   );
 };
 
 export default CollaborationDetailPage;
 
+// const CollaborationDetailPage = () => {
+//   const { collabPostId } = useParams(); // collabId를 collabPostId로 변경
+//   const [collabData, setCollabData] = useState(null);
+//   const [isLoadingCollab, setIsLoadingCollab] = useState(true);
+//   const [errorCollab, setErrorCollab] = useState(null);
+//   const [showOptions, setShowOptions] = useState(false);
 
+//   useEffect(() => {
+//     const fetchCollabData = async () => {
+//       try {
+//         const response = await axios.get(`https://api.partnerd.site/api/collabPosts/${collabPostId}`); // collabId를 collabPostId로 변경
+//         if (response.data.isSuccess) {
+//           setCollabData(response.data.result);
+//         } else {
+//           setErrorCollab('콜라보 데이터를 불러오는데 실패했습니다.');
+//         }
+//       } catch (err) {
+//         setErrorCollab('네트워크 오류가 발생했습니다.');
+//       } finally {
+//         setIsLoadingCollab(false);
+//       }
+//     };
+
+//     fetchCollabData();
+//   }, [collabPostId]); // collabId를 collabPostId로 변경
+
+//   const bannerImageFileName = collabData?.bannerKeyName ? collabData.bannerKeyName.split('/').pop() : null;
+//   const mainImageFileName = collabData?.mainKeyName ? collabData.mainKeyName.split('/').pop() : null;
+//   const eventImageFileNames = collabData?.eventImgKeyNameList ? collabData.eventImgKeyNameList.map(key => key.split('/').pop()) : [];
+
+//   // BANNER와 MAIN 이미지 각각 로드
+//   const { bannerPhotoUrl, mainPhotoUrl, eventPhotoUrls, isLoading: bannerLoading, error: bannerError } = useBannerPhoto(
+//     'collabPost',
+//     bannerImageFileName,
+//     mainImageFileName,
+//     eventImageFileNames
+//   );
+
+//   const [comments, setComments] = useState([
+//     { text: '참여 인원은 어느 정도 생각하고 계신가요?', user: '하나', date: '2025. 01. 12' }
+//   ]);
+
+//   const handleAddComment = (text) => {
+//     const newComment = {
+//       text,
+//       user: '사용자 이름',
+//       date: new Date().toISOString().split('T')[0],
+//     };
+//     setComments([...comments, newComment]);
+//   };
+
+//   const handleDeleteComment = (index) => {
+//     setComments(comments.filter((_, i) => i !== index));
+//   };
+
+//   const handleUpdateComment = (index, newText) => {
+//     const updatedComments = comments.map((comment, i) =>
+//       i === index ? { ...comment, text: newText } : comment
+//     );
+//     setComments(updatedComments);
+//   };
+
+//   const handleReply = (index, replyText) => {
+//     const updatedComments = comments.map((comment, i) =>
+//       i === index ? { ...comment, replies: [...(comment.replies || []), { text: replyText, user: 'CurrentUser', date: new Date().toISOString().split('T')[0] }] } : comment
+//     );
+//     setComments(updatedComments);
+//   };
+
+//   const toggleOptionsMenu = () => {
+//     setShowOptions(!showOptions);
+//   };
+
+//   return (
+//     <>
+//       {/* 배너 이미지 */}
+//       {bannerLoading ? <div>로딩 중...</div> :
+//         bannerError ? <div>{bannerError}</div> :
+//           <BannerPhoto src={bannerPhotoUrl || DefaultImage} />}
+
+//       <Wrapper>
+//         {/* MAIN 이미지 */}
+//         <ImageContainer>
+//           {bannerLoading ? <div>로딩 중...</div> :
+//             bannerError ? <div>{bannerError}</div> :
+//               <img src={mainPhotoUrl || DefaultImage} alt="Main" style={{ width: '100%', height: '100%', borderRadius: '8px' }} />}
+//         </ImageContainer>
+
+//         <MoreIconWrapper>
+//           <SingleDot onClick={toggleOptionsMenu} />
+//           <SingleDot onClick={toggleOptionsMenu} />
+//           <SingleDot onClick={toggleOptionsMenu} />
+//           <MoreOptionsMenu show={showOptions}>
+//             <MenuItem>수정하기</MenuItem>
+//             <Divider />
+//             <MenuItem>삭제하기</MenuItem>
+//           </MoreOptionsMenu>
+//         </MoreIconWrapper>
+
+//         {isLoadingCollab ? <div>로딩 중...</div> :
+//           errorCollab ? <div>{errorCollab}</div> :
+//             <InfoSection collabData={collabData} />}
+//       </Wrapper>
+
+//       <EventOverviewWrapper>
+//         {collabData ? <EventOverview eventData={collabData} /> : <div>데이터를 불러오는 중...</div>}
+//       </EventOverviewWrapper>
+
+//       <EventGuideWrapper>
+//         {collabData ? <EventGuide collabData={collabData} /> : <div>데이터를 불러오는 중...</div>}
+//       </EventGuideWrapper>
+
+//       <EventImagesWrapper>
+//         {collabData ? <EventImages images={eventPhotoUrls} /> : null}
+//       </EventImagesWrapper>
+
+//       {/* PersonalContact 컴포넌트 추가 */}
+//       <PersonalContactWrapper>
+//         <ContactTitle>컨택하러 가기</ContactTitle>
+//         <PersonalContact />
+//       </PersonalContactWrapper>
+
+//       <InquiryAndCommentsWrapper>
+//     <InquiryForm collabPostId={collabPostId} onAddComment={handleAddComment} />
+//     <div style={{ marginTop: '40px' }}>
+//     <CommentList
+//       comments={comments}
+//       onReply={handleReply}
+//       onDelete={handleDeleteComment}
+//       onUpdate={handleUpdateComment}
+//     />
+//    </div>
+// </InquiryAndCommentsWrapper>
+
+//     </>
+//   );
+// };
+
+// export default CollaborationDetailPage;
 
 const Wrapper = styled.div`
   display: flex;
@@ -221,6 +393,14 @@ const Wrapper = styled.div`
   margin-left: auto;
   margin-right: auto;
   width: 1000px;
+`;
+
+const InfoSectionWrapper = styled.div`
+  margin-left: 100px; 
+  width: 555px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
 const ImageContainer = styled.div`
@@ -271,7 +451,6 @@ const EventImagesWrapper = styled.div`
   margin-left: 340px;
   width: 550px;
 `;
-
 
 const MoreOptionsMenu = styled.div`
   position: absolute;

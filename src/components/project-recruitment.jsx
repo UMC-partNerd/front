@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Button, { TYPES } from "./common/button";
+import CustomModal, { VERSIONS } from "./common/modal/CustomModal";
 import { useNavigate } from 'react-router-dom';
 import {
   PaginationContainer,
@@ -34,13 +35,24 @@ import {
   CategoryGroup
 } from "../styled-components/styled-project-recruitment";
 
+import useProjectRecruitment from '../hooks/useProjectRecruitment';
+
 const ProjectRecruitment = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedStatus, setSelectedStatus] = useState('전체');
-  const [selectedCategory, setSelectedCategory] = useState('전체');
-  const [projectType, setProjectType] = useState('recruit');
-  const [searchTerm, setSearchTerm] = useState('');
-  const itemsPerPage = 12;
+  const {
+    projects,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    selectedStatus,
+    setSelectedStatus,
+    selectedCategories,
+    setSelectedCategories,
+    searchTerm,
+    setSearchTerm,
+    loading
+  } = useProjectRecruitment();
+
+  const navigate = useNavigate();
 
   const statusCategories = ['전체', '모집중', '모집완료'];
   const projectCategories = [
@@ -56,30 +68,23 @@ const ProjectRecruitment = () => {
     '기타'
   ];
 
-  // 예시 데이터
-  const projects = Array(50).fill().map((_, index) => ({
-    title: 'UMC',
-    description: 'UMC는 IT연합 동아리입니다.',
-    category: ['Web', 'Server', 'iOS', 'Android', 'Design', 'PM', 'AI/데이터', '게임 개발', '기타'][Math.floor(Math.random() * 9)],
-    status: index % 2 === 0 ? 'recruiting' : 'completed',
-    imageUrl: 'default-image-url.jpg'
-  }));
+  const itemsPerPage = 12;
 
   // 검색어, 상태, 카테고리로 프로젝트 필터링
   const filteredProjects = projects.filter(project => {
     const searchMatch = project.title.toLowerCase().includes(searchTerm.toLowerCase());
     const statusMatch = selectedStatus === '전체' ? true
-      : selectedStatus === '모집중' ? project.status === 'recruiting'
-      : selectedStatus === '모집완료' ? project.status === 'completed'
+      : selectedStatus === '모집중' ? project.projectStatus === '모집중'
+      : selectedStatus === '모집완료' ? project.projectStatus === '모집완료'
       : true;
-    const categoryMatch = selectedCategory === '전체' ? true
-      : project.category === selectedCategory;
+    const categoryMatch = selectedCategories.includes('전체') ? true
+      : selectedCategories.every(category => project.categoryDTOList.some(c => c.name === category));
 
     return searchMatch && statusMatch && categoryMatch;
   });
 
   // 전체 페이지 수 계산
-  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
+  const totalFilteredPages = Math.ceil(filteredProjects.length / itemsPerPage);
 
   // 현재 페이지의 데이터
   const currentProjects = filteredProjects.slice(
@@ -97,7 +102,7 @@ const ProjectRecruitment = () => {
         key="prev"
         onClick={() => {
           if (currentPage === 1) {
-            setCurrentPage(totalPages);
+            setCurrentPage(totalFilteredPages);
           } else {
             setCurrentPage(prev => prev - 1);
           }
@@ -109,7 +114,7 @@ const ProjectRecruitment = () => {
 
     // 순환 구조의 페이지 버튼 생성
     const getCircularPages = () => {
-      const visiblePages = totalPages <= 5 ? totalPages : 5; // 표시할 페이지 수
+      const visiblePages = totalFilteredPages <= 5 ? totalFilteredPages : 5; // 표시할 페이지 수
       const pages = [];
       
       for (let i = 0; i < visiblePages; i++) {
@@ -117,9 +122,9 @@ const ProjectRecruitment = () => {
         
         // 페이지 번호가 범위를 벗어날 경우 순환
         if (pageNum <= 0) {
-          pageNum = totalPages + pageNum;
-        } else if (pageNum > totalPages) {
-          pageNum = pageNum - totalPages;
+          pageNum = totalFilteredPages + pageNum;
+        } else if (pageNum > totalFilteredPages) {
+          pageNum = pageNum - totalFilteredPages;
         }
         
         pages.push(pageNum);
@@ -147,7 +152,7 @@ const ProjectRecruitment = () => {
       <ArrowButton
         key="next"
         onClick={() => {
-          if (currentPage === totalPages) {
+          if (currentPage === totalFilteredPages) {
             setCurrentPage(1);
           } else {
             setCurrentPage(prev => prev + 1);
@@ -161,10 +166,19 @@ const ProjectRecruitment = () => {
     return buttons;
   };
 
-  // useNavigate 훅을 사용하여 이동 기능 추가
-  const navigate = useNavigate();
-  const onClickHandler = () => {
-    // navigate('/collaboration/collab-registration');
+  const [openModal, setOpenModal] = useState(false);
+
+  const movetoRegister = () => {
+    navigate('/project/recruit/recruit-registration');
+    setOpenModal(false);
+  };
+
+  const buttonHandler = () => {
+    setOpenModal(true);
+  };
+
+  const handleCardClick = (projectId) => {
+    navigate(`/project/recruit/${projectId}`);
   };
 
   return (
@@ -209,9 +223,16 @@ const ProjectRecruitment = () => {
             {projectCategories.map(category => (
               <CategoryButton
                 key={category}
-                isActive={selectedCategory === category}
+                isActive={selectedCategories.includes(category)}
                 onClick={() => {
-                  setSelectedCategory(category);
+                  if (category === '전체') {
+                    setSelectedCategories(['전체']);
+                  } else {
+                    const newCategories = selectedCategories.includes(category)
+                      ? selectedCategories.filter(c => c !== category)
+                      : [...selectedCategories.filter(c => c !== '전체'), category];
+                    setSelectedCategories(newCategories.length ? newCategories : ['전체']);
+                  }
                   setCurrentPage(1);
                 }}
               >
@@ -222,27 +243,47 @@ const ProjectRecruitment = () => {
         </FilterContainer>
         <Button
             type={TYPES.PLUS}
+            sign='true'
             text='글 등록하기'
-            onClick={onClickHandler}
+            onClick={buttonHandler}
         />
       </SearchContainer>
+      
+      <CustomModal
+        openModal={openModal} 
+        closeModal={() => setOpenModal(false)}
+        boldface='프로젝트 모집을 등록하시겠습니까?'
+        regular='프로젝트의 리더로 프로젝트 페이지를 개설하여 프로젝트를 등록할 수 있습니다.'
+        text='개설하기'
+        onClickHandler={movetoRegister}
+        variant={VERSIONS.VER3}
+      />
 
       <PartnerGrid>
-        {currentProjects.map((project, index) => (
-          <PartnerCard key={index}>
-            <ImagePlaceholder>
-              <RecruitmentStatus status={project.status}>
-                {project.status === 'recruiting' ? '모집중' : '모집완료'}
-              </RecruitmentStatus>
-              <img src={project.imageUrl} alt={project.title} />
-            </ImagePlaceholder>
-            <CardContent>
-              <CategoryBadge>{project.category}</CategoryBadge>
-              <Title>{project.title}</Title>
-              <Description>{project.description}</Description>
-            </CardContent>
-          </PartnerCard>
-        ))}
+        {loading ? (
+          <div>로딩 중...</div>
+        ) : (
+          currentProjects.map((project) => (
+            <PartnerCard 
+              key={project.projectId} 
+              onClick={() => handleCardClick(project.projectId)}
+            >
+              <ImagePlaceholder>
+                <RecruitmentStatus status={project.projectStatus === '모집중' ? 'recruiting' : 'completed'}>
+                  {project.projectStatus}
+                </RecruitmentStatus>
+                {project.imageUrl && <img src={project.imageUrl} alt={project.title} />}
+              </ImagePlaceholder>
+              <CardContent>
+                {project.categoryDTOList.map(category => (
+                  <CategoryBadge key={category.id}>{category.name}</CategoryBadge>
+                ))}
+                <Title>{project.title}</Title>
+                <Description>{project.intro}</Description>
+              </CardContent>
+            </PartnerCard>
+          ))
+        )}
       </PartnerGrid>
 
       <PaginationContainer>
