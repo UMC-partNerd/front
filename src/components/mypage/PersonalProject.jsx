@@ -9,6 +9,9 @@ import { SubupSec } from "../../styles/mypagestyles";
 import { SlArrowLeft } from "react-icons/sl";
 import { SlArrowRight } from "react-icons/sl";
 import useMypageImg from "../../hooks/useMypagesProfileImg";
+import { useLocation } from "react-router-dom";
+import { FaPlus } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 const PersonalProject = () => {
 
@@ -20,6 +23,12 @@ const PersonalProject = () => {
     const [error, setError] = useState(null); // 에러 상태
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    
+    const isEditPage = location.pathname === "/mypage/personal-page-edit";
 
     const fetchProjects = async (pageNumber) =>{
         try{
@@ -101,7 +110,7 @@ return(
         <CardGridPersonal>
             {!loading && !error && projects.length > 0 ? (
                 projects.map((project) => (
-                    <ClubCard key={project.promotionProjectId}>
+                    <ClubCard key={project.promotionProjectId} style={{boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.15)"}}>
                         <ImagePlaceholder>
                             {/* 이미지 URL 생성 */}
                             <img
@@ -117,9 +126,39 @@ return(
                 ))
             ) : null}
         </CardGridPersonal>
+
+        {isEditPage && (
+            <PlusProject onClick={() => navigate('/mypage/my-posts')}>
+                <FaPlus />
+                <div>프로젝트 등록하기</div>
+            </PlusProject>
+        )}
     </CardWrapp>
 )
 }
+
+const PlusProject = styled.div`
+display:flex;
+width: 140px;
+min-height: 180px;
+
+cursor:pointer;
+
+margin-top:30px;
+background: #FFFFFF;
+box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+border-radius: 8px;
+color:#A0A0A0;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+
+&>div {
+    font-size:14px;
+    margin-top:12px;
+}
+
+`
 
 const SelectButton = styled.div`
 display:flex;
@@ -147,7 +186,7 @@ display:flex;
 margin-bottom:10px;
 flex-direction:column;
 width:100%;
-max-height:40px;
+max-height:100px;
 
 `
 
