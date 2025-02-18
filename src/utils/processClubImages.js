@@ -1,4 +1,5 @@
 import axios from "axios";
+import Project from "../components/home/Project";
 
 const API_BASE_URL = "https://api.partnerd.site";
 
@@ -28,7 +29,24 @@ export const processClubImages = async (clubList) => {
                     profileImageUrl: cloudFrontUrl || "", // 이미지 URL을 새로운 필드에 저장
                 };
             }
+            
             return club;
         })
     );
 };
+
+//퍼스널 페이지 프로젝트 리스트 변환
+export const processProjectImages = async (projectList) =>{
+    return Promise.all(
+        projectList.map(async (project) =>{
+            if (project.thumbnailKeyName) {
+                const cloudFrontUrl = await getImageUrl(project.thumbnailKeyName);
+                return {
+                    ...project,
+                    thumbnailUrl: cloudFrontUrl || "", // 변환된 이미지 URL 저장
+                };
+            }
+        return project;
+        })
+    )
+}

@@ -6,8 +6,11 @@ import { ClubContainer, CardGrid, ClubCard, ImagePlaceholder, CardContent,
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useClubData } from "../../hooks/useClubDataimg";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const MyTeamsComp = () => {
+
+    const navigate = useNavigate();
 
     const {clubs, isLoading, error} = useClubData();
 
@@ -29,7 +32,10 @@ const MyTeamsComp = () => {
                     clubs.map((club) => {
                         
                         return (
-                            <ClubCard key={club.clubId}>
+                            <ClubCard key={club.clubId} 
+                                onClick={() => navigate('/find/${club.clubId}')}
+                                style={{cursor:'pointer'}}
+                                >
                                 <ImagePlaceholder>
                                     <img 
                                     src={club.profileImageUrl || "/default-image.png"}
