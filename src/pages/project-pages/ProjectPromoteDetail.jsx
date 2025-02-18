@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import * as S from '../../styled-components/projectdetail-styles/styled-ProjectPromoteDetail';
 import ImageSlider from '../../components/projectdetail/ImageSlider';
@@ -10,6 +10,7 @@ import useBannerPhoto from '../../hooks/useBannerPhoto';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
 import Button, { TYPES } from "../../components/common/button";
 import OptionMenu from '../../components/common/button/optionMenu';
+import { UserName } from '../../styled-components/community-styles/styled-PostItem';
 
 const DefaultImage = '/default-image.png';
 
@@ -20,13 +21,26 @@ const ProjectPromoteDetail = () => {
   const [openFirstModal, setOpenFirstModal] = useState(false); // 첫 번째 모달 (삭제 확인)
   const [openSecondModal, setOpenSecondModal] = useState(false); // 두 번째 모달 (삭제 완료)
 
+  const [cheers, setCheers] = useState(0);        // 기존 응원 개수
+  const [cheered, setCheered] = useState(false);  // 응원 여부
+  const navigate = useNavigate();
+
+
   // 프로젝트 및 댓글 데이터 조회
   useEffect(() => {
     // 프로젝트 데이터 조회
     axios.get(`https://api.partnerd.site/api/project/promotion/${promotionProjectId}`)
       .then((response) => {
         if (response.data.isSuccess) {
-          setProjectData(response.data.result);
+          setProjectData((prev) => (JSON.stringify(prev) === JSON.stringify(response.data.result) ? prev : response.data.result));
+          
+          // 응원하기 투표 개수
+          setCheers(response.data.result.vote);
+
+          // 본인 투표 여부 응답 데이터에서 확인 필요
+          // setCheered(response.data.result.isVotedByMe || false);
+
+
         } else {
           console.error('프로젝트 데이터 조회 실패');
         }
@@ -230,19 +244,22 @@ const ProjectPromoteDetail = () => {
   };
 
   // 응원하기
-  const [cheers, setCheers] = useState(0); 
-  const [cheered, setCheered] = useState(false); 
   // const onClickHandler = () => {
   //   setCheers(cheers + (cheered ? -1 : 1)); 
   //   setCheered(!cheered);
   // }
 
-  const onClickHandler = async () => {
+  const onClickHandler = useCallback( async () => {
     try {
       const token = localStorage.getItem("jwtToken");
       if (!token) {
-        console.error("로그인이 필요합니다.");
+        console.error("로그인이 필요");
         return;
+      }
+
+      // 이미 투표 진행한 경우
+      if (cheered) {
+        setCheered(true);
       }
 
       const response = await axios.patch(
@@ -250,22 +267,31 @@ const ProjectPromoteDetail = () => {
         {},
         {
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
         }
       );
   
       if (response.data.isSuccess) {
         console.log("응원 성공: ", response.data.message);
-        setCheers((prev) => (cheered ? prev - 1 : prev + 1));
-        setCheered((prev) => !prev);
+
+        
+      // UI 즉시 업데이트 (사용자 경험 개선)
+      setCheers((prev) => (cheered ? prev - 1 : prev + 1)); // 응원 여부 반영한 개수
+      setCheered((prev) => !prev);                          // 클릭 상태 반전
+      
       } else {
         console.error("응원 실패:", response.data.message);
+        // 실패 시 UI 원상복구
+        setCheers((prev) => (cheered ? prev + 1 : prev - 1));
+        setCheered((prev) => !prev); 
       }
     } catch (error) {
       console.error("응원 중 오류 발생:", error);
-
+        // 실패 시 UI 원상복구
+        setCheers((prev) => (cheered ? prev + 1 : prev - 1));
+        setCheered((prev) => !prev); 
       if (error.response) {
         console.error("서버 응답 상태 코드:", error.response.status);
         console.error("서버 응답 데이터:", error.response.data);
@@ -293,8 +319,8 @@ const ProjectPromoteDetail = () => {
         `https://api.partnerd.site/api/project/promotion/${promotionProjectId}`,
         {
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
         }
       );
@@ -343,8 +369,8 @@ const ProjectPromoteDetail = () => {
 
           <Button
             type = {TYPES.VOTE}
-            count={cheers}
-            onClick={onClickHandler}
+            count={cheers}            // 서버에서 받은 응원 개수
+            onClick={onClickHandler}  // 클릭 시 서버와 동기화
           />
         </S.SButtonBox>
       </S.SHeaderBox>
