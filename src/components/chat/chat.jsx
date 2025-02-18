@@ -27,8 +27,12 @@ import {
   ChatTime,
   MessageInput,
   Input,
-  SendButton
+  SendButton,
+
+  AssiciatedCollab
 } from "../../styled-components/styled-chat/chat";
+
+import Banner from "../common/banner/Banner";
 
 const sendBtn = '/send.png';
 
@@ -69,14 +73,19 @@ const Chat = () => {
     }
     initializeWebSocket(SelectedchatRoomId);
   };
+
   // 🔹 새로운 WebSocket을 설정하는 함수
   const initializeWebSocket = (chatRoomId) => {
     console.log(`🔄 새로운 WebSocket 연결 시작: ${chatRoomId}`);
+    
+    // 세션 아이디 (채팅)
     const sessionId = encodeURIComponent(localStorage.getItem("sessionId"));
 
     const socket = new SockJS(
       `https://api.partnerd.site/chat?sessionId=${sessionId}`
     );
+
+    console.log("WebSocket Session ID:", sessionId);
 
     const client = new Client({
       webSocketFactory: () => socket,
@@ -361,102 +370,114 @@ const Chat = () => {
   }, [selectedTab, chatList, collabChatList]); // ✅ 탭 변경 시마다 업데이트
 
   return (
-    <Container>
-      <Sidebar>
-        <TabMenu>
-          <Tab
-            active={selectedTab === "private"}
-            onClick={() => setSelectedTab("private")}
-          >
-            개인 채팅
-          </Tab>
-          <Tab
-            active={selectedTab === "collab"}
-            onClick={() => setSelectedTab("collab")}
-          >
-            콜라보레이션 채팅
-          </Tab>
-        </TabMenu>
-        <ChatList>
-          {(selectedTab === "private" ? chatList : collabChatList).map(
-            (chat) => (
-              <ChatItem
-                key={chat.id}
-                onClick={() => handleChatClick(chat.chatRoomId, chat)}
-              >
-                <Avatar
-                  src={avatarUrls[chat.chatRoomId] || "/default-avatar.png"}
-                />
-                <ChatInfo>
-                  <ChatName>
-                    {selectedTab === "private"
-                      ? chat.receiverNickname
-                      : chat.clubName}
-                  </ChatName>
-                  <LastMessage>
-                    {chat.lastMessage || "메시지가 없습니다"}
-                  </LastMessage>
-                </ChatInfo>
-                <ChatTime>{chat.time}</ChatTime>
-              </ChatItem>
-            )
-          )}
-        </ChatList>
-      </Sidebar>
+    <>
+        <Banner largeText="채팅"/>
+        <Container>
+        <Sidebar>
+            <TabMenu>
+            <Tab
+                active={selectedTab === "private"}
+                onClick={() => setSelectedTab("private")}
+            >
+                개인 채팅
+            </Tab>
+            <Tab
+                active={selectedTab === "collab"}
+                onClick={() => setSelectedTab("collab")}
+            >
+                콜라보레이션 채팅
+            </Tab>
+            </TabMenu>
+            <ChatList>
+            {(selectedTab === "private" ? chatList : collabChatList).map(
+                (chat) => (
+                <ChatItem
+                    key={chat.id}
+                    onClick={() => handleChatClick(chat.chatRoomId, chat)}
+                >
+                    {/* 콜라보레이션 채팅*/}
+                    {selectedTab === "collab" && <AssiciatedCollab>{chat.collabName}</AssiciatedCollab>}
+                    <Avatar
+                    src={avatarUrls[chat.chatRoomId] || "/default-avatar.png"}
+                    />
+                    <ChatInfo>
+                    <ChatName>
+                        {selectedTab === "private"
+                        ? chat.receiverNickname
+                        : chat.clubName}
+                    </ChatName>
+                    <LastMessage>
+                        {chat.lastMessage || "메시지가 없습니다"}
+                    </LastMessage>
+                    </ChatInfo>
+                    <ChatTime>{chat.time}</ChatTime>
+                </ChatItem>
+                )
+            )}
+            </ChatList>
+        </Sidebar>
 
-      <ChatContainer>
-        <ChatTitle>UMC</ChatTitle>
-        <ChatRoomContainer>
-          {selectedChatRoomId ? (
-            <>
-              <ChatHeader>{selectedChat.receiverNickname}</ChatHeader>
-              <MessageContainer>
-                {Object.entries(groupedMessages[selectedChatRoomId] || {}).map(
-                  ([date, messages]) => (
-                    <div key={date}>
-                      <DateHeader>{date}</DateHeader>
-                      {Array.isArray(messages) &&
-                        messages.map((msg, index) => {
-                          const isMine = msg.senderNickname === "율무";
-                          return (
-                            <Message key={index} isMine={isMine}>
-                              <MessageWrapper isMine={isMine}>
-                                {!isMine && (
-                                  <Avatar
-                                    src={
-                                      avatarUrls[msg.id] || "/default-avatar.png"
-                                    }
-                                  />
-                                )}
-                                <MessageBubble isMine={isMine}>
-                                  {msg.content}
-                                </MessageBubble>
-                              </MessageWrapper>
-                            </Message>
-                          );
-                        })}
-                    </div>
-                  )
-                )}
-              </MessageContainer>
-              <MessageInput>
-                <Input
-                  type="text"
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  placeholder="메시지를 입력하세요"
-                />
-                <SendButton onClick={handleSendMessage}>
-                  <img src={sendBtn} alt="메세지 보내기" />
-                </SendButton>
-              </MessageInput>
-            </>
-          ) : (
-            <EmptyChat>채팅방을 선택해주세요</EmptyChat>
-          )}
-        </ChatRoomContainer>
-      </ChatContainer>
-    </Container>
+        <ChatContainer>
+            {selectedChatRoomId ? (
+                <>
+                    <ChatTitle>
+                        {selectedTab === "private"
+                            ? selectedChat.receiverNickname
+                            : selectedChat.clubName}
+                        
+                    </ChatTitle>
+                    <ChatRoomContainer>
+                        {selectedTab === "collab" && (
+                            <ChatHeader>[{selectedChat.collabName}] 콜라보레이션 채팅에서 협업 관련 세부 계획에 대한 논의를 시작해보세요.</ChatHeader>
+                        )}
+                        <MessageContainer>
+                            {Object.entries(groupedMessages[selectedChatRoomId] || {}).map(
+                            ([date, messages]) => (
+                                <div key={date}>
+                                <DateHeader>{date}</DateHeader>
+                                {Array.isArray(messages) &&
+                                    messages.map((msg, index) => {
+                                    const isMine = msg.senderNickname === "율무";
+                                    return (
+                                        <Message key={index} isMine={isMine}>
+                                        <MessageWrapper isMine={isMine}>
+                                            {!isMine && (
+                                            <Avatar
+                                                src={
+                                                avatarUrls[msg.id] || "/default-avatar.png"
+                                                }
+                                            />
+                                            )}
+                                            <MessageBubble isMine={isMine}>
+                                            {msg.content}
+                                            </MessageBubble>
+                                        </MessageWrapper>
+                                        </Message>
+                                    );
+                                    })}
+                                </div>
+                            )
+                            )}
+                        </MessageContainer>
+                        <MessageInput>
+                            <Input
+                            type="text"
+                            value={inputMessage}
+                            onChange={(e) => setInputMessage(e.target.value)}
+                            placeholder="메시지를 입력하세요"
+                            />
+                            <SendButton onClick={handleSendMessage}>
+                            <img src={sendBtn} alt="메세지 보내기" />
+                            </SendButton>
+                        </MessageInput>
+                    </ChatRoomContainer>
+                </>
+            ) : (
+                <EmptyChat>채팅방을 선택해주세요</EmptyChat>
+            )}
+        </ChatContainer>
+        </Container>
+    </>
   );
 };
 

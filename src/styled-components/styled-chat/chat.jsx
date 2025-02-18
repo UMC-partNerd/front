@@ -97,12 +97,13 @@ export const ChatRoomContainer = styled.div`
 `;
 
 export const ChatHeader = styled.p`
-    border-bottom: 1px solid #ddd;
-    padding: 20px;
-    color: #212121;
-    text-align: center;
-    font-size: 24px;
-    font-weight: 600;
+    color: #08D485;
+    font-family: Pretendard;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.24px;
 `;
 
 export const MessageWrapper = styled.div`
@@ -212,4 +213,24 @@ export const Input = styled.input`
 
 export const SendButton = styled.button`
     padding: 10px 16px;
+`;
+
+
+
+export const AssiciatedCollab = styled.div`
+    display: inline-flex;
+    padding: 4px 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 4px;
+    background: #EAF1FF;
+
+    color: #0B2ED9;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.32px;
 `;

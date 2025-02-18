@@ -111,7 +111,7 @@ const router = createBrowserRouter([
       {
         // 채팅 목록
         path: 'chat',
-        // element: <ChatList/>,
+        element: <Chat/>,
         children: [
           {
             // 채팅방
@@ -196,7 +196,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'test',
-        element: <Chat/>
+        // element: <Chat/>
       }
     ]
   }
