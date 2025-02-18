@@ -17,9 +17,10 @@ import ProjectPromotion from './components/project-promotion';
 import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
 
-import ChatPage from './pages/ChatPage';
+// import ChatPage from './pages/ChatPage';
 // import ChatList from './components/chat/chat-list';
 // import ChatRoom from './components/chat/chat-room';
+import Chat from './components/chat/chat';
 
 const router = createBrowserRouter([
   {
@@ -149,7 +150,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'test',
-        element: <ChatPage/>
+        element: <Chat/>
       }
     ]
   }

@@ -4,7 +4,7 @@ import {
   Date,
   ChatWrap,
   InputMessage
-} from "../../styled-components/chat/chat-room";
+} from "../../styled-components/styled-chat/chat-room";
 
 export const TYPES = {
   PERSONAL: 'personal',

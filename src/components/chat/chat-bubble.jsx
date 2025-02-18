@@ -4,7 +4,7 @@ import {
   Row,
   Who,
   Message  
-} from "../styled-components/chat/chat-bubble";
+} from "../styled-components/styled-chat/chat-bubble";
 
 export const POSITIONS = {
   LEFT: 'left',

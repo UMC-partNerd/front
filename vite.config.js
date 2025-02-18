@@ -8,4 +8,9 @@ export default defineConfig({
   server: {
     port: 3000
   },
+
+  // 채팅
+  define: {
+    global: "window"
+  }
 })
