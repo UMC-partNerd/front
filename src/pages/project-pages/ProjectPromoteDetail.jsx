@@ -7,6 +7,7 @@ import ProjectPromoteForm from '../../components/projectdetail/ProjectPromoteFor
 import ProjectCommentList from '../../components/projectdetail/ProjectCommentList';
 import CommentForm from '../../components/projectdetail/CommentForm';
 import useBannerPhoto from '../../hooks/useBannerPhoto';
+import MemberForm from '../../components/projectdetail/MemberForm';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
 
 import Button, { TYPES } from "../../components/common/button";
@@ -125,7 +126,7 @@ const ProjectPromoteDetail = () => {
         // 댓글 목록에서 해당 댓글을 찾아 대댓글을 추가
         setComments((prevComments) =>
           prevComments.map((comment) =>
-            comment.projectCommentId === parentId
+            comment.promotionProjectCommentId === parentId
               ? { 
                   ...comment, 
                   replies: [...(comment.replies || []), addedReply] 
@@ -214,7 +215,7 @@ const ProjectPromoteDetail = () => {
         const updatedComment = response.data.result;
   
         const updatedComments = comments.map((comment) =>
-          comment.projectCommentId === updatedComment.projectCommentId
+          comment.promotionProjectCommentId === updatedComment.promotionProjectCommentId
             ? { ...comment, contents: updatedComment.contents }
             : comment
         );
@@ -257,6 +258,7 @@ const ProjectPromoteDetail = () => {
         </S.STextBox>
       </S.SImageBoxContainer>
 
+
       {/* 삭제 확인 모달 */}
       <CustomModal
         openModal={openFirstModal} 
@@ -287,6 +289,15 @@ const ProjectPromoteDetail = () => {
         </S.SFormContainer>
       </S.SFormWrapper>
 
+      <S.SMemberFormWrapper>
+        <MemberForm
+         leaderInfo={projectData?.leaderInfo}
+         projectMembers={projectData?.projectMembers}
+         promotionProjectMembers={projectData?.promotionProjectMembers}
+         isPromote={true} 
+        />
+       </S.SMemberFormWrapper>
+
       {/* 댓글 폼 */}
       <S.SCommentFormWrapper>
         <CommentForm onAddComment={handleAddComment} />
@@ -298,6 +309,7 @@ const ProjectPromoteDetail = () => {
           onReply={handleAddReply}
           onDelete={handleDeleteComment} 
           onUpdate={handleUpdateComment} 
+          type="promote"  
         />
       </S.SProjectCommentListWrapper>
     </S.SContainer>

@@ -18,14 +18,14 @@ const TeamRegistration = () => {
     category: '',
     activities: '',
   });
-  const [activityIntro, setActivityIntro] = useState(''); // 활동 소개 추가
-  const [activityImageKeyNames, setActivityImageKeyNames] = useState([]); // 활동 이미지 추가
+  const [activityIntro, setActivityIntro] = useState(''); 
+  const [activityImageKeyNames, setActivityImageKeyNames] = useState([]); 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   // 현재 경로 확인
   const location = useLocation();
-  const isEditMode = location.pathname.includes('manage'); // 'manage' 경로가 있으면 edit 모드
+  const isEditMode = location.pathname.includes('manage'); 
 
   // 팀 정보 업데이트 함수
   const handleTeamInfoChange = (newTeamInfo) => {
