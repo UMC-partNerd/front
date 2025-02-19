@@ -1,12 +1,14 @@
-// RootLayout.jsx
+import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
-import { useState, useEffect } from 'react';
+import useUserStore from '../stores/useUserStore';
+import axios from 'axios';
 
 function RootLayout() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);  
+  const { token, clearUser } = useUserStore();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   const handleScroll = () => {
@@ -16,21 +18,46 @@ function RootLayout() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('jwt_token');
-    setIsLoggedIn(!!token); // 토큰이 있으면 true, 없으면 false
+    const storedToken = localStorage.getItem('jwtToken');
+    if (storedToken) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false); // 로그인 후 네비게이션바
+    }
+  
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [token]);
 
-  // 로그아웃 
-  const handleLogout = () => {
-    localStorage.removeItem("jwt_token");
-    localStorage.removeItem("kakao_access_token");
-    localStorage.removeItem("used_kakao_code");
-    localStorage.removeItem("kakao_email");
-    setIsLoggedIn(false); // 상태 업데이트
+  const handleLogout = async () => {
+    const kakaoAccessToken = localStorage.getItem('kakao_access_token');
+    
+    if (kakaoAccessToken) {
+      try {
+        const response = await axios.post('https://kapi.kakao.com/v1/user/logout', {}, {
+          headers: {
+            Authorization: `Bearer ${kakaoAccessToken}`
+          }
+        });
+
+        if (response.status === 200) {
+          console.log("카카오 로그아웃 성공");
+        } else {
+          console.error("카카오 로그아웃 실패:", response);
+        }
+        localStorage.removeItem('kakao_access_token');
+      } catch (error) {
+        console.error("카카오 로그아웃 실패:", error);
+      }
+    }
+
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('kakao_email');
+    localStorage.removeItem('used_kakao_code');
+    clearUser();
+    setIsLoggedIn(false);
     window.location.href = '/'; // 페이지 새로고침
   };
 

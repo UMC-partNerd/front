@@ -1,126 +1,67 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';  
+import { FiMoreVertical } from 'react-icons/fi'; 
+import * as S from '../../styled-components/teamdetail-styles/styled-TeamInfo';
 
-const TeamInfo = ({ name, description, category, contact = [] }) => (
-  <Container>
-    <HeaderContainer>
-      <BadgeTitleContainer>
-        <Badge>{category}</Badge>
-        <Title>{name}</Title>
-      </BadgeTitleContainer>
-      <ManageLink>팀페이지 관리 &nbsp;&gt;</ManageLink>
-    </HeaderContainer>
-    <SubTitle>{description}</SubTitle>
+const TeamInfo = ({ name, description, category, contact = [], clubId, onDelete }) => {
+  const [showOptions, setShowOptions] = useState(false); 
+  const navigate = useNavigate(); 
 
-    <ContactInfoContainer>
-      {contact.length > 0 ? contact.map((item, index) => (
-        <ContactItem key={index}>
-          <ContactType>{item.type}:</ContactType>
-          <ContactLink>{item.link}</ContactLink>
-        </ContactItem>
-      )) : <div>연락처 정보가 없습니다.</div>}
-    </ContactInfoContainer>
-  </Container>
-);
+  const handleOptionsClick = () => {
+    setShowOptions(!showOptions); 
+  };
+
+  const handleEditClick = () => {
+    // 수정하기 클릭 시 팀 페이지 관리 페이지로 이동
+    navigate(`/find/${clubId}/manage`);
+  };
+
+  const onDeleteClick = () => {
+    // 삭제 기능 호출
+    onDelete(clubId); 
+  };
+
+  return (
+    <S.SContainer>
+      <S.SHeaderContainer>
+        <S.SBadgeTitleContainer>
+          <S.SBadge>{category}</S.SBadge>
+          <S.STitle>{name}</S.STitle>
+        </S.SBadgeTitleContainer>
+        
+  
+        <FiMoreVertical
+          onClick={handleOptionsClick}
+          style={{
+            position: 'absolute',
+            right: '-15px',
+            top: '-2px',
+            cursor: 'pointer',
+            fontSize: '20px', 
+          }}
+        />
+
+        {/* 메뉴 옵션 */}
+        <S.SMoreOptionsMenu show={showOptions}>
+          <S.SMenuItem onClick={handleEditClick}>수정하기</S.SMenuItem>
+          <S.SDivider />
+          <S.SMenuItem onClick={onDeleteClick}>삭제하기</S.SMenuItem>  
+        </S.SMoreOptionsMenu>
+      </S.SHeaderContainer>
+
+      <S.SSubTitle>{description}</S.SSubTitle>
+
+      <S.SContactInfoContainer>
+        {contact.length > 0 ? contact.map((item, index) => (
+          <S.SContactItem key={index}>
+            <S.SContactType>{item.contactType !== 'string' ? item.contactType : '연락처 정보가 없습니다'}</S.SContactType>
+            <S.SContactLink>{item.contactUrl !== 'string' ? item.contactUrl : ' '}</S.SContactLink>
+          </S.SContactItem>
+        )) : <div>연락처 정보가 없습니다.</div>}
+      </S.SContactInfoContainer>
+    </S.SContainer>
+  );
+};
+
 
 export default TeamInfo;
-
-
-const Container = styled.div`
-  margin: 20px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top: 45px;
-  border-bottom: 1px solid #E1E1E1; 
-  max-width: 800px; 
-  width: 100%; 
-  height: 290px;
-  box-sizing: border-box; 
-`;
-
-const HeaderContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  width: 100%;
-  position: relative;
-  box-sizing: border-box;
-`;
-
-const BadgeTitleContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Title = styled.h1`
-  font-size: 2em;
-  margin-bottom: 3px;
-  margin-top: 7px;
-`;
-
-const SubTitle = styled.p`
-  font-size: 500;
-  margin-bottom: 10px;
-  color: #707070;
-`;
-
-const Badge = styled.span`
-  display: inline-block;
-  padding: 5px 20px;
-  margin: 5px 0;
-  border-radius: 30px;
-  background-color: #DDFCF0;
-  color: #08D485;
-  font-size: 600;
-  font-weight: bold;
-  border: 1.5px solid #08D485;
-  width: 60px;
-  height: auto;
-  white-space: nowrap;
-  overflow: hidden;
-  text-align: center; 
-  line-height: 1.5; 
-`;
-
-
-const ManageLink = styled.button`
-  background: none;
-  border:none;
-  color: #A0A0A0;
-  font-size: 15px;
-  font-weight: 500;
-  padding: 10px 20px;
-  cursor: pointer;
-  position: absolute;
-  right: 20px;
-  top: 15px;
-  white-space: nowrap; 
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const ContactInfoContainer = styled.div`
-  margin-top: 20px;
-`;
-
-const ContactItem = styled.div`
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-`;
-
-const ContactType = styled.span`
-  font-weight: bold;
-  margin-right: 10px;
-  color: #212121;
-`;
-
-const ContactLink = styled.span`
-  color: #707070;
-  font-size: 1em;
-  &:hover {
-    text-decoration: none;
-  }
-`;

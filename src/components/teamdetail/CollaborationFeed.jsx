@@ -1,122 +1,83 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import * as S from '../../styled-components/teamdetail-styles/styled-CollaborationFeed';
 
-const CollaborationFeed = ({ feed }) => {
+const CollaborationFeed = ({ feed = [] }) => {
   const navigate = useNavigate();
+  
+  // 상세 정보를 담을 상태
+  const [detailedFeed, setDetailedFeed] = useState([]);
 
   const handleFeedClick = (id) => {
     navigate(`/collaboration/${id}`);
   };
 
+  // 상세 정보 요청
+  useEffect(() => {
+    const fetchDetails = async () => {
+      const token = localStorage.getItem('jwtToken');
+      try {
+        const responses = await Promise.all(
+          feed.map(async (item) => {
+            const response = await axios.get(`https://api.partnerd.site/api/collabPosts/${item.collabPostId}`, {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              }
+            });
+            return { ...item, ...response.data.result }; 
+          })
+        );
+        setDetailedFeed(responses);
+      } catch (error) {
+        console.error("Error fetching collaboration post details:", error);
+      }
+    };
+
+    if (feed.length > 0) {
+      fetchDetails();
+    }
+  }, [feed]);
+
   return (
-    <Container>
-      <Header>
-        <SectionTitle>콜라보레이션 피드</SectionTitle>
-        {/* "콜라보레이션 바로가기" 버튼 제거 */}
-        {/* <LinkButton onClick={handleGoToCollaboration}>콜라보레이션 바로가기  {'>'}</LinkButton> */}
-      </Header>
-      <FeedList>
-        {feed.map((item) => (
-          <FeedItem key={item.id} onClick={() => handleFeedClick(item.id)}>
-            <FeedHeader>
-              <FeedTitle>{item.title}</FeedTitle>
-              <FeedDate>{item.date}</FeedDate>
-            </FeedHeader>
-            <FeedDescription>{item.content}</FeedDescription>
-          </FeedItem>
-        ))}
-      </FeedList>
-    </Container>
+    <S.SContainer>
+      <S.SHeader>
+        <S.SSectionTitle>콜라보레이션 피드</S.SSectionTitle>
+      </S.SHeader>
+      {detailedFeed.length === 0 ? (
+        <S.SFeedItem>
+          <S.SFeedTitle>콜라보레이션 피드가 없습니다.</S.SFeedTitle>
+        </S.SFeedItem>
+      ) : (
+        <S.SFeedList>
+          {detailedFeed.map((item) => (
+            <S.SFeedItem key={item.collabPostId} onClick={() => handleFeedClick(item.collabPostId)}>
+              <S.SFeedHeader>
+                <S.SFeedTitle>{item.title}</S.SFeedTitle>
+                {/* 날짜 포맷을 'YYYY-MM-DD' 형식으로 표시 */}
+                <S.SFeedDate>{new Date(item.startDate).toLocaleDateString()}</S.SFeedDate>
+              </S.SFeedHeader>
+              {/* content는 'intro'로 전달된다고 가정 */}
+              <S.SFeedDescription>{item.description || item.intro}</S.SFeedDescription>
+            </S.SFeedItem>
+          ))}
+        </S.SFeedList>
+      )}
+    </S.SContainer>
   );
 };
 
 CollaborationFeed.propTypes = {
   feed: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      collabPostId: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired,
-      date: PropTypes.string.isRequired,
+      intro: PropTypes.string.isRequired, // API 응답에서 intro 필드로 가정
+      startDate: PropTypes.string.isRequired, // startDate 필드로 가정
     })
   ).isRequired,
 };
 
 export default CollaborationFeed;
-
-const Container = styled.div` 
-  margin: 53px 0; 
-  max-width: 800px; 
-  width: 100%;
-`;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 32px; 
-  font-weight: 700; 
-  color: #212121;
-`;
-
-const FeedList = styled.ul`
-  margin-top: 30px;
-  list-style-type: none;
-  padding: 0;
-`;
-
-const FeedItem = styled.li`
-  margin-bottom: 30px; 
-  padding: 30px; 
-  border: 0.05px solid #f3f3f3; 
-  border-radius: 15px;
-  cursor: pointer;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); 
-  transition: background-color 0.3s, box-shadow 0.3s;
-  min-height: 120px;
-  display: flex;
-  flex-direction: column;
-
-  &:hover {
-    background-color: #f9f9f9;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); 
-  }
-`;
-
-const FeedHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-`;
-
-const FeedTitle = styled.div`
-  font-weight: 600; 
-  font-size: 20px; 
-  color: #0D29B7;
-`;
-
-const FeedDate = styled.div`
-  font-size: 0.8em;
-  color: #888;
-`;
-
-const FeedDescription = styled.div`
-  white-space: pre-line; 
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  color: #414141;
-  margin-top: 10px;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.5;
-`;

@@ -32,21 +32,23 @@ const LoginComp = () =>{
         </MainWrapp>
     )
 }
-const Input = styled.input`
-    max-width: 450px;
-    width: 80%;
-    height: 0.7em;
-    padding: 22px 28px;
-    gap: 10px;
-    background-color: #ffffff !important;
-    border: 1px solid #c2c2c2;
-    border-radius: 4px;
 
-    @media (max-width: 768px) {
+const Input = styled.input`
+max-width:450px;
+width: 80%;
+height: 0.7em;
+padding: 22px 28px;
+gap: 10px;
+background-color: #FFFFFF  !important;
+border: 1px solid #C2C2C2;
+border-radius: 4px;
+
+@media (max-width: 768px) {
         width: 90%;
         padding: 18px;
     }
-`;
+
+`
 
 const Logo = styled.div`
     display: block;
@@ -59,42 +61,46 @@ const Logo = styled.div`
     &:hover {
         opacity: 0.9;
     }
-
-    @media (max-width: 768px) {
-        width: 150px;
-    }
-`;
+`
 
 const Submit = styled.input`
-    max-width: 420px;
-    width: 100%;
-    height: 3.4em;
-    border-radius: 10px;
-    font-size: 1em;
-    color: white;
-    background: #0d29b7;
-    border-radius: 4px;
-    border: none;
+max-width:420px;
+width: 100%;
+height: 3.4em;
+border-radius: 10px;
+font-size:1em;
+color:white;
+background: #0D29B7;
+border-radius: 4px;
+border:none;
 
-    @media (max-width: 768px) {
+// background: ${(props) => (props.isValid ? '#FF073D' : 'gray')};
+
+// cursor: ${(props) => (props.isValid ? 'pointer' : 'not-allowed')};
+//     transition: background-color 0.3s;
+
+//     &:disabled {
+//         background: gray;
+//     }
+@media (max-width: 768px) {
         width: 90%;
         font-size: 0.9em;
     }
-`;
+`
+
 
 const Form = styled.form`
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    width: 60%;
-    margin-top: 20px;
+display:flex;
+justify-content: center;
+flex-direction: column;
+align-items: center;
+width:60%;
+margin-top:20px;
 
-    @media (max-width: 768px) {
+@media (max-width: 768px) {
         width: 80%;
     }
-`;
-
+`
 const LinksWrapper = styled.div`
     display: flex;
     justify-content: center;
@@ -107,10 +113,9 @@ const LinksWrapper = styled.div`
         gap: 8px;
     }
 `;
-
 const LinkText = styled.span`
     font-size: 0.8em;
-    color: #707070;
+    color:  #707070;
     cursor: pointer;
 
     &:hover {
@@ -155,47 +160,41 @@ const Line = styled.div`
 
 const TextInLine = styled.span`
     margin: 0 10px;
-    font-size: 0.8em;
+    font-size: 0.5em;
     color: #707070;
     white-space: nowrap;
-
-    @media (max-width: 768px) {
-        font-size: 0.7em;
-    }
 `;
 
 const MainWrapp = styled.main`
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    width: 60vw;
-    max-width: 2700px;
-    height: 85vh;
-    background: #ffffff;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 16px;
-    margin: 50px 100px 70px 100px;
-    padding: 20px;
+justify-content:center;
+align-items: center;
+display:flex;
+flex-direction:column;
+width: 60vw;
+max-width:2700px;
+height: 85vh;
+background: #FFFFFF;
+box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+border-radius: 16px;
+margin: 50px 100px 70px 100px;
+padding: 20px;
 
-    @media (max-width: 1024px) {
+@media (max-width: 1024px) {
         width: 80vw;
         margin: 30px 50px;
     }
-
     @media (max-width: 768px) {
         width: 100vw;
         height: auto;
         margin: 20px;
         padding: 15px;
     }
-
     @media (max-width: 480px) {
         width: 100vw;
         margin: 10px;
         padding: 10px;
     }
-`;
 
+`
 
 export default LoginComp

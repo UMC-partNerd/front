@@ -18,6 +18,13 @@ export const PartnerCard = styled.div`
   border: 1px solid #EAEAEA;
   border-radius: 8px;
   overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 export const ImagePlaceholder = styled.div`
@@ -204,31 +211,6 @@ export const ButtonContainer = styled.div`
   margin-bottom: 24px;
   width: 100%;
   max-width: 1200px;
-`;
-
-export const RegisterButton = styled.button`
-  display: flex;
-  align-items: center;
-  padding: 8px 16px;
-  border-radius: 6px;
-  border: 1.5px solid #0D29B7;
-  background: transparent;
-  color: #0D29B7;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  margin-left: auto;
-
-  &:hover {
-    background: #0D29B7;
-    color: white;
-  }
-
-  &:before {
-    content: '+';
-    margin-right: 6px;
-    font-size: 14px;
-  }
 `;
 
 export const CategoryContainer = styled.div`

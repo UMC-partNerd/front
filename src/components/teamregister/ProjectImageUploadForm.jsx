@@ -1,88 +1,79 @@
-// ProjectImageUploadForm.jsx
-import React, { useState } from 'react';
-import ProfileImageUpload from './ProfileImageUpload';
-import BannerImageUpload from './BannerImageUpload';
-import styled from 'styled-components';
-import ImageRectangle from './ImageRectangle';
+import React, { useState, useEffect } from 'react';
+import ProfileImageUpload from '../../components/common/images/ProfileImageUpload';
+import BannerImageUpload from '../../components/common/images/BannerImageUpload';
+import ImageRectangle from '../common/images/ImageRectangle';
+import * as S from '../../styled-components/teamregister-styles/styled-ProjectImageUploadForm';
 
-const ProjectImageUploadForm = ({ handleProfileClick, handleBannerClick }) => {
-  const [profileImage, setProfileImage] = useState(null);
-  const [bannerImage, setBannerImage] = useState(null);
+const ProjectImageUploadForm = ({ setProfileImage, setBannerImage, profileImageUrl, bannerImageUrl }) => {
+  const [profileImagePreview, setProfileImagePreview] = useState(profileImageUrl || null);
+  const [bannerImagePreview, setBannerImagePreview] = useState(bannerImageUrl || null);
 
   const handleProfileClose = () => {
-    setProfileImage(null);  
+    setProfileImagePreview(null);
   };
 
   const handleBannerClose = () => {
-    setBannerImage(null);  
+    setBannerImagePreview(null);
   };
 
-  return (
-    <FormContainer>
-      {/* 프로젝트 프로필 사진 섹션 */}
-      <Section>
-        <ProfilePictureText>프로젝트 프로필 사진 <RedAsterisk>*</RedAsterisk></ProfilePictureText>
-        <form>
-          <RecommendationText>추천 사이즈: 960 x 540 | JPG, PNG | 최대 10MB</RecommendationText>
-          <ProfileImageUpload
-            onClick={(file) => setProfileImage(URL.createObjectURL(file))}  // 업로드된 이미지 미리보기 설정
-            imagePreview={profileImage}
-          />
-          {/* 항상 렌더링되는 ImageRectangle */}
-          <ImageRectangle imagePreview={profileImage} onClose={handleProfileClose} />
-        </form>
-      </Section>
+  useEffect(() => {
+    if (profileImageUrl) {
+      setProfileImagePreview(profileImageUrl); // 수정 페이지에서 초기 이미지 URL 설정
+    }
+    if (bannerImageUrl) {
+      setBannerImagePreview(bannerImageUrl); // 수정 페이지에서 초기 이미지 URL 설정
+    }
+  }, [profileImageUrl, bannerImageUrl]);
 
-      {/* 프로젝트 배너 사진 섹션 */}
-      <Section>
-        <ProfilePictureText>프로젝트 배너 사진 <RedAsterisk>*</RedAsterisk></ProfilePictureText>
+  return (
+    <S.SFormContainer>
+      {/* 프로젝트 프로필 이미지 섹션 */}
+      <S.SSection>
+        <S.SProfilePictureText>
+          프로젝트 프로필 사진 <S.SRedAsterisk>*</S.SRedAsterisk>
+        </S.SProfilePictureText>
         <form>
-          <RecommendationText>추천 사이즈: 1920 x 1080 | JPG, PNG | 최대 10MB</RecommendationText>
-          <BannerImageUpload
-            onClick={(file) => setBannerImage(URL.createObjectURL(file))}  // 업로드된 이미지 미리보기 설정
-            imagePreview={bannerImage}
+          <S.SRecommendationText>
+            추천 사이즈: 960 x 540 | JPG, PNG | 최대 10MB
+          </S.SRecommendationText>
+          <ProfileImageUpload
+            folderName="club"
+            type={1}  
+            setImageKey={(key) => setProfileImage(key)}  
+            setImagePreview={(preview) => setProfileImagePreview(preview)}  
           />
-          {/* 항상 렌더링되는 ImageRectangle */}
-          <ImageRectangle imagePreview={bannerImage} onClose={handleBannerClose} />
         </form>
-      </Section>
-    </FormContainer>
+        {/* 프로필 이미지 미리보기: 항상 표시되도록 */}
+        <ImageRectangle 
+          imagePreview={profileImagePreview} 
+          onClose={handleProfileClose} 
+        />
+      </S.SSection>
+
+      {/* 프로젝트 배너 이미지 섹션 */}
+      <S.SSection>
+        <S.SProfilePictureText>
+          프로젝트 배너 사진 <S.SRedAsterisk>*</S.SRedAsterisk>
+        </S.SProfilePictureText>
+        <form>
+          <S.SRecommendationText>
+            추천 사이즈: 1920 x 1080 | JPG, PNG | 최대 10MB
+          </S.SRecommendationText>
+          <BannerImageUpload
+            folderName="club"
+            type={0}  
+            setImageKey={(key) => setBannerImage(key)} 
+            setImagePreview={(preview) => setBannerImagePreview(preview)} 
+          />
+        </form>
+ 
+        <ImageRectangle 
+          imagePreview={bannerImagePreview} 
+          onClose={handleBannerClose} 
+        />
+      </S.SSection>
+    </S.SFormContainer>
   );
 };
-const FormContainer = styled.div`
-  background-color: white;
-  width: 94%;
-  max-width: 1000px;
-  min-height: 800px;
-  padding: 60px;
-  border-radius: 20px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
-  margin-top: 50px;
-`;
-
-const Section = styled.div`
-  margin-bottom: 40px;
-`;
-
-const ProfilePictureText = styled.div`
-  font-weight: 700;
-  font-size: 26px;
-  line-height: 38px;
-  color: #212121;
-  margin-bottom: 25px;
-`;
-
-const RedAsterisk = styled.span`
-  color: #FF2626;
-`;
-
-const RecommendationText = styled.div`
-  font-family: 'Pretendard';
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 19px;
-  color: #C2C2C2;
-  margin-bottom: 10px;
-`;
 
 export default ProjectImageUploadForm;
