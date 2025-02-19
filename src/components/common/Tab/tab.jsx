@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   TabMenu,
   Tab,
@@ -7,7 +6,6 @@ import {
 
 const Tab = ({ tab1, tab2 }) => {
   const [selectedTab, setSelectedTab] = useState({tab1}); // tab1
-  const navigate = useNavigate();
   return (
     <TabMenu>
         <Tab
