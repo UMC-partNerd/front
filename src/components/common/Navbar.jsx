@@ -7,9 +7,15 @@ import { BsChatRightDots } from "react-icons/bs";
 import { useState } from 'react';
 import ProfileMenu from '../home/ProfileMenu';
 
-function Navbar({ isLoggedIn, onLogout }) {
+// 배지
+import Badge from "./alarm/badge";
+import AlarmWindow from './alarm/alarm-window';
+
+function Navbar({ isLoggedIn, isStatus, badgeCount, onLogout }) {
+  const [isAlarmOpen, setIsAlarmOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const toggleAlarm = () => setIsAlarmOpen(prevState => !prevState);
   const toggleMenu = () => setIsMenuOpen(prevState => !prevState);
 
   return (
@@ -41,7 +47,9 @@ function Navbar({ isLoggedIn, onLogout }) {
                 <BsChatRightDots />
               </IconWrapper>
               <IconWrapper>
-                <GoBell />
+                <GoBell  onClick={toggleAlarm}/>
+                {isAlarmOpen && <AlarmWindow />}
+                {badgeCount > 0 && <Badge isStatus={isStatus} badgeCount={badgeCount} />}
               </IconWrapper>
               <IconWrapper onClick={toggleMenu}>
                 <MdOutlinePersonOutline />

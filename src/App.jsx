@@ -28,6 +28,8 @@ import KakaoCallback from './components/login/KakaoCallback';
 import RecruitmentRegister from './components/recruit-register/recruitment-register';
 import PromotionRegister from './components/promote-register/promotion-register';
 
+import Alarm from './components/common/alarm/alarm-window';
+
 import PersonalEditComp from './components/mypage/PersonalEditComp';
 import MyPagePersonalEdit from './pages/mypages/Personal-EditPage';
 // import ChatPage from './pages/ChatPage';
@@ -196,7 +198,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'test',
-        // element: <Chat/>
+        element: <Alarm />
       }
     ]
   }
