@@ -28,10 +28,10 @@ const KakaoCallback = () => {
     }
 
     // ✅ 이미 로그인된 사용자 확인
-    const storedToken = localStorage.getItem("kakao_access_token");
+    const storedToken = localStorage.getItem("jwtToken");
     if (storedToken) {
       console.log("✅ 이미 로그인된 사용자입니다.");
-      navigate("/register/social");
+      navigate("/");
       return;
     }
 
@@ -49,6 +49,9 @@ const KakaoCallback = () => {
             // 이메일 정보 저장
             const email = response.data.result.email;
             const jwtToken = response.data.result.jwtToken;
+
+
+            //localStorage.setItem("kakao_access_token", response.data.result.access_token);
 
             // 세션 아이디 (채팅)
             const sessionId = response.data.result.sessionId;

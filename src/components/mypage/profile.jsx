@@ -9,8 +9,16 @@ import Button, { TYPES } from "../common/button";
 import axios from "axios";
 import NicknameField from "../register/NicknameCheck";
 import useMypageImg from "../../hooks/useMypagesProfileImg";
+import ProfileImageUpload from "./ProfileImageUpload";
+import { useRef } from "react";
 
 const MyProfile = () => {
+    //프로필 이미지 업로드 
+    const fileInputRef = useRef(null);
+    const [uploading, setUploading] = useState(false);
+    //업로드된 이미지 키 저장 
+    const [imageKey, setImageKey] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
     // 비밀번호 상태
         const [passwordType, setPasswordType] = useState('password');
         const [passwordIcon, setPasswordIcon] = useState(<FaRegEyeSlash size={15} />);
@@ -27,9 +35,10 @@ const MyProfile = () => {
             marketing_notify:false,
         });
 
-        //업로드된 이미지 키 저장 
-        const [imageKey, setImageKey] = useState(null);
+        //프로필 이미지 키 저장 상태 
+        const [originalProfileKey, setOriginalProfileKey] = useState(null);
 
+        
         // 닉네임 중복 확인 상태 추가
         const [isNicknameChecked, setIsNicknameChecked] = useState(false);
 
@@ -58,16 +67,6 @@ const MyProfile = () => {
                 setConfirmPasswordIcon(<FaRegEyeSlash size={15} />);
             }
         };
-
-        // 사진 등록하기
-        // 저장하기
-        const onClickHandler = () => {
-
-        };
-        
-
-        
-
         //내 프로필 조회 api 
         const getMyProfile = async () =>{
             try {
@@ -87,6 +86,9 @@ const MyProfile = () => {
 
                 console.log("프로필 데이터", response.data.result);
                 setProfile(response.data.result); //상태 업데이트 
+
+                //프로필 이미지 키 저장 (변경 전 값 유지)
+                setOriginalProfileKey(response.data.result.profileKeyName || null);
             }
             catch (error) {
                 console.error("프로필 불러오기 실패:", error);
@@ -156,7 +158,7 @@ const MyProfile = () => {
                 }
 
                 const updatedProfile = {
-                    profile_url: profile?.profile_url || "", // 새로 업로드된 이미지 URL
+                    profileKeyName: imageKey ?? originalProfileKey, // 새로 업로드된 이미지 URL
                     name: profile?.name || "",
                     nickname: profile?.nickname || "",
                     birth: profile?.birth || "",
@@ -186,6 +188,67 @@ const MyProfile = () => {
             }
         };
 
+        
+
+
+        const handleClick = () => {
+            fileInputRef.current.click(); // 이미지 파일 선택
+        };
+
+        const handleFileChange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            setUploading(true);
+            try {
+            const response = await fetch('https://api.partnerd.site/api/s3/preSignedUrl', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                filename: file.name,
+                folderName:'myProfileImage',
+                type : 5,
+                contentType: file.type,
+                }),
+            });
+
+            const data = await response.json();
+            const { preSignedUrl, keyName } = data.result;
+
+            setImageKey(keyName); // 서버로 이미지 키 전송
+            //추가 , 프로필 데이터에 저장
+            setProfile((prevProfile) => ({
+                ...prevProfile,
+                profile_url: keyName, // 프로필 데이터에도 저장
+            }));
+
+            await fetch(preSignedUrl, {
+                method: 'PUT',
+                headers: {
+                'Content-Type': file.type,  
+                'x-amz-meta-cache-control': 'max-age=864000'  // 캐시 제어 헤더 추가
+                },
+                body: file,
+            });
+            
+            // 로컬 미리보기 업데이트
+            const imageUrl = URL.createObjectURL(file);
+            setImagePreview(imageUrl); 
+            setProfile((prevProfile) => ({
+                ...prevProfile,
+                profile_url: imageUrl, // 화면에서 바로 반영되도록 profile_url 업데이트
+            }));
+
+            console.log('이미지 업로드 완료:', imageUrl);
+            } catch (error) {
+            console.error('이미지 업로드 중 오류 발생', error);
+            } finally {
+            setUploading(false);
+            }
+        };
+
     return (
         <MainWrapp>
             <Title>내 프로필</Title>
@@ -195,15 +258,15 @@ const MyProfile = () => {
             <SubTitle>프로필 사진</SubTitle>
 
             <ProfileWrapp>
-            {isLoading ? (
-                    <p>로딩 중...</p>
-                ) : error ? (
+            {imagePreview ? (
+                    <ImageComp src={imagePreview} alt="프로필 미리보기" />
+                )  : error ? (
                     <p>이미지를 불러올 수 없습니다.</p>
                 ) : (
                     <ImageComp
                         src={profileImageUrl}
                         alt="프로필 이미지"
-                        onError={(e) => { e.target.src = "/banner1.png"; }} // 기본 이미지 처리
+                        onError={(e) => { e.target.src = "/Profile_none.png"; }} // 기본 이미지 처리
                     />
                 )}
 
@@ -211,7 +274,13 @@ const MyProfile = () => {
                     <Button
                         type={TYPES.PLUS}
                         text='사진 등록하기'
-                        onClick={onClickHandler}
+                        onClick={handleClick}
+                    />
+                    <input 
+                    type="file"
+                    ref={fileInputRef}
+                    style={{display:'none'}}
+                    onChange={handleFileChange}
                     />
                 </ButtonWrapp>
                 

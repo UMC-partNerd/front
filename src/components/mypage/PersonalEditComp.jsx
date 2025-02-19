@@ -195,7 +195,7 @@ const PersonalEditComp = () => {
                 </CardWrapp>
             </PersonalField>
 
-            <PersonalField style ={{marginTop:'140px'}}>
+            <PersonalField style ={{marginTop:'380px'}}>
                 <Subup>경력</Subup>
                 <StyledHr />
                 <InputArea placeholder="인턴쉽 경험 등 자신의 경력에 대해 작성해주세요"
