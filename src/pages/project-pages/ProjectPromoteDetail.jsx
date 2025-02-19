@@ -7,6 +7,7 @@ import ProjectPromoteForm from '../../components/projectdetail/ProjectPromoteFor
 import ProjectCommentList from '../../components/projectdetail/ProjectCommentList';
 import CommentForm from '../../components/projectdetail/CommentForm';
 import useBannerPhoto from '../../hooks/useBannerPhoto';
+import MemberForm from '../../components/projectdetail/MemberForm';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
 
 const DefaultImage = '/default-image.png';
@@ -255,6 +256,7 @@ const ProjectPromoteDetail = () => {
         </S.STextBox>
       </S.SImageBoxContainer>
 
+
       {/* 삭제 확인 모달 */}
       <CustomModal
         openModal={openFirstModal} 
@@ -285,6 +287,15 @@ const ProjectPromoteDetail = () => {
         </S.SFormContainer>
       </S.SFormWrapper>
 
+      <S.SMemberFormWrapper>
+        <MemberForm
+         leaderInfo={projectData?.leaderInfo}
+         projectMembers={projectData?.projectMembers}
+         promotionProjectMembers={projectData?.promotionProjectMembers}
+         isPromote={true} 
+        />
+       </S.SMemberFormWrapper>
+
       {/* 댓글 폼 */}
       <S.SCommentFormWrapper>
         <CommentForm onAddComment={handleAddComment} />
@@ -296,7 +307,7 @@ const ProjectPromoteDetail = () => {
           onReply={handleAddReply}
           onDelete={handleDeleteComment} 
           onUpdate={handleUpdateComment} 
-          type="promote"  // type 추가
+          type="promote"  
         />
       </S.SProjectCommentListWrapper>
     </S.SContainer>

@@ -42,8 +42,8 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
       onUpdate(commentId, editedText, type);
       setEditMode(false);
     } else {
-      setEditMode(false);  // 빈 텍스트일 경우에도 편집 모드 종료
-      setEditedText(text);  // 원래 텍스트로 되돌림
+      setEditMode(false);  
+      setEditedText(text); 
     }
   };
 
@@ -53,24 +53,24 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
     const today = new Date();
     const formattedDate = `${today.getFullYear()}. ${today.getMonth() + 1}. ${today.getDate()}`; // 오늘 날짜 포맷
     
-    const displayName = userInfo?.nickname || "임시 닉네임"; // 사용자 닉네임 가져오기
-    const profileKeyName = profileImageUrl || '/default-profile.png'; // 프로필 이미지 URL
+    const displayName = userInfo?.nickname || "임시 닉네임"; 
+    const profileKeyName = profileImageUrl || '/default-profile.png'; 
     
     // 새로운 대댓글 객체 생성
     const newReply = {
       contents: replyText,  
       nickname: displayName,  
       profileKeyName: profileKeyName,  
-      projectCommentId: commentId, // 'commentId'가 'recruit' 또는 'promote'에 맞는 ID로 변경되어야 함
+      projectCommentId: commentId,
       date: formattedDate,  
     };
   
-    // 대댓글을 부모 컴포넌트로 전달 
-    onReply(replyText, commentId, type); // 'type'에 따라 처리
+  
+    onReply(replyText, commentId, type); 
     
-    // 대댓글을 UI에 추가
+
     setReplyList([...replyList, newReply]);
-    setShowReply(false);  // 대댓글 입력 폼 닫기
+    setShowReply(false);  
   };
 
   const handleLike = () => {
@@ -78,10 +78,10 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
     setLiked(!liked);
   };
 
-  // 댓글 삭제 시 대댓글도 함께 삭제
+
   const handleDeleteClick = () => {
-    onDelete(commentId, type); // 부모 컴포넌트에서 댓글 삭제 함수 호출
-    setReplyList([]);  // 댓글 삭제 시 하위 대댓글도 삭제
+    onDelete(commentId, type); 
+    setReplyList([]);  
   };
 
   // 날짜 포맷 함수

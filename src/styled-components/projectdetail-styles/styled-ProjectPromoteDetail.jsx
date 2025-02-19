@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 export const SCommentFormWrapper = styled.div`
   width: 94%;
   max-width: 1000px;
@@ -8,21 +9,31 @@ export const SCommentFormWrapper = styled.div`
   align-items: center;
   flex-direction: column;
   margin-top: 20px;
-  margin-left: -10px;  
+  margin-left: -75px;  
 `;
 
 
 export const SProjectCommentListWrapper = styled.div`
-  width: 95%;
-  max-width: 1000px;
-  padding: 20px;
+  width: 100%;  
+  max-width: 1000px; 
+  padding: 40px;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  justify-content: flex-start; 
+  align-items: flex-start;  
   flex-direction: column;
-  margin-left: 250px;
+  margin-right: -270px; 
 `;
 
+export const SMemberFormWrapper = styled.div`
+  width: 100%;  
+  max-width: 1000px; 
+  padding: 40px;
+  display: flex;
+  justify-content: flex-start; 
+  align-items: flex-start;  
+  flex-direction: column;
+  margin-right: -270px; 
+`;
 
 export const SContainer = styled.div`
   display: flex;

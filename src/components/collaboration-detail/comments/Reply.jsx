@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FiMoreVertical } from "react-icons/fi";
 import * as S from '../../../styled-components/collab-styles/styled-Reply';
 
-const Reply = ({ text, user, date, onDelete, onUpdate }) => {
+const Reply = ({ replyId, text, user, date, onDelete, onUpdate }) => {
   const [replyText, setReplyText] = useState(text);
   const [editMode, setEditMode] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
@@ -17,7 +17,7 @@ const Reply = ({ text, user, date, onDelete, onUpdate }) => {
   };
 
   const handleDeleteClick = () => {
-    onDelete();
+    onDelete(replyId); // 상위 컴포넌트로 삭제 요청
     setShowOptions(false);
   };
 
@@ -27,7 +27,7 @@ const Reply = ({ text, user, date, onDelete, onUpdate }) => {
 
   const handleEditSubmit = () => {
     if (replyText.trim()) {
-      onUpdate(replyText);
+      onUpdate(replyId, replyText); // 상위 컴포넌트로 수정된 텍스트 전달
       setEditMode(false);
     }
   };

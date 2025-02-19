@@ -17,7 +17,8 @@ const DefaultImage = '/default-image.png'; // 기본 이미지
 
 const TeamPageWrapper = styled.div`
   display: flex;
-  justify-content: center;  
+  justify-content: center;
+  padding: 0% 10% 0% 10%;  
 `;
 
 const TeamPageContainer = styled.div`
@@ -92,9 +93,6 @@ const TeamPage = () => {
     fetchClubDetails();
   }, [clubId]);
   
-  
-  
-
   // 배너 이미지 및 메인 사진 로드
   const { 
     bannerPhotoUrl, 
