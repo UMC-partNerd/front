@@ -134,12 +134,13 @@ const PromotionRegister = () => {
           <ContactForm />
         </FormGroup>
 
-        <Button
-          type={TYPES.PLUS}
-          sign='true'
-          text='프로젝트 등록하기'
-          onClick={handleSubmit}
-        /> 
+        <ButtonWrapper>
+          <Button
+            type={TYPES.NEXT}
+            text="최종 등록하기"
+            onClick={handleSubmit}
+          />
+        </ButtonWrapper>
       </Container>
     </>
   );
@@ -281,6 +282,15 @@ const DeleteButton = styled.button`
   &:hover {
     background-color: #A5D6A8;
   }
+`;
+
+const ButtonWrapper = styled.div`
+  margin-top: 40px;
+  margin-bottom: 60px;
+  width: 95%;
+  max-width: 1000px;
+  display: flex;
+  justify-content: center;
 `;
 
 export default PromotionRegister;

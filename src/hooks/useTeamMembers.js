@@ -61,12 +61,17 @@ export const useTeamMembers = () => {
         throw new Error('로그인이 필요합니다.');
       }
 
+      console.log('검색 요청 URL:', `https://api.partnerd.site/api/partnerd/register/members?nickname=${nickname}`);
+      console.log('토큰:', token);
+
       const response = await axios.get(`https://api.partnerd.site/api/partnerd/register/members`, {
         params: { nickname },
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
+      
+      console.log('응답 데이터:', response.data);
 
       const members = await Promise.all(
         response.data.result.map(async (member) => ({
@@ -77,6 +82,11 @@ export const useTeamMembers = () => {
 
       setSearchResults(members);
     } catch (err) {
+      console.log('에러 상세 정보:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status
+      });
       setError(err.message);
       setSearchResults([]);
     } finally {
