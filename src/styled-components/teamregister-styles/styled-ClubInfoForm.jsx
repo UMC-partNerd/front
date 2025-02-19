@@ -4,11 +4,11 @@ export const FormContainer = styled.div`
   background-color: white;
   width: 94%;
   max-width: 1000px;
-  min-height: 1500px;
   padding: 60px;
   border-radius: 20px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
   margin-top: 45px;
+  margin-bottom: 40px;
 `;
 
 export const Section = styled.div`
@@ -53,7 +53,7 @@ export const CategoryButton = styled.button`
 `;
 
 export const InputContainer = styled.div`
-  margin-bottom: 25px;  
+  margin-bottom: 25px;
   color: #E1E1E1;
 `;
 
@@ -81,6 +81,7 @@ export const InputField = styled.input`
 
   &::placeholder {
     color: #B0B0B0;
+     font-family: 'Pretendard', sans-serif;
   }
 `;
 
@@ -93,6 +94,8 @@ export const TextAreaField = styled.textarea`
   border-radius: 5px;
   outline: none;
   transition: border 0.3s ease;
+  font-family: 'Pretendard', sans-serif;
+  letter-spacing: 2px; 
 
   &:focus {
     border: 1px solid #0D29B7;
@@ -100,6 +103,8 @@ export const TextAreaField = styled.textarea`
 
   &::placeholder {
     color: #C2C2C2;
+    font-family: 'Pretendard', sans-serif;
+    letter-spacing: 2px; 
   }
 
   height: 200px; 
@@ -112,28 +117,6 @@ export const SmallText = styled.p`
   color: #707070;
   margin-top: 5px;
   margin-bottom: 0; 
-`;
-
-export const ContactBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: #F3F3F3;
-  padding: 15px;
-  border-radius: 8px;
-  height: 250px;  
-  margin-top: -5px; 
-  margin-bottom: 0;  
-  position: relative;  
-`;
-
-export const AddText = styled.div`
-  position: absolute;
-  left: 15px;
-  bottom: 15px;
-  color: #0d29b7;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
 `;
 
 export const TextAreaContainer = styled.div`

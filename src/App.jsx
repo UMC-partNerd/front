@@ -1,10 +1,11 @@
 import './styles/globalstyles.css';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Routes, Route } from 'react-router-dom';
 import RootLayout from './layout/root-layout';
 import HomePage from './pages/homepage';
 import NotFoundPage from './pages/notfoundpage';
-import { TeamPage } from './pages/TeamPage'; 
-import CollaborationDetailPage from './pages/collaboration-pages/CollaborationDetailPage'; 
+import TeamPage from './pages/TeamPage'; 
+import CollaborationDetailPage from './pages/collaboration-pages/CollaborationDetailPage';
+import CollabRegistration from './pages/collaboration-pages/CollabRegistration'; 
 import TeamRegistration from './pages/TeamRegistration';
 import LoginPage from './pages/loginpage';
 import SignUpPage from './pages/signuppage';
@@ -18,11 +19,18 @@ import PartnerSearch from './components/partnerd-search';
 import ProjectRecruitment from './components/project-recruitment';
 import ProjectCollaboration from './components/project-collaboration';
 import ProjectPromotion from './components/project-promotion';
+import ProjectRecruitDetail from './pages/project-pages/ProjectRecruitDetail'; 
+import ProjectPromoteDetail from './pages/project-pages/ProjectPromoteDetail';
+import TeamMangement from './pages/TeamMangement';  
 import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
+import RecruitmentRegister from './components/recruit-register/recruitment-register';
+import PromotionRegister from './components/promote-register/promotion-register';
 
 import Alarm from './components/common/alarm/alarm-window';
 
+import PersonalEditComp from './components/mypage/PersonalEditComp';
+import MyPagePersonalEdit from './pages/mypages/Personal-EditPage';
 
 const router = createBrowserRouter([
   {
@@ -31,100 +39,136 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage />
+        element: <HomePage />,
       },
       {
         path: 'find',
         children: [
           {
             path: ':clubId',
-            element: <TeamPage />,
+            element: <TeamPage />, 
           },
           {
-            path: 'team-registration', 
+            path: ':clubId/manage',  
+            element: <TeamMangement />,  
+          },
+          {
+            path: 'team-registration',
             element: <TeamRegistration />,
           },
           {
             index: true,
-            element: <PartnerSearch />
-          }
+            element: <PartnerSearch />,
+          },
         ],
       },
       {
         path: 'login',
-        element: <LoginPage />
+        element: <LoginPage />,
       },
       {
         path: 'oauth/kakao/callback',
-        element: <KakaoCallback />
+        element: <KakaoCallback />,
       },
       {
         path: 'register',
         children: [
           {
             path: 'email',
-            element: <SignUpPage/>
+            element: <SignUpPage />,
           },
           {
             path: 'social',
-            element: <SignUpSocialPage/>
-          }
-        ]
+            element: <SignUpSocialPage />,
+          },
+        ],
       },
       {
         path: 'collaboration',
-
         children: [
           {
-            path: ':id', 
+            path: ':collabPostId',
             element: <CollaborationDetailPage />,
           },
+          {
+            path: 'collab-registration',
+            element: <CollabRegistration />,
+          },
+          {
+            index: true,
+            element: <ProjectCollaboration />,
+          },
         ],
-
-        element: <ProjectCollaboration/>
-
       },
       {
         path: 'project',
         children: [
           {
             path: 'recruit',
-            element: <ProjectRecruitment/>
+            element: <ProjectRecruitment />,
           },
           {
             path: 'promote',
-            element: <ProjectPromotion/>
+            element: <ProjectPromotion />,
+          },
+          {
+            path: 'recruit/recruit-registration',
+            element: <RecruitmentRegister />,
+          },
+          {
+            path: 'promote/promote-registration',
+            element: <PromotionRegister />,
+          },
+          {
+            path: 'recruit/:recruitProjectId',
+            element: <ProjectRecruitDetail />, 
+          },
+          {
+            path: 'promote/:promotionProjectId',
+            element: <ProjectPromoteDetail />,
+          },
+          {
+            path: 'promote/register',
+            element: <PromotionRegister />,
           },
           {
             index: true,
-            element: <ProjectRecruitment/>
-          }
-        ]
+            element: <ProjectRecruitment />,
+          },
+        ],
       },
       {
         path: 'community',
-        element: <CommunityPage />
+        element: <CommunityPage />,
       },
-      { //마이페이지 경로 
+      { // 마이페이지 경로
         path: 'mypage',
         children: [
           {
-            path:'profile', //디폴트는 내 페이지 
-            element: <MyPageDe/>,
+            path:'profile', // 디폴트는 내 페이지
+            element: <MyPageDe />,
           },
           {
             path:'personal-page',
-            element: <MyPagePersonal />
+            element: <MyPagePersonal />,
+          },
+          {
+            path:'personal-page-edit',
+            element: <MyPagePersonalEdit />
           },
           {
             path:'teams',
-            element: <MyPageTeams />
+            element: <MyPageTeams />,
           },
           {
             path:'my-posts',
-            element: <MyPagePosts />
-          }
-        ]
+            element: <MyPagePosts />,
+          },
+        ],
+      },
+      {
+        path: 'project/recruit/register',
+        element: <RecruitmentRegister />,
       },
       {
         path: '*',
@@ -142,10 +186,8 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <>
-      <RouterProvider router={router}/>
-    </>
-  )
+    <RouterProvider router={router} />
+  );
 }
 
-export default App
+export default App;

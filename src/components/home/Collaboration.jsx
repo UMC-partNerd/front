@@ -1,80 +1,60 @@
-import React, { useState, useEffect } from "react";
-import Card from "./Card";
+import React from "react";
 import {
   CollaborationContainer,
   Header,
   Title,
   MoreButton,
-  CardGrid
+  CardGrid,
+  CollabCard,
+  CompanyLogo,
+  TitleRow,
+  InfoColumn,
+  CompanyName,
+  CollabTitle,
+  CollabDescription,
+  PostDate
 } from "../../styled-components/styled-Collaboration";
+import { useCollaborationData } from '../../hooks/useCollaborationData';
 
-const INITIAL_CARDS = [];
+const Collaboration = () => {
+  const { collaborations, isLoading, error } = useCollaborationData();
 
-const TEMP_CARDS = [
-  {
-    title: "UMC와 연합 해커톤 진행할 동아리를 찾습니다!",
-    content: "2025년 1월 셋째 주에 계획 중인 연합 해커톤을 함께할 동아리를 찾습니다. 장소는 이미 공덕 프론트원으로 섭외가 된 상태이고...",
-    thumbnail: "UMC",
-    footer: "UMC",
-  },
-  {
-    title: "UMC와 연합 해커톤 진행할 동아리를 찾습니다!2",
-    content: "2025년 1월 셋째 주에 계획 중인 연합 해커톤을 함께할 동아리를 찾습니다. 장소는 이미 공덕 프론트원으로 섭외가 된 상태이고...",
-    thumbnail: "UMC",
-    footer: "UMC",
-  },
-  {
-    title: "UMC와 연합 해커톤 진행할 동아리를 찾습니다!3",
-    content: "2025년 1월 셋째 주에 계획 중인 연합 해커톤을 함께할 동아리를 찾습니다. 장소는 이미 공덕 프론트원으로 섭외가 된 상태이고...",
-    thumbnail: "UMC",
-    footer: "UMC",
-  },
-  {
-    title: "UMC와 연합 해커톤 진행할 동아리를 찾습니다!4",
-    content: "2025년 1월 셋째 주에 계획 중인 연합 해커톤을 함께할 동아리를 찾습니다. 장소는 이미 공덕 프론트원으로 섭외가 된 상태이고...",
-    thumbnail: "UMC",
-    footer: "UMC",
-  }
-];
-
-function Collaboration() {
-  const [cards, setCards] = useState(INITIAL_CARDS);
-
-  useEffect(() => {
-    async function fetchTopCollaborations() {
-      try {
-        // const response = await fetch('/api/collaborations/top');
-        // const data = await response.json();
-        // setCards(data.slice(0, 4));
-      } catch (error) {
-        console.error('Failed to fetch collaborations:', error);
-      }
-    }
-
-    fetchTopCollaborations();
-  }, []);
-
-  const displayCards = cards.length > 0 ? cards : TEMP_CARDS;
+  if (isLoading) return <div>로딩 중...</div>;
+  if (error) return <div>에러가 발생했습니다: {error.message}</div>;
+  if (!collaborations || collaborations.length === 0) return <div>콜라보레이션 데이터가 없습니다.</div>;
 
   return (
     <CollaborationContainer>
       <Header>
         <Title>최근 등록된 콜라보레이션</Title>
-        <MoreButton href="#">더보기 ›</MoreButton>
+        <MoreButton href="/collaborations">더보기 ›</MoreButton>
       </Header>
       <CardGrid>
-        {displayCards.slice(0, 4).map((card, index) => (
-          <Card
-            key={index}
-            title={card.title}
-            content={card.content}
-            thumbnail={card.thumbnail}
-            footer={card.footer}
-          />
+        {collaborations.map((collab, index) => (
+          <CollabCard key={index}>
+            <TitleRow>
+              <CompanyLogo>
+                <img 
+                  src={collab.imageUrl || collab.thumbnail || '/default-image.png'} 
+                  alt={collab.clubName}
+                  onError={(e) => {
+                    e.target.src = '/default-image.png';
+                    e.target.onerror = null;
+                  }}
+                />
+              </CompanyLogo>
+              <CollabTitle>{collab.title}</CollabTitle>
+              <PostDate>1일 전</PostDate>
+            </TitleRow>
+            <InfoColumn>
+              <CollabDescription>{collab.intro}</CollabDescription>
+              <CompanyName>{collab.clubName}</CompanyName>
+            </InfoColumn>
+          </CollabCard>
         ))}
       </CardGrid>
     </CollaborationContainer>
   );
-}
+};
 
 export default Collaboration;

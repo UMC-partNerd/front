@@ -100,3 +100,13 @@ export const Description = styled.p`
   color: #666;
   line-height: 1.5;
 `; 
+
+
+export const CardGridPersonal = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 100%;
+  height:auto;
+  
+`;
