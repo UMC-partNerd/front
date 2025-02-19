@@ -8,55 +8,19 @@ import styled from "styled-components";
 import { SubupSec } from "../../styles/mypagestyles";
 import { SlArrowLeft } from "react-icons/sl";
 import { SlArrowRight } from "react-icons/sl";
+import { useLocation } from "react-router-dom";
+import { FaPlus } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+import { useProjectData } from "../../hooks/usePersonalProject";
 
 const PersonalProject = () => {
 
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-    const pageSize = 4; //한 페이지 당 프로젝트 개수 
+    const {projects, isLoading, error, page, totalPages, setPage} = useProjectData();
 
-    const [projects, setProject] = useState([]);
-    const [loading, setLoading] = useState(false); // 로딩 상태
-    const [error, setError] = useState(null); // 에러 상태
-    const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-
-    const fetchProjects = async (pageNumber) =>{
-        try{
-            const jwtToken = localStorage.getItem("jwtToken"); 
-
-            if (!jwtToken) {
-                    alert("로그인이 필요합니다.");
-                    setLoading(false);
-                    return;
-            }
-
-            const response = await axios.get(`${API_BASE_URL}/api/project/promotion/personal`, 
-                {
-                    params: { page: pageNumber, pageSize },
-                    headers:{
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${jwtToken}`,
-                        }
-                });
-
-            console.log("마이페이지-퍼스널페이지:프로젝트", response.data.result);
-            setProject(response.data.result?.promotionProjectPreviewDTOList || []);
-
-            //페이지 수 계산
-            const totalElements = response.data.result?.totalElements || 0;
-            setTotalPages(Math.ceil(totalElements / pageSize));
-        }catch (error) {
-            console.error("게시글 불러오기 실패:", error);
-            setError("게시글을 불러오는 중 오류가 발생했습니다.");
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    useEffect(() => {
-        fetchProjects(page);
-    }, [page]);
-
+    const location = useLocation();
+    const navigate = useNavigate();
+    
+    const isEditPage = location.pathname === "/mypage/personal-page-edit";
 
     //이전 페이지로 이동 
     const handlePrevPage = () =>{
@@ -70,16 +34,19 @@ const PersonalProject = () => {
             setPage(page + 1);
         }
     };
+
+    //이미지 가져오기 
+    // const {thumnailImageUrl, isLoading, error} = useMypageImg(project?.thumbnailKeyName)
 return(
     <CardWrapp>
         {/* 로딩 상태 표시 */}
-        {loading && <p>팀 데이터를 불러오는 중입니다...</p>}
+        {isLoading && <p>팀 데이터를 불러오는 중입니다...</p>}
 
         {/* 에러 메시지 표시 */}
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p style={{ color: "red" }}>{error.message || "알 수 없는 오류가 발생했습니다."}</p>}
 
         {/* 프로젝트가 없을 때 메시지를 CardGrid 바깥으로 이동 */}
-        {!loading && !error && projects.length === 0 && (
+        {!isLoading && !error && projects.length === 0 && (
             <SubupSec style={{ marginTop: "50px", justifyContent: "center", display: "flex" }}>
                 {"등록한 경력이 없습니다"}
             </SubupSec>
@@ -95,13 +62,17 @@ return(
         </SelectButtonWrapp>
 
         <CardGridPersonal>
-            {!loading && !error && projects.length > 0 ? (
+            {!isLoading && !error && projects.length > 0 ? (
                 projects.map((project) => (
-                    <ClubCard key={project.promotionProjectId}>
+                    <ClubCard 
+                    key={project.promotionProjectId} 
+                    style={{boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.15)", cursor:'pointer'}}
+                    onClick={() => navigate(`/project/recruit/${project.promotionProjectId}`)}
+                    >
                         <ImagePlaceholder>
                             {/* 이미지 URL 생성 */}
                             <img
-                                src={`${API_BASE_URL}/${project.thumbnailKeyName}`}
+                                src={project.thumbnailUrl || "/default-image.png"}
                                 alt={project.title}
                             />
                         </ImagePlaceholder>
@@ -113,9 +84,39 @@ return(
                 ))
             ) : null}
         </CardGridPersonal>
+
+        {isEditPage && (
+            <PlusProject onClick={() => navigate('/find/team-registration')}>
+                <FaPlus />
+                <div>프로젝트 등록하기</div>
+            </PlusProject>
+        )}
     </CardWrapp>
 )
 }
+
+const PlusProject = styled.div`
+display:flex;
+width: 140px;
+min-height: 180px;
+
+cursor:pointer;
+
+margin-top:30px;
+background: #FFFFFF;
+box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+border-radius: 8px;
+color:#A0A0A0;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+
+&>div {
+    font-size:14px;
+    margin-top:12px;
+}
+
+`
 
 const SelectButton = styled.div`
 display:flex;
@@ -143,7 +144,7 @@ display:flex;
 margin-bottom:10px;
 flex-direction:column;
 width:100%;
-max-height:40px;
+max-height:100px;
 
 `
 

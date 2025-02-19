@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import * as S from '../../styled-components/projectdetail-styles/styled-ProjectRecruitDetail';
 import ImageSlider from '../../components/projectdetail/ImageSlider';
@@ -7,11 +7,13 @@ import ProjectDetailForm from '../../components/projectdetail/ProjectDetailForm'
 import JoinProjectInfo from '../../components/projectdetail/JoinProjectInfo';
 import ProjectCommentList from '../../components/projectdetail/ProjectCommentList';
 import CommentForm from '../../components/projectdetail/CommentForm';
+import MemberForm from '../../components/projectdetail/MemberForm';
+import PersonalContact from '../../components/common/contact';
 import useBannerPhoto from '../../hooks/useBannerPhoto';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
 
 const DefaultImage = '/default-image.png';
-const DefaultProfileImage = '/default-profile.png'; 
+const DefaultProfileImage = '/default-profile.png';
 
 const ProjectRecruitDetail = () => {
   const { recruitProjectId } = useParams();
@@ -37,7 +39,7 @@ const ProjectRecruitDetail = () => {
     // 댓글 데이터 조회 API 호출
     axios.get(`https://api.partnerd.site/api/project/recruit/${recruitProjectId}/comment`)
       .then((response) => {
-        console.log('댓글 조회 응답:', response.data);  // 응답을 콘솔에 출력
+        console.log('댓글 조회 응답:', response.data);  
         if (response.data.isSuccess) {
           // 삭제된 댓글을 제외하고 상태에 저장
           const filteredComments = response.data.result.filter(comment => !comment.isDeleted);
@@ -147,97 +149,46 @@ const ProjectRecruitDetail = () => {
     }
   };
 
-  // 댓글 삭제 함수 (DELETE)
-  const handleDeleteComment = async (commentId) => {
-    const jwtToken = localStorage.getItem('jwtToken');  // jwtToken 정의
-  
-    if (!jwtToken) {
-      alert("로그인을 해주세요!");
-      return;
-    }
-  
-    try {
-      const response = await axios.delete(
-        `https://api.partnerd.site/api/project/recruit/comment/${commentId}`, 
-        {
-          headers: {
-            'Authorization': `Bearer ${jwtToken}`,  
-            'Content-Type': 'application/json',  
-          },
-        }
-      );
-      console.log('API 응답:', response.data);
-
-      if (response.data.isSuccess) {
-        console.log('댓글 삭제 성공:', commentId);
-        
-        // 삭제 후 댓글 목록 재조회
-        const updatedResponse = await axios.get(`https://api.partnerd.site/api/project/recruit/${recruitProjectId}/comment`);
-        if (updatedResponse.data.isSuccess) {
-          // 삭제된 댓글을 제외하고 상태에 저장
-          const filteredComments = updatedResponse.data.result.filter(comment => !comment.isDeleted);
-          setComments(filteredComments);
-        } else {
-          console.error('댓글 재조회 실패');
-        }
-      } else {
-        console.error('댓글 삭제 실패:', response.data.message);
+    // 댓글 삭제 함수 (DELETE)
+    const handleDeleteComment = async (commentId) => {
+      const jwtToken = localStorage.getItem('jwtToken'); 
+    
+      if (!jwtToken) {
+        alert("로그인을 해주세요!");
+        return;
       }
-    } catch (error) {
-      console.error('댓글 삭제 중 오류 발생:', error.response ? error.response.data : error.message);
-    }
-  };
-
-  // 댓글 수정 함수 (PATCH)
-  const handleUpdateComment = async (commentId, newText, type) => { // type을 파라미터로 추가
-    const jwtToken = localStorage.getItem('jwtToken');  // JWT 토큰 가져오기
-
-    if (!jwtToken) {
-      alert("로그인을 해주세요!");
-      return;
-    }
-
-    console.log("새로운 댓글 내용:", newText);
-
-    if (!newText || newText.trim() === "") {
-      alert("댓글 내용을 입력해주세요!");
-      return;
-    }
-
-    try {
-      const response = await axios.patch(
-        `https://api.partnerd.site/api/project/recruit/comment/${commentId}`, 
-        {
-          contents: newText, // 수정된 댓글 내용
-          type: type, // type도 전달
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${jwtToken}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      if (response.data.isSuccess) {
-        const updatedComment = response.data.result; // 수정된 댓글 정보
-
-        // 댓글 목록 수정된 내용으로 교체
-        const updatedComments = comments.map((comment) =>
-          comment.projectCommentId === updatedComment.projectCommentId
-            ? { ...comment, contents: updatedComment.contents }
-            : comment
+    
+      try {
+        const response = await axios.delete(
+          `https://api.partnerd.site/api/project/recruit/comment/${commentId}`, 
+          {
+            headers: {
+              'Authorization': `Bearer ${jwtToken}`,  
+              'Content-Type': 'application/json',  
+            },
+          }
         );
-
-        setComments(updatedComments); // 댓글 목록 업데이트
-        console.log('댓글 수정 성공:', updatedComment);
-      } else {
-        console.error('댓글 수정 실패:', response.data.message);
+        console.log('API 응답:', response.data);
+  
+        if (response.data.isSuccess) {
+          console.log('댓글 삭제 성공:', commentId);
+          
+          // 삭제 후 댓글 목록 재조회
+          const updatedResponse = await axios.get(`https://api.partnerd.site/api/project/recruit/${recruitProjectId}/comment`);
+          if (updatedResponse.data.isSuccess) {
+            // 삭제된 댓글을 제외하고 상태에 저장
+            const filteredComments = updatedResponse.data.result.filter(comment => !comment.isDeleted);
+            setComments(filteredComments);
+          } else {
+            console.error('댓글 재조회 실패');
+          }
+        } else {
+          console.error('댓글 삭제 실패:', response.data.message);
+        }
+      } catch (error) {
+        console.error('댓글 삭제 중 오류 발생:', error.response ? error.response.data : error.message);
       }
-    } catch (error) {
-      console.error('댓글 수정 중 오류 발생:', error);
-    }
-  };
+    };
 
   // 삭제 버튼 클릭 시 첫 번째 모달 띄우기
   const buttonHandler = () => {
@@ -303,6 +254,19 @@ const ProjectRecruitDetail = () => {
         </S.SJoinProjectInfoWrapper>
       </S.SFormWrapper>
 
+      <S.SMemberFormWrapper>
+       <MemberForm 
+         leaderInfo={projectData?.leaderInfo} 
+         projectMembers={projectData?.projectMembers} 
+         isPromote={false}  
+       />
+      </S.SMemberFormWrapper>
+
+      <S.SPersonalContactWrapper>
+        <S.SContactTitle>컨택하러 가기</S.SContactTitle>
+        <PersonalContact />
+      </S.SPersonalContactWrapper>
+
       {/* 댓글 폼 */}
       <S.SCommentFormWrapper>
         <CommentForm onAddComment={handleAddComment} type="recruit" />
@@ -311,17 +275,15 @@ const ProjectRecruitDetail = () => {
       <S.SProjectCommentListWrapper>
         <ProjectCommentList
           comments={comments}
-          onReply={handleAddReply}
+          onReply={handleAddReply} 
           onDelete={(commentId) => handleDeleteComment(commentId)}  // 댓글 삭제
           onUpdate={(commentId, newText, type) => handleUpdateComment(commentId, newText, type)}
           type="recruit"
           profileImageUrl={profileKeyName}
         />
       </S.SProjectCommentListWrapper>
-
     </S.SContainer>
   );
 };
 
 export default ProjectRecruitDetail;
-

@@ -70,7 +70,7 @@ const CollabRegistration = () => {
 
       const token = localStorage.getItem('jwtToken');
 
-      const response = await axios.post('https://api.partnerd.site/api/collabPosts/', payload, {
+      const response = await axios.post('https://api.partnerd.site/api/collabPosts', payload, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',

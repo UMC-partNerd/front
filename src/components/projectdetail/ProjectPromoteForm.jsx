@@ -7,7 +7,7 @@ const ProjectPromoteForm = ({ projectData }) => {
 
   return (
     <div>
-      <Title>프로젝트 설명</Title> {/* 타이틀은 그대로 유지 */}
+      <Title>프로젝트 설명</Title> 
       <Description>{description || "프로젝트에 대한 설명이 없습니다."}</Description> 
     </div>
   );
