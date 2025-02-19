@@ -420,12 +420,13 @@ const RecruitmentRegister = () => {
           />
         </FormGroup>
 
-        <Button
-          type={TYPES.PLUS}
-          sign='true'
-          text='프로젝트 등록하기'
-          onClick={handleSubmit}
-        /> 
+        <ButtonWrapper>
+          <Button
+            type={TYPES.NEXT}
+            text="최종 등록하기"
+            onClick={handleSubmit}
+          /> 
+        </ButtonWrapper>
       </Container>
     </>
   );
@@ -633,4 +634,13 @@ const DateDivider = styled.span`
   font-size: 20px;
   font-weight: 500;
   margin-top: 25px;
+`;
+
+const ButtonWrapper = styled.div`
+  margin-top: 40px;
+  margin-bottom: 60px;
+  width: 95%;
+  max-width: 1000px;
+  display: flex;
+  justify-content: center;
 `;

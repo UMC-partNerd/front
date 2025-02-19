@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider, Routes, Route } from 'react-router
 import RootLayout from './layout/root-layout';
 import HomePage from './pages/homepage';
 import NotFoundPage from './pages/notfoundpage';
-import { TeamPage } from './pages/TeamPage'; 
+import TeamPage from './pages/TeamPage'; 
 import CollaborationDetailPage from './pages/collaboration-pages/CollaborationDetailPage';
 import CollabRegistration from './pages/collaboration-pages/CollabRegistration'; 
 import TeamRegistration from './pages/TeamRegistration';

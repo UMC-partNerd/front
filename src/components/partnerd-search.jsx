@@ -104,6 +104,12 @@ const PartnerSearch = () => {
     navigate('/find/team-registration');
   };
 
+  const handleCardClick = (clubId, e) => {
+    e.preventDefault(); // 이벤트 전파 중지
+    e.stopPropagation(); // 이벤트 버블링 중지
+    navigate(`/find/${clubId}`);
+  };
+
   if (isLoading) {
     return <div>로딩 중...</div>;
   }
@@ -174,7 +180,7 @@ const PartnerSearch = () => {
           {currentPartners.map((partner) => (
             <PartnerCard 
               key={partner.clubId}
-              onClick={() => navigate(`/find/${partner.clubId}`)}
+              onClick={(e) => handleCardClick(partner.clubId, e)}
               style={{ cursor: 'pointer' }}
             >
               <ImagePlaceholder>
@@ -182,6 +188,7 @@ const PartnerSearch = () => {
                   src={partner.profileImage} 
                   alt={partner.name}
                   onError={(e) => {
+                    e.stopPropagation(); // 이미지 에러 이벤트 전파 중지
                     if (!e.target.src.includes('default-image.jpg')) {
                       e.target.src = '/default-image.jpg';
                     } else {
