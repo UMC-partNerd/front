@@ -16,11 +16,11 @@ export const ButtonContainer = styled.div`
     border-radius: 6px;
   }
 
-  display: flex;
-  align-items: center;
-  justify-content:center;
-  padding:10px 10px;
-  gap: 10px;
+display: flex;
+align-items: center;
+justify-content:center;
+padding:10px 10px;
+gap: 10px;
 
   font-family: Pretendard;
   font-style: normal;
@@ -29,6 +29,36 @@ export const ButtonContainer = styled.div`
   letter-spacing: -0.4px;
 
   cursor:pointer;
+`;
+
+export const VoteContainer = styled.div`
+  display: inline-flex;
+  padding: 8px 32px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  border: 2px solid #08D485;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 8px 0px rgba(9, 131, 84, 0.30);
+
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.48px;
+
+  color:${(props) => (props.count ? 'rgba(8, 212, 133, 0.60)' : '#08D485')};
+
+  flex-shrink: 0;
+
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(8, 212, 133, 0.60);
+    color: #FFFFFF;
+  }
 `;
 
 export const NextContainer = styled.div`

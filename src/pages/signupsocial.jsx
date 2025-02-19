@@ -25,13 +25,12 @@ const SignUpSocialPage = () =>{
         marketingConsent: true,
         marketingNotify: true,
     });
-
-    //닉네임 체크 상태태
+    //닉네임 체크 상태
     const [isNicknameChecked, setIsNicknameChecked] = useState(false);
     // 약관 체크 상태
     const [isAgreementChecked, setIsAgreementChecked] = useState(false);
 
-        // 사용자 데이터 업데이트
+    // 사용자 데이터 업데이트
     const handleUserDataChange = (data) => {
         setUserData(data);
     };
@@ -52,14 +51,12 @@ const SignUpSocialPage = () =>{
     };
 
     //입력 필드 채워진 경우, or 닉네임 체크 한 경우에만 버튼 활성화 로직 
-    const isFormValid = 
-    userData.name && 
-    userData.birthDate && 
-    userData.nickname && 
-    isNicknameChecked && 
-    isAgreementChecked;
-
-
+    const isFormValid = userData.name && 
+                        userData.birthDate && 
+                        userData.nickname && 
+                        isNicknameChecked && 
+                        isAgreementChecked;
+                        
     // 완료 버튼 클릭 시 데이터 전송
     const handleSubmit = async () => {
         try {
@@ -122,7 +119,6 @@ const SignUpSocialPage = () =>{
     
     //     console.log("isFormValid:", isValid);
     // }, [userData, isNicknameChecked, isAgreementChecked]);
-
 
     return(
         <main className="loginPage">

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // 추가
 import Button, { TYPES } from "./common/button";
 import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
+import Banner from "../components/common/banner/Banner";
 
 import {
   PaginationContainer,
@@ -27,174 +28,161 @@ import {
   CategoryTitle
 } from "../styled-components/styled-project-collaboration";
 
+import useProjectCollaboration from '../hooks/useProjectCollaboration';
+
 const ProjectCollaboration = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState('latest');
-  const [selectedCategory, setSelectedCategory] = useState('전체');
-  const itemsPerPage = 9;
-
-  // 예시 데이터
-  const projects = Array(50).fill().map((_, index) => ({
-    title: '프로젝트 제목',
-    deadline: '2025. 01. 04 ~ 01. 12',
-    imageUrl: 'default-image-url.jpg',
-    category: '웹/앱 개발'
-  }));
-
-  const categories = [
-    '전체',
-    '웹/앱 개발',
-    '인공지능',
-    '데이터',
-    '디자인',
-    '마케팅',
-    '게임',
-    '기타'
-  ];
-
-  // 카테고리 필터링
-  const filteredProjects = selectedCategory === '전체'
-    ? projects
-    : projects.filter(project => project.category === selectedCategory);
-
-  // 현재 페이지의 데이터만 선택
-  const currentProjects = filteredProjects.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  // 전체 페이지 수 계산
-  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
-
-  const renderPageButtons = () => {
-    const buttons = [];
-    
-    // 이전 페이지 버튼
-    buttons.push(
-      <ArrowButton
-        key="prev"
-        onClick={() => setCurrentPage(prev => prev === 1 ? totalPages : prev - 1)}
-      >
-        <ArrowIcon className="left" />
-      </ArrowButton>
-    );
-
-    // 페이지 번호 생성
-    let pageNumbers = [];
-    for (let i = -2; i <= 2; i++) {
-      let pageNum = currentPage + i;
-      
-      if (pageNum <= 0) pageNum = totalPages + pageNum;
-      if (pageNum > totalPages) pageNum = pageNum - totalPages;
-      
-      pageNumbers.push(pageNum);
-    }
-
-    pageNumbers.forEach(num => {
-      buttons.push(
-        <PageButton
-          key={num}
-          $isActive={currentPage === num}
-          onClick={() => setCurrentPage(num)}
-        >
-          {num}
-        </PageButton>
-      );
-    });
-
-    // 다음 페이지 버튼
-    buttons.push(
-      <ArrowButton
-        key="next"
-        onClick={() => setCurrentPage(prev => prev === totalPages ? 1 : prev + 1)}
-      >
-        <ArrowIcon className="right" />
-      </ArrowButton>
-    );
-
-    return buttons;
-  };
-
-  const [openModal, setOpenModal] = useState(false);
+  const {
+    projects,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    sortBy,
+    setSortBy,
+    selectedCategory,
+    setSelectedCategory,
+    categories,
+    loading,
+    getImageUrl
+  } = useProjectCollaboration();
 
   // 버튼: 협업글 작성하기
-  const handleWriteClick = () => {
-    setOpenModal(true);
-  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-  const movetoRegister = () => {
-    navigate('/collaboration/collab-registration');  // 버튼 클릭 시 이동
-    setOpenModal(flase);
+
+  const handleWriteClick = () => {
+    const jwtToken = localStorage.getItem('jwtToken');
+    if (!jwtToken) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+    setIsModalOpen(true);  // 모달 열기
   };
+
+  const movetoRegister = () => {
+    navigate('/collaboration/collab-registration');
+    setIsModalOpen(false);
+  };
+
+  const handleCardClick = (id) => {
+    navigate(`/collaboration/${id}`);
+  };
+
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
-    <CollaborationContainer>
-      <CategoryTitle>카테고리</CategoryTitle>
-      <CategoryContainer>
-        {categories.map(category => (
-          <CategoryButton
-            key={category}
-            isActive={selectedCategory === category}
-            onClick={() => setSelectedCategory(category)}
-          >
-            {category}
-          </CategoryButton>
-        ))}
-      </CategoryContainer>
-
-      <ButtonContainer>
-        <SortContainer>
-          <SortButton
-            isActive={sortBy === 'latest'}
-            onClick={() => setSortBy('latest')}
-          >
-            최신순
-          </SortButton>
-          <SortButton
-            isActive={sortBy === 'deadline'}
-            onClick={() => setSortBy('deadline')}
-          >
-            마감순
-          </SortButton>
-        </SortContainer>
-
-        <Button
-            type={TYPES.PLUS}
-            sign='true'
-            text='협업글 작성하기'
-            onClick={handleWriteClick}
-        />
-      </ButtonContainer>
-
-      <CustomModal
-        openModal={openModal} 
-        closeModal={() => setOpenModal(false)}
-
-        boldface='협업을 등록하시겠습니까?'
-        regular='협업의 리더로 콜라보 페이지를 개설하여 협업을 등록할 수 있습니다.'
-        text='개설하기'
-        onClickHandler={movetoRegister}
-        variant={VERSIONS.VER3}
+    <>
+      <Banner 
+        largeText="콜라보레이션" 
+        smallText="협업 글을 올리고 다른 동아리와 콜라보레이션을 진행해보세요"
       />
-      <ProjectGrid>
-        {currentProjects.map((project, index) => (
-          <ProjectCard key={index}>
-            <ImagePlaceholder>
-              <img src={project.imageUrl} alt={project.title} />
-            </ImagePlaceholder>
-            <CardContent>
-              <CategoryBadge>{project.category}</CategoryBadge>
-              <Title>{project.title}</Title>
-              <Deadline>{project.deadline}</Deadline>
-            </CardContent>
-          </ProjectCard>
-        ))}
-      </ProjectGrid>
+      <CollaborationContainer>
+        <CategoryTitle>카테고리</CategoryTitle>
+        <CategoryContainer>
+          {categories.map(category => (
+            <CategoryButton
+              key={category.id}
+              isActive={selectedCategory === category.id}
+              onClick={() => setSelectedCategory(category.id)}
+            >
+              {category.name}
+            </CategoryButton>
+          ))}
+        </CategoryContainer>
 
-      <PaginationContainer>
-        {renderPageButtons()}
-      </PaginationContainer>
-    </CollaborationContainer>
+        <ButtonContainer>
+          <SortContainer>
+            <SortButton
+              isActive={sortBy === 'createdAt'}
+              onClick={() => setSortBy('createdAt')}
+            >
+              최신순
+            </SortButton>
+            <SortButton
+              isActive={sortBy === 'endDate'}
+              onClick={() => setSortBy('endDate')}
+            >
+              마감순
+            </SortButton>
+          </SortContainer>
+
+          <Button
+              type={TYPES.PLUS}
+              sign='true'
+              text='협업글 작성하기'
+              onClick={handleWriteClick}
+          />
+        </ButtonContainer>
+
+        <CustomModal
+          openModal={isModalOpen} 
+          closeModal={() => setIsModalOpen(false)}  // 함수 참조로 수정
+          boldface='협업을 등록하시겠습니까?'
+          regular='협업의 리더로 콜라보 페이지를 개설하여 협업을 등록할 수 있습니다.'
+          text='개설하기'
+          onClickHandler={movetoRegister}
+          variant={VERSIONS.VER3}
+        />
+        <ProjectGrid>
+          {projects.map((project) => (
+            <ProjectCard 
+              key={project.collabPostId}
+              onClick={() => handleCardClick(project.collabPostId)}
+            >
+              <ImagePlaceholder>
+                {project.imageKeyName && (
+                  <img 
+                    src={getImageUrl(project.imageKeyName)} 
+                    alt={project.title}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = '/default-image.png'; // 기본 이미지 경로
+                    }}
+                  />
+                )}
+              </ImagePlaceholder>
+              <CardContent>
+                <CategoryBadge>
+                  {project.categoryDTOList.map(cat => cat.name).join(', ')}
+                </CategoryBadge>
+                <Title>{project.title}</Title>
+                <Deadline>
+                  {new Date(project.startDate).toLocaleDateString()} ~ 
+                  {new Date(project.endDate).toLocaleDateString()}
+                </Deadline>
+              </CardContent>
+            </ProjectCard>
+          ))}
+        </ProjectGrid>
+
+        <PaginationContainer>
+          <ArrowButton
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+          >
+            <ArrowIcon className="left" />
+          </ArrowButton>
+          
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+            <PageButton
+              key={page}
+              $isActive={currentPage === page}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </PageButton>
+          ))}
+
+          <ArrowButton
+            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+            disabled={currentPage === totalPages}
+          >
+            <ArrowIcon className="right" />
+          </ArrowButton>
+        </PaginationContainer>
+      </CollaborationContainer>
+    </>
   );
 };
 
