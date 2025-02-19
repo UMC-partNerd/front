@@ -4,7 +4,9 @@ import KakaoBtn from "./kakaoButton"
 const LoginComp = () =>{
     return(
         <MainWrapp>
-            <span>로고</span>
+            <Logo>
+            <img src="/Frame.png" alt="Logo" />
+            </Logo>
             <h4>새로운 성장을 파트너드와 함께!</h4>
             <Form >
                 <Input placeholder='이메일을 입력해주세요!' type={'email'}  />
@@ -41,6 +43,24 @@ background-color: #FFFFFF  !important;
 border: 1px solid #C2C2C2;
 border-radius: 4px;
 
+@media (max-width: 768px) {
+        width: 90%;
+        padding: 18px;
+    }
+
+`
+
+const Logo = styled.div`
+    display: block;
+    width: 200px;
+    height: auto;
+    img {
+        width: 100%;
+        height: auto;
+    }
+    &:hover {
+        opacity: 0.9;
+    }
 `
 
 const Submit = styled.input`
@@ -62,6 +82,10 @@ border:none;
 //     &:disabled {
 //         background: gray;
 //     }
+@media (max-width: 768px) {
+        width: 90%;
+        font-size: 0.9em;
+    }
 `
 
 
@@ -72,6 +96,10 @@ flex-direction: column;
 align-items: center;
 width:60%;
 margin-top:20px;
+
+@media (max-width: 768px) {
+        width: 80%;
+    }
 `
 const LinksWrapper = styled.div`
     display: flex;
@@ -79,20 +107,33 @@ const LinksWrapper = styled.div`
     align-items: center;
     margin-top: 30px;
     margin-bottom: 17px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 8px;
+    }
 `;
 const LinkText = styled.span`
-    font-size: 0.5em;
+    font-size: 0.8em;
     color:  #707070;
     cursor: pointer;
 
     &:hover {
         text-decoration: underline;
     }
+
+    @media (max-width: 768px) {
+        font-size: 0.7em;
+    }
 `;
 
 const Divider = styled.span`
     margin: 0 8px;
     color: #c2c2c2;
+
+    @media (max-width: 768px) {
+        display: none;
+    }
 `;
 
 const DividerWithText = styled.div`
@@ -100,12 +141,21 @@ const DividerWithText = styled.div`
     align-items: center;
     width: 100%;
     margin: 10px 0 20px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 5px;
+    }
 `;
 
 const Line = styled.div`
     flex: 1;
     height: 1px;
     background: #c2c2c2;
+
+    @media (max-width: 768px) {
+        width: 80%;
+    }
 `;
 
 const TextInLine = styled.span`
@@ -126,6 +176,24 @@ height: 85vh;
 background: #FFFFFF;
 box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 border-radius: 16px;
+margin: 50px 100px 70px 100px;
+padding: 20px;
+
+@media (max-width: 1024px) {
+        width: 80vw;
+        margin: 30px 50px;
+    }
+    @media (max-width: 768px) {
+        width: 100vw;
+        height: auto;
+        margin: 20px;
+        padding: 15px;
+    }
+    @media (max-width: 480px) {
+        width: 100vw;
+        margin: 10px;
+        padding: 10px;
+    }
 
 `
 

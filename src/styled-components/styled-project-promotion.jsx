@@ -136,6 +136,13 @@ export const ProjectCard = styled.div`
   border: 1px solid #EAEAEA;
   border-radius: 8px;
   overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 export const ImagePlaceholder = styled.div`
@@ -212,6 +219,13 @@ export const TopProjectCard = styled.div`
   border: 1px solid #EAEAEA;
   border-radius: 8px;
   overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 export const TopImagePlaceholder = styled.div`

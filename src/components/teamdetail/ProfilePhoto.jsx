@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 const ProfileContainer = styled.div`
-  width: 140px; 
-  height: 140px; 
+  width: 180px; 
+  height: 130px; 
   border-radius: 5px;
   background-color: #ccc;
   display: flex;
@@ -12,7 +12,7 @@ const ProfileContainer = styled.div`
   color: white;
   font-size: 1.5em;
   margin-top: -77px; 
-  margin-left: 180px; 
+  margin-left: 190px; 
 `;
 
 const ProfilePhoto = ({ src }) => {
