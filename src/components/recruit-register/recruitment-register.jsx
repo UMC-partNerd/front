@@ -176,8 +176,7 @@ const RecruitmentRegister = () => {
         // 등록 성공 후 리다이렉트 또는 추가 작업
       }
     } catch (error) {
-      alert('프로젝트 모집 등록에 실패했습니다.');
-      console.error(error);
+      console.error('모집 등록 실패', error);
     }
   };
   
