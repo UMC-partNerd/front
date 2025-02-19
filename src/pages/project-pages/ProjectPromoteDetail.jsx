@@ -10,6 +10,8 @@ import useBannerPhoto from '../../hooks/useBannerPhoto';
 import MemberForm from '../../components/projectdetail/MemberForm';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
 
+import Button, { TYPES } from "../../components/common/button";
+
 const DefaultImage = '/default-image.png';
 
 const ProjectPromoteDetail = () => {

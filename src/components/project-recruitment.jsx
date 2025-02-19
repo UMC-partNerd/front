@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Button, { TYPES } from "./common/button";
 import CustomModal, { VERSIONS } from "./common/modal/CustomModal";
 import { useNavigate } from 'react-router-dom';
+import Banner from "./common/banner/Banner";
 import {
   PaginationContainer,
   ArrowButton,
@@ -182,114 +183,120 @@ const ProjectRecruitment = () => {
   };
 
   return (
-    <RecruitmentContainer>
-      <ProjectTypeContainer>
-        <ProjectTypeButton 
-          isActive={true}
-          onClick={() => window.location.href = '/project/recruit'}
-        >
-          프로젝트 모집하기
-        </ProjectTypeButton>
-        <ProjectTypeButton 
-          isActive={false}
-          onClick={() => window.location.href = '/project/promote'}
-        >
-          프로젝트 홍보하기
-        </ProjectTypeButton>
-      </ProjectTypeContainer>
-
-      <SearchContainer>
-        <FilterContainer>
-          <SearchInput
-            placeholder="어떤 프로젝트를 찾으시나요?"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <CategoryGroup>
-            {statusCategories.map(status => (
-              <CategoryButton
-                key={status}
-                isActive={selectedStatus === status}
-                onClick={() => {
-                  setSelectedStatus(status);
-                  setCurrentPage(1);
-                }}
-              >
-                {status}
-              </CategoryButton>
-            ))}
-          </CategoryGroup>
-          <CategoryGroup>
-            {projectCategories.map(category => (
-              <CategoryButton
-                key={category}
-                isActive={selectedCategories.includes(category)}
-                onClick={() => {
-                  if (category === '전체') {
-                    setSelectedCategories(['전체']);
-                  } else {
-                    const newCategories = selectedCategories.includes(category)
-                      ? selectedCategories.filter(c => c !== category)
-                      : [...selectedCategories.filter(c => c !== '전체'), category];
-                    setSelectedCategories(newCategories.length ? newCategories : ['전체']);
-                  }
-                  setCurrentPage(1);
-                }}
-              >
-                {category}
-              </CategoryButton>
-            ))}
-          </CategoryGroup>
-        </FilterContainer>
-        <Button
-            type={TYPES.PLUS}
-            sign='true'
-            text='글 등록하기'
-            onClick={buttonHandler}
-        />
-      </SearchContainer>
-      
-      <CustomModal
-        openModal={openModal} 
-        closeModal={() => setOpenModal(false)}
-        boldface='프로젝트 모집을 등록하시겠습니까?'
-        regular='프로젝트의 리더로 프로젝트 페이지를 개설하여 프로젝트를 등록할 수 있습니다.'
-        text='개설하기'
-        onClickHandler={movetoRegister}
-        variant={VERSIONS.VER3}
+    <>
+      <Banner 
+        largeText="프로젝트 팀원 모집하기" 
+        smallText="함께 할 팀원을 찾고 있나요? 파트너드에서 딱 알맞는 팀원을 찾아보세요!"
       />
+      <RecruitmentContainer>
+        <ProjectTypeContainer>
+          <ProjectTypeButton 
+            isActive={true}
+            onClick={() => window.location.href = '/project/recruit'}
+          >
+            프로젝트 모집하기
+          </ProjectTypeButton>
+          <ProjectTypeButton 
+            isActive={false}
+            onClick={() => window.location.href = '/project/promote'}
+          >
+            프로젝트 홍보하기
+          </ProjectTypeButton>
+        </ProjectTypeContainer>
 
-      <PartnerGrid>
-        {loading ? (
-          <div>로딩 중...</div>
-        ) : (
-          currentProjects.map((project) => (
-            <PartnerCard 
-              key={project.projectId} 
-              onClick={() => handleCardClick(project.projectId)}
-            >
-              <ImagePlaceholder>
-                <RecruitmentStatus status={project.projectStatus === '모집중' ? 'recruiting' : 'completed'}>
-                  {project.projectStatus}
-                </RecruitmentStatus>
-                {project.imageUrl && <img src={project.imageUrl} alt={project.title} />}
-              </ImagePlaceholder>
-              <CardContent>
-                {project.categoryDTOList.map(category => (
-                  <CategoryBadge key={category.id}>{category.name}</CategoryBadge>
-                ))}
-                <Title>{project.title}</Title>
-                <Description>{project.intro}</Description>
-              </CardContent>
-            </PartnerCard>
-          ))
-        )}
-      </PartnerGrid>
+        <SearchContainer>
+          <FilterContainer>
+            <SearchInput
+              placeholder="어떤 프로젝트를 찾으시나요?"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <CategoryGroup>
+              {statusCategories.map(status => (
+                <CategoryButton
+                  key={status}
+                  isActive={selectedStatus === status}
+                  onClick={() => {
+                    setSelectedStatus(status);
+                    setCurrentPage(1);
+                  }}
+                >
+                  {status}
+                </CategoryButton>
+              ))}
+            </CategoryGroup>
+            <CategoryGroup>
+              {projectCategories.map(category => (
+                <CategoryButton
+                  key={category}
+                  isActive={selectedCategories.includes(category)}
+                  onClick={() => {
+                    if (category === '전체') {
+                      setSelectedCategories(['전체']);
+                    } else {
+                      const newCategories = selectedCategories.includes(category)
+                        ? selectedCategories.filter(c => c !== category)
+                        : [...selectedCategories.filter(c => c !== '전체'), category];
+                      setSelectedCategories(newCategories.length ? newCategories : ['전체']);
+                    }
+                    setCurrentPage(1);
+                  }}
+                >
+                  {category}
+                </CategoryButton>
+              ))}
+            </CategoryGroup>
+          </FilterContainer>
+          <Button
+              type={TYPES.PLUS}
+              sign='true'
+              text='글 등록하기'
+              onClick={buttonHandler}
+          />
+        </SearchContainer>
+        
+        <CustomModal
+          openModal={openModal} 
+          closeModal={() => setOpenModal(false)}
+          boldface='프로젝트 모집을 등록하시겠습니까?'
+          regular='프로젝트의 리더로 프로젝트 페이지를 개설하여 프로젝트를 등록할 수 있습니다.'
+          text='개설하기'
+          onClickHandler={movetoRegister}
+          variant={VERSIONS.VER3}
+        />
 
-      <PaginationContainer>
-        {renderPageButtons()}
-      </PaginationContainer>
-    </RecruitmentContainer>
+        <PartnerGrid>
+          {loading ? (
+            <div>로딩 중...</div>
+          ) : (
+            currentProjects.map((project) => (
+              <PartnerCard 
+                key={project.projectId} 
+                onClick={() => handleCardClick(project.projectId)}
+              >
+                <ImagePlaceholder>
+                  <RecruitmentStatus status={project.projectStatus === '모집중' ? 'recruiting' : 'completed'}>
+                    {project.projectStatus}
+                  </RecruitmentStatus>
+                  {project.imageUrl && <img src={project.imageUrl} alt={project.title} />}
+                </ImagePlaceholder>
+                <CardContent>
+                  {project.categoryDTOList.map(category => (
+                    <CategoryBadge key={category.id}>{category.name}</CategoryBadge>
+                  ))}
+                  <Title>{project.title}</Title>
+                  <Description>{project.intro}</Description>
+                </CardContent>
+              </PartnerCard>
+            ))
+          )}
+        </PartnerGrid>
+
+        <PaginationContainer>
+          {renderPageButtons()}
+        </PaginationContainer>
+      </RecruitmentContainer>
+    </>
   );
 };
 

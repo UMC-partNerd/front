@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Button, { TYPES } from "../components/common/button";
 import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
 import { useNavigate } from 'react-router-dom';
+import Banner from "../components/common/banner/Banner";
 
 import {
   PaginationContainer,
@@ -103,6 +104,12 @@ const PartnerSearch = () => {
     navigate('/find/team-registration');
   };
 
+  const handleCardClick = (clubId, e) => {
+    e.preventDefault(); // 이벤트 전파 중지
+    e.stopPropagation(); // 이벤트 버블링 중지
+    navigate(`/find/${clubId}`);
+  };
+
   if (isLoading) {
     return <div>로딩 중...</div>;
   }
@@ -118,91 +125,96 @@ const PartnerSearch = () => {
   const totalPages = Math.ceil((partners?.length || 0) / itemsPerPage);
 
   return (
-    <PartnerSearchContainer>
-      <CategoryTitle>카테고리</CategoryTitle>
-      <CategoryContainer>
-        {PARTNER_CATEGORIES.map(category => (
-          <CategoryButton
-            key={category}
-            isActive={selectedCategory === category}
-            onClick={() => setSelectedCategory(category)}
-          >
-            {category}
-          </CategoryButton>
-        ))}
-      </CategoryContainer>
-
-      <ButtonContainer>
-        <SortContainer>
-          <SortButton
-            isActive={sortBy === SORT_OPTIONS.RECENT}
-            onClick={() => setSortBy(SORT_OPTIONS.RECENT)}
-          >
-            최신순
-          </SortButton>
-          <SortButton
-            isActive={sortBy === SORT_OPTIONS.POPULAR}
-            onClick={() => setSortBy(SORT_OPTIONS.POPULAR)}
-          >
-            인기순
-          </SortButton>
-        </SortContainer>
-        
-
-        <Button    
-          type={TYPES.PLUS}
-          sign='true'
-          text='동아리 등록하기'
-          onClick={buttonHandler}
-        /> 
-      </ButtonContainer>
-      <CustomModal
-        openModal={openModal} 
-        closeModal={() => setOpenModal(false)}
-
-        boldface='동아리를 등록하시겠습니까?'
-        regular='동아리의 리더로 팀페이지를 개설하여 동아리를 등록할 수 있습니다.'
-        text='개설하기'
-        onClickHandler={onClickHandler}
-        variant={VERSIONS.VER3}
+    <>
+      <Banner 
+        largeText="파트너드 찾기" 
+        smallText="관심있는 IT 동아리를 찾아보고, 새로운 경험을 향해 도전해보세요!"
       />
-      <PartnerGrid>
-        {currentPartners.map((partner) => (
-          <PartnerCard 
-            key={partner.clubId}
-            onClick={() => navigate(`/find/${partner.clubId}`)}
-            style={{ cursor: 'pointer' }}
-          >
-            <ImagePlaceholder>
-              <img 
-                src={partner.profileImage} 
-                alt={partner.name}
-                onError={(e) => {
-                  if (!e.target.src.includes('default-image.jpg')) {
-                    e.target.src = '/default-image.jpg';
-                  } else {
-                    e.target.onError = null;
-                    e.target.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
-                  }
-                }}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            </ImagePlaceholder>
-            <CardContent>
-              <CategoryBadge>{partner.categoryName}</CategoryBadge>
-              <Title>{partner.name}</Title>
-              <Description>{partner.intro}</Description>
-            </CardContent>
-          </PartnerCard>
-        ))}
-      </PartnerGrid>
+      <PartnerSearchContainer>
+        <CategoryTitle>카테고리</CategoryTitle>
+        <CategoryContainer>
+          {PARTNER_CATEGORIES.map(category => (
+            <CategoryButton
+              key={category}
+              isActive={selectedCategory === category}
+              onClick={() => setSelectedCategory(category)}
+            >
+              {category}
+            </CategoryButton>
+          ))}
+        </CategoryContainer>
 
-      {totalPages > 0 && (
-        <PaginationContainer>
-          {renderPageButtons()}
-        </PaginationContainer>
-      )}
-    </PartnerSearchContainer>
+        <ButtonContainer>
+          <SortContainer>
+            <SortButton
+              isActive={sortBy === SORT_OPTIONS.RECENT}
+              onClick={() => setSortBy(SORT_OPTIONS.RECENT)}
+            >
+              최신순
+            </SortButton>
+            <SortButton
+              isActive={sortBy === SORT_OPTIONS.POPULAR}
+              onClick={() => setSortBy(SORT_OPTIONS.POPULAR)}
+            >
+              인기순
+            </SortButton>
+          </SortContainer>
+          <Button    
+            type={TYPES.PLUS}
+            sign='true'
+            text='동아리 등록하기'
+            onClick={buttonHandler}
+          /> 
+        </ButtonContainer>
+        <CustomModal
+          openModal={openModal} 
+          closeModal={() => setOpenModal(false)}
+
+          boldface='동아리를 등록하시겠습니까?'
+          regular='동아리의 리더로 팀페이지를 개설하여 동아리를 등록할 수 있습니다.'
+          text='개설하기'
+          onClickHandler={onClickHandler}
+          variant={VERSIONS.VER3}
+        />
+        <PartnerGrid>
+          {currentPartners.map((partner) => (
+            <PartnerCard 
+              key={partner.clubId}
+              onClick={(e) => handleCardClick(partner.clubId, e)}
+              style={{ cursor: 'pointer' }}
+            >
+              <ImagePlaceholder>
+                <img 
+                  src={partner.profileImage} 
+                  alt={partner.name}
+                  onError={(e) => {
+                    e.stopPropagation(); // 이미지 에러 이벤트 전파 중지
+                    if (!e.target.src.includes('default-image.jpg')) {
+                      e.target.src = '/default-image.jpg';
+                    } else {
+                      e.target.onError = null;
+                      e.target.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+                    }
+                  }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </ImagePlaceholder>
+              <CardContent>
+                <CategoryBadge>{partner.categoryName}</CategoryBadge>
+                <Title>{partner.name}</Title>
+                <Description>{partner.intro}</Description>
+              </CardContent>
+            </PartnerCard>
+          ))}
+        </PartnerGrid>
+
+        {totalPages > 0 && (
+          <PaginationContainer>
+            {renderPageButtons()}
+          </PaginationContainer>
+        )}
+      </PartnerSearchContainer>
+    </>
   );
 };
 

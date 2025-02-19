@@ -20,7 +20,11 @@ const useBannerPhoto = (
   const [error, setError] = useState(null);
 
   const fetchPhotoUrl = useCallback(async (keyName) => {
-    console.log('Fetching URL for keyName:', keyName);
+    // 이미 URL 형식인 경우 바로 반환
+    if (!keyName || keyName.startsWith('http')) {
+      return keyName;
+    }
+
     try {
       const encodedKeyName = encodeURIComponent(keyName);
       const response = await axios.get(
@@ -31,7 +35,6 @@ const useBannerPhoto = (
           },
         }
       );
-      console.log('API Response:', response.data); // API 응답 확인
 
       if (response.data && response.data.result && response.data.result.cloudFrontUrl) {
         return response.data.result.cloudFrontUrl;
@@ -45,48 +48,50 @@ const useBannerPhoto = (
   }, []);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchPhotos = async () => {
       try {
         // 각각의 이미지 파일에 대해 URL 요청
-        if (bannerImageFile) {
+        if (bannerImageFile && isMounted) {
           const bannerUrl = await fetchPhotoUrl(bannerImageFile);
           setBannerPhotoUrl(bannerUrl);
         }
 
-        if (mainImageFile) {
+        if (mainImageFile && isMounted) {
           const mainUrl = await fetchPhotoUrl(mainImageFile);
           setMainPhotoUrl(mainUrl);
         }
 
-        if (eventImageFiles && eventImageFiles.length > 0) {
+        if (eventImageFiles && eventImageFiles.length > 0 && isMounted) {
           const eventUrls = await Promise.all(
             eventImageFiles.map(file => fetchPhotoUrl(file))
           );
           setEventPhotoUrls(eventUrls);
         }
 
-        // 썸네일 처리
-        if (thumbnailImageFile) {
+        if (thumbnailImageFile && isMounted) {
           const thumbnailUrl = await fetchPhotoUrl(thumbnailImageFile);
           setThumbnailPhotoUrl(thumbnailUrl);
         }
 
-        // 인트로 이미지 처리
-        if (introImageFile) {
-          console.log('Requesting intro image URL with keyName:', introImageFile);
+        if (introImageFile && isMounted) {
           const introUrl = await fetchPhotoUrl(introImageFile);
           setIntroPhotoUrl(introUrl);
         }
 
-        // 프로필 이미지 처리
-        if (profileImageFile) {
+        if (profileImageFile && isMounted) {
           const profileUrl = await fetchPhotoUrl(profileImageFile);
           setProfilePhotoUrl(profileUrl);
         }
       } catch (err) {
-        setError(err.message);
+        if (isMounted) {
+          setError(err.message);
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
@@ -99,7 +104,13 @@ const useBannerPhoto = (
       profileImageFile 
     ) {
       fetchPhotos();
+    } else {
+      setIsLoading(false);
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [
     bannerImageFile,
     mainImageFile,

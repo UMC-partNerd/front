@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // 추가
 import Button, { TYPES } from "./common/button";
 import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
+import Banner from "../components/common/banner/Banner";
 
 import {
   PaginationContainer,
@@ -71,111 +72,117 @@ const ProjectCollaboration = () => {
   }
 
   return (
-    <CollaborationContainer>
-      <CategoryTitle>카테고리</CategoryTitle>
-      <CategoryContainer>
-        {categories.map(category => (
-          <CategoryButton
-            key={category.id}
-            isActive={selectedCategory === category.id}
-            onClick={() => setSelectedCategory(category.id)}
-          >
-            {category.name}
-          </CategoryButton>
-        ))}
-      </CategoryContainer>
-
-      <ButtonContainer>
-        <SortContainer>
-          <SortButton
-            isActive={sortBy === 'createdAt'}
-            onClick={() => setSortBy('createdAt')}
-          >
-            최신순
-          </SortButton>
-          <SortButton
-            isActive={sortBy === 'endDate'}
-            onClick={() => setSortBy('endDate')}
-          >
-            마감순
-          </SortButton>
-        </SortContainer>
-
-        <Button
-            type={TYPES.PLUS}
-            sign='true'
-            text='협업글 작성하기'
-            onClick={handleWriteClick}
-        />
-      </ButtonContainer>
-
-      <CustomModal
-        openModal={isModalOpen} 
-        closeModal={() => setIsModalOpen(false)}  // 함수 참조로 수정
-        boldface='협업을 등록하시겠습니까?'
-        regular='협업의 리더로 콜라보 페이지를 개설하여 협업을 등록할 수 있습니다.'
-        text='개설하기'
-        onClickHandler={movetoRegister}
-        variant={VERSIONS.VER3}
+    <>
+      <Banner 
+        largeText="콜라보레이션" 
+        smallText="협업 글을 올리고 다른 동아리와 콜라보레이션을 진행해보세요"
       />
-      <ProjectGrid>
-        {projects.map((project) => (
-          <ProjectCard 
-            key={project.collabPostId}
-            onClick={() => handleCardClick(project.collabPostId)}
-          >
-            <ImagePlaceholder>
-              {project.imageKeyName && (
-                <img 
-                  src={getImageUrl(project.imageKeyName)} 
-                  alt={project.title}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = '/default-image.png'; // 기본 이미지 경로
-                  }}
-                />
-              )}
-            </ImagePlaceholder>
-            <CardContent>
-              <CategoryBadge>
-                {project.categoryDTOList.map(cat => cat.name).join(', ')}
-              </CategoryBadge>
-              <Title>{project.title}</Title>
-              <Deadline>
-                {new Date(project.startDate).toLocaleDateString()} ~ 
-                {new Date(project.endDate).toLocaleDateString()}
-              </Deadline>
-            </CardContent>
-          </ProjectCard>
-        ))}
-      </ProjectGrid>
+      <CollaborationContainer>
+        <CategoryTitle>카테고리</CategoryTitle>
+        <CategoryContainer>
+          {categories.map(category => (
+            <CategoryButton
+              key={category.id}
+              isActive={selectedCategory === category.id}
+              onClick={() => setSelectedCategory(category.id)}
+            >
+              {category.name}
+            </CategoryButton>
+          ))}
+        </CategoryContainer>
 
-      <PaginationContainer>
-        <ArrowButton
-          onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-          disabled={currentPage === 1}
-        >
-          <ArrowIcon className="left" />
-        </ArrowButton>
-        
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-          <PageButton
-            key={page}
-            $isActive={currentPage === page}
-            onClick={() => setCurrentPage(page)}
-          >
-            {page}
-          </PageButton>
-        ))}
+        <ButtonContainer>
+          <SortContainer>
+            <SortButton
+              isActive={sortBy === 'createdAt'}
+              onClick={() => setSortBy('createdAt')}
+            >
+              최신순
+            </SortButton>
+            <SortButton
+              isActive={sortBy === 'endDate'}
+              onClick={() => setSortBy('endDate')}
+            >
+              마감순
+            </SortButton>
+          </SortContainer>
 
-        <ArrowButton
-          onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-          disabled={currentPage === totalPages}
-        >
-          <ArrowIcon className="right" />
-        </ArrowButton>
-      </PaginationContainer>
-    </CollaborationContainer>
+          <Button
+              type={TYPES.PLUS}
+              sign='true'
+              text='협업글 작성하기'
+              onClick={handleWriteClick}
+          />
+        </ButtonContainer>
+
+        <CustomModal
+          openModal={isModalOpen} 
+          closeModal={() => setIsModalOpen(false)}  // 함수 참조로 수정
+          boldface='협업을 등록하시겠습니까?'
+          regular='협업의 리더로 콜라보 페이지를 개설하여 협업을 등록할 수 있습니다.'
+          text='개설하기'
+          onClickHandler={movetoRegister}
+          variant={VERSIONS.VER3}
+        />
+        <ProjectGrid>
+          {projects.map((project) => (
+            <ProjectCard 
+              key={project.collabPostId}
+              onClick={() => handleCardClick(project.collabPostId)}
+            >
+              <ImagePlaceholder>
+                {project.imageKeyName && (
+                  <img 
+                    src={getImageUrl(project.imageKeyName)} 
+                    alt={project.title}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = '/default-image.png'; // 기본 이미지 경로
+                    }}
+                  />
+                )}
+              </ImagePlaceholder>
+              <CardContent>
+                <CategoryBadge>
+                  {project.categoryDTOList.map(cat => cat.name).join(', ')}
+                </CategoryBadge>
+                <Title>{project.title}</Title>
+                <Deadline>
+                  {new Date(project.startDate).toLocaleDateString()} ~ 
+                  {new Date(project.endDate).toLocaleDateString()}
+                </Deadline>
+              </CardContent>
+            </ProjectCard>
+          ))}
+        </ProjectGrid>
+
+        <PaginationContainer>
+          <ArrowButton
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+          >
+            <ArrowIcon className="left" />
+          </ArrowButton>
+          
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+            <PageButton
+              key={page}
+              $isActive={currentPage === page}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </PageButton>
+          ))}
+
+          <ArrowButton
+            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+            disabled={currentPage === totalPages}
+          >
+            <ArrowIcon className="right" />
+          </ArrowButton>
+        </PaginationContainer>
+      </CollaborationContainer>
+    </>
   );
 };
 
