@@ -18,17 +18,20 @@ const ReplyInput = ({ onReply, onClose }) => {
   const [text, setText] = useState('');
 
   const handleSubmit = () => {
-    if (text.trim() === '') return;
-    onReply(text);
-    setText('');
-    onClose(); 
+    if (text.trim() === '') {
+      alert('답글을 입력해주세요!');  
+      return;
+    }
+    console.log("새로운 댓글 내용:", text); 
+    onReply(text);  
+    setText(''); 
+    onClose();   
   };
 
   const handleKeyDown = (e) => {
-   
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit();
+    if (e.key === 'Enter' && !e.shiftKey) { 
+      e.preventDefault(); 
+      handleSubmit(); // 댓글 전송
     }
   };
 
@@ -46,3 +49,4 @@ const ReplyInput = ({ onReply, onClose }) => {
 };
 
 export default ReplyInput;
+

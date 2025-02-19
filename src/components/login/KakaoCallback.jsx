@@ -50,10 +50,19 @@ const KakaoCallback = () => {
             const email = response.data.result.email;
             const jwtToken = response.data.result.jwtToken;
 
+
             //localStorage.setItem("kakao_access_token", response.data.result.access_token);
+
+            // 세션 아이디 (채팅)
+            const sessionId = response.data.result.sessionId;
+
+            localStorage.setItem("kakao_access_token", response.data.result.access_token);
             localStorage.setItem("used_kakao_code", authCode);
             localStorage.setItem("kakao_email", email); // 이메일 저장
             localStorage.setItem("jwtToken", jwtToken); // JWT 토큰 저장
+            localStorage.setItem("sessionId", sessionId);
+
+            console.log("Session ID from localStorage:", sessionId);
 
             //zustand로 로그인 상태 업데이트(추가한 부분)
             setUser(email, jwtToken); // 로그인 상태 업데이트

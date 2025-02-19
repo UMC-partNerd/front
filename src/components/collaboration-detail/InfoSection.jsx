@@ -8,7 +8,7 @@ const InfoSection = ({ collabData, buttonHandler }) => {
   const formatDate = (dateString) => {
     return dateString ? new Date(dateString).toLocaleDateString() : '정보 없음';
   };
-
+  
   return (
     <S.SInfoContainer>
       <S.SHeaderText>{collabData.title || '제목 없음'}</S.SHeaderText>
