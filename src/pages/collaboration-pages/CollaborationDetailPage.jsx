@@ -40,8 +40,6 @@ const CollaborationDetailPage = () => {
     // Your delete logic here
   };
 
-  const [errorMessage, setErrorMessage] = useState('');
-
   useEffect(() => {
     console.log('collabPostId:', collabPostId); // collabPostId 값 확인
     const fetchCollabData = async () => {
@@ -280,37 +278,6 @@ const CollaborationDetailPage = () => {
   // 협업 요청 보내기
   const sendHandler = async () => {
     setOpenModal(false);
-  // 모달: 보내기
-  const sendHandler = async(collabPostId) => {
-    setErrorMessage('');
-    
-    const token = localStorage.getItem('jwtToken');
-    if (!token) {
-      console.error("❌ JWT 토큰이 없습니다. 로그인 상태를 확인하세요.");
-      return;
-    }
-
-    if (!collabPostId) {
-      console.error("❌ collabPostId가 제공되지 않았습니다.");
-      return;
-    }
-
-    try {
-      const response = await axios.post('https://api.partnerd.site/api/collabAsk/${collabPostId}', null, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      console.log('협업 요청 성공', response.data);
-      
-      setOpenModal(false);
-    } catch (error) {
-      console.error('협업 요청 실패', error);
-      setErrorMessage('협업 요청에 실패했습니다.');
-    } finally {
-      setOpenModal(false);
-    }
   };
 
   return (
@@ -345,13 +312,17 @@ const CollaborationDetailPage = () => {
         {isLoadingCollab ? <div>로딩 중...</div> :
           errorCollab ? <div>{errorCollab}</div> :
           <InfoSectionWrapper>
-          <InfoSection collabData={collabData} />
-        </InfoSectionWrapper>}
-        </Wrapper>
+            <InfoSection collabData={collabData} />
+          </InfoSectionWrapper>}
+      </Wrapper>
 
       <EventOverviewWrapper>
         {collabData ? <EventOverview eventData={collabData} /> : <div>데이터를 불러오는 중...</div>}
       </EventOverviewWrapper>
+
+      <EventGuideWrapper>
+        {collabData ? <EventGuide collabData={collabData} /> : <div>데이터를 불러오는 중...</div>}
+      </EventGuideWrapper>
 
       <EventImagesWrapper>
         {collabData ? <EventImages images={eventPhotoUrls} /> : null}
