@@ -21,6 +21,15 @@ const Comment = ({ collabPostId, collabInquiryId, text, user, date, replies = []
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
+  // user 객체가 없는 경우를 대비한 기본값 설정
+  const defaultUser = {
+    nickname: '사용자',
+    profileImage: '/default-profile.png'
+  };
+
+  // user가 없는 경우 기본값 사용
+  const currentUser = user || defaultUser;
+
   const handleReplyClick = () => {
     setShowReply(!showReply);
   };
@@ -80,12 +89,16 @@ const Comment = ({ collabPostId, collabInquiryId, text, user, date, replies = []
   return (
     <S.SCommentWrapper>
       <S.SProfileImage 
-      src={profileImageUrl ? profileImageUrl : '/default-profile.png'} 
-      alt="Profile" 
+        src={currentUser.profileImage || '/default-profile.png'} 
+        alt="Profile" 
+        onError={(e) => {
+          e.target.src = '/default-profile.png';
+          e.target.onerror = null;
+        }}
       />
 
       <S.SCommentContent>
-        <S.SCommentHeader>{user.nickname}</S.SCommentHeader>
+        <S.SCommentHeader>{currentUser.nickname}</S.SCommentHeader>
         <S.SCommentMeta>{formattedDate}</S.SCommentMeta>
         <S.SCommentBody>
           {editMode ? (
@@ -138,7 +151,7 @@ const Comment = ({ collabPostId, collabInquiryId, text, user, date, replies = []
       </S.SMoreOptionsMenu>
 
       <CustomModal
-        openModal={setOpenModal} 
+        openModal={openModal}
         closeModal={() => setOpenModal(false)}
         boldface='댓글을 삭제하시겠습니까?'
         regular='삭제하기를 누르면 다시 되돌릴 수 없습니다. 정말로 삭제하시겠습니까?'

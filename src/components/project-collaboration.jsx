@@ -131,16 +131,14 @@ const ProjectCollaboration = () => {
               onClick={() => handleCardClick(project.collabPostId)}
             >
               <ImagePlaceholder>
-                {project.imageKeyName && (
-                  <img 
-                    src={getImageUrl(project.imageKeyName)} 
-                    alt={project.title}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = '/default-image.png'; // 기본 이미지 경로
-                    }}
-                  />
-                )}
+                <img 
+                  src={project.imageUrl} 
+                  alt={project.title}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '/default-image.png';
+                  }}
+                />
               </ImagePlaceholder>
               <CardContent>
                 <CategoryBadge>

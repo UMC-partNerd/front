@@ -41,24 +41,30 @@ const CollaborationDetailPage = () => {
   };
 
   useEffect(() => {
-    console.log('collabPostId:', collabPostId); // collabPostId 값 확인
     const fetchCollabData = async () => {
       try {
         const response = await axios.get(`https://api.partnerd.site/api/collabPosts/${collabPostId}`);
         if (response.data.isSuccess) {
           setCollabData(response.data.result);
-          setComments(response.data.result.collabInquiryList || []);
+          // 댓글 데이터가 있는 경우에만 설정
+          if (response.data.result.collabInquiryList) {
+            const validComments = response.data.result.collabInquiryList.filter(
+              comment => comment && !comment.isDeleted
+            );
+            setComments(validComments);
+          }
         } else {
           setErrorCollab('콜라보 데이터를 불러오는데 실패했습니다.');
         }
       } catch (err) {
+        console.error('데이터 로딩 중 오류:', err);
         setErrorCollab('네트워크 오류가 발생했습니다.');
       } finally {
         setIsLoadingCollab(false);
       }
     };
-  
-    if (collabPostId) {  // collabPostId가 있을 때만 데이터 요청
+
+    if (collabPostId) {
       fetchCollabData();
     }
   }, [collabPostId]);
