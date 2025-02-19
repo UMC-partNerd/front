@@ -73,14 +73,15 @@ export const Row = styled.div`
   width: 100%;
 `;
 
-export const Indicator = styled.circle`
+export const Indicator = styled.div`
   width: 12px;
   height: 12px;
   flex-shrink: 0;
   fill: var(--Main-Color, #0D29B7);
-
+  border-radius: 50%;  // 기존 'circle' -> div 사용하므로 원형 유지
   margin-bottom: 8px;
   margin-right: 20px;
+  visibility: ${({ isRead }) => (isRead ? "hidden" : "visible")}; // ✅ isRead가 true일 경우 숨김
 `;
 
 export const AlarmMessage = styled.p`

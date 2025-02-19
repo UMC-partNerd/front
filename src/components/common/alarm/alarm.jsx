@@ -16,13 +16,14 @@ function Alarm({ club, timer, isRead, onRead }) {
     return (
         <AlarmContainer>
             <Row>
-                {!isRead && (
-                    <Indicator>
-                        <img src={`/${Ellipse427}`} alt="안 읽은 알림" />
-                    </Indicator>
-                )}
-                <AlarmMessage msg="club">{club}</AlarmMessage>
-                <AlarmMessage>로부터 콜라보 신청이 왔습니다.</AlarmMessage>
+                {/* {isRead ? null 
+                        : (<Indicator>
+                            <img src={`/${Ellipse427}`} alt="안 읽은 알림" />
+                          </Indicator>
+                )} */}
+                <Indicator isRead={isRead} />
+
+                <AlarmMessage msg="club">{club}로부터 콜라보 신청이 왔습니다.</AlarmMessage>
             </Row>
             <Row>
                 <From onClick={onRead}>
