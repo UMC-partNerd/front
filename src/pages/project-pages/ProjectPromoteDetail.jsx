@@ -9,6 +9,8 @@ import CommentForm from '../../components/projectdetail/CommentForm';
 import useBannerPhoto from '../../hooks/useBannerPhoto';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
 
+import Button, { TYPES } from "../../components/common/button";
+
 const DefaultImage = '/default-image.png';
 
 const ProjectPromoteDetail = () => {
