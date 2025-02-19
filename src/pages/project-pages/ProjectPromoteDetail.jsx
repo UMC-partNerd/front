@@ -9,7 +9,6 @@ import CommentForm from '../../components/projectdetail/CommentForm';
 import useBannerPhoto from '../../hooks/useBannerPhoto';
 import MemberForm from '../../components/projectdetail/MemberForm';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
-
 import Button, { TYPES } from "../../components/common/button";
 
 const DefaultImage = '/default-image.png';
@@ -51,7 +50,7 @@ const ProjectPromoteDetail = () => {
         console.error('댓글 조회 중 오류 발생:', error);
       });
   }, [promotionProjectId]);
-
+  
   const { thumbnailPhotoUrl, introPhotoUrl, isLoading, error } = useBannerPhoto(
     'projects', 
     null, 
