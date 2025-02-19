@@ -6,7 +6,8 @@ import ActivityImageUpload from '../common/images/ActivityImageUpload';
 import ImageRectangle from '../common/images/ImageRectangle';
 import DateList from '../common/DateList';
 import Button, { TYPES } from "../common/button";
-
+import CustomModal, { VERSIONS } from "../common/modal/CustomModal";
+import { useNavigate } from 'react-router-dom';
 
 import TeamMemberRegistration from '../contact/member-registration';
 import ContactForm from '../contact/contactForm';
@@ -121,6 +122,8 @@ const RecruitmentRegister = () => {
     setProfileImagePreview(null);
   };
 
+  // 프로젝트 등록하기
+  const [openModal, setOpenModal] = useState(false);
   const handleSubmit = async () => {
     try {
       const { uploadImage, registerProject } = useProjectRecruit();
@@ -167,14 +170,24 @@ const RecruitmentRegister = () => {
 
       const response = await registerProject(projectData);
       if (response.isSuccess) {
-        alert('프로젝트가 성공적으로 등록되었습니다.');
+        console.log('홍보 모집 성공', response.data);
+
+        setOpenModal(true);
         // 등록 성공 후 리다이렉트 또는 추가 작업
       }
     } catch (error) {
-      alert('프로젝트 등록에 실패했습니다.');
+      alert('프로젝트 모집 등록에 실패했습니다.');
       console.error(error);
     }
   };
+  
+  const navigate = useNavigate();
+  const moveTo = () => {
+    setOpenModal(false);
+    // 등록된 글로 이동 (수정 필요)
+    // navigate('/project/recruit/${promotionProjectId}');
+    navigate('/project/recruit');
+  };  
 
   return (
     <>
@@ -422,17 +435,19 @@ const RecruitmentRegister = () => {
 
         <ButtonWrapper>
           <Button
-            type={TYPES.NEXT}
-            text="최종 등록하기"
+            type={TYPES.NEXT}              
+            text='최종 등록하기'
             onClick={handleSubmit}
           /> 
+
+          <CustomModal
+            openModal={openModal} 
+            closeModal={moveTo}
+            boldface='프로젝트 등록 완료!'
+            regular='프로젝트 홍보 등록이 완료되었습니다.'
+            variant={VERSIONS.VER2}
+          />
         </ButtonWrapper>
-        <Button
-          type={TYPES.NEXT}
-          sign='true'
-          text='프로젝트 등록하기'
-          onClick={handleSubmit}
-        /> 
       </Container>
     </>
   );

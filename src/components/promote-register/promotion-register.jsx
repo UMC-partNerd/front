@@ -193,25 +193,20 @@ const PromotionRegister = () => {
           <ContactForm />
         </FormGroup>
 
-        <Button
-          type={TYPES.NEXT}
-          sign='true'
-          text='프로젝트 등록하기'
-          onClick={handleSubmit}
-        /> 
 
-        <CustomModal
-          openModal={openModal} 
-          closeModal={moveTo}
-          boldface='프로젝트 등록 완료!'
-          regular='프로젝트 홍보 등록이 완료되었습니다.'
-          variant={VERSIONS.VER2}
-        />
         <ButtonWrapper>
           <Button
-            type={TYPES.NEXT}
-            text="최종 등록하기"
+            type={TYPES.NEXT}              
+            text='최종 등록하기'
             onClick={handleSubmit}
+          /> 
+
+          <CustomModal
+            openModal={openModal} 
+            closeModal={moveTo}
+            boldface='프로젝트 등록 완료!'
+            regular='프로젝트 홍보 등록이 완료되었습니다.'
+            variant={VERSIONS.VER2}
           />
         </ButtonWrapper>
       </Container>
