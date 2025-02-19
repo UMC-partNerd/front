@@ -8,7 +8,8 @@ import axios from 'axios';
 
 function RootLayout() {
   const { token, clearUser } = useUserStore();
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // 로그인 후 navBar // (false); // 로그인 전 navBar
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   const handleScroll = () => {
     const scrollPosition = window.scrollY + window.innerHeight;
