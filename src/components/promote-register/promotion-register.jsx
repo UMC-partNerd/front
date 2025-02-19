@@ -64,22 +64,7 @@ const PromotionRegister = () => {
     });
     
     try {
-      const payload = {
-
-
-
-        name: projectInfo.name,              // 프로젝트명
-        intro: projectInfo.intro,            // 한 줄 소개
-        contact: "",                         // 연락처 (기존 데이터에 없음)
-        categoryId: "",                      // 카테고리 (기존 데이터에 없음)
-        activities: {
-            intro: projectInfo.description,   // 활동 소개 (프로젝트 설명을 활동 소개로 매핑)
-            activityImageKeyNames: serviceImages,  // 활동 이미지 목록 (서비스 이미지를 활동 이미지로 매핑)
-        },
-        bannerKeyName: profileImagePreview || null, // 배너 이미지 (profileImagePreview 사용)
-        mainKeyName: profileImage || null,         // 프로필 이미지
-
-        
+      const payload = {     
         name: projectInfo.name,
         info: projectInfo.intro,
         description: projectInfo.description,
