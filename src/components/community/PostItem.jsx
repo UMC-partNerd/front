@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MdMoreVert } from 'react-icons/md';
 import CommCommentList from './CommCommentList'; 
 import CommentInput from './CommentInput'; 
+import OptionMenu from '../../components/common/button/optionMenu';
+
 import { 
   PostWrapper, PostHeader, UserInfo, UserName, Role, PostDate,
-  MoreOptionsWrapper, VerticalIcon, SMoreOptionsMenu, SMenuItem, SDivider, 
   PostContent, PostTitle, PostSummary, ImageSection, LargeImageWrapper,
   SmallImageWrapper, ImageBox, CommentSection, CommentWrapper 
 } from '../../styled-components/community-styles/styled-PostItem';
@@ -15,31 +15,7 @@ const formatDate = (dateString) => {
 };
 
 const PostItem = ({ post }) => {
-  const [showOptions, setShowOptions] = useState(false);
   const [comments, setComments] = useState(post.comments || []); // 댓글 상태 추가
-  const menuRef = useRef(null); // 메뉴를 감지할 ref 추가
-
-  // 바깥 클릭 시 메뉴 닫기
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setShowOptions(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  const handleEditClick = () => {
-    console.log('수정하기 클릭');
-  };
-
-  const handleDeleteClick = () => {
-    console.log('삭제하기 클릭');
-  };
 
   const handleAddComment = (commentText) => {
     setComments([...comments, { text: commentText, user: '사용자', date: new Date().toLocaleString(), replies: [] }]);
@@ -52,14 +28,10 @@ const PostItem = ({ post }) => {
           <UserName>{post.nickname} <Role>@{post.role} / {post.team}</Role></UserName>
           <PostDate>{formatDate(post.date)}</PostDate>
         </UserInfo>
-        <MoreOptionsWrapper ref={menuRef}>
-          <VerticalIcon onClick={() => setShowOptions(!showOptions)} />
-          <SMoreOptionsMenu show={showOptions}>
-            <SMenuItem onClick={handleEditClick}>수정하기</SMenuItem>
-            <SDivider />
-            <SMenuItem onClick={handleDeleteClick}>삭제하기</SMenuItem>
-          </SMoreOptionsMenu>
-        </MoreOptionsWrapper>
+        
+        {/* OptionMenu 컴포넌트 분리 */}
+        <OptionMenu/>
+
       </PostHeader>
       <PostContent>
         <PostTitle>{post.title}</PostTitle>
@@ -82,7 +54,7 @@ const PostItem = ({ post }) => {
           <CommCommentList 
             comments={comments} 
             onReply={(index, replyText) => console.log(`댓글 ${index}에 대한 답글: ${replyText}`)} 
-            onDelete={(index) => console.log(`댓글 ${index} 삭제`)} 
+            onDelete={(index) => console.log(`댓글 ${index} 삭제`)}
             onUpdate={(index, newText) => console.log(`댓글 ${index} 업데이트: ${newText}`)} 
           />
         </CommentWrapper>

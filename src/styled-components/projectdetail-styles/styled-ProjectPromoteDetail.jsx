@@ -12,7 +12,6 @@ export const SCommentFormWrapper = styled.div`
   margin-left: -75px;  
 `;
 
-
 export const SProjectCommentListWrapper = styled.div`
   width: 100%;  
   max-width: 1000px; 
@@ -78,6 +77,23 @@ export const STextBox = styled.div`
   font-weight: 600;
   line-height: normal;
   letter-spacing: -0.8px;
+`;
+
+export const SHeaderBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 220px;
+`;
+
+export const SButtonBox = styled.div`
+  display: flex;
+  width: 200px;  
+  height: 150px; 
+  padding-top: 100px;
+  padding-left: 100px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 220px;
 `;
 
 export const STitle = styled.h2`

@@ -11,6 +11,7 @@ import MemberForm from '../../components/projectdetail/MemberForm';
 import PersonalContact from '../../components/common/contact';
 import useBannerPhoto from '../../hooks/useBannerPhoto';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
+import OptionMenu from '../../components/common/button/optionMenu';
 
 const DefaultImage = '/default-image.png';
 const DefaultProfileImage = '/default-profile.png';
@@ -210,15 +211,29 @@ const ProjectRecruitDetail = () => {
 
   return (
     <S.SContainer>
-      <S.SImageBoxContainer>
-        <S.SImageBox>
-          {isLoading ? <p>Loading...</p> : error ? <p>Error loading image: {error}</p> : <img src={thumbnailPhotoUrl || DefaultImage} alt="Project Thumbnail" />}
-        </S.SImageBox>
-        <S.STextBox>
-          <S.STitle>{projectData.title}</S.STitle>
-          <S.SDescription>{projectData.intro}</S.SDescription>
-        </S.STextBox>
-      </S.SImageBoxContainer>
+      <S.SHeaderBox>
+        <S.SButtonBox/>
+        <S.SImageBoxContainer>
+          <S.SImageBox>
+            {/* 썸네일 이미지 로딩 처리 */}
+            {isLoading ? (
+              <p>Loading...</p>
+            ) : error ? (
+              <p>Error loading image: {error}</p>
+            ) : (
+              <img src={thumbnailPhotoUrl || DefaultImage} alt="Project Thumbnail" />
+            )}
+          </S.SImageBox>
+          <S.STextBox>
+            <S.STitle>{projectData.title}</S.STitle>
+            <S.SDescription>{projectData.intro}</S.SDescription>
+          </S.STextBox>
+        </S.SImageBoxContainer>
+
+        <S.SButtonBox>
+          <OptionMenu/>
+        </S.SButtonBox>
+      </S.SHeaderBox>
 
       {/* 삭제 확인 모달 */}
       <CustomModal

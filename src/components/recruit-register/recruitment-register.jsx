@@ -427,6 +427,12 @@ const RecruitmentRegister = () => {
             onClick={handleSubmit}
           /> 
         </ButtonWrapper>
+        <Button
+          type={TYPES.NEXT}
+          sign='true'
+          text='프로젝트 등록하기'
+          onClick={handleSubmit}
+        /> 
       </Container>
     </>
   );

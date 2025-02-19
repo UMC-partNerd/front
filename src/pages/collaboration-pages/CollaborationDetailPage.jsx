@@ -13,6 +13,7 @@ import { FiMoreVertical } from "react-icons/fi";
 import axios from 'axios';
 import EventOverview from '../../components/collaboration-detail/EventOverview';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
+import OptionMenu from '../../components/common/button/optionMenu';
 
 const DefaultImage = '/default-image.png';
 
@@ -309,11 +310,18 @@ const CollaborationDetailPage = () => {
         <MenuItem onClick={handleDeleteClick}>삭제하기</MenuItem>
       </MoreOptionsMenu>
 
+        {/* feat/70 OptionMenu 컴포넌트 */}
+        <OptionMenu
+          id={collabPostId}
+          apiURL='https://api.partnerd.site/api/Partnerd/${collabPostId}'
+          moveToUrl='/collaboration'
+        />
+
         {isLoadingCollab ? <div>로딩 중...</div> :
           errorCollab ? <div>{errorCollab}</div> :
           <InfoSectionWrapper>
-            <InfoSection collabData={collabData} />
-          </InfoSectionWrapper>}
+          <InfoSection collabData={collabData} />
+        </InfoSectionWrapper>}
       </Wrapper>
 
       <EventOverviewWrapper>
