@@ -7,6 +7,8 @@ import ImageRectangle from '../common/images/ImageRectangle';
 import TeamMemberRegistration from '../contact/member-registration';
 import ContactForm from '../contact/contactForm';
 import Button, { TYPES } from "../common/button";
+import CustomModal, { VERSIONS } from "../common/modal/CustomModal";
+import { useNavigate } from 'react-router-dom';
 
 const PromotionRegister = () => {
   const [projectInfo, setProjectInfo] = useState({
@@ -19,6 +21,10 @@ const PromotionRegister = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [teamMembers, setTeamMembers] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
 
   const handleImageUpload = (imageKey) => {
     if (serviceImages.length < 10) {
@@ -40,14 +46,82 @@ const PromotionRegister = () => {
     setProfileImagePreview(null);
   };
 
+  // 프로젝트 등록하기
+  const [openModal, setOpenModal] = useState(false);
+
   const handleSubmit = async () => {
+    
+    setIsLoading(true);
+    setErrorMessage('');
+
+    // 등록하기 동작
+
     console.log('프로젝트 등록 데이터:', {
       ...projectInfo,
       profileImage,
       serviceImages,
       teamMembers
     });
+    
+    try {
+      const payload = {
+
+
+
+        name: projectInfo.name,              // 프로젝트명
+        intro: projectInfo.intro,            // 한 줄 소개
+        contact: "",                         // 연락처 (기존 데이터에 없음)
+        categoryId: "",                      // 카테고리 (기존 데이터에 없음)
+        activities: {
+            intro: projectInfo.description,   // 활동 소개 (프로젝트 설명을 활동 소개로 매핑)
+            activityImageKeyNames: serviceImages,  // 활동 이미지 목록 (서비스 이미지를 활동 이미지로 매핑)
+        },
+        bannerKeyName: profileImagePreview || null, // 배너 이미지 (profileImagePreview 사용)
+        mainKeyName: profileImage || null,         // 프로필 이미지
+
+        
+        name: projectInfo.name,
+        info: projectInfo.intro,
+        description: projectInfo.description,
+
+        thumbnailKeyName: profileImage ? profileImage : null,
+        projectImgKeyNameList: serviceImages ? serviceImages : [],
+        // projectImgKeyNameList: profileImagePreview ? profileImagePreview : null,
+        promotionProjectMember: teamMembers.map(member => member.id) || [],
+          contactMethod: teamMembers.map(member => ({
+            contactType: member.contactType || "기본 연락처",  // 연락 방법 (예: 인스타, 이메일 등)
+            contactUrl: member.contactUrl || ""              // 연락 URL
+          })) || []
+      };
+
+      const token = localStorage.getItem('jwtToken');
+      
+      const response = await axios.post('https://api.partnerd.site/api/project/promotion', payload, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('등록 성공', response.data);
+
+      setOpenModal(true);
+
+    } catch (error) {
+      console.error('등록 실패', error);
+      setErrorMessage('홍보 등록에 실패했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  const navigate = useNavigate();
+  const moveTo = () => {
+    setOpenModal(false);
+    // 등록된 글로 이동 (수정 필요)
+    // navigate('/project/promote/${promotionProjectId}');
+    navigate('/project/promote');
+  };  
+
 
   return (
     <>
@@ -135,11 +209,19 @@ const PromotionRegister = () => {
         </FormGroup>
 
         <Button
-          type={TYPES.PLUS}
+          type={TYPES.NEXT}
           sign='true'
           text='프로젝트 등록하기'
           onClick={handleSubmit}
         /> 
+
+        <CustomModal
+          openModal={openModal} 
+          closeModal={moveTo}
+          boldface='프로젝트 등록 완료!'
+          regular='프로젝트 홍보 등록이 완료되었습니다.'
+          variant={VERSIONS.VER2}
+        />
       </Container>
     </>
   );

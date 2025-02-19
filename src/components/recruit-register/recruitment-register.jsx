@@ -421,7 +421,7 @@ const RecruitmentRegister = () => {
         </FormGroup>
 
         <Button
-          type={TYPES.PLUS}
+          type={TYPES.NEXT}
           sign='true'
           text='프로젝트 등록하기'
           onClick={handleSubmit}

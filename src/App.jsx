@@ -126,6 +126,10 @@ const router = createBrowserRouter([
             element: <ProjectPromoteDetail />,
           },
           {
+            path: 'project/recruit/register',
+            element: <RecruitmentRegister />,
+          },
+          {
             path: 'promote/register',
             element: <PromotionRegister />,
           },
@@ -163,10 +167,6 @@ const router = createBrowserRouter([
             element: <MyPagePosts />,
           },
         ],
-      },
-      {
-        path: 'project/recruit/register',
-        element: <RecruitmentRegister />,
       },
       {
         path: '*',

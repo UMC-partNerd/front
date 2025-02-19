@@ -249,7 +249,7 @@ const ProjectPromoteDetail = () => {
   //   setCheered(!cheered);
   // }
 
-  const onClickHandler = useCallback( async () => {
+  const onClickHandler = useCallback(async () => {
     try {
       const token = localStorage.getItem("jwtToken");
       if (!token) {
@@ -276,22 +276,16 @@ const ProjectPromoteDetail = () => {
       if (response.data.isSuccess) {
         console.log("응원 성공: ", response.data.message);
 
-        
-      // UI 즉시 업데이트 (사용자 경험 개선)
-      setCheers((prev) => (cheered ? prev - 1 : prev + 1)); // 응원 여부 반영한 개수
-      setCheered((prev) => !prev);                          // 클릭 상태 반전
+        // UI 즉시 업데이트 (사용자 경험 개선)
+        setCheers((prev) => (cheered ? prev - 1 : prev + 1)); // 응원 여부 반영한 개수
+        setCheered((prev) => !prev);                          // 클릭 상태 반전
       
       } else {
         console.error("응원 실패:", response.data.message);
-        // 실패 시 UI 원상복구
-        setCheers((prev) => (cheered ? prev + 1 : prev - 1));
-        setCheered((prev) => !prev); 
       }
     } catch (error) {
       console.error("응원 중 오류 발생:", error);
-        // 실패 시 UI 원상복구
-        setCheers((prev) => (cheered ? prev + 1 : prev - 1));
-        setCheered((prev) => !prev); 
+      
       if (error.response) {
         console.error("서버 응답 상태 코드:", error.response.status);
         console.error("서버 응답 데이터:", error.response.data);
@@ -299,7 +293,7 @@ const ProjectPromoteDetail = () => {
         console.error("요청이 전송되지 않았습니다.");
       }
     }
-  };
+  }, [cheered, promotionProjectId]);
     
   // 모달: 삭제하기
   const buttonHandler = () => {
