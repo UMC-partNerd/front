@@ -32,6 +32,10 @@ import Alarm from './components/common/alarm/alarm-window';
 
 import PersonalEditComp from './components/mypage/PersonalEditComp';
 import MyPagePersonalEdit from './pages/mypages/Personal-EditPage';
+
+import ManageWindow from './components/mypage/member-manage/manageWindow';
+import MemberList from './components/mypage/member-manage/memberList';
+import Member from './components/mypage/member-manage/member';
 // import ChatPage from './pages/ChatPage';
 // import ChatList from './components/chat/chat-list';
 // import ChatRoom from './components/chat/chat-room';
@@ -198,7 +202,10 @@ const router = createBrowserRouter([
       },
       {
         path: 'test',
-        element: <Alarm />
+        // element: <ManageWindow />,
+        // element: <Member />,
+        element: <MemberList />,
+        // element: <Alarm />
       }
     ]
   }

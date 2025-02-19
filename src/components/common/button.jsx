@@ -7,42 +7,44 @@ import {
 } from '../../styled-components/styled-Button';
 
 export const TYPES = {
-  VOTE: 'vote', // 프로젝트 홍보 응원하기
-  NEXT: 'next', // 큰
+  CANCEL: 'cancel', // x // 팀페이지 관리(멤버버)
+  VOTE: 'vote',     // 프로젝트 홍보 응원하기
+  NEXT: 'next',     // 큰
   PLUS: 'plus',
-  YES: 'yes',   // 승인: 파랑
-  NO: 'no'      // 거절: 흰색
+  YES: 'yes',     // 승인: 파랑
+  NO: 'no'        // 거절: 흰색
 };
 
-{/* 
+// import Button, { TYPES } from "../common/button";
+// import { useNavigate } from 'react-router-dom';
 
-  import Button, { TYPES } from "../components/common/button";
-  import { useNavigate } from 'react-router-dom';
+// useNavigate 훅을 사용하여 이동 기능 추가
+// const navigate = useNavigate();
+// const onClickHandler = () => {
+//   navigate('/collaboration/collab-registration');
+// };
 
-  // useNavigate 훅을 사용하여 이동 기능 추가
-  const navigate = useNavigate();
-  const onClickHandler = () => {
-    navigate('/collaboration/collab-registration');
-  };
+// isLoading
 
-  isLoading
-  
-  <Button
-    width={width} 
-    height={height} 
-    fontSize={fontSize}
-    type={TYPES.NEXT}
-    sign='true'
+{/* <Button
+    type={TYPES.PLUS}
     text='글 작성하기'
     onClick={onClickHandler}
-  /> 
-*/}
+/> */}
+
+const XButton = '/xBtn.png'; // 기본 이미지
 
 function Button({ width, height, fontSize, type, sign, text, count, onClick }) {
   const renderDefaultButton = () => (
-    <ButtonContainer width={width} height={height} fontSize={fontSize} type={type} onClick={onClick}>
+    <ButtonContainer type={type} onClick={onClick}>
       {text}
     </ButtonContainer>
+  );
+
+  const renderCancelButton = () => (
+    <div type={type} onClick={onClick}>
+      <img src={XButton} />
+    </div>
   );
 
   const renderVoteButton = () => (
@@ -52,16 +54,20 @@ function Button({ width, height, fontSize, type, sign, text, count, onClick }) {
   );
 
   const renderNextButton = () => (
-    <NextContainer width={width} height={height} fontSize={fontSize} type={type} onClick={onClick}>
+    <NextContainer type={type} onClick={onClick}>
       {text}
     </NextContainer>
   );
 
   const renderPlusButton = () => (
-    <PlusContainer width={width} height={height} fontSize={fontSize} type={type} sign={sign} onClick={onClick}>
+    <PlusContainer type={type} onClick={onClick}>
       {text}
     </PlusContainer>
   );
+
+  if (type === TYPES.CANCEL) {
+    return renderCancelButton();
+  }
 
   if (type === TYPES.VOTE) {
     return renderVoteButton();

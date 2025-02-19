@@ -9,6 +9,8 @@ import styled from 'styled-components';
 
 function MamberList ({  }) {
     const [users, setUsers] = useState([]);
+    const [requests, setRequests] = useState([]);
+    const [members, setMembers] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const usersPerPage = 5;
@@ -78,7 +80,7 @@ function MamberList ({  }) {
           const endIndex = startIndex + usersPerPage;
           const newUsers = allRequests.slice(startIndex, endIndex);
       
-          setUsers((prevUsers) => [...prevUsers, ...newUsers]);
+          setRequests((prevUsers) => [...prevUsers, ...newUsers]);
       
           
           if (endIndex >= allRequests.length) {
@@ -100,7 +102,7 @@ function MamberList ({  }) {
         const endIndex = startIndex + usersPerPage;
         const newUsers = allMembers.slice(startIndex, endIndex);
     
-        setUsers((prevUsers) => [...prevUsers, ...newUsers]);
+        setMembers((prevUsers) => [...prevUsers, ...newUsers]);
     
         
         if (endIndex >= allMembers.length) {
