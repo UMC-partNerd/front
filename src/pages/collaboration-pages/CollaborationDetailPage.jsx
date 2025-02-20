@@ -39,6 +39,7 @@ const CollaborationDetailPage = () => {
       try {
         const response = await axios.get(`https://api.partnerd.site/api/collabPosts/${collabPostId}`);
         if (response.data.isSuccess) {
+          console.log("콜라보레이션 데이터", response.data.result);
           setCollabData(response.data.result);
           // 댓글 데이터가 있는 경우에만 설정
           if (response.data.result.collabInquiryList) {
@@ -357,7 +358,11 @@ const CollaborationDetailPage = () => {
 
       <PersonalContactWrapper>
         <ContactTitle>컨택하러 가기</ContactTitle>
-        <PersonalContact />
+        <PersonalContact
+        profileImageUrl={""}
+        nickname={collabData?.nickname}
+        explan={`${collabData?.contactMethod[1].contactUrl}`}
+        />
       </PersonalContactWrapper>
 
       <InquiryAndCommentsWrapper>
