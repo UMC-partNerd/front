@@ -1,5 +1,5 @@
 import React from 'react';
-import Banner from '../components/banner/Banner';
+import Banner from '../components/common/banner/Banner';
 import Request, { TYPES } from '../components/collaboration/Request'
 
 import {
@@ -119,15 +119,15 @@ const RequestPage = () => {
                 <PartnerGrid>
                 {currentPartners.map((request, index) => (
 
-                <Request  
-                    key={index}
-                    profile={requestprofile}
-                    otherUser={request.otherUser}
-                    title={request.title}
-                    time={request.time}
-                    message={request.message}
-                    type={TYPES.SENDTO}
-                />
+                // <Request  
+                //     key={index}
+                //     profile={requestprofile}
+                //     otherUser={request.otherUser}
+                //     title={request.title}
+                //     time={request.time}
+                //     message={request.message}
+                //     type={TYPES.SENDTO}
+                // />
 
                 <Request  
                     key={index}

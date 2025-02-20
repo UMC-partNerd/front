@@ -2,7 +2,6 @@ import './styles/globalstyles.css';
 import { createBrowserRouter, RouterProvider, Routes, Route } from 'react-router-dom';
 import RootLayout from './layout/root-layout';
 import HomePage from './pages/homepage';
-// import RequestPage from './pages/RequestPage';
 import NotFoundPage from './pages/notfoundpage';
 import { TeamPage } from './pages/TeamPage'; 
 import CollaborationDetailPage from './pages/collaboration-pages/CollaborationDetailPage';
@@ -27,19 +26,19 @@ import Community from './components/community/Top10-rank';
 import KakaoCallback from './components/login/KakaoCallback';
 import RecruitmentRegister from './components/recruit-register/recruitment-register';
 import PromotionRegister from './components/promote-register/promotion-register';
-
-import Alarm from './components/common/alarm/alarm-window';
-
 import PersonalEditComp from './components/mypage/PersonalEditComp';
 import MyPagePersonalEdit from './pages/mypages/Personal-EditPage';
 
+// 협업 요청 확인하기
+import RequestPage from './pages/ReuquestPage';
+
+// 채팅
+import Chat from './components/chat/chat';
+
+// 동아리 멤버 관리
 import ManageWindow from './components/mypage/member-manage/manageWindow';
 import MemberList from './components/mypage/member-manage/memberList';
 import Member from './components/mypage/member-manage/member';
-// import ChatPage from './pages/ChatPage';
-// import ChatList from './components/chat/chat-list';
-// import ChatRoom from './components/chat/chat-room';
-import Chat from './components/chat/chat';
 
 const router = createBrowserRouter([
   {
@@ -110,7 +109,7 @@ const router = createBrowserRouter([
           {
             // 협업 요청 확인하기
             path: 'request',
-            // element: <RequestPage/>
+            element: <RequestPage/>
           },
         ],
       },
@@ -203,14 +202,12 @@ const router = createBrowserRouter([
       {
         path: 'test',
         // element: <ManageWindow />,
-        // element: <Member />,
-        element: <MemberList />,
-        // element: <Alarm />
+        element: <Member />,
+        // element: <MemberList />,
       }
     ]
   }
 ])
-
 
 
 function App() {

@@ -7,6 +7,11 @@ import styled from 'styled-components';
 
 // } from '../../../styled-components/user-Manage/styled-manageWindow';
 
+export const STATUS = {
+    PROJECT: 'project',
+    CLUB: 'club',
+};
+
 function MamberList ({  }) {
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(1);
