@@ -5,6 +5,13 @@ export const CardContainer = styled.div`
   width: 100%;
   height: ${({ variant }) => variant === VARIANTS.PROJECT ? '100px' : '160px'};
   display: flex;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-4px);
+  }
+
   ${({ variant }) => (variant === VARIANTS.CLUB || variant === VARIANTS.PROJECT) ? `
     background-color: #F2F2F2;
     border-radius: 16px;

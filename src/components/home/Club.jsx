@@ -13,23 +13,32 @@ import {
   Description
 } from "../../styled-components/styled-Club";
 import { useHomeData } from '../../hooks/useHomeData';
+import { useNavigate } from 'react-router-dom';
 
 function Club() {
   const { homeData, isLoading } = useHomeData();
+  const navigate = useNavigate();
 
   if (isLoading) {
     return <div>로딩 중...</div>;
   }
 
+  const handleCardClick = (id) => {
+    navigate(`/find/${id}`);
+  };
+
   return (
     <ClubContainer>
       <Header>
         <Title>당장 주목해야 하는 동아리</Title>
-        <MoreButton href="/clubs">더보기 ›</MoreButton>
+        <MoreButton href="/find">더보기 ›</MoreButton>
       </Header>
       <CardGrid>
         {homeData.clubs.map((club, index) => (
-          <ClubCard key={index}>
+          <ClubCard 
+            key={index} 
+            onClick={() => handleCardClick(club.id)}
+          >
             <ImagePlaceholder>
               <img src={club.imageUrl} alt={club.name} />
             </ImagePlaceholder>

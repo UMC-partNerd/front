@@ -9,22 +9,30 @@ import InquiryForm from '../../components/collaboration-detail/InquiryForm';
 import CommentList from '../../components/collaboration-detail/comments/CommentList';
 import EventImages from '../../components/collaboration-detail/EventImages';
 import useBannerPhoto from '../../hooks/useBannerPhoto';
+import { FiMoreVertical } from "react-icons/fi";
 import axios from 'axios';
 import EventOverview from '../../components/collaboration-detail/EventOverview';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
 
 const DefaultImage = '/default-image.png';
 
-
-/*
-주석 안 한 부분이 dev 코드 입니다.
-*/
 const CollaborationDetailPage = () => {
   const { collabPostId } = useParams();
   const [collabData, setCollabData] = useState(null);
+  const [showOptions, setShowOptions] = useState(false);
   const [isLoadingCollab, setIsLoadingCollab] = useState(true);
   const [errorCollab, setErrorCollab] = useState(null);
   const [comments, setComments] = useState([]);
+
+  const handleOptionsClick = () => {
+    setShowOptions((prevState) => !prevState); 
+  };
+
+  const handleEditClick = () => {
+    console.log('Edit clicked');
+  };
+
+
 
   useEffect(() => {
     const fetchCollabData = async () => {
@@ -32,70 +40,55 @@ const CollaborationDetailPage = () => {
         const response = await axios.get(`https://api.partnerd.site/api/collabPosts/${collabPostId}`);
         if (response.data.isSuccess) {
           setCollabData(response.data.result);
+          // 댓글 데이터가 있는 경우에만 설정
+          if (response.data.result.collabInquiryList) {
+            const validComments = response.data.result.collabInquiryList.filter(
+              comment => comment && !comment.isDeleted
+            );
+            setComments(validComments);
+          }
         } else {
           setErrorCollab('콜라보 데이터를 불러오는데 실패했습니다.');
         }
       } catch (err) {
+        console.error('데이터 로딩 중 오류:', err);
         setErrorCollab('네트워크 오류가 발생했습니다.');
       } finally {
         setIsLoadingCollab(false);
       }
     };
 
-    fetchCollabData();
+    if (collabPostId) {
+      fetchCollabData();
+    }
   }, [collabPostId]);
 
-  const bannerImageFileName = collabData?.bannerKeyName ? collabData.bannerKeyName.split('/').pop() : null;
-  const mainImageFileName = collabData?.mainKeyName ? collabData.mainKeyName.split('/').pop() : null;
-  const eventImageFileNames = collabData?.eventImgKeyNameList ? collabData.eventImgKeyNameList.map(key => key.split('/').pop()) : [];
+  const bannerImageFileName = collabData?.bannerKeyName 
+    ? `collabPost/BANNER/${collabData.bannerKeyName.split('/').pop()}` 
+    : null;
 
-  const { bannerPhotoUrl, mainPhotoUrl, eventPhotoUrls, isLoading: bannerLoading, error: bannerError } = useBannerPhoto(
-    'collabPost',
-    bannerImageFileName,
-    mainImageFileName,
-    eventImageFileNames
+  const mainImageFileName = collabData?.mainKeyName 
+    ? `collabPost/MAIN/${collabData.mainKeyName.split('/').pop()}` 
+    : null;
+
+  const eventImageFileNames = collabData?.eventImgKeyNameList 
+    ? collabData.eventImgKeyNameList.map(key => `collabPost/EVENT/${key.split('/').pop()}`) 
+    : [];
+
+  const { 
+    bannerPhotoUrl, 
+    mainPhotoUrl, 
+    eventPhotoUrls, 
+    isLoading: bannerLoading, 
+    error: bannerError 
+  } = useBannerPhoto(
+    'collabPost', 
+    bannerImageFileName, 
+    mainImageFileName,   
+    eventImageFileNames  
   );
 
-  const handleAddComment = async (text) => {
-    try {
-      const token = localStorage.getItem('jwtToken');
-      if (!token) {
-        console.error('로그인이 필요합니다.');
-        return;
-      }
-  
-      const response = await axios.post(
-        'https://api.partnerd.site/api/collabInquiry/register',
-        {
-          collabPostId: parseInt(collabPostId, 10),
-          contents: text,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-  
-      if (response.data.isSuccess) {
-        const newComment = {
-          id: response.data.result.collabInquiryId,
-          text: response.data.result.contents,
-          user: response.data.result.nickname,
-          date: new Date().toISOString().split('T')[0],
-        };
-        setComments(prevComments => [...prevComments, newComment]);
-      } else {
-        console.error('Error posting comment:', response.data.message);
-      }
-    } catch (error) {
-      console.error('Error posting comment:', error);
-    }
-  };
-  
-
-  const handleDeleteComment = async (commentId) => {
+  const handleDeleteClick = async () => {
     try {
       const token = localStorage.getItem('jwtToken');
       if (!token) {
@@ -104,7 +97,7 @@ const CollaborationDetailPage = () => {
       }
   
       const response = await axios.delete(
-        `https://api.partnerd.site/api/collabInquiry/${commentId}`,
+        `https://api.partnerd.site/api/collabPosts/${collabPostId}`, 
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -114,14 +107,78 @@ const CollaborationDetailPage = () => {
       );
   
       if (response.data.isSuccess) {
-        setComments(comments.filter(comment => comment.id !== commentId));
+        console.log('콜라보 게시물이 성공적으로 삭제되었습니다.');
+        window.location.href = '/collaboration'; 
+      } else {
+        console.error('삭제에 실패했습니다:', response.data.message);
+      }
+    } catch (error) {
+      console.error('콜라보 게시물 삭제 중 오류 발생:', error);
+    }
+  };
+  
+  const handleAddComment = async (text) => {
+    try {
+      const token = localStorage.getItem('jwtToken');
+      if (!token) {
+        console.error('로그인이 필요합니다.');
+        return;
+      }
+
+      const response = await axios.post(
+        'https://api.partnerd.site/api/collabInquiry/register',
+        { collabPostId, contents: text },
+        { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
+      );
+
+      if (response.data.isSuccess) {
+        const newComment = {
+          id: response.data.result.collabInquiryId,
+          contents: response.data.result.contents,
+          nickname: response.data.result.nickname,
+          date: new Date().toISOString().split('T')[0],
+        };
+        setComments((prevComments) => [...prevComments, newComment]);
+      }
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
+
+    };
+  
+
+
+  
+  const handleDeleteComment = async (commentId) => {
+    console.log("Deleting comment with ID: ", commentId); 
+  
+    try {
+      const token = localStorage.getItem('jwtToken');
+      if (!token) {
+        console.error('로그인이 필요합니다.');
+        return;
+      }
+  
+      const response = await axios.delete(
+        `https://api.partnerd.site/api/collabInquiry/${commentId}`, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      if (response.data.isSuccess) {
+        setComments(comments.filter(comment => comment.id !== commentId)); 
       } else {
         console.error('Error deleting comment:', response.data.message);
       }
     } catch (error) {
       console.error('Error deleting comment:', error);
     }
-  };
+  }; 
+  
   
 
   const handleUpdateComment = async (commentId, newText) => {
@@ -131,7 +188,7 @@ const CollaborationDetailPage = () => {
         console.error('로그인이 필요합니다.');
         return;
       }
-  
+
       const response = await axios.patch(
         `https://api.partnerd.site/api/collabInquiry/${commentId}`,
         { contents: newText },
@@ -142,10 +199,10 @@ const CollaborationDetailPage = () => {
           },
         }
       );
-  
+
       if (response.data.isSuccess) {
         const updatedComments = comments.map(comment =>
-          comment.id === commentId ? { ...comment, text: newText } : comment
+          comment.collabInquiryId === commentId ? { ...comment, text: newText } : comment
         );
         setComments(updatedComments);
       } else {
@@ -155,30 +212,95 @@ const CollaborationDetailPage = () => {
       console.error('Error updating comment:', error);
     }
   };
-  
 
-  const handleReply = (index, replyText) => {
-    const updatedComments = comments.map((comment, i) =>
-      i === index ? { ...comment, replies: [...(comment.replies || []), { text: replyText, user: 'CurrentUser', date: new Date().toISOString().split('T')[0] }] } : comment
-    );
-    setComments(updatedComments);
+  const handleReply = async (parentId, replyText) => {
+    try {
+      const token = localStorage.getItem('jwtToken');
+      if (!token) {
+        console.error('로그인이 필요합니다.');
+        return;
+      }
+
+      const response = await axios.post(
+        `https://api.partnerd.site/api/collabInquiry/${parentId}`, // parentId 사용
+        {
+          collabPostId: parseInt(collabPostId, 10),
+          contents: replyText,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.data.isSuccess) {
+        const newReply = {
+          collabInquiryId: response.data.result.collabInquiryId,
+          text: response.data.result.contents,
+          user: response.data.result.nickname,
+          date: new Date().toISOString().split('T')[0],
+        };
+        setComments(prevComments =>
+          prevComments.map(comment =>
+            comment.collabInquiryId === parentId
+              ? { ...comment, replies: [...(comment.replies || []), newReply] }
+              : comment
+          )
+        );
+      } else {
+        console.error('Error posting reply:', response.data.message);
+      }
+    } catch (error) {
+      console.error('Error posting reply:', error);
+    }
   };
+
+  const handleDeleteReply = async (replyId) => {
+    try {
+      const token = localStorage.getItem('jwtToken');
+      if (!token) {
+        console.error('로그인이 필요합니다.');
+        return;
+      }
+
+      const response = await axios.delete(
+        `https://api.partnerd.site/api/collabInquiry/${replyId}/reply`, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.data.isSuccess) {
+        setComments(prevComments =>
+          prevComments.map(comment =>
+            ({
+              ...comment,
+              replies: comment.replies.filter(reply => reply.collabInquiryId !== replyId)
+            })
+          )
+        );
+      } else {
+        console.error('Error deleting reply:', response.data.message);
+      }
+    } catch (error) {
+      console.error('Error deleting reply:', error);
+    }
+  };
+
   const [openModal, setOpenModal] = useState(false);
 
-   // 버튼: 협업 요청하기 클릭
-   const collabRequestHandler = () => {
+  const collabRequestHandler = () => {
     setOpenModal(true);
   };
 
-  // 모달: 보내기
   const sendHandler = async () => {
-    // 협업 요청 보내기
-    // await api.joinClub();
-
-    // 모달 닫기
     setOpenModal(false);
   };
-
 
   return (
     <>
@@ -186,19 +308,40 @@ const CollaborationDetailPage = () => {
         bannerError ? <div>{bannerError}</div> :
           <BannerPhoto src={bannerPhotoUrl || DefaultImage} />}
 
-      <Wrapper>
-        <ImageContainer>
-          {bannerLoading ? <div>로딩 중...</div> :
-            bannerError ? <div>{bannerError}</div> :
-              <img src={mainPhotoUrl || DefaultImage} alt="Main" style={{ width: '100%', height: '100%', borderRadius: '8px' }} />}
-        </ImageContainer>
+<Wrapper>
+  <ImageSection>
+    <ImageContainer>
+      {bannerLoading ? <div>로딩 중...</div> :
+        bannerError ? <div>{bannerError}</div> :
+          <img src={mainPhotoUrl || DefaultImage} alt="Main" style={{ width: '100%', height: '100%', borderRadius: '8px' }} />}
+    </ImageContainer>
 
-        {isLoadingCollab ? <div>로딩 중...</div> :
-          errorCollab ? <div>{errorCollab}</div> :
-          <InfoSectionWrapper>
-          <InfoSection collabData={collabData} />
-        </InfoSectionWrapper>}
-        </Wrapper>
+       <MoreIconWrapper>
+         <FiMoreVertical
+              onClick={handleOptionsClick}
+              style={{
+                position: 'absolute',
+                right: '5px',
+                top: '-15px',
+                cursor: 'pointer',
+                fontSize: '20px', 
+              }}
+            />
+    </MoreIconWrapper>
+
+    <MoreOptionsMenu show={showOptions}>
+      <MenuItem onClick={handleEditClick}>수정하기</MenuItem>
+      <Divider />
+      <MenuItem onClick={handleDeleteClick}>삭제하기</MenuItem>
+    </MoreOptionsMenu>
+  </ImageSection>
+
+    <InfoSectionWrapper>
+      {isLoadingCollab ? <div>로딩 중...</div> :
+      errorCollab ? <div>{errorCollab}</div> :
+        <InfoSection collabData={collabData} />}
+    </InfoSectionWrapper>
+  </Wrapper>
 
       <EventOverviewWrapper>
         {collabData ? <EventOverview eventData={collabData} /> : <div>데이터를 불러오는 중...</div>}
@@ -218,22 +361,21 @@ const CollaborationDetailPage = () => {
       </PersonalContactWrapper>
 
       <InquiryAndCommentsWrapper>
-      <InquiryForm collabPostId={collabPostId} onAddComment={handleAddComment} />
-        <div style={{ marginTop: '40px' }}>
+        <InquiryForm collabPostId={collabPostId} onSubmit={handleAddComment} />
+         <div style={{ marginTop: '40px' }}>
         <CommentList
-         comments={comments}  
-        collabPostId={collabPostId}
-        onReply={handleReply}
-        onDelete={handleDeleteComment}
-        onUpdate={handleUpdateComment}
+         comments={comments}  // Use 'comments' state here.
+         collabPostId={collabPostId}
+         onReply={handleReply}
+         onDelete={(commentId) => handleDeleteComment(commentId)}
+         onUpdate={handleUpdateComment}
         />
-        </div>
+         </div>
       </InquiryAndCommentsWrapper>
 
       <CustomModal
-        openModal={openModal} 
+        openModal={openModal}
         closeModal={() => setOpenModal(false)}
-
         boldface='협업 요청하기'
         regular='협업하기 요청을 보내시겠습니까?'
         text='보내기'
@@ -246,148 +388,9 @@ const CollaborationDetailPage = () => {
 
 export default CollaborationDetailPage;
 
-// const CollaborationDetailPage = () => {
-//   const { collabPostId } = useParams(); // collabId를 collabPostId로 변경
-//   const [collabData, setCollabData] = useState(null);
-//   const [isLoadingCollab, setIsLoadingCollab] = useState(true);
-//   const [errorCollab, setErrorCollab] = useState(null);
-//   const [showOptions, setShowOptions] = useState(false);
-
-//   useEffect(() => {
-//     const fetchCollabData = async () => {
-//       try {
-//         const response = await axios.get(`https://api.partnerd.site/api/collabPosts/${collabPostId}`); // collabId를 collabPostId로 변경
-//         if (response.data.isSuccess) {
-//           setCollabData(response.data.result);
-//         } else {
-//           setErrorCollab('콜라보 데이터를 불러오는데 실패했습니다.');
-//         }
-//       } catch (err) {
-//         setErrorCollab('네트워크 오류가 발생했습니다.');
-//       } finally {
-//         setIsLoadingCollab(false);
-//       }
-//     };
-
-//     fetchCollabData();
-//   }, [collabPostId]); // collabId를 collabPostId로 변경
-
-//   const bannerImageFileName = collabData?.bannerKeyName ? collabData.bannerKeyName.split('/').pop() : null;
-//   const mainImageFileName = collabData?.mainKeyName ? collabData.mainKeyName.split('/').pop() : null;
-//   const eventImageFileNames = collabData?.eventImgKeyNameList ? collabData.eventImgKeyNameList.map(key => key.split('/').pop()) : [];
-
-//   // BANNER와 MAIN 이미지 각각 로드
-//   const { bannerPhotoUrl, mainPhotoUrl, eventPhotoUrls, isLoading: bannerLoading, error: bannerError } = useBannerPhoto(
-//     'collabPost',
-//     bannerImageFileName,
-//     mainImageFileName,
-//     eventImageFileNames
-//   );
-
-//   const [comments, setComments] = useState([
-//     { text: '참여 인원은 어느 정도 생각하고 계신가요?', user: '하나', date: '2025. 01. 12' }
-//   ]);
-
-//   const handleAddComment = (text) => {
-//     const newComment = {
-//       text,
-//       user: '사용자 이름',
-//       date: new Date().toISOString().split('T')[0],
-//     };
-//     setComments([...comments, newComment]);
-//   };
-
-//   const handleDeleteComment = (index) => {
-//     setComments(comments.filter((_, i) => i !== index));
-//   };
-
-//   const handleUpdateComment = (index, newText) => {
-//     const updatedComments = comments.map((comment, i) =>
-//       i === index ? { ...comment, text: newText } : comment
-//     );
-//     setComments(updatedComments);
-//   };
-
-//   const handleReply = (index, replyText) => {
-//     const updatedComments = comments.map((comment, i) =>
-//       i === index ? { ...comment, replies: [...(comment.replies || []), { text: replyText, user: 'CurrentUser', date: new Date().toISOString().split('T')[0] }] } : comment
-//     );
-//     setComments(updatedComments);
-//   };
-
-//   const toggleOptionsMenu = () => {
-//     setShowOptions(!showOptions);
-//   };
-
-//   return (
-//     <>
-//       {/* 배너 이미지 */}
-//       {bannerLoading ? <div>로딩 중...</div> :
-//         bannerError ? <div>{bannerError}</div> :
-//           <BannerPhoto src={bannerPhotoUrl || DefaultImage} />}
-
-//       <Wrapper>
-//         {/* MAIN 이미지 */}
-//         <ImageContainer>
-//           {bannerLoading ? <div>로딩 중...</div> :
-//             bannerError ? <div>{bannerError}</div> :
-//               <img src={mainPhotoUrl || DefaultImage} alt="Main" style={{ width: '100%', height: '100%', borderRadius: '8px' }} />}
-//         </ImageContainer>
-
-//         <MoreIconWrapper>
-//           <SingleDot onClick={toggleOptionsMenu} />
-//           <SingleDot onClick={toggleOptionsMenu} />
-//           <SingleDot onClick={toggleOptionsMenu} />
-//           <MoreOptionsMenu show={showOptions}>
-//             <MenuItem>수정하기</MenuItem>
-//             <Divider />
-//             <MenuItem>삭제하기</MenuItem>
-//           </MoreOptionsMenu>
-//         </MoreIconWrapper>
-
-//         {isLoadingCollab ? <div>로딩 중...</div> :
-//           errorCollab ? <div>{errorCollab}</div> :
-//             <InfoSection collabData={collabData} />}
-//       </Wrapper>
-
-//       <EventOverviewWrapper>
-//         {collabData ? <EventOverview eventData={collabData} /> : <div>데이터를 불러오는 중...</div>}
-//       </EventOverviewWrapper>
-
-//       <EventGuideWrapper>
-//         {collabData ? <EventGuide collabData={collabData} /> : <div>데이터를 불러오는 중...</div>}
-//       </EventGuideWrapper>
-
-//       <EventImagesWrapper>
-//         {collabData ? <EventImages images={eventPhotoUrls} /> : null}
-//       </EventImagesWrapper>
-
-//       {/* PersonalContact 컴포넌트 추가 */}
-//       <PersonalContactWrapper>
-//         <ContactTitle>컨택하러 가기</ContactTitle>
-//         <PersonalContact />
-//       </PersonalContactWrapper>
-
-//       <InquiryAndCommentsWrapper>
-//     <InquiryForm collabPostId={collabPostId} onAddComment={handleAddComment} />
-//     <div style={{ marginTop: '40px' }}>
-//     <CommentList
-//       comments={comments}
-//       onReply={handleReply}
-//       onDelete={handleDeleteComment}
-//       onUpdate={handleUpdateComment}
-//     />
-//    </div>
-// </InquiryAndCommentsWrapper>
-
-//     </>
-//   );
-// };
-
-// export default CollaborationDetailPage;
 
 const Wrapper = styled.div`
-  display: flex;
+  display: flex;               // flex로 배치
   align-items: flex-start;
   margin-top: 50px;
   margin-left: auto;
@@ -395,12 +398,10 @@ const Wrapper = styled.div`
   width: 1000px;
 `;
 
-const InfoSectionWrapper = styled.div`
-  margin-left: 100px; 
-  width: 555px;
+const ImageSection = styled.div`
+  position: relative; 
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
 `;
 
 const ImageContainer = styled.div`
@@ -410,26 +411,44 @@ const ImageContainer = styled.div`
   height: 340px;
   flex-shrink: 0;
   margin-left: 20px;
+  position: relative;  
 `;
 
 const MoreIconWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 2px;
-  margin-right: 90px;
-  margin-top: 0;
-  padding: 10px;
-  position: relative;
+  position: absolute;
+  top: 18px;          
+  right: -30px;        
+  cursor: pointer;
+  z-index: 1010;
 `;
 
-const SingleDot = styled.div`
-  width: 4px;
-  height: 4px;
-  background-color: #000;
-  border-radius: 50%;
-  margin-bottom: 5px;
-  cursor: pointer; 
+const MoreOptionsMenu = styled.div`
+  position: absolute;
+  top: 40px;           
+  right: -50px;       
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  display: ${({ show }) => (show ? 'flex' : 'none')};
+  box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.15);
+  width: 120px;
+  height: 100px;
+  padding: 0;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 1000;
 `;
+
+
+
+const InfoSectionWrapper = styled.div`
+  margin-left: 80px;  
+  width: 555px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
 
 const EventOverviewWrapper = styled.div`
   display: flex;
@@ -452,23 +471,7 @@ const EventImagesWrapper = styled.div`
   width: 550px;
 `;
 
-const MoreOptionsMenu = styled.div`
-  position: absolute;
-  top: 30px; 
-  left: 0; 
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  display: ${({ show }) => (show ? 'flex' : 'none')};
-  box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.15);
-  width: 120px;
-  height: 100px;
-  padding: 0;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const MenuItem = styled.div`
+export const MenuItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -483,11 +486,11 @@ const MenuItem = styled.div`
   }
 `;
 
-const Divider = styled.div`
+export const Divider = styled.div`
   width: 80%;
   height: 1px;
   background-color: #ddd;
-  margin: 0 auto;
+  margin-left: 10px;
 `;
 
 const PersonalContactWrapper = styled.div`
@@ -506,16 +509,6 @@ const ContactTitle = styled.div`
   font-weight: 700;
   margin: 0 0 35px 0;
 `;
-
-{/*const InquiryTitle = styled.div`
-  color: #212121;
-  font-family: Pretendard, sans-serif;
-  font-size: 25px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  letter-spacing: -0.64px;
-`;*/}
 
 
 const InquiryAndCommentsWrapper = styled.div`

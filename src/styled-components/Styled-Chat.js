@@ -12,6 +12,7 @@ width:25vw;
 max-width: 300px;
 min-height: 358px;
 height:100%;
+margin-top:30px;
 
 box-sizing: border-box;
 padding:20px;

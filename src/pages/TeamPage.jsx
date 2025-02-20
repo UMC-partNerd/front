@@ -17,7 +17,8 @@ const DefaultImage = '/default-image.png'; // 기본 이미지
 
 const TeamPageWrapper = styled.div`
   display: flex;
-  justify-content: center;  
+  justify-content: center;
+  padding: 0% 10% 0% 10%;
 `;
 
 const TeamPageContainer = styled.div`
@@ -34,47 +35,50 @@ const ChatWrapp = styled.div`
   flex-direction: column;
   height: 100%;
   margin: 20px;
+  margin-top: 30px;
+  margin-bottom: 20px;  // 여기서 버튼 밑에 마진을 추가
 `;
+
 
 const TeamPage = () => {
   const { clubId } = useParams();
-  const navigate = useNavigate();
-  
-  // 상태 관리
   const [club, setClub] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [openFirstModal, setOpenFirstModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [collabPosts, setCollabPosts] = useState([]);  // 콜라보레이션 피드 상태 추가
+  const navigate = useNavigate();
+
+  const [openFirstModal, setopenFirstModal] = useState(false);
   const [openSecondModal, setOpenSecondModal] = useState(false);
 
-  // 배너 이미지 및 메인 사진 로드
-  const { bannerPhotoUrl, mainPhotoUrl, eventPhotoUrls, isLoading: bannerLoading, error: bannerError } = useBannerPhoto(
-    'club',
-    club?.bannerImage ? club.bannerImage.split('/').pop() : null,
-    club?.profileImage ? club.profileImage.split('/').pop() : null,
-    club?.activity?.activityImageKeyNames ? club.activity.activityImageKeyNames.map(key => key.split('/').pop()) : []
-  );
-
-  // 동아리 정보 가져오기
+  // 동아리 정보 및 콜라보레이션 피드 가져오기
   useEffect(() => {
     const fetchClubDetails = async () => {
       const token = localStorage.getItem('jwtToken');
-      
       if (!token) {
-        setError('토큰이 없습니다. 로그인을 확인해주세요.');
+        setError('로그인이 필요합니다.');
         setIsLoading(false);
         return;
       }
 
       try {
-        const response = await axios.get(`https://api.partnerd.site/api/partnerd/${clubId}`, {
-          headers: { 
+        console.log('Fetching club details...');
+        // 동아리 정보 및 콜라보레이션 포스트 가져오기
+        const clubResponse = await axios.get(`https://api.partnerd.site/api/partnerd/${clubId}`, {
+          headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           }
         });
-        setClub(response.data.result);
+
+        console.log('Club details response:', clubResponse);  // 응답 확인
+        setClub(clubResponse.data.result);
+
+        // 콜라보레이션 포스트 가져오기 (팀 페이지 API 응답에 포함)
+        const collabPosts = clubResponse.data.result.collaborationPosts || []; // 새롭게 추가된 부분
+        setCollabPosts(collabPosts.slice(0, 2));  // 최신 2개 피드만 저장
       } catch (err) {
+        console.error('Error fetching data:', err);  // 오류 메시지 출력
         setError('동아리 정보를 불러오는 중 오류가 발생했습니다.');
       } finally {
         setIsLoading(false);
@@ -84,11 +88,38 @@ const TeamPage = () => {
     fetchClubDetails();
   }, [clubId]);
 
+  // 배너 이미지 및 메인 사진 로드
+  const { 
+    bannerPhotoUrl, 
+    mainPhotoUrl, 
+    eventPhotoUrls, 
+    isLoading: bannerLoading, 
+    error: bannerError 
+  } = useBannerPhoto(
+    'club',  // 폴더 이름 (예: 'club', 'projects' 등)
+    club?.bannerImage ? `club/BANNER/${club.bannerImage.split('/').pop()}` : null,  
+    club?.profileImage ? `club/MAIN/${club.profileImage.split('/').pop()}` : null,  
+    club?.activity?.activityImageKeyNames ? club.activity.activityImageKeyNames.map(key => `club/EVENT/${key.split('/').pop()}`) : [] 
+  );
+
+  // 로딩 처리
+  if (isLoading || bannerLoading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (error || bannerError) {
+    return <div>오류: {error || bannerError}</div>;
+  }
+
+  if (!club) {
+    return <div>동아리를 찾을 수 없습니다.</div>;
+  }
+
   // 삭제 기능
-  const onDelete = async () => {
+  const onDelete = async (clubId) => {
     const token = localStorage.getItem('jwtToken');
     try {
-      await axios.delete(`https://api.partnerd.site/api/partnerd/${clubId}`, {
+      const response = await axios.delete(`https://api.partnerd.site/api/partnerd/${clubId}`, {
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -101,23 +132,27 @@ const TeamPage = () => {
     }
   };
 
-  // 모달 핸들러
+  // 버튼 클릭 시 모달1을 띄우는 함수
   const clubJoinHandler = () => {
-    setOpenFirstModal(true);
+    setopenFirstModal(true);
   };
 
+  // 모달: 승인 함수
   const joinHandler = async () => {
     setOpenSecondModal(true);
-    setOpenFirstModal(false);
+    setopenFirstModal(false);
   };
 
-  if (isLoading || bannerLoading) {
-    return <div>로딩 중...</div>;
-  }
+  // 리더 확인: 리더의 이름을 기준으로 리더인지 확인
+  const token = localStorage.getItem('jwtToken');
+  const decodedToken = token ? JSON.parse(atob(token.split('.')[1])) : null;
+  const userName = decodedToken?.name;  // jwt 토큰에서 사용자 이름을 가져옴
 
-  if (error || bannerError) {
-    return <div>에러: {error || bannerError}</div>;
-  }
+  // 리더인지 확인하는 로직 (리더의 name과 비교)
+  const isLeader = club?.leaderMembers?.some(leader => leader.name === userName);
+
+  // 콘솔로 확인
+  console.log('리더?', isLeader);
 
   return (
     <>
@@ -125,49 +160,48 @@ const TeamPage = () => {
       <ProfilePhoto src={mainPhotoUrl || DefaultImage} />
       <TeamPageWrapper>
         <TeamPageContainer>
-          {/* TeamInfo 컴포넌트에 onDelete 함수 전달 */}
           <TeamInfo 
             name={club.name} 
             description={club.intro} 
             category={club.category} 
             contact={club.contactMethod || []}
             clubId={clubId} 
-            onDelete={onDelete}  // 삭제 함수 전달
+            onDelete={onDelete}
+            isLeader={isLeader}  // 리더 여부 전달
           />
           <Activities activities={club.activity.intro} images={eventPhotoUrls || []} />
-          <CollaborationFeed feed={club.collabPosts} />
+          <CollaborationFeed feed={collabPosts} />
         </TeamPageContainer>
         <ChatWrapp>
-          <Button
-            type={TYPES.NEXT}
-            text='동아리 참여하기'
-            onClick={clubJoinHandler}
-          /> 
+        <Button
+         type={TYPES.NEXT}
+         text='동아리 참여하기'
+         onClick={clubJoinHandler}
+         style={{ marginBottom: '20px' }}  // 버튼 밑에 20px 마진 추가
+        />
+
           <CustomModal
-            openModal={openFirstModal}
-            closeModal={() => setOpenFirstModal(false)}
-            boldface="동아리에 가입하시겠습니까?"
-            regular="동아리 가입 신청을 하시면 동아리 리더의 승인 후 가입이 완료됩니다."
-            text="신청하기"
+            openModal={openFirstModal} 
+            closeModal={() => setopenFirstModal(false)}
+            boldface='동아리에 참여하시겠습니까?'
+            regular='동아리 가입을 위해서는 동아리 리더진의 승인을 기다려야 합니다.'
+            text='참여하기'
             onClickHandler={joinHandler}
             variant={VERSIONS.VER3}
           />
-          
           <CustomModal
-            openModal={openSecondModal}
+            openModal={openSecondModal} 
             closeModal={() => setOpenSecondModal(false)}
-            boldface="가입 신청이 완료되었습니다"
-            regular="동아리 리더의 승인을 기다려주세요"
-            text="확인"
-            onClickHandler={() => setOpenSecondModal(false)}
-            variant={VERSIONS.VER3}
+            boldface='동아리 참여 완료!'
+            regular='동아리 가입 신청이 완료되었습니다. 승인 후 자동으로 참여됩니다.'
+            variant={VERSIONS.VER2}
           />
-          <Chatlist />
-          <ChatListALL />
+          <Chatlist style={{ marginTop: '100px' }} />
+          <ChatListALL style={{ marginTop: '30px' }} />
         </ChatWrapp>
       </TeamPageWrapper>
     </>
   );
 };
 
-export default TeamPage;
+export { TeamPage };

@@ -6,7 +6,7 @@ import EventImageUploadForm from '../../components/collabregister/EventImageUplo
 import styled from 'styled-components';
 import Button, { TYPES } from "../../components/common/button";
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
-import { useNavigate } from 'react-router-dom';  // 추가
+import { useNavigate } from 'react-router-dom';  
 
 import axios from 'axios';
 
@@ -70,7 +70,7 @@ const CollabRegistration = () => {
 
       const token = localStorage.getItem('jwtToken');
 
-      const response = await axios.post('https://api.partnerd.site/api/collabPosts/', payload, {
+      const response = await axios.post('https://api.partnerd.site/api/collabPosts', payload, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',

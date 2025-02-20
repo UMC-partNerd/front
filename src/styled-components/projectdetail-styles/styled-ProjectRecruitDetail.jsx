@@ -104,6 +104,35 @@ export const SJoinProjectInfoWrapper = styled.div`
 `;
 
 
+export const SMemberFormWrapper = styled.div`
+  width: 100%;  
+  max-width: 1000px; 
+  padding: 40px;
+  display: flex;
+  justify-content: flex-start; 
+  align-items: flex-start;  
+  flex-direction: column;
+  margin-right: -270px; 
+`;
+
+export const SPersonalContactWrapper = styled.div`
+  width: 100%;  
+  max-width: 1000px; 
+  padding: 40px;
+  display: flex;
+  justify-content: flex-start; 
+  align-items: flex-start;  
+  flex-direction: column;
+  margin-right: -270px; 
+`;
+
+export const SContactTitle = styled.div`
+  color: #212121;
+  font-family: Pretendard, sans-serif;
+  font-size: 25px;
+  font-weight: 700;
+  margin: 0 0 35px 0;
+`;
 
 export const SCommentFormWrapper = styled.div`
   width: 94%;

@@ -90,8 +90,8 @@ export const SContactLink = styled.span`
 
 export const SMoreOptionsMenu = styled.div`
   position: absolute;
-  right: 0px;  /* right 값을 0px로 설정하여 아이콘 바로 아래에 배치 */
-  top: 20px;  /* top 값을 수정하여 아이콘 바로 밑으로 위치시키기 */
+  right: 0px;  
+  top: 20px;  
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 10px;

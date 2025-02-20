@@ -49,6 +49,12 @@ export const ClubCard = styled.div`
   border: 1px solid #EAEAEA;
   border-radius: 8px;
   overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
 `;
 
 export const ImagePlaceholder = styled.div`

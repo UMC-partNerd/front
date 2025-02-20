@@ -19,18 +19,7 @@ const CollaborationFeed = ({ feed = [] }) => {
     const fetchDetails = async () => {
       const token = localStorage.getItem('jwtToken');
       try {
-        const responses = await Promise.all(
-          feed.map(async (item) => {
-            const response = await axios.get(`https://api.partnerd.site/api/collabPosts/${item.collabPostId}`, {
-              headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              }
-            });
-            return { ...item, ...response.data.result }; 
-          })
-        );
-        setDetailedFeed(responses);
+        setDetailedFeed(feed);
       } catch (error) {
         console.error("Error fetching collaboration post details:", error);
       }
@@ -47,20 +36,21 @@ const CollaborationFeed = ({ feed = [] }) => {
         <S.SSectionTitle>콜라보레이션 피드</S.SSectionTitle>
       </S.SHeader>
       {detailedFeed.length === 0 ? (
+        // 피드가 없을 경우
         <S.SFeedItem>
-          <S.SFeedTitle>콜라보레이션 피드가 없습니다.</S.SFeedTitle>
+          <S.SFeedTitle>관련 콜라보레이션 피드가 없습니다.</S.SFeedTitle>
         </S.SFeedItem>
       ) : (
         <S.SFeedList>
           {detailedFeed.map((item) => (
-            <S.SFeedItem key={item.collabPostId} onClick={() => handleFeedClick(item.collabPostId)}>
+            <S.SFeedItem key={item.title} onClick={() => handleFeedClick(item.title)}>
               <S.SFeedHeader>
                 <S.SFeedTitle>{item.title}</S.SFeedTitle>
                 {/* 날짜 포맷을 'YYYY-MM-DD' 형식으로 표시 */}
-                <S.SFeedDate>{new Date(item.startDate).toLocaleDateString()}</S.SFeedDate>
+                <S.SFeedDate>{new Date(item.openDate).toLocaleDateString()}</S.SFeedDate>
               </S.SFeedHeader>
-              {/* content는 'intro'로 전달된다고 가정 */}
-              <S.SFeedDescription>{item.description || item.intro}</S.SFeedDescription>
+              {/* description을 출력하고, 없으면 '내용 없음' 표시 */}
+              <S.SFeedDescription>{item.description || '내용 없음'}</S.SFeedDescription>
             </S.SFeedItem>
           ))}
         </S.SFeedList>
@@ -72,10 +62,9 @@ const CollaborationFeed = ({ feed = [] }) => {
 CollaborationFeed.propTypes = {
   feed: PropTypes.arrayOf(
     PropTypes.shape({
-      collabPostId: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,
-      intro: PropTypes.string.isRequired, // API 응답에서 intro 필드로 가정
-      startDate: PropTypes.string.isRequired, // startDate 필드로 가정
+      description: PropTypes.string.isRequired,  // API 응답에서 description 사용
+      openDate: PropTypes.string.isRequired,     // API 응답에서 openDate 사용
     })
   ).isRequired,
 };
