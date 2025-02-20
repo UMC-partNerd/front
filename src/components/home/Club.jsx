@@ -31,7 +31,7 @@ function Club() {
     <ClubContainer>
       <Header>
         <Title>당장 주목해야 하는 동아리</Title>
-        <MoreButton href="/clubs">더보기 ›</MoreButton>
+        <MoreButton href="/find">더보기 ›</MoreButton>
       </Header>
       <CardGrid>
         {homeData.clubs.map((club, index) => (

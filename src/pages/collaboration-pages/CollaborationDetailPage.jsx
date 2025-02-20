@@ -330,11 +330,12 @@ const CollaborationDetailPage = () => {
             />
     </MoreIconWrapper>
 
-      <MoreOptionsMenu show={showOptions}>
-        <MenuItem onClick={handleEditClick}>수정하기</MenuItem>
-        <Divider />
-        <MenuItem onClick={handleDeleteClick}>삭제하기</MenuItem>
-      </MoreOptionsMenu>
+    <MoreOptionsMenu show={showOptions}>
+      <MenuItem onClick={handleEditClick}>수정하기</MenuItem>
+      <Divider />
+      <MenuItem onClick={handleDeleteClick}>삭제하기</MenuItem>
+    </MoreOptionsMenu>
+  </ImageSection>
 
         {/* feat/70 OptionMenu 컴포넌트 */}
         <OptionMenu

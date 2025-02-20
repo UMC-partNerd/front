@@ -37,35 +37,12 @@ const TeamRegistration = () => {
     }));
   };
 
-  // 이름 변경 처리 함수
-  const handleNameChange = (name) => {
-    handleTeamInfoChange({ name });
-  };
-
-  // 한 줄 소개 변경 처리 함수
-  const handleIntroChange = (intro) => {
-    handleTeamInfoChange({ intro });
-  };
-
-  // 카테고리 변경 처리 함수
-  const handleCategoryChange = (category) => {
-    handleTeamInfoChange({ category });
-  };
-
-  // 연락 방법 변경 처리 함수
-  const handleContactMethodsChange = (methods) => {
-    handleTeamInfoChange({ contact: methods });
-  };
-
-  // 활동 소개 변경 처리 함수
-  const handleActivityIntroChange = (intro) => {
-    setActivityIntro(intro);
-  };
-
-  // 활동 이미지 변경 처리 함수
-  const handleActivityImageChange = (imageKeyNames) => {
-    setActivityImageKeyNames(imageKeyNames);
-  };
+  const handleNameChange = (name) => handleTeamInfoChange({ name });
+  const handleIntroChange = (intro) => handleTeamInfoChange({ intro });
+  const handleCategoryChange = (category) => handleTeamInfoChange({ category });
+  const handleContactMethodsChange = (methods) => handleTeamInfoChange({ contact: methods });
+  const handleActivityIntroChange = (intro) => setActivityIntro(intro);
+  const handleActivityImageChange = (imageKeyNames) => setActivityImageKeyNames(imageKeyNames);
 
   const buttonHandler = async () => {
     setIsLoading(true);
@@ -155,6 +132,8 @@ const TeamRegistration = () => {
 };
 
 export default TeamRegistration;
+
+
 
 const Container = styled.div`
   background-color: #F3F4F7;
