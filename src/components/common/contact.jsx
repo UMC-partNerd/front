@@ -16,7 +16,7 @@ const PersonalContact = ({profileImageUrl, nickname, explan, intro}) =>{
             <TopContainer>
                 {/* 이미지 */}
                 <ImageComp 
-                        src={profileImageUrl}
+                        src={profileImageUrl || "/Profile_none.png"}
                             alt = "프로필 이미지"
                         />
                 <CenterContainer>
