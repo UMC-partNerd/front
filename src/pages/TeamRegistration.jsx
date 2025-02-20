@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import Button, { TYPES } from "../components/common/button";
 import axios from 'axios';
 import { PermissionRegistration } from '../components/contact/permission-registration';
+import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
+
 
 const TeamRegistration = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -14,14 +16,15 @@ const TeamRegistration = () => {
   const [teamInfo, setTeamInfo] = useState({
     name: '',
     intro: '',
-    contact: '',
+    contact: [], // 연락처 배열을 초기화
     category: '',
-    activities: '',
+    activities: '', // activities 필드도 수정된 경우 필요 없을 수 있습니다
   });
-  const [activityIntro, setActivityIntro] = useState(''); 
-  const [activityImageKeyNames, setActivityImageKeyNames] = useState([]); 
+  const [activityIntro, setActivityIntro] = useState('');
+  const [activityImageKeyNames, setActivityImageKeyNames] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [openModal, setOpenModal] = useState(false);
 
   // 현재 경로 확인
   const location = useLocation();
@@ -73,9 +76,9 @@ const TeamRegistration = () => {
       const payload = {
         name: teamInfo.name,
         intro: teamInfo.intro,
-        contact: teamInfo.contact,
+        contactMethod: teamInfo.contact, // teamInfo.contact 배열을 그대로 전달
         categoryId: teamInfo.category,
-        activities: {
+        activity: {  // 'activities'에서 'activity'로 변경
           intro: activityIntro,
           activityImageKeyNames: activityImageKeyNames,
         },
@@ -92,6 +95,7 @@ const TeamRegistration = () => {
         },
       });
       console.log('등록 성공', response.data);
+      setOpenModal(true); // 등록 후 모달 열기
     } catch (error) {
       console.error('등록 실패', error);
       setErrorMessage('팀 등록에 실패했습니다.');
@@ -111,6 +115,8 @@ const TeamRegistration = () => {
           setProfileImage={setProfileImage}
           setBannerImage={setBannerImage}
         />
+        
+
         <ClubInfoForm 
           teamInfo={teamInfo}
           handleNameChange={handleNameChange}
@@ -131,7 +137,15 @@ const TeamRegistration = () => {
           text={isLoading ? '등록 중...' : isEditMode ? '수정 완료' : '최종 등록하기'}
           onClick={onClickHandler}
         />
-
+        
+        <CustomModal
+          openModal={openModal} 
+          closeModal={() => setOpenModal(false)}
+          boldface='동아리 등록 완료!'
+          regular='팀페이지 관리는 마이페이지 > 팀페이지지에서 가능합니다.'
+          variant={VERSIONS.VER2}
+        />
+        
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </Container>
     </>
@@ -139,6 +153,7 @@ const TeamRegistration = () => {
 };
 
 export default TeamRegistration;
+
 
 
 

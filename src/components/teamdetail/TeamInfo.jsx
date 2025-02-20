@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  
+import React, { useState } from 'react';  
 import { FiMoreVertical } from 'react-icons/fi'; 
+import { useNavigate } from 'react-router-dom';  
 import * as S from '../../styled-components/teamdetail-styles/styled-TeamInfo';
 
 const TeamInfo = ({ name, description, category, contact = [], clubId, onDelete }) => {
@@ -12,12 +12,10 @@ const TeamInfo = ({ name, description, category, contact = [], clubId, onDelete 
   };
 
   const handleEditClick = () => {
-    // 수정하기 클릭 시 팀 페이지 관리 페이지로 이동
     navigate(`/find/${clubId}/manage`);
   };
 
   const onDeleteClick = () => {
-    // 삭제 기능 호출
     onDelete(clubId); 
   };
 
@@ -28,8 +26,8 @@ const TeamInfo = ({ name, description, category, contact = [], clubId, onDelete 
           <S.SBadge>{category}</S.SBadge>
           <S.STitle>{name}</S.STitle>
         </S.SBadgeTitleContainer>
-        
-  
+
+        {/* 더보기 아이콘이 항상 보이도록 설정 */}
         <FiMoreVertical
           onClick={handleOptionsClick}
           style={{
@@ -63,5 +61,8 @@ const TeamInfo = ({ name, description, category, contact = [], clubId, onDelete 
   );
 };
 
-
 export default TeamInfo;
+
+
+
+
