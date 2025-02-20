@@ -7,7 +7,7 @@ const BannerImageUpload = ({ folderName, type, setImageKey, setImagePreview }) =
   const [imagePreview, setImagePreviewState] = useState(null);
 
   const handleClick = () => {
-    fileInputRef.current.click();
+    fileInputRef.current.click(); // 이미지 파일 선택
   };
 
   const handleFileChange = async (e) => {
@@ -32,18 +32,20 @@ const BannerImageUpload = ({ folderName, type, setImageKey, setImagePreview }) =
       const data = await response.json();
       const { preSignedUrl, keyName } = data.result;
 
-      setImageKey(keyName);
+      setImageKey(keyName); // 서버로 이미지 키 전송
 
       await fetch(preSignedUrl, {
         method: 'PUT',
         headers: {
-          'Content-Type': file.type,
+          'Content-Type': 'application/json',
+          'x-amz-meta-cache-control': 'max-age=864000'
         },
         body: file,
       });
 
+      // 로컬 미리보기 업데이트
       const imageUrl = URL.createObjectURL(file);
-      setImagePreview(imageUrl);
+      setImagePreview(imageUrl);  // 미리보기 이미지를 업데이트
       setImagePreviewState(imageUrl);
 
       console.log('이미지 업로드 완료:', imageUrl);

@@ -49,6 +49,12 @@ export const ClubCard = styled.div`
   border: 1px solid #EAEAEA;
   border-radius: 8px;
   overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
 `;
 
 export const ImagePlaceholder = styled.div`
@@ -100,3 +106,13 @@ export const Description = styled.p`
   color: #666;
   line-height: 1.5;
 `; 
+
+
+export const CardGridPersonal = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 100%;
+  height:auto;
+  
+`;

@@ -2,22 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 
 
-const ProjectPromoteForm = () => {
-  const projectTitle = "프로젝트 설명";
-  const projectDescription = `“다른 IT 동아리와 협업하거나, 프로젝트를 함께 할 동료를 구할 수는 없을까?” 
-
-투게다는 IT 동아리 네트워킹 플랫폼으로 타 동아리와의 협업을 촉진하고, 서비스 런칭을 위한 팀원을 모집할 수 있습니다. 
-협업을 통해 새로운 경험을 할 수 있으며 더욱 성장한 모습을 찾아볼 수 있어요!`;
+const ProjectPromoteForm = ({ projectData }) => {
+  const { description } = projectData || {}; 
 
   return (
     <div>
-      <Title>{projectTitle}</Title>
-      <Description>{projectDescription}</Description>
+      <Title>프로젝트 설명</Title> 
+      <Description>{description || "프로젝트에 대한 설명이 없습니다."}</Description> 
     </div>
   );
 };
 
 export default ProjectPromoteForm;
+
 
 
 const Title = styled.h2`

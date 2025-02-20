@@ -15,9 +15,15 @@ import {
   PostDate
 } from "../../styled-components/styled-Collaboration";
 import { useCollaborationData } from '../../hooks/useCollaborationData';
+import { useNavigate } from 'react-router-dom';
 
 const Collaboration = () => {
+  const navigate = useNavigate();
   const { collaborations, isLoading, error } = useCollaborationData();
+
+  const handleCardClick = (id) => {
+    navigate(`/collaboration/${id}`);
+  };
 
   if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div>에러가 발생했습니다: {error.message}</div>;
@@ -30,8 +36,11 @@ const Collaboration = () => {
         <MoreButton href="/collaborations">더보기 ›</MoreButton>
       </Header>
       <CardGrid>
-        {collaborations.map((collab, index) => (
-          <CollabCard key={index}>
+        {collaborations.map((collab) => (
+          <CollabCard 
+            key={collab.id}
+            onClick={() => handleCardClick(collab.id)}
+          >
             <TitleRow>
               <CompanyLogo>
                 <img 

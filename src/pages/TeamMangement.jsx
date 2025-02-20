@@ -6,6 +6,9 @@ import ClubInfoForm from '../components/teamregister/ClubInfoForm';
 import Banner from '../components/common/banner/Banner';
 import ProjectImageUploadForm from '../components/teamregister/ProjectImageUploadForm';
 import styled from 'styled-components';
+import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
+import PermissionRegistration from '../components/contact/permission-registration';
+import LeaderChange from '../components/contact/leader-change';
 
 const TeamManagement = () => {
   const { clubId } = useParams();
@@ -50,6 +53,8 @@ const TeamManagement = () => {
     setTeamInfo((prevState) => ({ ...prevState, ...updatedData }));
   };
 
+  // 버튼: 수정하기
+  const [openModal, setOpenModal] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -81,11 +86,14 @@ const TeamManagement = () => {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       console.log('팀 수정 성공:', response.data);
+      setOpenModal(true);
+
     } catch (error) {
       console.error('팀 수정 실패:', error);
       setErrorMessage('팀 수정에 실패했습니다. 다시 시도해 주세요.');
     } finally {
       setIsLoading(false);
+      setOpenModal(false);
     }
   };
 
@@ -114,12 +122,33 @@ const TeamManagement = () => {
           teamInfo={teamInfo}
         />
 
+        <PermissionWrapper>
+          <UnifiedPermissionContainer>
+            <PermissionSection>
+              <PermissionRegistration />
+            </PermissionSection>
+            <StyledHr />
+            <PermissionSection>
+              <LeaderChange />
+            </PermissionSection>
+          </UnifiedPermissionContainer>
+        </PermissionWrapper>
+
         <Button
           type={TYPES.NEXT}
           text={isLoading ? '등록 중...' : '수정하기'}
           onClick={handleSubmit}
           disabled={isLoading}
         />
+
+        <CustomModal
+          openModal={openModal} 
+          closeModal={() => setOpenModal(false)}
+          boldface='팀페이지 수정 완료!'
+          regular='팀페이지 수정 완료되었습니다.'
+          variant={VERSIONS.VER2}
+        />
+        
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </Container>
     </>
@@ -127,9 +156,6 @@ const TeamManagement = () => {
 };
 
 export default TeamManagement;
-
-
-
 
 const Container = styled.div`
   background-color: #F3F4F7;
@@ -146,5 +172,39 @@ const Container = styled.div`
 const ErrorMessage = styled.p`
   color: red;
   font-size: 14px;
+`;
+
+const PermissionWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 30px 0;
+`;
+
+const UnifiedPermissionContainer = styled.div`
+  width: 1040px;
+  padding: 40px;
+  border-radius: 20px;
+  background: #FFF;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.10);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+`;
+
+const PermissionSection = styled.div`
+  & > div {
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    background: none;
+  }
+`;
+
+const StyledHr = styled.hr`
+  width: 100%;
+  border: none;
+  border-top: 1px solid #E0E0E0;
+  margin: 0;
 `;
 

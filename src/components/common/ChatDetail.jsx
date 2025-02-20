@@ -3,11 +3,11 @@ import { SubContainer, ImageComp, ChatButton, ChatWrapp, Title, Name, Explan, Na
 const ChatDetails = () =>{
     return(
         <SubContainer>
-                        <ImageComp />
-                        <NameField>
-                            <Name>이름</Name>
-                            <Explan>설명</Explan>
-                        </NameField>
+            <ImageComp />
+            <NameField>
+                <Name>이름</Name>
+                <Explan>설명</Explan>
+            </NameField>
         </SubContainer>
     )
 }

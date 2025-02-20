@@ -5,6 +5,8 @@ import EventGuideForm from '../../components/collabregister/EventGuideForm';
 import EventImageUploadForm from '../../components/collabregister/EventImageUploadForm';
 import styled from 'styled-components';
 import Button, { TYPES } from "../../components/common/button";
+import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
+import { useNavigate } from 'react-router-dom';  // 추가
 
 import axios from 'axios';
 
@@ -38,6 +40,8 @@ const CollabRegistration = () => {
     }));
   };
 
+  const [openModal, setOpenModal] = useState(false);
+  const navigate = useNavigate();
   const onClickHandler = async () => {
     setIsLoading(true);
     setErrorMessage('');
@@ -66,13 +70,14 @@ const CollabRegistration = () => {
 
       const token = localStorage.getItem('jwtToken');
 
-      const response = await axios.post('https://api.partnerd.site/api/collabPosts/', payload, {
+      const response = await axios.post('https://api.partnerd.site/api/collabPosts', payload, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
       console.log('등록 성공', response.data);
+      setOpenModal(true);
     } catch (error) {
       console.error('등록 실패', error);
       setErrorMessage('등록에 실패했습니다.');
@@ -80,6 +85,11 @@ const CollabRegistration = () => {
       setIsLoading(false);
     }
   };
+
+  const closeModal = () => {
+    setOpenModal(false);
+    navigate('/collaboration');
+};
 
   return (
     <>
@@ -102,7 +112,14 @@ const CollabRegistration = () => {
         >
           {isLoading ? '등록 중...' : '최종 등록하기'}
         </Button>
+        <CustomModal
+          openModal={openModal} 
+          closeModal={closeModal}
 
+          boldface='협업 등록 완료!'
+          regular='협업 페이지 관리는 마이페이지 > 콜라보레이션에서 가능합니다.'
+          variant={VERSIONS.VER2}
+        />
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </Container>
     </>

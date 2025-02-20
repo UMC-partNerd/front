@@ -1,11 +1,17 @@
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 
-const ToggleButton = () =>{
-    const [isOn, setIsOn] = useState(false); // 초기 상태는 Off
+const ToggleButton = ({ initialState, onToggle }) =>{
+    const [isOn, setIsOn] = useState(initialState); // 초기값을 `initialOn`으로 설정
+
+    useEffect(() => {
+        setIsOn(initialState); // props 값이 바뀌면 동기화
+    }, [initialState]);
 
     const handleToggle = () => {
-        setIsOn((prev) => !prev); // 상태를 반전
+        const newState = !isOn;  // 상태 반전
+        setIsOn(newState);
+        onToggle(newState); // ✅ 부모 컴포넌트에 변경된 값 전달
     };
 
     return (
@@ -25,6 +31,7 @@ const ToggleButton = () =>{
     padding: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    justify-content: ${(props) => (props.isOn ? "flex-end" : "flex-start")}; // ✅ 정렬 보장
     `;
 
     const ToggleCircle = styled.div`
@@ -32,8 +39,8 @@ const ToggleButton = () =>{
     height: 15px;
     background-color: white;
     border-radius: 50%;
-    transform: ${(props) => (props.isOn ? "translateX(25px)" : "translateX(0)")};
-    transition: transform 0.3s;
+    transition: transform 0.3s ease-in-out;
+    margin-left: ${(props) => (props.isOn ? "20px" : "0px")}; // ✅ transform 대신 margin 사용
     `;
 
 export default ToggleButton;

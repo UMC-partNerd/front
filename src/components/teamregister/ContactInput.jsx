@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import * as S from '../../styled-components/teamregister-styles/styled-ContactInput';
 
 const ContactInput = ({ contactMethods = [], setContactMethods }) => {
+// const ContactInput = ({ contactMethods, setContactMethods }) => {
   const [contactMethod, setContactMethod] = useState('');
   const [link, setLink] = useState('');
 

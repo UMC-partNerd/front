@@ -5,6 +5,19 @@ import API from "../../api/axiosInstance";
 import styled from "styled-components";
 import useUserStore from '../../stores/useUserStore'; // zustand 추가 내용git
 
+// ✅ JWT에서 만료 시간(`exp`) 확인하는 함수
+const checkTokenExpired = (token) => {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1])); // JWT의 payload 해독
+    const exp = payload.exp * 1000; // 초 단위이므로 밀리초로 변환
+    return Date.now() > exp; // 현재 시간이 만료 시간보다 크면 만료됨
+  } catch (error) {
+    console.error("JWT 파싱 오류:", error);
+    return true; // 오류 발생 시 만료된 것으로 간주
+  }
+}
+
+
 const KakaoCallback = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -14,6 +27,8 @@ const KakaoCallback = () => {
   const { setUser } = useUserStore(); // 로그인 상태를 zustand 스토어로 변경
 
   useEffect(() => {
+
+
     const authCode = searchParams.get("code");
     if (!authCode) {
       console.log("No auth code found.");
@@ -28,11 +43,47 @@ const KakaoCallback = () => {
     }
 
     // ✅ 이미 로그인된 사용자 확인
-    const storedToken = localStorage.getItem("kakao_access_token");
+    const storedToken = localStorage.getItem("jwtToken");
     if (storedToken) {
-      console.log("✅ 이미 로그인된 사용자입니다.");
-      navigate("/register/social");
-      return;
+      console.log("✅ 기존 토큰 확인 중...");
+
+      // ✅ JWT 파싱해서 만료 시간 확인
+      const isExpired = checkTokenExpired(storedToken);
+
+      if (!isExpired) {
+        console.log("✅ 유효한 JWT, 홈으로 이동");
+        navigate("/");
+        return; 
+      } else {
+        console.log("JWT 만료됨... 갱신 시도도");
+
+        axios.post(`${API_BASE_URL}/api/auth/token/refresh`, { expiredToken: storedToken })
+          .then(refreshResponse => {
+            if (refreshResponse.status === 200 && refreshResponse.data.isSuccess) {
+              const newJwt = refreshResponse.data.result.jwtToken;
+              localStorage.setItem("jwtToken", newJwt);
+              console.log("🔄 JWT 갱신 완료, 홈으로 이동");
+              navigate("/");
+            } else {
+              console.log("❌ Refresh 실패, 재로그인 필요");
+              localStorage.removeItem("jwtToken");
+              navigate("/login");
+            }
+          })
+          .catch(() => {
+            console.log("❌ Refresh API 요청 실패, 재로그인 필요");
+            localStorage.removeItem("jwtToken");
+            navigate("/login");
+          });
+
+        return;
+      }
+      
+
+
+      // console.log("✅ 이미 로그인된 사용자입니다.");
+      // navigate("/");
+      // return;
     }
 
     // ✅ 중복 요청 방지를 위한 상태 변수 추가
@@ -50,10 +101,19 @@ const KakaoCallback = () => {
             const email = response.data.result.email;
             const jwtToken = response.data.result.jwtToken;
 
+
+            //localStorage.setItem("kakao_access_token", response.data.result.access_token);
+
+            // 세션 아이디 (채팅)
+            const sessionId = response.data.result.sessionId;
+
             localStorage.setItem("kakao_access_token", response.data.result.access_token);
             localStorage.setItem("used_kakao_code", authCode);
             localStorage.setItem("kakao_email", email); // 이메일 저장
             localStorage.setItem("jwtToken", jwtToken); // JWT 토큰 저장
+            localStorage.setItem("sessionId", sessionId);
+
+            console.log("Session ID from localStorage:", sessionId);
 
             //zustand로 로그인 상태 업데이트(추가한 부분)
             setUser(email, jwtToken); // 로그인 상태 업데이트

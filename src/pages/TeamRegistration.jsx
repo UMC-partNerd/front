@@ -1,13 +1,16 @@
-import React, { useRef, useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Banner from '../components/common/banner/Banner';
-import ProjectImageUploadForm from '../components/teamregister/ProjectImageUploadForm';
-import ClubInfoForm from '../components/teamregister/ClubInfoForm';
+import ClubInfoForm from '../components/teamregister/ClubInfoForm'; 
+import ProjectImageUploadForm from '../components/teamregister/ProjectImageUploadForm';  
+import styled from 'styled-components';
+import Button, { TYPES } from "../components/common/button";
 import axios from 'axios';
+import { PermissionRegistration } from '../components/contact/permission-registration';
 
 const TeamRegistration = () => {
-  const fileInputRefProfile = useRef(null);
-  const fileInputRefBanner = useRef(null);
+  const [profileImage, setProfileImage] = useState(null);
+  const [bannerImage, setBannerImage] = useState(null);
   const [teamInfo, setTeamInfo] = useState({
     name: '',
     intro: '',
@@ -15,94 +18,128 @@ const TeamRegistration = () => {
     category: '',
     activities: '',
   });
-  const [profileImage, setProfileImage] = useState(null);
-  const [bannerImage, setBannerImage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); 
-  const [errorMessage, setErrorMessage] = useState(''); 
+  const [activityIntro, setActivityIntro] = useState(''); 
+  const [activityImageKeyNames, setActivityImageKeyNames] = useState([]); 
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleProfileClick = () => {
-    fileInputRefProfile.current.click();
+  // 현재 경로 확인
+  const location = useLocation();
+  const isEditMode = location.pathname.includes('manage'); 
+
+  // 팀 정보 업데이트 함수
+  const handleTeamInfoChange = (newTeamInfo) => {
+    setTeamInfo((prevState) => ({
+      ...prevState,
+      ...newTeamInfo,
+    }));
   };
 
-  const handleBannerClick = () => {
-    fileInputRefBanner.current.click();
+  // 이름 변경 처리 함수
+  const handleNameChange = (name) => {
+    handleTeamInfoChange({ name });
   };
 
-  const handleFileChange = (e, type) => {
-    const file = e.target.files[0];
-    if (type === 'profile') {
-      setProfileImage(file);
-    } else if (type === 'banner') {
-      setBannerImage(file);
-    }
+  // 한 줄 소개 변경 처리 함수
+  const handleIntroChange = (intro) => {
+    handleTeamInfoChange({ intro });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // 로딩 상태 시작
+  // 카테고리 변경 처리 함수
+  const handleCategoryChange = (category) => {
+    handleTeamInfoChange({ category });
+  };
+
+  // 연락 방법 변경 처리 함수
+  const handleContactMethodsChange = (methods) => {
+    handleTeamInfoChange({ contact: methods });
+  };
+
+  // 활동 소개 변경 처리 함수
+  const handleActivityIntroChange = (intro) => {
+    setActivityIntro(intro);
+  };
+
+  // 활동 이미지 변경 처리 함수
+  const handleActivityImageChange = (imageKeyNames) => {
+    setActivityImageKeyNames(imageKeyNames);
+  };
+
+  const onClickHandler = async () => {
     setIsLoading(true);
     setErrorMessage('');
-    
-    // FormData 준비
-    const formData = new FormData();
-    formData.append('name', teamInfo.name);
-    formData.append('intro', teamInfo.intro);
-    formData.append('contact', teamInfo.contact);
-    formData.append('category', teamInfo.category);
-    formData.append('activities', teamInfo.activities);
-    if (profileImage) formData.append('profileImage', profileImage);
-    if (bannerImage) formData.append('bannerImage', bannerImage);
 
-    // 로컬 스토리지에서 JWT 토큰 가져오기
-    const token = localStorage.getItem('authToken');
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  
-    console.log("Request URL:", `${API_BASE_URL}/api/partnerd/register`);  
-  
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/partnerd/register`, formData, {
+      const payload = {
+        name: teamInfo.name,
+        intro: teamInfo.intro,
+        contact: teamInfo.contact,
+        categoryId: teamInfo.category,
+        activities: {
+          intro: activityIntro,
+          activityImageKeyNames: activityImageKeyNames,
+        },
+        bannerKeyName: bannerImage ? bannerImage : null,
+        mainKeyName: profileImage ? profileImage : null,
+      };
+
+      const token = localStorage.getItem('jwtToken');
+      
+      const response = await axios.post('https://api.partnerd.site/api/partnerd/register', payload, {
         headers: {
           'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
       });
-      console.log('팀 등록 성공:', response.data);
-      // 성공 처리 후, 사용자에게 알림 등 추가 기능
+      console.log('등록 성공', response.data);
     } catch (error) {
-      console.error('팀 등록 실패:', error);
-      setErrorMessage('팀 등록에 실패했습니다. 다시 시도해 주세요.');
+      console.error('등록 실패', error);
+      setErrorMessage('팀 등록에 실패했습니다.');
     } finally {
-      setIsLoading(false); // 로딩 상태 종료
+      setIsLoading(false);
     }
   };
-  
+
   return (
     <>
       <Banner 
-        largeText="프로젝트 등록하기" 
-        smallText="팀원을 모집하고 싶다면 나의 프로젝트를 등록해보세요!" 
+        largeText={isEditMode ? '팀 수정하기' : '팀 등록하기'}  
+        smallText={isEditMode ? '팀 정보를 수정하세요!' : '팀을 모집하고 싶다면 나의 팀을 등록해보세요!'} 
       />
       <Container>
         <ProjectImageUploadForm 
-          handleProfileClick={handleProfileClick} 
-          handleBannerClick={handleBannerClick}
-          handleFileChange={handleFileChange}
+          setProfileImage={setProfileImage}
+          setBannerImage={setBannerImage}
         />
         <ClubInfoForm 
           teamInfo={teamInfo}
-          setTeamInfo={setTeamInfo}
+          handleNameChange={handleNameChange}
+          handleIntroChange={handleIntroChange}
+          handleCategoryChange={handleCategoryChange}
+          handleContactMethodsChange={handleContactMethodsChange}
+          handleActivityIntroChange={handleActivityIntroChange}
+          handleActivityImageChange={handleActivityImageChange}
+          activityIntro={activityIntro}
+          activityImageKeyNames={activityImageKeyNames}
+          isEditMode={isEditMode}
         />
-        <SubmitButton onClick={handleSubmit} disabled={isLoading}>
-          {isLoading ? '등록 중...' : '팀 등록'}
-        </SubmitButton>
-        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>} 
+        
+        <PermissionRegistration />
+        
+        <Button
+          type={TYPES.NEXT}
+          text={isLoading ? '등록 중...' : isEditMode ? '수정 완료' : '최종 등록하기'}
+          onClick={onClickHandler}
+        />
+
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </Container>
     </>
   );
 };
 
-
 export default TeamRegistration;
+
 
 
 const Container = styled.div`
@@ -117,16 +154,10 @@ const Container = styled.div`
   }
 `;
 
-const SubmitButton = styled.button`
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  margin-top: 20px;
-`;
 
 const ErrorMessage = styled.p`
   color: red;
   font-size: 14px;
 `;
+
+

@@ -1,44 +1,19 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 
-const InquiryForm = ({ collabPostId, onAddComment }) => {
+const InquiryForm = ({ onSubmit }) => {
   const [text, setText] = useState('');
   const [error, setError] = useState(null);
 
-  const handleKeyDown = async (e) => {
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       if (text.trim()) {
-        try {
-          const token = localStorage.getItem('jwtToken');
-          if (!token) {
-            setError('로그인이 필요합니다.');
-            return;
-          }
-
-          const response = await axios.post(
-            'https://api.partnerd.site/api/collabInquiry/register',
-            {
-              collabPostId: parseInt(collabPostId, 10), 
-              contents: text,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
-            }
-          );
-
-          if (response.data.isSuccess) {
-            onAddComment(response.data.result);
-            setText('');
-            setError(null);
-          }
-        } catch (error) {
-          setError('문의글을 등록하는 중 오류가 발생했습니다.');
-        }
+        onSubmit(text); // 상위 컴포넌트에서 처리하도록 변경
+        setText('');
+        setError(null);
+      } else {
+        setError('내용을 입력해주세요.');
       }
     }
   };
@@ -58,6 +33,7 @@ const InquiryForm = ({ collabPostId, onAddComment }) => {
 };
 
 export default InquiryForm;
+
 
 
 
