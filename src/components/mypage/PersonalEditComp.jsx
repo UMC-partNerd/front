@@ -234,11 +234,13 @@ const PersonalEditComp = () => {
                         type="text"
                         value={inputValue}
                         onChange={handleInputChange}
+                        
                     />
 
                     <Button
-                        style={{ width: '100%' }}
-                        type={TYPES.NO}
+                        style={{ width: '100%'}}
+                        type={TYPES.PLUS}
+                        width={'55px'}
                         text={"등록하기"}
                         onClick={handleAddSkill}
                     />
@@ -265,7 +267,8 @@ const PersonalEditComp = () => {
                     />
                     <Button
                         style={{ width: '100%' }}
-                        type={TYPES.NO}
+                        type={TYPES.PLUS}
+                        width={'55px'}
                         text={"등록하기"}
                         onClick={handleAddLink}
                     />
@@ -326,7 +329,7 @@ const SubmitField = styled.div`
 display:flex;
 flex-direction:row;
 justify-content:start;
-
+gap:15px;
 height:auto;
 `
 

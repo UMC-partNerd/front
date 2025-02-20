@@ -25,7 +25,9 @@ const NicknameField = ({ value, onChange, onNicknameCheck , currentNickname}) =>
     //닉네임 중복 확인 
     const handleNicknameSubmit = async () =>{
         if (value.length < 2) {
+            alert("닉네임은 2글자 이상이어야 합니다. ");
             setNicknameError("닉네임은 2자 이상 입력해야 합니다.");
+            return;
         }
         //닉네임이 현재 사용중인 경우 API 요청을 생략함 
         if(value === currentNickname) {
@@ -90,10 +92,7 @@ const NicknameField = ({ value, onChange, onNicknameCheck , currentNickname}) =>
                     </NicknameCheck>
                     </NicknameWrapper>
                     
-                    {nicknameError ? (
-                    <Subdown >
-                        닉네임은 2글자 이상이어야 합니다.</Subdown>
-                    ) : isNicknameAvailable === null ? (
+                    {isNicknameAvailable === null ? (
                         <Subdown>닉네임은 중복일 수 없습니다.</Subdown>
                     ): isNicknameAvailable ? (
                         <Subdown style={{ color: "#08D485" }}>사용 가능한 닉네임입니다.</Subdown>
@@ -101,7 +100,8 @@ const NicknameField = ({ value, onChange, onNicknameCheck , currentNickname}) =>
                         <Subdown style={{ color: "#08D485" }}>현재 사용 중인 닉네임입니다.</Subdown>
                     ) : (
                         <Subdown>중복된 닉네임 입니다.</Subdown>
-                    )}
+                    ) 
+                    }
                 </FieldGroup>
     )
     
