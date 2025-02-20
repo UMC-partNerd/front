@@ -5,7 +5,7 @@ import { ClubContainer, CardGrid, ClubCard, ImagePlaceholder, CardContent,
 import { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import { SubupSec } from "../../styles/mypagestyles";
+import { SubupSec, StyledHr } from "../../styles/mypagestyles";
 import { SlArrowLeft } from "react-icons/sl";
 import { SlArrowRight } from "react-icons/sl";
 import { useLocation } from "react-router-dom";
@@ -39,18 +39,12 @@ const PersonalProject = () => {
     // const {thumnailImageUrl, isLoading, error} = useMypageImg(project?.thumbnailKeyName)
 return(
     <CardWrapp>
+        <StyledHr />
         {/* 로딩 상태 표시 */}
         {isLoading && <p>팀 데이터를 불러오는 중입니다...</p>}
 
         {/* 에러 메시지 표시 */}
         {error && <p style={{ color: "red" }}>{error.message || "알 수 없는 오류가 발생했습니다."}</p>}
-
-        {/* 프로젝트가 없을 때 메시지를 CardGrid 바깥으로 이동 */}
-        {!isLoading && !error && projects.length === 0 && (
-            <SubupSec style={{ marginTop: "50px", justifyContent: "center", display: "flex" }}>
-                {"등록한 경력이 없습니다"}
-            </SubupSec>
-        )}
 
         <SelectButtonWrapp>
             <SelectButton
@@ -60,6 +54,13 @@ return(
                 onClick={handleNextPage} disabled = {page === totalPages}
             >< SlArrowRight size="0.7em"/></SelectButton>
         </SelectButtonWrapp>
+
+        {/* 프로젝트가 없을 때 메시지를 CardGrid 바깥으로 이동 */}
+        { !isEditPage &&!isLoading && !error && projects.length === 0 && (
+            <SubupSec style={{ marginTop: "50px", marginBottom : '20px',justifyContent: "center", display: "flex" }}>
+                {"등록한 프로젝트가 없습니다"}
+            </SubupSec>
+        )}
 
         <CardGridPersonal>
             {!isLoading && !error && projects.length > 0 ? (
@@ -102,7 +103,7 @@ min-height: 180px;
 
 cursor:pointer;
 
-margin-top:30px;
+margin-top:10px;
 background: #FFFFFF;
 box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
 border-radius: 8px;

@@ -71,15 +71,18 @@ const MyPersonalComp = () =>{
         
         <ButtonWrapp>
         <Button
-            type={TYPES.NO}
+            type={TYPES.PLUS}
+            width={'50px'} height={'16px'}
             text={personal?.personalId ? "수정하기" : "작성하기"}
             onClick={() => navigate(`/mypage/personal-page-edit`, { state: { personal } })}
         />
         </ButtonWrapp>
 
-        <PersonalField style={{ marginBottom: "150px" }}>
-            <Subup>등록한 프로젝트</Subup>
-            <StyledHr />
+        
+        
+        <PersonalField style={{ marginBottom: "150px", height:'auto'}}>
+        <Subup>등록한 프로젝트</Subup>
+        <StyledHr />
             <CardWrapp>
                 <PersonalProject />
             </CardWrapp>

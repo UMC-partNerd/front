@@ -47,16 +47,16 @@ const ClubInfoForm = ({
   const handleImageUpload = (imagePreview, imageKey) => {
     // 이미 이미지가 8개 이하일 때만 추가
     const updatedPreviews = [...imagePreviews];
-    const emptyIndex = updatedPreviews.indexOf(null);  // 비어있는 자리를 찾기
+    const emptyIndex = updatedPreviews.indexOf(null);  
 
     if (emptyIndex !== -1) {
-      updatedPreviews[emptyIndex] = imagePreview;  // 비어있는 자리(첫 번째 null)에 이미지를 넣음
+      updatedPreviews[emptyIndex] = imagePreview;  
       setImagePreviews(updatedPreviews);
 
       // activityImageKeyNames 업데이트
       const updatedImageKeys = [...activityImageKeyNames];
-      updatedImageKeys[emptyIndex] = imageKey;  // 해당 인덱스에 imageKey 추가
-      handleActivityImageChange(updatedImageKeys);  // 부모로 값 전달
+      updatedImageKeys[emptyIndex] = imageKey;  
+      handleActivityImageChange(updatedImageKeys);  
     } else {
       alert('이미지는 최대 8개까지 업로드할 수 있습니다.');
     }
@@ -64,13 +64,13 @@ const ClubInfoForm = ({
 
   const handleImageDelete = (index) => {
     const updatedPreviews = [...imagePreviews];
-    updatedPreviews[index] = null;  // 해당 인덱스의 이미지를 null로 설정하여 비움
+    updatedPreviews[index] = null; 
     setImagePreviews(updatedPreviews);
 
-    // activityImageKeyNames에서 해당 인덱스를 삭제
+
     const updatedImageKeys = [...activityImageKeyNames];
-    updatedImageKeys[index] = null;  // 삭제할 이미지의 키 값을 null로 설정
-    handleActivityImageChange(updatedImageKeys);  // 부모로 값 전달
+    updatedImageKeys[index] = null;  
+    handleActivityImageChange(updatedImageKeys);  
   };
 
   const handleIntroChangeLocal = (value) => {
@@ -164,8 +164,8 @@ const ClubInfoForm = ({
           {imagePreviews.map((imagePreview, index) => (
             <ImageRectangle
               key={index}
-              imagePreview={imagePreview}  // 해당 인덱스에 이미지가 없으면 null(빈 이미지)
-              onClose={() => handleImageDelete(index)}  // 삭제 버튼 클릭 시 해당 이미지 삭제
+              imagePreview={imagePreview}  
+              onClose={() => handleImageDelete(index)}  
             />
           ))}
         </S.ImageRectanglesContainer>

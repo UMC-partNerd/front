@@ -60,4 +60,16 @@ export const CardGrid = styled.div`
   @media (max-width: 768px) {
     grid-template-columns: repeat(1, 1fr);
   }
+`;
+
+export const ProjectCard = styled.div`
+  border: 1px solid #EAEAEA;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
 `; 

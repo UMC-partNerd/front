@@ -96,6 +96,6 @@ export const StyledHr = styled.hr`
 export const PersonalField = styled.div`
 display:flex;
 flex-direction:column;
-height:160px;
+min-height:160px;
 // background:pink;
 `
