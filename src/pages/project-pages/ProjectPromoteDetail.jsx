@@ -9,6 +9,7 @@ import CommentForm from '../../components/projectdetail/CommentForm';
 import useBannerPhoto from '../../hooks/useBannerPhoto';
 import MemberForm from '../../components/projectdetail/MemberForm';
 import CustomModal, { VERSIONS } from "../../components/common/button/CustomModal";
+import PersonalContact from '../../components/common/contact';
 import Button, { TYPES } from "../../components/common/button/button";
 import OptionMenu from '../../components/common/button/optionMenu';
 import { UserName } from '../../styled-components/community-styles/styled-PostItem';
@@ -33,15 +34,16 @@ const ProjectPromoteDetail = () => {
     axios.get(`https://api.partnerd.site/api/project/promotion/${promotionProjectId}`)
       .then((response) => {
         if (response.data.isSuccess) {
-          setProjectData((prev) => (JSON.stringify(prev) === JSON.stringify(response.data.result) ? prev : response.data.result));
+          setProjectData(response.data.result);
           
           // 응원하기 투표 개수
           setCheers(response.data.result.vote);
 
           // 본인 투표 여부 응답 데이터에서 확인 필요
-          // setCheered(response.data.result.isVotedByMe || false);
+          setCheered(response.data.result.isVoted || false);
 
 
+          console.log("프로젝트 promote 데이터 조회",response.data.result);
         } else {
           console.error('프로젝트 데이터 조회 실패');
         }
@@ -408,6 +410,15 @@ const ProjectPromoteDetail = () => {
          isPromote={true} 
         />
        </S.SMemberFormWrapper>
+
+       <S.SPersonalContactWrapper>
+        <S.SContactTitle>컨택하러 가기</S.SContactTitle>
+        <PersonalContact 
+        profileImageUrl = {projectData?.leaderInfo?.profileKeyName || "/Profile_none.png"}
+        nickname={projectData?.leaderInfo.nickname}
+        explan={`${projectData?.leaderInfo.occupation_of_interest}/${projectData?.leaderInfo.belong_to_club}`}
+        />
+      </S.SPersonalContactWrapper>
 
       {/* 댓글 폼 */}
       <S.SCommentFormWrapper>
