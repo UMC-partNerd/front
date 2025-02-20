@@ -33,7 +33,7 @@ const Collaboration = () => {
     <CollaborationContainer>
       <Header>
         <Title>최근 등록된 콜라보레이션</Title>
-        <MoreButton href="/collaborations">더보기 ›</MoreButton>
+        <MoreButton href="/collaboration">더보기 ›</MoreButton>
       </Header>
       <CardGrid>
         {collaborations.map((collab) => (
