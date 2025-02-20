@@ -67,6 +67,43 @@ const ProjectCollaboration = () => {
     navigate(`/collaboration/${id}`);
   };
 
+  const getPageNumbers = (current, total) => {
+    if (total <= 5) {
+      return Array.from({ length: total }, (_, i) => i + 1);
+    }
+
+    let pages = [];
+    let start = current - 2;
+    
+    // 시작 페이지가 1보다 작을 경우 (예: current가 1 또는 2일 때)
+    if (start < 1) {
+      start = total + start; // 끝에서부터 시작
+      pages = Array.from({ length: 5 }, (_, i) => {
+        let page = start + i;
+        if (page > total) {
+          page = page - total;
+        }
+        return page;
+      });
+    }
+    // 끝 페이지가 total보다 클 경우 (예: current가 total 또는 total-1일 때)
+    else if (current + 2 > total) {
+      pages = Array.from({ length: 5 }, (_, i) => {
+        let page = start + i;
+        if (page > total) {
+          page = page - total;
+        }
+        return page;
+      });
+    }
+    // 일반적인 경우
+    else {
+      pages = Array.from({ length: 5 }, (_, i) => start + i);
+    }
+
+    return pages;
+  };
+
   if (loading) {
     return <div>로딩 중...</div>;
   }
@@ -156,13 +193,12 @@ const ProjectCollaboration = () => {
 
         <PaginationContainer>
           <ArrowButton
-            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(prev => prev === 1 ? totalPages : prev - 1)}
           >
             <ArrowIcon className="left" />
           </ArrowButton>
           
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+          {getPageNumbers(currentPage, totalPages).map(page => (
             <PageButton
               key={page}
               $isActive={currentPage === page}
@@ -173,8 +209,7 @@ const ProjectCollaboration = () => {
           ))}
 
           <ArrowButton
-            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(prev => prev === totalPages ? 1 : prev + 1)}
           >
             <ArrowIcon className="right" />
           </ArrowButton>
