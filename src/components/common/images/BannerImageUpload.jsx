@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import * as S from '../../../styled-components/common-styles/styled-BannerImageUpload';
+import * as S from '../../../styled-components/common-styles/styled-BannerImageUpload'; // BannerImageUpload 스타일 컴포넌트
 
 const BannerImageUpload = ({ folderName, type, setImageKey, setImagePreview }) => {
   const fileInputRef = useRef(null);
@@ -37,8 +37,8 @@ const BannerImageUpload = ({ folderName, type, setImageKey, setImagePreview }) =
       await fetch(preSignedUrl, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
-          'x-amz-meta-cache-control': 'max-age=864000'
+          'Content-Type': file.type,  
+          'x-amz-meta-cache-control': 'max-age=864000'  // 캐시 제어 헤더 추가
         },
         body: file,
       });
@@ -60,7 +60,7 @@ const BannerImageUpload = ({ folderName, type, setImageKey, setImagePreview }) =
     <S.UploadGroup>
       <S.UploadRectangle onClick={handleClick}>
         <S.CenterContainer>
-          <S.ImagePreview src='/image.png' alt='Icon' /> 
+          <S.ImagePreview src='/image.png' alt='Icon' /> {/* 여기에 업로드된 이미지 미리보기 */}
           <S.UploadText>이미지 업로드하기</S.UploadText>
         </S.CenterContainer>
       </S.UploadRectangle>

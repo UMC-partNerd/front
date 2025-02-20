@@ -24,7 +24,7 @@ const PersonalContact = ({profileImageUrl, nickname, explan, intro}) =>{
             <TopContainer>
                 {/* 이미지 */}
                 <ImageComp 
-                        src={profileImageUrl}
+                        src={profileImageUrl || "/Profile_none.png"}
                             alt = "프로필 이미지"
                         />
                 <CenterContainer>
@@ -124,14 +124,14 @@ margin-left:15px;
 const Container = styled.main`
 width: 100%;
 max-width:405px;
-min-height: 110px;
+height:auto;
 background: #FFFFFF;
 box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
 border-radius: 8px;
 display:flex;
 flex-direction:column;
 align-items:center;
-padding:10px 20px 10px 20px;
+padding:20px 20px 20px 20px;
 box-sizing: border-box;
 justify-content: space-between;
 margin-bottom:50px;

@@ -23,9 +23,9 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
     userInfo?.nickname, 
     null, null, null, null
   );
-
-  const displayName = userInfo?.nickname || "임시 닉네임";  
-
+ 
+  const displayName = userInfo?.nickname || "임시 닉네임"; 
+  
   const handleReplyClick = () => setShowReply(prev => !prev);
   const handleOptionsClick = () => setShowOptions(prev => !prev);
 

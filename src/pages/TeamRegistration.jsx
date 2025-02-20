@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';  // useNavigate 추가
 import Banner from '../components/common/banner/Banner';
 import ClubInfoForm from '../components/teamregister/ClubInfoForm'; 
 import ProjectImageUploadForm from '../components/teamregister/ProjectImageUploadForm';  
@@ -15,20 +15,21 @@ const TeamRegistration = () => {
   const [teamInfo, setTeamInfo] = useState({
     name: '',
     intro: '',
-    contact: '',
+    contact: [],
     category: '',
     activities: '',
   });
-  const [activityIntro, setActivityIntro] = useState(''); 
-  const [activityImageKeyNames, setActivityImageKeyNames] = useState([]); 
+  const [activityIntro, setActivityIntro] = useState('');
+  const [activityImageKeyNames, setActivityImageKeyNames] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [openModal, setOpenModal] = useState(false);
 
-  // 현재 경로 확인
   const location = useLocation();
-  const isEditMode = location.pathname.includes('manage'); 
+  const isEditMode = location.pathname.includes('manage');
 
-  // 팀 정보 업데이트 함수
+  const navigate = useNavigate();  // useNavigate 훅 추가
+
   const handleTeamInfoChange = (newTeamInfo) => {
     setTeamInfo((prevState) => ({
       ...prevState,
@@ -66,10 +67,6 @@ const TeamRegistration = () => {
     setActivityImageKeyNames(imageKeyNames);
   };
 
-  // 모달: 최종 등록하기
-  const [openModal, setOpenModal] = useState(false);
-  const navigate = useNavigate();
-
   const buttonHandler = async () => {
     setIsLoading(true);
     setErrorMessage('');
@@ -78,9 +75,9 @@ const TeamRegistration = () => {
       const payload = {
         name: teamInfo.name,
         intro: teamInfo.intro,
-        contact: teamInfo.contact,
+        contactMethod: teamInfo.contact,
         categoryId: teamInfo.category,
-        activities: {
+        activity: {
           intro: activityIntro,
           activityImageKeyNames: activityImageKeyNames,
         },
@@ -89,7 +86,6 @@ const TeamRegistration = () => {
       };
 
       const token = localStorage.getItem('jwtToken');
-      
       const response = await axios.post('https://api.partnerd.site/api/partnerd/register', payload, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -97,8 +93,7 @@ const TeamRegistration = () => {
         },
       });
       console.log('등록 성공', response.data);
-
-      setOpenModal(true);
+      setOpenModal(true);  // 등록 후 모달 열기
     } catch (error) {
       console.error('등록 실패', error);
       setErrorMessage('팀 등록에 실패했습니다.');
@@ -107,9 +102,9 @@ const TeamRegistration = () => {
     }
   };
 
-  const moveTOFind = () => {
+  const handleModalClose = () => {
     setOpenModal(false);
-    navigate('/find');
+    navigate('/find');  // 모달 닫고 /find 페이지로 이동
   };
 
   return (
@@ -123,6 +118,7 @@ const TeamRegistration = () => {
           setProfileImage={setProfileImage}
           setBannerImage={setBannerImage}
         />
+        
         <ClubInfoForm 
           teamInfo={teamInfo}
           handleNameChange={handleNameChange}
@@ -145,14 +141,13 @@ const TeamRegistration = () => {
         />
 
         <CustomModal
-            openModal={openModal} 
-            closeModal={moveTOFind}
-
-            boldface='동아리 등록 완료!'
-            regular='팀 페이지 관리는 마이페이지 > 팀페이지에서 가능합니다.'
-            variant={VERSIONS.VER2}
+          openModal={openModal} 
+          closeModal={handleModalClose}  // 모달 닫기 처리
+          boldface='동아리 등록 완료!'
+          regular='팀페이지 관리는 마이페이지 > 팀페이지에서 가능합니다.'
+          variant={VERSIONS.VER2}
         />
-
+  
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </Container>
     </>
@@ -160,8 +155,6 @@ const TeamRegistration = () => {
 };
 
 export default TeamRegistration;
-
-
 
 const Container = styled.div`
   background-color: #F3F4F7;

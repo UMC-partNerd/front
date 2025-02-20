@@ -9,6 +9,7 @@ const useProjectCollaboration = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [imageLoading, setImageLoading] = useState({});
 
   const categories = [
     { id: null, name: '전체' },
@@ -21,10 +22,53 @@ const useProjectCollaboration = () => {
     { id: 7, name: '기타' }
   ];
 
+  const getImageUrl = async (keyName) => {
+    if (!keyName) {
+      console.log('🚫 이미지 키 없음:', keyName);
+      return null;
+    }
+
+    const jwtToken = localStorage.getItem('jwtToken');
+    if (!jwtToken) {
+      console.log('🚫 JWT 토큰이 없습니다');
+      return null;
+    }
+
+    try {
+      console.log('📡 이미지 URL 요청 keyName:', keyName);
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/api/s3/preSignedUrl?keyName=${keyName}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwtToken}`
+          }
+        }
+      );
+
+      console.log('✅ 이미지 URL 응답:', {
+        keyName,
+        isSuccess: response.data.isSuccess,
+        cloudFrontUrl: response.data.result?.cloudFrontUrl
+      });
+      
+      if (response.data.isSuccess) {
+        return response.data.result.cloudFrontUrl;
+      }
+      return null;
+    } catch (err) {
+      console.error('❌ 이미지 URL 조회 실패:', {
+        keyName,
+        error: err.message
+      });
+      return null;
+    }
+  };
+
   const fetchProjects = async () => {
     const jwtToken = localStorage.getItem('jwtToken');
     if (!jwtToken) {
-      alert('로그인이 필요합니다.');
+      console.log('🚫 JWT 토큰이 없습니다');
       return;
     }
 
@@ -36,6 +80,7 @@ const useProjectCollaboration = () => {
         url += `&categories=${selectedCategory}`;
       }
 
+      console.log('📡 프로젝트 데이터 요청:', url);
       const response = await axios.get(url, {
         headers: {
           'Content-Type': 'application/json',
@@ -43,50 +88,50 @@ const useProjectCollaboration = () => {
         }
       });
 
+      console.log('✅ 프로젝트 데이터 응답:', response.data);
+
       if (response.data.isSuccess) {
         const result = response.data.result;
         const projectsArray = Array.isArray(result.collabPostPreviewDTOLList)
           ? result.collabPostPreviewDTOLList
           : [];
-        setProjects(projectsArray);
+        
+        console.log('📦 전체 프로젝트 목록:', projectsArray.map(p => ({
+          title: p.title,
+          mainImgKeyname: p.mainImgKeyname
+        })));
+
+        const projectsWithImages = await Promise.all(
+          projectsArray.map(async (project) => {
+            console.log('🔄 프로젝트 이미지 처리 시작:', {
+              title: project.title,
+              mainImgKeyname: project.mainImgKeyname
+            });
+            
+            const imageUrl = await getImageUrl(project.mainImgKeyname);
+            
+            console.log('✅ 프로젝트 이미지 처리 완료:', {
+              title: project.title,
+              mainImgKeyname: project.mainImgKeyname,
+              imageUrl: imageUrl
+            });
+            
+            return {
+              ...project,
+              imageUrl: imageUrl || '/default-image.png'
+            };
+          })
+        );
+        
+        console.log('✅ 최종 프로젝트 데이터:', projectsWithImages);
+        setProjects(projectsWithImages);
         setTotalPages(result.totalPage || 1);
       }
-      
-      
     } catch (err) {
+      console.error('❌ 프로젝트 데이터 조회 실패:', err);
       setError(err.message);
-      console.error('프로젝트 데이터 조회 실패:', err);
     } finally {
       setLoading(false);
-    }
-  };
-  
-
-  const getImageUrl = async (keyName) => {
-    const jwtToken = localStorage.getItem('jwtToken');
-    if (!jwtToken) {
-      alert('로그인이 필요합니다.');
-    return null;
-    }
-
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/api/s3/preSignedUrl?keyName=${keyName}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${jwtToken}`
-          }
-        }
-      );
-
-      if (response.data.isSuccess) {
-        return response.data.result.cloudFrontUrl;
-      }
-      return null;
-    } catch (err) {
-      console.error('이미지 URL 조회 실패:', err);
-      return null;
     }
   };
 
@@ -106,7 +151,7 @@ const useProjectCollaboration = () => {
     categories,
     loading,
     error,
-    getImageUrl
+    imageLoading
   };
 };
 

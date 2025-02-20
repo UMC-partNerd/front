@@ -319,16 +319,6 @@ const ContentContainer = styled.div`
     margin: 0 auto;
 `;
 
-const MenuWrapp = styled.div`
-    align-items: center;
-    margin-top: 40px;
-    gap: 160px;
-    padding: 8px 120px;
-
-    width: 1000px,
-    height: 500px,
-`;
-
 const TabMenu = styled.div`
     display: flex;
     justify-content: space-between;

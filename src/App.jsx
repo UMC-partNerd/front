@@ -208,7 +208,7 @@ const router = createBrowserRouter([
       {
         path: 'test',
         // element: <ManageWindow />,
-        element: <Member />,
+        // element: <Member />,
         // element: <MemberList />,
       }
     ]
