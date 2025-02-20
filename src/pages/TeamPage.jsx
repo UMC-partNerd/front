@@ -11,7 +11,7 @@ import Chatlist from '../components/common/Chatlist_owner';
 import ChatListALL from '../components/common/Chatlist_members';
 import useBannerPhoto from '../hooks/useBannerPhoto';
 import Button, { TYPES } from "../components/common/button";
-import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
+import CustomModal, { VERSIONS } from "../components/common/button/CustomModal";
 
 const DefaultImage = '/default-image.png'; // 기본 이미지
 
