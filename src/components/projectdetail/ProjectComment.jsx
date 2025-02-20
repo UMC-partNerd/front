@@ -16,7 +16,7 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
   const [replyList, setReplyList] = useState(replies); // 대댓글 상태
   const [likes, setLikes] = useState(0); 
   const [liked, setLiked] = useState(false); 
-  const [openModal, setOpenModal] = useState(false); // State to manage modal visibility
+  const [openModal, setOpenModal] = useState(false); 
 
   const { userInfo } = useUserInfo(jwtToken);  // 사용자 정보 가져오기
 
