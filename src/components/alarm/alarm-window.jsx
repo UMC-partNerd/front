@@ -8,7 +8,7 @@ import {
     AlarmWrap1,
     Title,
     AlarmWrap2
-} from '../../../styled-components/alarm/styled-Alarm';
+} from '../../styled-components/alarm/styled-Alarm';
 
 const TEMP_ALARMS = [
     { club: "UMC", timer: "방금전", isRead: true },

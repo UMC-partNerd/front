@@ -5,7 +5,7 @@ import {
     StyledCircle,
     Circle,
     CountBadge,
-} from '../../../styled-components/alarm/styled-Badge';
+} from '../../styled-components/alarm/styled-Badge';
 
 function Badge({ isStatus, badgeCount }) {
     return (

@@ -14,7 +14,7 @@ import {
   ChatContainer,
   LastChat,
   Time
-} from '../../styled-components/styled-Request';
+} from '../../styled-components/alarm/styled-Request';
 
 export const TYPES = {
   SENDTO: 'sendto',

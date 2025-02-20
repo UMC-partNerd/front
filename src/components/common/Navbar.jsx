@@ -8,13 +8,15 @@ import { useState } from 'react';
 import ProfileMenu from '../home/ProfileMenu';
 
 // 배지
-import Badge from "./alarm/badge";
-import AlarmWindow from './alarm/alarm-window';
+import Badge from "../alarm/badge";
+import AlarmWindow from '../alarm/alarm-window';
 
 function Navbar({ isLoggedIn, isStatus, badgeCount, onLogout }) {
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [isAlarmOpen, setIsAlarmOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const toggleChat = () => setIsChatOpen(prevState => !prevState);
   const toggleAlarm = () => setIsAlarmOpen(prevState => !prevState);
   const toggleMenu = () => setIsMenuOpen(prevState => !prevState);
 
@@ -43,11 +45,11 @@ function Navbar({ isLoggedIn, isStatus, badgeCount, onLogout }) {
         <IconContainer>
           {isLoggedIn ? (
             <>
-              <IconWrapper>
+              <IconWrapper onClick={toggleChat}>
                 <BsChatRightDots />
               </IconWrapper>
-              <IconWrapper>
-                <GoBell  onClick={toggleAlarm}/>
+              <IconWrapper onClick={toggleAlarm}>
+                <GoBell/>
                 {isAlarmOpen && <AlarmWindow />}
                 {badgeCount > 0 && <Badge isStatus={isStatus} badgeCount={badgeCount} />}
               </IconWrapper>

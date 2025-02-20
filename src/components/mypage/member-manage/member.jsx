@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Member, { STATUS } from './member';
 import styled from 'styled-components';
 
 // import {

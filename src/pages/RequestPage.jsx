@@ -1,35 +1,180 @@
-import React, { useState, useEffect } from "react";
-import Request, { TYPES } from "../components/collaboration/Request";
-import {
-  RequestPageContainer,
-  RequestTypeContainer,
-  SelectType,
-  RequestsContainer
-} from "../styled-components/styled-Request";
+import React from 'react';
+import Banner from '../components/common/banner/Banner';
+import Request, { TYPES } from "../components/alarm/Request";
 
+import {
+    PaginationContainer,
+    ArrowButton,
+    ArrowIcon,
+    PageButton
+} from "../styled-components/styled-common";
+  
 const INIT = [];
 
-const TEMP_SENDTO = [
-  {
-    otherUser: "UMC",
-    title: "2025 IT 컨퍼런스 공동 개최",
-  },
-  {
-    otherUser: "더쿠",
-    title: "2D 픽셀 게임 런칭 프로젝트",
-  }
+const TEMP_REQUESTS = [
+    {
+      title: "동아리 이름",
+      description: "동아리 한 줄 소개",
+      imageUrl: "썸네일",
+      category: "웹/앱 개발",
+    },
+    
 ];
 
-const TEMP_RECEIVETO = [
-  {
-    otherUser: "LVflower",
-    title: "2025 IT 컨퍼런스 공동 개최",
-  },
-  {
-    otherUser: "갓페퍼민트",
-    title: "2D 픽셀 게임 런칭 프로젝트",
-  }
-];
+
+const TEMP_SENDTO = [
+    {
+      otherUser: "UMC",
+      title: "2025 IT 컨퍼런스 공동 개최",
+    },
+    {
+      otherUser: "더쿠",
+      title: "2D 픽셀 게임 런칭 프로젝트",
+    }
+  ];
+  
+  const TEMP_RECEIVETO = [
+    {
+      otherUser: "LVflower",
+      title: "2025 IT 컨퍼런스 공동 개최",
+    },
+    {
+      otherUser: "갓페퍼민트",
+      title: "2D 픽셀 게임 런칭 프로젝트",
+    }
+  ];
+  
+  
+const RequestPage = () => {
+    const [requests, setRequests] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [sortBy, setSortBy] = useState('latest');
+    const itemsPerPage = 2;
+
+    // 예시 데이터
+    const partners = Array(50).fill().map((_, index) => ({
+        title: 'UMC',
+        description: 'UMC는 IT연합 동아리입니다.',
+        category: '웹/앱 개발',
+        imageUrl: 'default-image-url.jpg'
+    }));
+    
+    // 현재 페이지의 데이터만 선택
+    const currentPartners = filteredPartners.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    // 전체 페이지 수 계산
+    const totalPages = Math.ceil(filteredPartners.length / itemsPerPage);
+
+    useEffect(() => {
+        async function fetchRequests() {
+          try {
+            // const response = await fetch('/api/clubs/top');
+            // const data = await response.json();
+            // setClubs(data.slice(0, 3));
+          } catch (error) {
+            console.error('Failed to fetch clubs:', error);
+          }
+        }
+    
+        fetchRequests();
+    }, []);
+
+    const renderPageButtons = () => {
+    const buttons = [];
+    
+    // 이전 페이지 버튼
+    buttons.push(
+        <ArrowButton
+        key="prev"
+        onClick={() => setCurrentPage(prev => prev === 1 ? totalPages : prev - 1)}
+        >
+        <ArrowIcon className="left" />
+        </ArrowButton>
+    );
+
+    // 현재 페이지를 중심으로 순환하는 페이지 번호 생성
+    let pageNumbers = [];
+    for (let i = -2; i <= 2; i++) {
+        let pageNum = currentPage + i;
+        
+        // 페이지 번호가 범위를 벗어나면 순환
+        if (pageNum <= 0) pageNum = totalPages + pageNum;
+        if (pageNum > totalPages) pageNum = pageNum - totalPages;
+        
+        pageNumbers.push(pageNum);
+    }
+
+    // 페이지 버튼 생성
+    pageNumbers.forEach(num => {
+        buttons.push(
+        <PageButton
+            key={num}
+            $isActive={currentPage === num}
+            onClick={() => setCurrentPage(num)}
+        >
+            {num}
+        </PageButton>
+        );
+    });
+
+    // 다음 페이지 버튼
+    buttons.push(
+        <ArrowButton
+        key="next"
+        onClick={() => setCurrentPage(prev => prev === totalPages ? 1 : prev + 1)}
+        >
+        <ArrowIcon className="right" />
+        </ArrowButton>
+    );
+
+    return buttons;
+    };
+
+    const displayClubs = clubs.length > 0 ? clubs : TEMP_CARDS;
+
+    return (
+        <>
+            <Banner
+                largeText="협업 요청하기"
+            />
+            <>
+
+                <PartnerGrid>
+                {currentPartners.map((request, index) => (
+
+                // <Request  
+                //     key={index}
+                //     profile={requestprofile}
+                //     otherUser={request.otherUser}
+                //     title={request.title}
+                //     time={request.time}
+                //     message={request.message}
+                //     type={TYPES.SENDTO}
+                // />
+
+                <Request  
+                    key={index}
+                    profile={requestprofile}
+                    otherUser={request.otherUser}
+                    title={request.title}
+                    type={TYPES.RECEIVETO}
+                />
+
+                ))}
+                </PartnerGrid>
+        
+                <PaginationContainer>
+                    {renderPageButtons()}
+                </PaginationContainer>
+            </>
+        </>
+    );
+};
+
+export default RequestPage;
 
 // function RequestPage( type ) {
 //   const [requests, setRequests] = useState(INIT);
@@ -72,35 +217,33 @@ const TEMP_RECEIVETO = [
 // }
 
 // export default RequestPage;
+//////////////////////////////
+// const RequestPage = () =>{
+//   return(
+//       <>
+//           <h1>협업 요청 확인하기</h1>
 
-const RequestPage = () =>{
-  return(
-      <>
-          <h1>협업 요청 확인하기</h1>
 
-
-          <Request
-            key={index}
-            profile={request.profile}
-            clubName={request.clubName}
-            collabName={request.collabName}
-          />
+//           <Request
+//             key={index}
+//             profile={request.profile}
+//             clubName={request.clubName}
+//             collabName={request.collabName}
+//           />
           
-          {/* <RequestTypeContainer>
-            <SelectType type={type}>보낸 요청</SelectType> | <SelectType type={type}>받은 요청</SelectType>
-          </RequestTypeContainer>
-          <RequestGrid>
-            {displayRequests.slice(0, 2).map((request, index) => (
-              <Request
-                key={index}
-                profile={request.profile}
-                clubName={request.clubName}
-                collabName={request.collabName}
-              />
-            ))}
-          </RequestGrid> */}
-      </>
-  )
-}
-
-export default RequestPage;
+//           {/* <RequestTypeContainer>
+//             <SelectType type={type}>보낸 요청</SelectType> | <SelectType type={type}>받은 요청</SelectType>
+//           </RequestTypeContainer>
+//           <RequestGrid>
+//             {displayRequests.slice(0, 2).map((request, index) => (
+//               <Request
+//                 key={index}
+//                 profile={request.profile}
+//                 clubName={request.clubName}
+//                 collabName={request.collabName}
+//               />
+//             ))}
+//           </RequestGrid> */}
+//       </>
+//   )
+// }

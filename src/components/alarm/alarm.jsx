@@ -7,7 +7,7 @@ import {
     Timer,
     From,
     StyledPath,
-} from '../../../styled-components/alarm/styled-Alarm';
+} from '../../styled-components/alarm/styled-Alarm';
 
 function Alarm({ club, timer, isRead, onRead }) {
     const Ellipse427 = "Ellipse 427.png";
