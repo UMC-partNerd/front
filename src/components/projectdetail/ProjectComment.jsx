@@ -4,7 +4,8 @@ import { CiHeart } from "react-icons/ci";
 import ProjectReply from './ProjectReply';
 import ReplyInput from '../collaboration-detail/comments/ReplyInput';
 import useUserInfo from '../../hooks/useUserInfo';
-import useBannerPhoto from '../../hooks/useBannerPhoto';
+import useMypageImg from '../../hooks/useMypagesProfileImg'; 
+import CustomModal, { VERSIONS } from "../common/modal/CustomModal"; 
 import * as S from '../../styled-components/projectdetail-styles/styled-ProjectComment';
 
 const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdate, onReply, type, jwtToken }) => {
@@ -15,17 +16,20 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
   const [replyList, setReplyList] = useState(replies); // 대댓글 상태
   const [likes, setLikes] = useState(0); 
   const [liked, setLiked] = useState(false); 
+  const [openModal, setOpenModal] = useState(false); // State to manage modal visibility
 
   const { userInfo } = useUserInfo(jwtToken);  // 사용자 정보 가져오기
 
-  const { profileImageUrl } = useBannerPhoto(
-    'myProfileImage', 
-    userInfo?.nickname, 
-    null, null, null, null
-  );
- 
+
+  const profileImageKey = userInfo?.profileKeyName
+    ? `myProfileImage/MYPROFILE/${userInfo.profileKeyName.split('/').pop()}`
+    : null;
+
+
+  const { profileImageUrl, isLoading, error, imageType } = useMypageImg(profileImageKey);
+
   const displayName = userInfo?.nickname || "임시 닉네임"; 
-  
+
   const handleReplyClick = () => setShowReply(prev => !prev);
   const handleOptionsClick = () => setShowOptions(prev => !prev);
 
@@ -65,10 +69,7 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
       date: formattedDate,  
     };
   
-  
     onReply(replyText, commentId, type); 
-    
-
     setReplyList([...replyList, newReply]);
     setShowReply(false);  
   };
@@ -78,10 +79,15 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
     setLiked(!liked);
   };
 
-
   const handleDeleteClick = () => {
+    setOpenModal(true); 
+  };
+
+  
+  const handleDeleteConfirm = () => {
     onDelete(commentId, type); 
     setReplyList([]);  
+    setOpenModal(false); 
   };
 
   // 날짜 포맷 함수
@@ -101,7 +107,16 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
 
   return (
     <S.SCommentWrapper>
-      <S.SProfileImage src={profileImageUrl || '/default-profile.png'} alt="Profile" />
+    
+      {isLoading ? (
+        <S.SProfileImage alt="로딩 중" />
+      ) : (
+        <S.SProfileImage 
+          src={profileImageUrl || '/default-profile.png'} 
+          alt="Profile" 
+        />
+      )}
+
       <S.SCommentContent>
         <S.SCommentHeader>{displayName}</S.SCommentHeader>
         <S.SCommentMeta>
@@ -136,12 +151,10 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
               user={reply.nickname}  
               date={reply.date} 
               onDelete={(replyId) => {
-                // 대댓글 삭제 함수 호출
                 setReplyList(replyList.filter((r) => r.projectCommentId !== replyId));
                 onDelete(replyId, 'reply');  // 대댓글 삭제 시 별도로 처리
               }}
               onUpdate={(replyId, newText) => {
-                // 대댓글 수정 함수 호출
                 setReplyList(replyList.map((r) => 
                   r.projectCommentId === replyId ? { ...r, contents: newText } : r
                 ));
@@ -175,6 +188,17 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
         <S.SDivider />
         <S.SMenuItem onClick={handleDeleteClick}>삭제하기</S.SMenuItem>
       </S.SMoreOptionsMenu>
+
+
+      <CustomModal
+        openModal={openModal}
+        closeModal={() => setOpenModal(false)}
+        boldface="댓글을 삭제하시겠습니까?"
+        regular="삭제하기를 누르면 다시 되돌릴 수 없습니다. 정말로 삭제하시겠습니까?"
+        text="삭제하기"
+        onClickHandler={handleDeleteConfirm}
+        variant={VERSIONS.VER3}
+      />
     </S.SCommentWrapper>
   );
 };
