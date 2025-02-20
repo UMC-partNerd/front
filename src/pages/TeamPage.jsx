@@ -35,7 +35,10 @@ const ChatWrapp = styled.div`
   flex-direction: column;
   height: 100%;
   margin: 20px;
+  margin-top: 30px;
+  margin-bottom: 20px;  // 여기서 버튼 밑에 마진을 추가
 `;
+
 
 const TeamPage = () => {
   const { clubId } = useParams();
@@ -170,11 +173,13 @@ const TeamPage = () => {
           <CollaborationFeed feed={collabPosts} />
         </TeamPageContainer>
         <ChatWrapp>
-          <Button
-            type={TYPES.NEXT}
-            text='동아리 참여하기'
-            onClick={clubJoinHandler}
-          /> 
+        <Button
+         type={TYPES.NEXT}
+         text='동아리 참여하기'
+         onClick={clubJoinHandler}
+         style={{ marginBottom: '20px' }}  // 버튼 밑에 20px 마진 추가
+        />
+
           <CustomModal
             openModal={openFirstModal} 
             closeModal={() => setopenFirstModal(false)}
@@ -191,8 +196,8 @@ const TeamPage = () => {
             regular='동아리 가입 신청이 완료되었습니다. 승인 후 자동으로 참여됩니다.'
             variant={VERSIONS.VER2}
           />
-          <Chatlist />
-          <ChatListALL />
+          <Chatlist style={{ marginTop: '100px' }} />
+          <ChatListALL style={{ marginTop: '30px' }} />
         </ChatWrapp>
       </TeamPageWrapper>
     </>
