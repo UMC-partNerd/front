@@ -9,6 +9,8 @@ import CommentForm from '../../components/projectdetail/CommentForm';
 import useBannerPhoto from '../../hooks/useBannerPhoto';
 import MemberForm from '../../components/projectdetail/MemberForm';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
+import PersonalContact from '../../components/common/contact';
+
 import Button, { TYPES } from "../../components/common/button";
 
 const DefaultImage = '/default-image.png';
@@ -27,6 +29,7 @@ const ProjectPromoteDetail = () => {
       .then((response) => {
         if (response.data.isSuccess) {
           setProjectData(response.data.result);
+          console.log("프로젝트 promote 데이터 조회",response.data.result);
         } else {
           console.error('프로젝트 데이터 조회 실패');
         }
@@ -196,7 +199,7 @@ const ProjectPromoteDetail = () => {
       return;
     }
   
-    console.log("업데이트할 댓글 ID:", commentId);  
+    console.log("업데이트할 댓글 ID:", commentId);  // commentId가 제대로 전달되는지 로그로 확인
   
     try {
       const response = await axios.patch(
@@ -296,6 +299,15 @@ const ProjectPromoteDetail = () => {
          isPromote={true} 
         />
        </S.SMemberFormWrapper>
+
+       <S.SPersonalContactWrapper>
+        <S.SContactTitle>컨택하러 가기</S.SContactTitle>
+        <PersonalContact 
+        profileImageUrl = {projectData?.leaderInfo?.profileKeyName || "/Profile_none.png"}
+        nickname={projectData?.leaderInfo.nickname}
+        explan={`${projectData?.leaderInfo.occupation_of_interest}/${projectData?.leaderInfo.belong_to_club}`}
+        />
+      </S.SPersonalContactWrapper>
 
       {/* 댓글 폼 */}
       <S.SCommentFormWrapper>

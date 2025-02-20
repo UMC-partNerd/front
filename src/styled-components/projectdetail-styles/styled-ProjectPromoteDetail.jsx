@@ -159,4 +159,3 @@ export const SCommentInput = styled.input`
   border-radius: 5px;
   background-color: #f9f9f9;
 `;
-

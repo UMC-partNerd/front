@@ -28,6 +28,7 @@ const ProjectRecruitDetail = () => {
       .then((response) => {
         if (response.data.isSuccess) {
           setProjectData(response.data.result);
+          console.log("프로젝트 데이터 조회", response.data.result);
         } else {
           console.error('API 호출 실패');
         }
@@ -270,10 +271,16 @@ const ProjectRecruitDetail = () => {
     />
   </S.SMemberFormWrapper>
 
-  <S.SPersonalContactWrapper>
-    <S.SContactTitle>컨택하러 가기</S.SContactTitle>
-    <PersonalContact />
-  </S.SPersonalContactWrapper>
+
+      <S.SPersonalContactWrapper>
+        <S.SContactTitle>컨택하러 가기</S.SContactTitle>
+        <PersonalContact 
+          profileImageUrl = {projectData?.leaderInfo?.profileKeyName || "/Profile_none.png"}
+          nickname={projectData?.leaderInfo.nickname}
+          explan={`${projectData?.leaderInfo.occupation_of_interest}/${projectData?.leaderInfo.belong_to_club}`}
+        />
+      </S.SPersonalContactWrapper>
+
 
   {/* 댓글 폼 */}
   <S.SCommentFormWrapper>

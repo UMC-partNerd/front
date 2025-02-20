@@ -58,20 +58,31 @@ const ProjectPromotion = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // 인기순이고 첫 페이지일 때만 Top3 프로젝트를 가져옴
     if (sortBy === 'popular' && currentPage === 1) {
       fetchTopProjects();
     }
-  }, [sortBy]);
+  }, [sortBy, currentPage]);
 
   useEffect(() => {
-    if (searchTerm) {
-      searchProjects(currentPage, searchTerm);
-    } else {
-      fetchProjects(currentPage, sortBy);
-    }
+    const loadProjects = async () => {
+      try {
+        if (searchTerm) {
+          await searchProjects(currentPage, searchTerm);
+        } else {
+          console.log('프로젝트 로딩 시작:', { currentPage, sortBy }); // 로딩 시작 로깅
+          await fetchProjects(currentPage, sortBy);
+        }
+      } catch (error) {
+        console.error('프로젝트 로딩 중 에러 발생:', error);
+      }
+    };
+
+    loadProjects();
   }, [currentPage, sortBy, searchTerm]);
 
   const handleSortChange = (newSortBy) => {
+    console.log('정렬 방식 변경:', { current: sortBy, new: newSortBy });
     setSortBy(newSortBy);
     setCurrentPage(1);
   };
@@ -82,36 +93,23 @@ const ProjectPromotion = () => {
 
   const renderPageButtons = () => {
     const buttons = [];
-    
+
+    // 이전 페이지 버튼
     buttons.push(
       <ArrowButton
         key="prev"
-        onClick={() => setCurrentPage(prev => prev === 1 ? totalPages : prev - 1)}
+        onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
       >
         <ArrowIcon className="left" />
       </ArrowButton>
     );
 
-    let pageNumbers = new Set();
-    let startPage = currentPage - 2;
-    
-    for (let i = 0; i < 5; i++) {
-      let pageNum = startPage + i;
-      
-      if (pageNum <= 0) pageNum = totalPages + pageNum;
-      if (pageNum > totalPages) pageNum = pageNum - totalPages;
-      
-      pageNumbers.add(pageNum);
-    }
-
-    let pageArray = Array.from(pageNumbers).sort((a, b) => a - b);
-    
-    while (pageArray[2] !== currentPage) {
-      const first = pageArray.shift();
-      pageArray.push(first);
-    }
-
-    pageArray.forEach(num => {
+    // 페이지 번호 버튼 (현재 페이지 기준으로 5개씩 보여줌)
+    for (
+      let num = Math.max(1, currentPage - 2);
+      num <= Math.min(totalPages, currentPage + 2);
+      num++
+    ) {
       buttons.push(
         <PageButton
           key={num}
@@ -121,12 +119,13 @@ const ProjectPromotion = () => {
           {num}
         </PageButton>
       );
-    });
+    }
 
+    // 다음 페이지 버튼
     buttons.push(
       <ArrowButton
         key="next"
-        onClick={() => setCurrentPage(prev => prev === totalPages ? 1 : prev + 1)}
+        onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
       >
         <ArrowIcon className="right" />
       </ArrowButton>
