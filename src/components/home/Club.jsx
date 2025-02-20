@@ -13,13 +13,19 @@ import {
   Description
 } from "../../styled-components/styled-Club";
 import { useHomeData } from '../../hooks/useHomeData';
+import { useNavigate } from 'react-router-dom';
 
 function Club() {
   const { homeData, isLoading } = useHomeData();
+  const navigate = useNavigate();
 
   if (isLoading) {
     return <div>로딩 중...</div>;
   }
+
+  const handleCardClick = (id) => {
+    navigate(`/find/${id}`);
+  };
 
   return (
     <ClubContainer>
@@ -29,7 +35,10 @@ function Club() {
       </Header>
       <CardGrid>
         {homeData.clubs.map((club, index) => (
-          <ClubCard key={index}>
+          <ClubCard 
+            key={index} 
+            onClick={() => handleCardClick(club.id)}
+          >
             <ImagePlaceholder>
               <img src={club.imageUrl} alt={club.name} />
             </ImagePlaceholder>

@@ -142,7 +142,7 @@ const ProjectPromotion = () => {
   };
   const handleRegisterClick = () => {
     navigate('/project/promote/register');
-    setOpenModal(flase);  
+    setOpenModal(false);  
   };
 
   return (
