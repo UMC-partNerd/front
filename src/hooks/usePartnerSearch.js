@@ -7,7 +7,18 @@ const api = axios.create({
   baseURL: BASE_URL
 });
 
-export const usePartnerSearch = (category = '전체', order = 'recent', page = 1) => {
+// 카테고리 상수 업데이트
+const categories = [
+  { id: null, name: '전체' },
+  { id: 1, name: '웹/앱 개발' },
+  { id: 2, name: '인공지능' },
+  { id: 3, name: '게임' },
+  { id: 4, name: '데이터' },
+  { id: 5, name: '기획/디자인' },
+  { id: 6, name: '기타' }
+];
+
+export const usePartnerSearch = (selectedCategories = [null], order = 'recent', page = 1) => {
   const [partners, setPartners] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -43,7 +54,7 @@ export const usePartnerSearch = (category = '전체', order = 'recent', page = 1
   };
 
   useEffect(() => {
-    let isMounted = true; // 컴포넌트 마운트 상태 추적
+    let isMounted = true;
 
     const fetchPartners = async () => {
       try {
@@ -59,8 +70,8 @@ export const usePartnerSearch = (category = '전체', order = 'recent', page = 1
           sort: order === 'recent' ? 'latest' : 'popular'
         });
 
-        if (category !== '전체') {
-          params.append('categoryID', CATEGORY_MAPPING[category]);
+        if (selectedCategories[0] !== null) {
+          params.append('categoryID', selectedCategories[0]);
         }
 
         const response = await api.get(`/api/partnerd?${params}`, {
@@ -75,7 +86,13 @@ export const usePartnerSearch = (category = '전체', order = 'recent', page = 1
         }
 
         if (isMounted) {
-          const processedData = await processImageUrls(response.data.result);
+          const processedData = await processImageUrls(response.data.result.map(item => {
+            const matchingCategory = categories.find(cat => cat.id === item.categoryId);
+            return {
+              ...item,
+              categoryName: matchingCategory ? matchingCategory.name : '기타'
+            };
+          }));
           setPartners(processedData);
         }
         
@@ -95,38 +112,19 @@ export const usePartnerSearch = (category = '전체', order = 'recent', page = 1
     };
 
     fetchPartners();
+    return () => { isMounted = false; };
+  }, [selectedCategories, order, page]);
 
-    return () => {
-      isMounted = false; // 클린업 함수
-    };
-  }, [category, order, page]);
-
-  return { partners, isLoading, error };
+  return { 
+    partners, 
+    isLoading, 
+    error,
+    categories // categories 배열도 반환
+  };
 };
 
-// 카테고리와 정렬 옵션을 상수로 관리
-export const PARTNER_CATEGORIES = [
-  '전체',
-  '웹/앱개발',
-  '인공지능',
-  '게임',
-  '데이터',
-  '기획/디자인',
-  '기타'
-];
-
+// 불필요한 상수 제거
 export const SORT_OPTIONS = {
   RECENT: 'recent',
   POPULAR: 'popular'
-};
-
-// 카테고리 매핑
-export const CATEGORY_MAPPING = {
-  '전체': '1',
-  '웹/앱개발': '2',
-  '인공지능': '3',
-  '게임': '4',
-  '데이터': '5',
-  '기획/디자인': '6',
-  '기타': '7'
 }; 

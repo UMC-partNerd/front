@@ -6,7 +6,7 @@ const useProjectCollaboration = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [sortBy, setSortBy] = useState('endDate');
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategories, setSelectedCategories] = useState([null]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [imageLoading, setImageLoading] = useState({});
@@ -74,11 +74,14 @@ const useProjectCollaboration = () => {
 
     setLoading(true);
     try {
-      let url = `${import.meta.env.VITE_API_BASE_URL}/api/collabPosts?page=${currentPage}&sortBy=${sortBy}`;
-      
-      if (selectedCategory) {
-        url += `&categories=${selectedCategory}`;
-      }
+      const categoryParam = selectedCategories.includes(null) 
+        ? categories
+            .filter(cat => cat.id !== null)
+            .map(cat => cat.id)
+            .join(',')
+        : selectedCategories.join(',');
+
+      const url = `${import.meta.env.VITE_API_BASE_URL}/api/collabPosts/categories?page=${currentPage}&sortBy=${sortBy}&categories=${categoryParam}`;
 
       console.log('📡 프로젝트 데이터 요청:', url);
       const response = await axios.get(url, {
@@ -137,7 +140,7 @@ const useProjectCollaboration = () => {
 
   useEffect(() => {
     fetchProjects();
-  }, [currentPage, sortBy, selectedCategory]);
+  }, [currentPage, sortBy, selectedCategories]);
 
   return {
     projects,
@@ -146,8 +149,8 @@ const useProjectCollaboration = () => {
     totalPages,
     sortBy,
     setSortBy,
-    selectedCategory,
-    setSelectedCategory,
+    selectedCategories,
+    setSelectedCategories,
     categories,
     loading,
     error,

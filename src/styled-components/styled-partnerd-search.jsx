@@ -178,11 +178,12 @@ export const SearchContainer = styled.div`
 
 export const CategoryBadge = styled.span`
   display: inline-block;
-  padding: 0;
-  background: #FFFFFF;
+  padding: 4px 12px;
+  background: #F0FFF9;
   font-size: 14px;
   color: #08D485;
   margin-bottom: 8px;
   text-align: left;
   font-weight: 500;
+  border-radius: 4px;
 `;

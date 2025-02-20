@@ -51,6 +51,24 @@ export const AuthorInfo = styled.div`
 
 export const Profile = styled.span`
   margin-right: 6px;
+  
+  img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  div {  // 기본 이미지를 위한 스타일
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
 `;
 
 export const Author = styled.span`
