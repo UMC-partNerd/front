@@ -9,43 +9,45 @@ const useTopRank = () => {
   useEffect(() => {
     const fetchTopRank = async () => {
       try {
-        // 인기글 데이터 가져오기
         const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/community/popularity`);
         
-        if (response.data.isSuccess) {
-          // 각 게시물에 대해 프로필 이미지 URL 가져오기
+        if (response.data.isSuccess && Array.isArray(response.data.result)) {
           const dataWithImages = await Promise.all(
             response.data.result.map(async (item) => {
-              // profileKeyName이 있을 때만 이미지 URL 요청
-              if (item.profileKeyName) {
+              if (item.profileKeyName && item.profileKeyName.trim() !== '') {
                 try {
-                  const imageResponse = await axios.get(
-                    `${import.meta.env.VITE_API_BASE_URL}/api/users/profile/${item.profileKeyName}`
+                  const presignedUrlResponse = await axios.get(
+                    `${import.meta.env.VITE_API_BASE_URL}/api/s3/preSignedUrl`, {
+                      params: {
+                        keyName: item.profileKeyName
+                      },
+                      headers: {
+                        'Content-Type': 'application/json'
+                      }
+                    }
                   );
-                  return {
-                    ...item,
-                    profileImageUrl: imageResponse.data.result
-                  };
+                  
+                  if (presignedUrlResponse.data.isSuccess && presignedUrlResponse.data.result) {
+                    return {
+                      ...item,
+                      profileImageUrl: presignedUrlResponse.data.result.cloudFrontUrl
+                    };
+                  }
+                  return { ...item, profileImageUrl: null };
                 } catch (err) {
-                  console.error('프로필 이미지 로딩 실패:', err);
-                  return {
-                    ...item,
-                    profileImageUrl: null
-                  };
+                  console.error('프로필 이미지 URL 생성 실패:', err, 'profileKeyName:', item.profileKeyName);
+                  return { ...item, profileImageUrl: null };
                 }
               }
-              // profileKeyName이 없는 경우
-              return {
-                ...item,
-                profileImageUrl: null
-              };
+              return { ...item, profileImageUrl: null };
             })
           );
           setTopRankData(dataWithImages);
         } else {
-          setError(response.data.message);
+          setError('유효하지 않은 데이터 형식입니다.');
         }
       } catch (err) {
+        console.error('데이터 로딩 실패:', err);
         setError('데이터를 불러오는데 실패했습니다.');
       } finally {
         setIsLoading(false);
