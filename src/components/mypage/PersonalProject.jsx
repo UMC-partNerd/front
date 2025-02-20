@@ -68,7 +68,10 @@ return(
                     <ClubCard 
                     key={project.promotionProjectId} 
                     style={{boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.15)", cursor:'pointer'}}
-                    onClick={() => navigate(`/project/recruit/${project.promotionProjectId}`)}
+                    onClick={() => 
+                        navigate(`/project/recruit/7`)
+                        //navigate(`/project/recruit/${project.promotionProjectId}`)
+                        }
                     >
                         <ImagePlaceholder>
                             {/* 이미지 URL 생성 */}
