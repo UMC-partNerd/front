@@ -206,9 +206,19 @@ const RequestPage = () => {
 
     // (알림창에서 확인하러가기)요청이 삭제된 경우 
     const [openModal, setOpenModal] = useState(false);
-    const moveToreceive = () => {
+    const moveToCollab = () => {
         setOpenModal(false);
-        navigate(`/receiveoration`);
+        navigate(`/collabaration`);
+    };
+    
+    const moveToPost = () => {
+        setOpenModal(false);
+        navigate(`/collaboration/${collabId}`);
+    };
+    
+    const moveToChat = () => {
+        setOpenModal(false);
+        navigate(`/chat`);
     };
 
     return (
@@ -230,7 +240,7 @@ const RequestPage = () => {
                 </Tab>
             </TabMenu>
 
-            <PartnerGrid>
+            <RequestBox>
             {(selectedTab === "receive" ? receiveRequests : sendRequests).map((request) => (
 
                 // <Request  
@@ -245,19 +255,38 @@ const RequestPage = () => {
 
                 <Request  
                     key={request.collabAsksId}
-                    profile={request.profile}
-                    otherUser={request.otherUser}
-                    title={request.title}
-                    type={TYPES.RECEIVETO}
+                    profile={request.profile}                
+                    who={request.who}
+                    club={request.club}
+                    onClickPost={onClickPost}
+                    onClickChat={onClickChat}
+                    to={TO.SEND}
                 />
 
             ))}
-            </PartnerGrid>
+
+                <Request  
+                    profile=""                 
+                    who="리아동"
+                    club="컨퍼런스 IT"
+                    onClickPost={moveToPost}
+                    onClickChat={moveToChat}
+                    to={TO.SEND}
+                />
+                <Request  
+                    profile=""                 
+                    who="동아리"
+                    club="IT 컨퍼런스"
+                    onClickPost={moveToPost}
+                    onClickChat={moveToChat}
+                    to={TO.SEND}
+                />
+            </RequestBox>
             
             {/* 요청 취소된 경우 띄우는 모달 */}
             <CustomModal
                 openModal={openModal} 
-                closeModal={moveToreceive}
+                closeModal={moveToCollab}
 
                 boldface='취소된 콜라보레이션'
                 regular='다른 동아리와 협업해볼까요?'
@@ -283,16 +312,21 @@ const ContentContainer = styled.div`
     align-items: center;
     gap: 32px;
     padding: 20px;
+
+    width: 80%,
+    height: 80%,
+
+    margin: 0 auto;
 `;
 
 const MenuWrapp = styled.div`
     align-items: center;
     margin-top: 40px;
     gap: 160px;
-    padding: 8px 80px;
+    padding: 8px 120px;
 
-    width: "1000px",
-    height: "500px",
+    width: 1000px,
+    height: 500px,
 `;
 
 const TabMenu = styled.div`
@@ -320,8 +354,13 @@ const Tab = styled.div`
     color: ${({ active }) => (active ? "#0D29B7" : "#C2C2C2")};
 `;
 
-const PartnerGrid = styled.div`
-    display: grid;
+const RequestBox = styled.div`
+    weight: 80%;
+    height: 80%;
+
+    display: flex;
+    justify-content: space-between;
+
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 24px;
     margin-top: 24px;

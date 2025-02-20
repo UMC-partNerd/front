@@ -35,6 +35,7 @@ import MyPagePersonalEdit from './pages/mypages/Personal-EditPage';
 
 // 협업 요청 확인하기
 import RequestPage from './pages/RequestPage';
+import Request from "./components/common/button/Request";
 
 // 채팅
 import Chat from './components/chat/chat';
@@ -114,6 +115,7 @@ const router = createBrowserRouter([
             // 협업 요청 확인하기
             path: 'request',
             element: <RequestPage/>
+            // element: <Request/>
           },
         ],
       },
