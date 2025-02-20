@@ -39,7 +39,6 @@ const ChatWrapp = styled.div`
   margin-bottom: 20px;  // 여기서 버튼 밑에 마진을 추가
 `;
 
-
 const TeamPage = () => {
   const { clubId } = useParams();
   const [club, setClub] = useState(null);
@@ -50,6 +49,7 @@ const TeamPage = () => {
 
   const [openFirstModal, setopenFirstModal] = useState(false);
   const [openSecondModal, setOpenSecondModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false); // 삭제 완료 모달 상태 추가
 
   // 동아리 정보 및 콜라보레이션 피드 가져오기
   useEffect(() => {
@@ -62,29 +62,22 @@ const TeamPage = () => {
       }
 
       try {
-        console.log('Fetching club details...');
-        // 동아리 정보 및 콜라보레이션 포스트 가져오기
         const clubResponse = await axios.get(`https://api.partnerd.site/api/partnerd/${clubId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           }
         });
-
-        console.log('Club details response:', clubResponse);  // 응답 확인
         setClub(clubResponse.data.result);
 
-        // 콜라보레이션 포스트 가져오기 (팀 페이지 API 응답에 포함)
-        const collabPosts = clubResponse.data.result.collaborationPosts || []; // 새롭게 추가된 부분
-        setCollabPosts(collabPosts.slice(0, 2));  // 최신 2개 피드만 저장
+        const collabPosts = clubResponse.data.result.collabPosts || [];
+        setCollabPosts(collabPosts);
       } catch (err) {
-        console.error('Error fetching data:', err);  // 오류 메시지 출력
         setError('동아리 정보를 불러오는 중 오류가 발생했습니다.');
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchClubDetails();
   }, [clubId]);
 
@@ -125,8 +118,10 @@ const TeamPage = () => {
           'Content-Type': 'application/json',
         }
       });
-      alert('팀이 삭제되었습니다.');
-      navigate('/find');
+      setOpenDeleteModal(true); // 삭제 완료 후 새로운 모달을 열기
+      setTimeout(() => {
+        navigate('/find');  // 3초 후 동아리 목록 페이지로 이동
+      }, 3000);
     } catch (err) {
       alert('삭제 실패. 다시 시도해 주세요.');
     }
@@ -143,16 +138,7 @@ const TeamPage = () => {
     setopenFirstModal(false);
   };
 
-  // 리더 확인: 리더의 이름을 기준으로 리더인지 확인
-  const token = localStorage.getItem('jwtToken');
-  const decodedToken = token ? JSON.parse(atob(token.split('.')[1])) : null;
-  const userName = decodedToken?.name;  // jwt 토큰에서 사용자 이름을 가져옴
-
-  // 리더인지 확인하는 로직 (리더의 name과 비교)
-  const isLeader = club?.leaderMembers?.some(leader => leader.name === userName);
-
-  // 콘솔로 확인
-  console.log('리더?', isLeader);
+  const isLeader = club?.leader || false;
 
   return (
     <>
@@ -173,12 +159,15 @@ const TeamPage = () => {
           <CollaborationFeed feed={collabPosts} />
         </TeamPageContainer>
         <ChatWrapp>
-        <Button
-         type={TYPES.NEXT}
-         text='동아리 참여하기'
-         onClick={clubJoinHandler}
-         style={{ marginBottom: '20px' }}  // 버튼 밑에 20px 마진 추가
-        />
+          {/* 동아리 리더가 아닐 경우에만 버튼이 보이도록 조건 추가 */}
+          {!isLeader && (
+            <Button
+              type={TYPES.NEXT}
+              text='동아리 참여하기'
+              onClick={clubJoinHandler}
+              style={{ marginBottom: '20px' }}  // 버튼 밑에 20px 마진 추가
+            />
+          )}
 
           <CustomModal
             openModal={openFirstModal} 
@@ -195,6 +184,13 @@ const TeamPage = () => {
             boldface='동아리 참여 완료!'
             regular='동아리 가입 신청이 완료되었습니다. 승인 후 자동으로 참여됩니다.'
             variant={VERSIONS.VER2}
+          />
+          <CustomModal
+            openModal={openDeleteModal} 
+            closeModal={() => setOpenDeleteModal(false)}
+            boldface='팀페이지 삭제 완료'
+            regular='프로젝트가 삭제되었습니다.'
+            variant={VERSIONS.VER2}  
           />
           <Chatlist style={{ marginTop: '100px' }} />
           <ChatListALL style={{ marginTop: '30px' }} />

@@ -9,20 +9,11 @@ export const SCommentFormWrapper = styled.div`
   align-items: center;
   flex-direction: column;
   margin-top: 20px;
-  margin-left: -75px;  
+  margin-left: -30px;  
 `;
 
 
-export const SProjectCommentListWrapper = styled.div`
-  width: 100%;  
-  max-width: 1000px; 
-  padding: 40px;
-  display: flex;
-  justify-content: flex-start; 
-  align-items: flex-start;  
-  flex-direction: column;
-  margin-right: -270px; 
-`;
+
 
 export const SMemberFormWrapper = styled.div`
   width: 100%;  
@@ -32,7 +23,7 @@ export const SMemberFormWrapper = styled.div`
   justify-content: flex-start; 
   align-items: flex-start;  
   flex-direction: column;
-  margin-right: -270px; 
+  margin-left: 300px; 
 `;
 
 export const SContainer = styled.div`
@@ -112,7 +103,7 @@ export const SFormWrapper = styled.div`
   width: 100%;
   max-width: 1200px; 
   margin: 0 auto; 
-  gap: 30px;  
+  gap: 20px;  
 `;
 
 export const SFormContainer = styled.div`
@@ -124,10 +115,11 @@ export const SFormContainer = styled.div`
   align-items: flex-start;  
   flex-direction: column;
   margin-top: 30px;
-  margin-right: -320px;  
+  margin-right: -30px;  
 `;
 
-export const SJoinProjectInfoWrapper = styled.div`
+
+export const SProjectCommentListWrapper = styled.div`
   width: 100%;  
   max-width: 1000px; 
   padding: 40px;
@@ -135,8 +127,36 @@ export const SJoinProjectInfoWrapper = styled.div`
   justify-content: flex-start; 
   align-items: flex-start;  
   flex-direction: column;
-  margin-right: -320px; 
+  margin-right: -330px; 
 `;
 
 
+export const SReplyWrapper = styled.div`
+  width: 100%;
+  max-width: 1000px;
+  padding-left: 40px;  
+  margin-top: 15px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px; 
+`;
+
+export const SCommentBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;  
+`;
+
+export const SCommentInput = styled.input`
+  width: 100%;
+  max-width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+`;
 

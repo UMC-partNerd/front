@@ -6,7 +6,7 @@ import {
   PostWrapper, PostHeader, UserInfo, UserName, Role, PostDate,
   MoreOptionsWrapper, VerticalIcon, SMoreOptionsMenu, SMenuItem, SDivider, 
   PostContent, PostTitle, PostSummary, ImageSection, LargeImageWrapper,
-  SmallImageWrapper, ImageBox, CommentSection, CommentWrapper 
+  SmallImageWrapper, CommentSection, CommentWrapper
 } from '../../styled-components/community-styles/styled-PostItem';
 
 const formatDate = (dateString) => {
@@ -54,7 +54,7 @@ const PostItem = ({ post }) => {
         </UserInfo>
         <MoreOptionsWrapper ref={menuRef}>
           <VerticalIcon onClick={() => setShowOptions(!showOptions)} />
-          <SMoreOptionsMenu show={showOptions}>
+          <SMoreOptionsMenu show={showOptions ? "true" : undefined}>
             <SMenuItem onClick={handleEditClick}>수정하기</SMenuItem>
             <SDivider />
             <SMenuItem onClick={handleDeleteClick}>삭제하기</SMenuItem>
@@ -66,13 +66,14 @@ const PostItem = ({ post }) => {
         <PostSummary>{post.summary}</PostSummary>
         <ImageSection>
           <LargeImageWrapper>
-            <ImageBox large />
-            <ImageBox large />
+            <img src="/c.png" alt="Large Image 1" style={{ width: '48%', borderRadius: '3px', objectFit: 'cover' }} />
+            <img src="/2.png" alt="Large Image 2" style={{ width: '48%', borderRadius: '3px', objectFit: 'cover' }} />
           </LargeImageWrapper>
+
           <SmallImageWrapper>
-            <ImageBox />
-            <ImageBox />
-            <ImageBox />
+            <img src="/3.png" alt="Image 1" style={{ width: '30%', borderRadius: '3px', objectFit: 'cover' }} />
+            <img src="/4.png" alt="Image 2" style={{ width: '30%', borderRadius: '3px', objectFit: 'cover' }} />
+            <img src="/5.png" alt="Image 3" style={{ width: '30%', borderRadius: '3px', objectFit: 'cover' }} />
           </SmallImageWrapper>
         </ImageSection>
       </PostContent>

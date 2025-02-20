@@ -9,7 +9,6 @@ import CommentForm from '../../components/projectdetail/CommentForm';
 import useBannerPhoto from '../../hooks/useBannerPhoto';
 import MemberForm from '../../components/projectdetail/MemberForm';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
-
 import Button, { TYPES } from "../../components/common/button";
 
 const DefaultImage = '/default-image.png';
@@ -197,7 +196,7 @@ const ProjectPromoteDetail = () => {
       return;
     }
   
-    console.log("업데이트할 댓글 ID:", commentId);  // commentId가 제대로 전달되는지 로그로 확인
+    console.log("업데이트할 댓글 ID:", commentId);  
   
     try {
       const response = await axios.patch(

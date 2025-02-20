@@ -36,22 +36,29 @@ const ProjectRecruitDetail = () => {
         console.error('API 호출 중 오류 발생:', error);
       });
 
-    // 댓글 데이터 조회 API 호출
-    axios.get(`https://api.partnerd.site/api/project/recruit/${recruitProjectId}/comment`)
-      .then((response) => {
-        console.log('댓글 조회 응답:', response.data);  
-        if (response.data.isSuccess) {
-          // 삭제된 댓글을 제외하고 상태에 저장
-          const filteredComments = response.data.result.filter(comment => !comment.isDeleted);
-          setComments(filteredComments);
-        } else {
-          console.error('댓글 조회 실패');
-        }
-      })
-      .catch((error) => {
-        console.error('댓글 조회 중 오류 발생:', error);
-      });
-  }, [recruitProjectId]); // recruitProjectId가 변경될 때마다 호출
+          // 댓글 데이터 조회 API 호출
+          axios.get(`https://api.partnerd.site/api/project/recruit/${recruitProjectId}/comment`)
+            .then((response) => {
+              console.log('댓글 조회 응답:', response.data);  
+              if (response.data.isSuccess) {
+                // 삭제되지 않은 댓글을 필터링하고, 프로필 이미지 URL 추가
+                const commentsWithProfileImage = response.data.result
+                  .filter(comment => !comment.isDeleted) // 삭제된 댓글 제외
+                  .map(comment => ({
+                    ...comment,
+                    profileImageUrl: comment.user?.profileImageUrl || DefaultProfileImage // 프로필 이미지 URL 추가
+                  }));
+      
+                setComments(commentsWithProfileImage);
+              } else {
+                console.error('댓글 조회 실패');
+              }
+            })
+            .catch((error) => {
+              console.error('댓글 조회 중 오류 발생:', error);
+            });
+        }, [recruitProjectId]); 
+      
 
   const { thumbnailPhotoUrl, introPhotoUrl, isLoading, error } = useBannerPhoto(
     'projects', 
@@ -244,44 +251,48 @@ const ProjectRecruitDetail = () => {
         <ImageSlider images={images} />
       </S.SImageSliderWrapper>
 
-      <S.SFormWrapper>
-        <S.SFormContainer>
-          <ProjectDetailForm projectData={projectData} />
-        </S.SFormContainer>
+      <S.SMainWrapper>
+  <S.SFormWrapper>
+    <S.SProjectFormContainer>
+      <ProjectDetailForm projectData={projectData} />
+    </S.SProjectFormContainer>
 
-        <S.SJoinProjectInfoWrapper>
-          <JoinProjectInfo projectData={projectData} />
-        </S.SJoinProjectInfoWrapper>
-      </S.SFormWrapper>
+    <S.SJoinProjectInfoWrapper>
+      <JoinProjectInfo projectData={projectData} />
+    </S.SJoinProjectInfoWrapper>
+  </S.SFormWrapper>
 
-      <S.SMemberFormWrapper>
-       <MemberForm 
-         leaderInfo={projectData?.leaderInfo} 
-         projectMembers={projectData?.projectMembers} 
-         isPromote={false}  
-       />
-      </S.SMemberFormWrapper>
+  <S.SMemberFormWrapper>
+    <MemberForm 
+      leaderInfo={projectData?.leaderInfo} 
+      projectMembers={projectData?.projectMembers} 
+      isPromote={false}  
+    />
+  </S.SMemberFormWrapper>
 
-      <S.SPersonalContactWrapper>
-        <S.SContactTitle>컨택하러 가기</S.SContactTitle>
-        <PersonalContact />
-      </S.SPersonalContactWrapper>
+  <S.SPersonalContactWrapper>
+    <S.SContactTitle>컨택하러 가기</S.SContactTitle>
+    <PersonalContact />
+  </S.SPersonalContactWrapper>
 
-      {/* 댓글 폼 */}
-      <S.SCommentFormWrapper>
-        <CommentForm onAddComment={handleAddComment} type="recruit" />
-      </S.SCommentFormWrapper>
+  {/* 댓글 폼 */}
+  <S.SCommentFormWrapper>
+    <CommentForm onAddComment={handleAddComment} type="recruit" />
+  </S.SCommentFormWrapper>
 
-      <S.SProjectCommentListWrapper>
-        <ProjectCommentList
-          comments={comments}
-          onReply={handleAddReply} 
-          onDelete={(commentId) => handleDeleteComment(commentId)}  // 댓글 삭제
-          onUpdate={(commentId, newText, type) => handleUpdateComment(commentId, newText, type)}
-          type="recruit"
-          profileImageUrl={profileKeyName}
-        />
-      </S.SProjectCommentListWrapper>
+  <S.SProjectCommentListWrapper>
+  <ProjectCommentList
+    comments={comments} // 댓글 리스트
+    onReply={handleAddReply} // 대댓글 추가
+    onDelete={(commentId) => handleDeleteComment(commentId)} // 댓글 삭제
+    onUpdate={(commentId, newText, type) => handleUpdateComment(commentId, newText, type)} // 댓글 수정
+    type="recruit" // 모집 타입
+    profileImageUrl={profileKeyName} // 기본 프로필 이미지 URL
+  />
+</S.SProjectCommentListWrapper>
+
+</S.SMainWrapper>
+
     </S.SContainer>
   );
 };

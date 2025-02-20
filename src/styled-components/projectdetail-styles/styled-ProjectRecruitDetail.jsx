@@ -9,6 +9,16 @@ export const SContainer = styled.div`
   flex-direction: column;
 `;
 
+export const SMainWrapper = styled.div`
+  width: 100%;
+  padding: 5% 2%;  /* 상하 패딩 5%, 좌우 패딩 2% */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
 export const SImageBoxContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -89,7 +99,7 @@ export const SFormContainer = styled.div`
   align-items: flex-start;  
   flex-direction: column;
   margin-top: 30px;
-  margin-right: -320px;  
+  margin-right: -300px;  
 `;
 
 export const SJoinProjectInfoWrapper = styled.div`
@@ -101,6 +111,17 @@ export const SJoinProjectInfoWrapper = styled.div`
   align-items: flex-start;  
   flex-direction: column;
   margin-right: -320px; 
+`;
+
+export const SProjectFormContainer = styled.div`
+  width: 100%;  
+  max-width: 1000px; 
+  padding: 40px;
+  display: flex;
+  justify-content: flex-start; /* 내용 왼쪽 정렬 */
+  align-items: flex-start; /* 아이템 왼쪽 정렬 */
+  flex-direction: column;
+  margin-left: 10px; /* 왼쪽으로 이동 */
 `;
 
 
@@ -143,12 +164,12 @@ export const SCommentFormWrapper = styled.div`
   align-items: center;
   flex-direction: column;
   margin-top: 20px;
-  margin-left: -70px;  
+  margin-left: -110px;  
 `;
 
 
 export const SProjectCommentListWrapper = styled.div`
-  width: 95%;
+  width: 100%;
   max-width: 1000px;
   padding: 20px;
   display: flex;
@@ -157,3 +178,4 @@ export const SProjectCommentListWrapper = styled.div`
   flex-direction: column;
   margin-left: 300px;
 `;
+
