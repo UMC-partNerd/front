@@ -18,7 +18,7 @@ const MyPostsComp = () =>{
         { name: "콜라보레이션", endpoint: "/api/collabPosts/mypage" },
         { name: "프로젝트 모집하기", endpoint: "/api/project/recruit/mypage" },
         { name: "프로젝트 홍보하기", endpoint: "/api/project/promotion/mypage" },
-        { name: "커뮤니티", endpoint: "" }, // 커뮤니티 API 엔드포인트 추가 필요 ↗️
+        { name: "커뮤니티", endpoint: "/api/community/mypage" }, // 커뮤니티 API 엔드포인트 추가 필요 ↗️
     ];
 
     //선택된 카테고리의 api 호출
@@ -57,7 +57,7 @@ const MyPostsComp = () =>{
                 postList = response.data.result?.mypagePprojectPreviewDTOList || [];
             } else if(category === "프로젝트 홍보하기"){
                 postList = response.data.result?.mypagePromotionPprojectPreviewDTOList || [];
-            } else if(category === "프로젝트 홍보하기"){
+            } else if(category === "커뮤니티"){
                 postList = response.data.result?.mypagePromotionPprojectPreviewDTOList || [];
             } 
 
