@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';  // useNavigate 추가
 import Banner from '../components/common/banner/Banner';
 import ClubInfoForm from '../components/teamregister/ClubInfoForm'; 
 import ProjectImageUploadForm from '../components/teamregister/ProjectImageUploadForm';  
@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import Button, { TYPES } from "../components/common/button";
 import axios from 'axios';
 import { PermissionRegistration } from '../components/contact/permission-registration';
+import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
+
 
 const TeamRegistration = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -14,20 +16,21 @@ const TeamRegistration = () => {
   const [teamInfo, setTeamInfo] = useState({
     name: '',
     intro: '',
-    contact: '',
+    contact: [],
     category: '',
     activities: '',
   });
-  const [activityIntro, setActivityIntro] = useState(''); 
-  const [activityImageKeyNames, setActivityImageKeyNames] = useState([]); 
+  const [activityIntro, setActivityIntro] = useState('');
+  const [activityImageKeyNames, setActivityImageKeyNames] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [openModal, setOpenModal] = useState(false);
 
-  // 현재 경로 확인
   const location = useLocation();
-  const isEditMode = location.pathname.includes('manage'); 
+  const isEditMode = location.pathname.includes('manage');
 
-  // 팀 정보 업데이트 함수
+  const navigate = useNavigate();  // useNavigate 훅 추가
+
   const handleTeamInfoChange = (newTeamInfo) => {
     setTeamInfo((prevState) => ({
       ...prevState,
@@ -35,35 +38,12 @@ const TeamRegistration = () => {
     }));
   };
 
-  // 이름 변경 처리 함수
-  const handleNameChange = (name) => {
-    handleTeamInfoChange({ name });
-  };
-
-  // 한 줄 소개 변경 처리 함수
-  const handleIntroChange = (intro) => {
-    handleTeamInfoChange({ intro });
-  };
-
-  // 카테고리 변경 처리 함수
-  const handleCategoryChange = (category) => {
-    handleTeamInfoChange({ category });
-  };
-
-  // 연락 방법 변경 처리 함수
-  const handleContactMethodsChange = (methods) => {
-    handleTeamInfoChange({ contact: methods });
-  };
-
-  // 활동 소개 변경 처리 함수
-  const handleActivityIntroChange = (intro) => {
-    setActivityIntro(intro);
-  };
-
-  // 활동 이미지 변경 처리 함수
-  const handleActivityImageChange = (imageKeyNames) => {
-    setActivityImageKeyNames(imageKeyNames);
-  };
+  const handleNameChange = (name) => handleTeamInfoChange({ name });
+  const handleIntroChange = (intro) => handleTeamInfoChange({ intro });
+  const handleCategoryChange = (category) => handleTeamInfoChange({ category });
+  const handleContactMethodsChange = (methods) => handleTeamInfoChange({ contact: methods });
+  const handleActivityIntroChange = (intro) => setActivityIntro(intro);
+  const handleActivityImageChange = (imageKeyNames) => setActivityImageKeyNames(imageKeyNames);
 
   const onClickHandler = async () => {
     setIsLoading(true);
@@ -73,9 +53,9 @@ const TeamRegistration = () => {
       const payload = {
         name: teamInfo.name,
         intro: teamInfo.intro,
-        contact: teamInfo.contact,
+        contactMethod: teamInfo.contact,
         categoryId: teamInfo.category,
-        activities: {
+        activity: {
           intro: activityIntro,
           activityImageKeyNames: activityImageKeyNames,
         },
@@ -84,7 +64,6 @@ const TeamRegistration = () => {
       };
 
       const token = localStorage.getItem('jwtToken');
-      
       const response = await axios.post('https://api.partnerd.site/api/partnerd/register', payload, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -92,12 +71,18 @@ const TeamRegistration = () => {
         },
       });
       console.log('등록 성공', response.data);
+      setOpenModal(true);  // 등록 후 모달 열기
     } catch (error) {
       console.error('등록 실패', error);
       setErrorMessage('팀 등록에 실패했습니다.');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleModalClose = () => {
+    setOpenModal(false);
+    navigate('/find');  // 모달 닫고 /find 페이지로 이동
   };
 
   return (
@@ -111,6 +96,7 @@ const TeamRegistration = () => {
           setProfileImage={setProfileImage}
           setBannerImage={setBannerImage}
         />
+        
         <ClubInfoForm 
           teamInfo={teamInfo}
           handleNameChange={handleNameChange}
@@ -131,7 +117,15 @@ const TeamRegistration = () => {
           text={isLoading ? '등록 중...' : isEditMode ? '수정 완료' : '최종 등록하기'}
           onClick={onClickHandler}
         />
-
+        
+        <CustomModal
+          openModal={openModal} 
+          closeModal={handleModalClose}  // 모달 닫기 처리
+          boldface='동아리 등록 완료!'
+          regular='팀페이지 관리는 마이페이지 > 팀페이지에서 가능합니다.'
+          variant={VERSIONS.VER2}
+        />
+        
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </Container>
     </>
@@ -139,6 +133,7 @@ const TeamRegistration = () => {
 };
 
 export default TeamRegistration;
+
 
 
 

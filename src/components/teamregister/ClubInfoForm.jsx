@@ -7,13 +7,15 @@ import ImageRectangle from '../common/images/ImageRectangle';
 const ClubInfoForm = ({ 
   handleCategoryChange,
   handleNameChange,
-  handleIntroChange,
+  handleIntroChange,  // 부모에서 전달받은 intro 변경 함수
   handleContactMethodsChange,
   handleActivityIntroChange,  // 부모에서 전달받은 activityIntro 변경 함수
   handleActivityImageChange,  // 부모에서 전달받은 activityImageKeyNames 변경 함수
   teamInfo = {},  // teamInfo가 없을 경우 빈 객체로 기본값 설정
   activityIntro,
-  activityImageKeyNames,
+  activityImageKeyNames = [],  // activityImageKeyNames에 기본값을 빈 배열로 설정
+  intro,  // intro 값 추가
+  onDataChange,  // 부모로 데이터를 전달하는 함수 추가
   isEditMode = false  // 수정 모드인지 확인하는 flag 추가
 }) => {
   const categoryMap = {
@@ -27,7 +29,6 @@ const ClubInfoForm = ({
   };
 
   const [selectedCategory, setSelectedCategory] = useState(teamInfo.categoryId || null); 
-
   const [contactMethods, setContactMethods] = useState(teamInfo.contactMethod || []);
   const [imagePreviews, setImagePreviews] = useState(new Array(8).fill(null));  // 항상 8개의 공간을 유지
 
@@ -43,15 +44,19 @@ const ClubInfoForm = ({
     handleContactMethodsChange(methods);
   };
 
-  const handleImageUpload = (imagePreview) => {
+  const handleImageUpload = (imagePreview, imageKey) => {
     // 이미 이미지가 8개 이하일 때만 추가
     const updatedPreviews = [...imagePreviews];
-    const emptyIndex = updatedPreviews.indexOf(null);  // 비어있는 자리를 찾기
+    const emptyIndex = updatedPreviews.indexOf(null);  
 
     if (emptyIndex !== -1) {
-      updatedPreviews[emptyIndex] = imagePreview;  // 비어있는 자리(첫 번째 null)에 이미지를 넣음
+      updatedPreviews[emptyIndex] = imagePreview;  
       setImagePreviews(updatedPreviews);
-      handleActivityImageChange(updatedPreviews);  // 부모로 값 전달
+
+      // activityImageKeyNames 업데이트
+      const updatedImageKeys = [...activityImageKeyNames];
+      updatedImageKeys[emptyIndex] = imageKey;  
+      handleActivityImageChange(updatedImageKeys);  
     } else {
       alert('이미지는 최대 8개까지 업로드할 수 있습니다.');
     }
@@ -59,9 +64,27 @@ const ClubInfoForm = ({
 
   const handleImageDelete = (index) => {
     const updatedPreviews = [...imagePreviews];
-    updatedPreviews[index] = null;  // 해당 인덱스의 이미지를 null로 설정하여 비움
+    updatedPreviews[index] = null; 
     setImagePreviews(updatedPreviews);
-    handleActivityImageChange(updatedPreviews);  // 부모로 값 전달
+
+
+    const updatedImageKeys = [...activityImageKeyNames];
+    updatedImageKeys[index] = null;  
+    handleActivityImageChange(updatedImageKeys);  
+  };
+
+  const handleIntroChangeLocal = (value) => {
+    handleIntroChange(value);  // 부모에서 전달받은 handleIntroChange 호출
+    if (onDataChange) {
+      onDataChange({ intro: value });  // intro 값 부모로 전달
+    }
+  };
+
+  const handleActivityIntroChangeLocal = (value) => {
+    handleActivityIntroChange(value);
+    if (onDataChange) {
+      onDataChange({ activityIntro: value });  // activityIntro 값 부모로 전달
+    }
   };
 
   return (
@@ -100,11 +123,11 @@ const ClubInfoForm = ({
 
         <S.InputContainer>
           <S.InputLabel>한 줄 소개<S.RedAsterisk>*</S.RedAsterisk></S.InputLabel>
-          <S.InputField 
-            type="text" 
-            value={teamInfo?.intro || ''}  
-            onChange={(e) => handleIntroChange(e.target.value)} 
-            placeholder="예시) IT 벤처 동아리입니다" 
+          <S.InputField
+            type="text"
+            value={teamInfo.intro || ''}  // intro 값을 제대로 초기화
+            onChange={(e) => handleIntroChangeLocal(e.target.value)}  // intro를 부모로 전달
+            placeholder="예시) IT 벤처 동아리입니다"
           />
         </S.InputContainer>
 
@@ -124,16 +147,16 @@ const ClubInfoForm = ({
         <S.TextAreaContainer>
           <S.TextAreaField
             value={activityIntro}  
-            onChange={(e) => handleActivityIntroChange(e.target.value)} // 부모로 값 변경
+            onChange={(e) => handleActivityIntroChangeLocal(e.target.value)} // 부모로 값 변경
             placeholder="프로젝트, 활동 이력, 수상 내역 등 우리 동아리에 대해 간단히 소개해주세요"
           />
         </S.TextAreaContainer>
 
         <ActivityImageUpload
-         type={2}
          folderName="club"
-         setImageKey={handleActivityImageChange}  
-         setImagePreview={handleImageUpload}
+         type={2}
+         setImageKey={(key) => handleActivityImageChange([key])}  // imageKey와 함께 처리
+         setImagePreview={(imagePreview, imageKey) => handleImageUpload(imagePreview, imageKey)}  // imageKey와 함께 처리
         />
 
         <S.ImageRectanglesContainer>
@@ -141,8 +164,8 @@ const ClubInfoForm = ({
           {imagePreviews.map((imagePreview, index) => (
             <ImageRectangle
               key={index}
-              imagePreview={imagePreview}  // 해당 인덱스에 이미지가 없으면 null(빈 이미지)
-              onClose={() => handleImageDelete(index)}  // 삭제 버튼 클릭 시 해당 이미지 삭제
+              imagePreview={imagePreview}  
+              onClose={() => handleImageDelete(index)}  
             />
           ))}
         </S.ImageRectanglesContainer>

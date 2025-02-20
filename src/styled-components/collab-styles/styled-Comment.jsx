@@ -21,13 +21,13 @@ export const SCommentWrapper = styled.div`
   position: relative;
 `;
 
-export const SProfileImage = styled.div`
+export const SProfileImage = styled.img`
   width: 35px;
   height: 35px;
   flex-shrink: 0;
   border-radius: 50%;
-  background-color: lightgray;
   margin-right: 15px;
+  object-fit: cover;  
 `;
 
 export const SCommentContent = styled.div`
@@ -123,3 +123,5 @@ export const SDivider = styled.div`
   background-color: #ddd;
   margin: 0 auto;
 `;
+
+

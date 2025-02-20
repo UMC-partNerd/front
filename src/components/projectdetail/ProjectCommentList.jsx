@@ -25,10 +25,10 @@ const ProjectCommentList = ({ comments, onReply, onDelete, onUpdate, type, profi
             profileImageUrl={profileImageUrl} // 프로필 이미지 URL 전달
             onReply={(replyText) => {
               console.log("onReply 호출됨:", replyText);
-              onReply(commentId, replyText, type); // 댓글 ID와 type을 전달
+              onReply(commentId, replyText, type); 
             }}
             onDelete={() => onDelete(commentId, type)}  // 댓글 삭제
-            onUpdate={(commentId, newText, type) => onUpdate(commentId, newText, type)} // 댓글 수정
+            onUpdate={(commentId, newText, type) => onUpdate(commentId, newText, type)} 
           />
         );
       })}

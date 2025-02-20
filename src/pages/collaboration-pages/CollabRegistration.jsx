@@ -6,7 +6,7 @@ import EventImageUploadForm from '../../components/collabregister/EventImageUplo
 import styled from 'styled-components';
 import Button, { TYPES } from "../../components/common/button";
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
-import { useNavigate } from 'react-router-dom';  // 추가
+import { useNavigate } from 'react-router-dom';  
 
 import axios from 'axios';
 

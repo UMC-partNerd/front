@@ -8,7 +8,7 @@ const useBannerPhoto = (
   eventImageFiles,
   thumbnailImageFile,
   introImageFile,
-  profileImageFile 
+  profileImageFile
 ) => {
   const [bannerPhotoUrl, setBannerPhotoUrl] = useState(null);
   const [mainPhotoUrl, setMainPhotoUrl] = useState(null);
@@ -20,13 +20,14 @@ const useBannerPhoto = (
   const [error, setError] = useState(null);
 
   const fetchPhotoUrl = useCallback(async (keyName) => {
-    // 이미 URL 형식인 경우 바로 반환
     if (!keyName || keyName.startsWith('http')) {
       return keyName;
     }
 
     try {
       const encodedKeyName = encodeURIComponent(keyName);
+      console.log('Requesting for encodedKeyName:', encodedKeyName);  // 로깅 추가
+
       const response = await axios.get(
         `https://api.partnerd.site/api/s3/preSignedUrl?keyName=${encodedKeyName}`,
         {
@@ -36,6 +37,8 @@ const useBannerPhoto = (
         }
       );
 
+      console.log('Response from fetchPhotoUrl:', response);  // 응답 내용 확인
+
       if (response.data && response.data.result && response.data.result.cloudFrontUrl) {
         return response.data.result.cloudFrontUrl;
       } else {
@@ -43,6 +46,7 @@ const useBannerPhoto = (
       }
     } catch (err) {
       console.error("Error fetching URL:", err);
+      setError(err.message);
       throw new Error('이미지 데이터를 불러오는 중 오류가 발생했습니다.');
     }
   }, []);
@@ -52,37 +56,49 @@ const useBannerPhoto = (
 
     const fetchPhotos = async () => {
       try {
-        // 각각의 이미지 파일에 대해 URL 요청
-        if (bannerImageFile && isMounted) {
+        // profileImageFile 값이 제대로 설정되었을 경우에만 fetchPhotoUrl 호출
+        if (profileImageFile && !profilePhotoUrl && isMounted) {
+          const profileUrl = await fetchPhotoUrl(profileImageFile);
+          if (isMounted) {
+            setProfilePhotoUrl(profileUrl);
+          }
+        }
+
+        if (bannerImageFile && !bannerPhotoUrl && isMounted) {
           const bannerUrl = await fetchPhotoUrl(bannerImageFile);
-          setBannerPhotoUrl(bannerUrl);
+          if (isMounted) {
+            setBannerPhotoUrl(bannerUrl);
+          }
         }
 
-        if (mainImageFile && isMounted) {
+        if (mainImageFile && !mainPhotoUrl && isMounted) {
           const mainUrl = await fetchPhotoUrl(mainImageFile);
-          setMainPhotoUrl(mainUrl);
+          if (isMounted) {
+            setMainPhotoUrl(mainUrl);
+          }
         }
 
-        if (eventImageFiles && eventImageFiles.length > 0 && isMounted) {
+        if (eventImageFiles && eventImageFiles.length > 0 && !eventPhotoUrls.length && isMounted) {
           const eventUrls = await Promise.all(
             eventImageFiles.map(file => fetchPhotoUrl(file))
           );
-          setEventPhotoUrls(eventUrls);
+          if (isMounted) {
+            setEventPhotoUrls(eventUrls);
+          }
         }
 
-        if (thumbnailImageFile && isMounted) {
+        if (thumbnailImageFile && !thumbnailPhotoUrl && isMounted) {
           const thumbnailUrl = await fetchPhotoUrl(thumbnailImageFile);
-          setThumbnailPhotoUrl(thumbnailUrl);
+          if (isMounted) {
+            setThumbnailPhotoUrl(thumbnailUrl);
+          }
         }
 
-        if (introImageFile && isMounted) {
+        if (introImageFile && !introPhotoUrl && isMounted) {
           const introUrl = await fetchPhotoUrl(introImageFile);
-          setIntroPhotoUrl(introUrl);
-        }
-
-        if (profileImageFile && isMounted) {
-          const profileUrl = await fetchPhotoUrl(profileImageFile);
-          setProfilePhotoUrl(profileUrl);
+          if (isMounted) {
+            setIntroPhotoUrl(introUrl);
+          }
         }
       } catch (err) {
         if (isMounted) {
@@ -95,6 +111,7 @@ const useBannerPhoto = (
       }
     };
 
+    // 이미지 파일이 제공되었을 때만 fetchPhotos 호출
     if (
       bannerImageFile || 
       mainImageFile || 
@@ -117,9 +134,17 @@ const useBannerPhoto = (
     eventImageFiles,
     thumbnailImageFile,
     introImageFile,
-    profileImageFile,
-    fetchPhotoUrl
+    profileImageFile,  
+    fetchPhotoUrl,
+    bannerPhotoUrl,  
+    mainPhotoUrl,
+    eventPhotoUrls,
+    thumbnailPhotoUrl,
+    introPhotoUrl,
+    profilePhotoUrl
   ]);
+
+  console.log("Fetched profile image URL:", profilePhotoUrl); // 로깅
 
   return { 
     bannerPhotoUrl, 
