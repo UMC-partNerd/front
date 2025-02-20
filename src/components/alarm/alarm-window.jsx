@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect, useMemo } from "react";
 import Alarm from './alarm';
 import Badge from './badge';
+import { useNavigate } from "react-router-dom";
 
 import {
     Container,
@@ -11,10 +12,10 @@ import {
 } from '../../styled-components/alarm/styled-Alarm';
 
 const TEMP_ALARMS = [
-    { club: "UMC", timer: "방금전", isRead: true },
+    { club: "UMC", timer: "방금전", isRead: false },
     { club: "OZ", timer: "10분전", isRead: true },
     { club: "UMC", timer: "20분전", isRead: true },
-    { club: "OZ", timer: "30분전", isRead: true },
+    { club: "OZ", timer: "30분전", isRead: false },
     { club: "UMC", timer: "40분전", isRead: true },
 ];
 
@@ -22,6 +23,7 @@ function AlarmWindow() {
     const [alarms, setAlarms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchAlarms() {
@@ -32,13 +34,12 @@ function AlarmWindow() {
                     return;
                 }
 
-                // const fetchedAlarms = TEMP_ALARMS.map(alarm => ({
-                //     ...alarm,
-                //     isRead: false
-                // }));
-
-                // setAlarms(prev => (JSON.stringify(prev) === JSON.stringify(fetchedAlarms) ? prev : fetchedAlarms));
-
+                // 임시 데이터
+                const fetchedAlarms = TEMP_ALARMS.map(alarm => ({
+                    ...alarm,
+                    isRead: false
+                }));
+                setAlarms(prev => (JSON.stringify(prev) === JSON.stringify(fetchedAlarms) ? prev : fetchedAlarms));
 
                 // ✅ 마지막 이벤트 ID 가져오기
                 const lastEventId = localStorage.getItem("lastEventId") || "";
@@ -54,11 +55,14 @@ function AlarmWindow() {
                 if (response.data.isSuccess) {
                     console.log("📩 알림 데이터 수신:", response.data.result);
 
-                    const fetchedAlarms = response.data.result.collabAskPreviewDTOLList.map(alarm => ({
-                        club: alarm.clubName,
-                        timer: "방금 전",  // API에 시간이 없으면 임의 설정
-                        isRead: false
-                    }));
+                    const fetchedAlarms = response.data.result.collabAskPreviewDTOLList.map(alarm => {
+                        const existingAlarm = alarms.find(a => a.club === alarm.clubName);
+                        return {
+                            club: alarm.clubName,
+                            timer: "방금 전",
+                            isRead: existingAlarm ? existingAlarm.isRead : false  // 기존 상태 유지
+                        };
+                    });
 
                     // ✅ 기존 상태와 다를 때만 업데이트하여 불필요한 렌더링 방지
                     setAlarms(prev => 
@@ -83,17 +87,18 @@ function AlarmWindow() {
 
     const handleIsRead = (index) => {
         setAlarms(prevAlarms => {
-            // const updatedAlarms = [...prevAlarms];
-            // updatedAlarms[index].isRead = true;
-
-            // ✅ 이미 읽음 상태이면 변경하지 않음 (렌더링 최적화)
-            if (prevAlarms[index].isRead) return prevAlarms;
+            // // ✅ 이미 읽음 상태이면 변경하지 않음 (렌더링 최적화)
+            // if (prevAlarms[index].isRead) return prevAlarms;
             
-            const updatedAlarms = prevAlarms.map((alarm, i) =>
-                i === index ? { ...alarm, isRead: true } : alarm
-            );
+            // const updatedAlarms = prevAlarms.map((alarm, i) =>
+            //     i === index ? { ...alarm, isRead: true } : alarm
+            // );
 
-            return updatedAlarms;
+            prevAlarms.map((alarm, i) => 
+                i === index ? { ...alarm, isRead: true } : alarm
+            )
+            
+            navigate(`/collaboration/request`);
         });
     };
     

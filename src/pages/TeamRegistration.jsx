@@ -4,10 +4,10 @@ import Banner from '../components/common/banner/Banner';
 import ClubInfoForm from '../components/teamregister/ClubInfoForm'; 
 import ProjectImageUploadForm from '../components/teamregister/ProjectImageUploadForm';  
 import styled from 'styled-components';
-import Button, { TYPES } from "../components/common/button";
+import Button, { TYPES } from "../components/common/button/button";
 import axios from 'axios';
 import { PermissionRegistration } from '../components/contact/permission-registration';
-import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
+import CustomModal, { VERSIONS } from "../components/common/button/CustomModal";
 
 const TeamRegistration = () => {
   const [profileImage, setProfileImage] = useState(null);

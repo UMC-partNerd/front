@@ -10,7 +10,7 @@ import CommentForm from '../../components/projectdetail/CommentForm';
 import MemberForm from '../../components/projectdetail/MemberForm';
 import PersonalContact from '../../components/common/contact';
 import useBannerPhoto from '../../hooks/useBannerPhoto';
-import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
+import CustomModal, { VERSIONS } from "../../components/common/button/CustomModal";
 import OptionMenu from '../../components/common/button/optionMenu';
 
 const DefaultImage = '/default-image.png';

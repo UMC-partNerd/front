@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { VERSIONS } from '../components/common/modal/CustomModal';
 
 // overlay: 모달창 밖
 export const Background = {

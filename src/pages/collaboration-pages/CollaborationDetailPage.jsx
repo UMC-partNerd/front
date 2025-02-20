@@ -12,7 +12,7 @@ import useBannerPhoto from '../../hooks/useBannerPhoto';
 import { FiMoreVertical } from "react-icons/fi";
 import axios from 'axios';
 import EventOverview from '../../components/collaboration-detail/EventOverview';
-import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
+import CustomModal, { VERSIONS } from "../../components/common/button/CustomModal";
 import OptionMenu from '../../components/common/button/optionMenu';
 
 const DefaultImage = '/default-image.png';

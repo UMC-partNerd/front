@@ -4,7 +4,7 @@ import {
   VoteContainer,
   NextContainer,
   PlusContainer,
-} from '../../styled-components/button/styled-Button';
+} from '../../../styled-components/button/styled-Button';
 
 export const TYPES = {
   CANCEL: 'cancel', // x // 팀페이지 관리(멤버버)
@@ -36,7 +36,7 @@ const XButton = '/xBtn.png'; // 기본 이미지
 
 function Button({ width, height, fontSize, type, sign, text, count, onClick }) {
   const renderDefaultButton = () => (
-    <ButtonContainer type={type} onClick={onClick}>
+    <ButtonContainer width={width} height={height} fontSize={fontSize} type={type} onClick={onClick}>
       {text}
     </ButtonContainer>
   );
@@ -54,13 +54,13 @@ function Button({ width, height, fontSize, type, sign, text, count, onClick }) {
   );
 
   const renderNextButton = () => (
-    <NextContainer type={type} onClick={onClick}>
+    <NextContainer width={width} height={height} fontSize={fontSize} type={type} onClick={onClick}>
       {text}
     </NextContainer>
   );
 
   const renderPlusButton = () => (
-    <PlusContainer type={type} onClick={onClick}>
+    <PlusContainer width={width} height={height} fontSize={fontSize} type={type} onClick={onClick}>
       {text}
     </PlusContainer>
   );

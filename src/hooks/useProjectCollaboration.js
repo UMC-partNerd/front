@@ -66,7 +66,7 @@ const useProjectCollaboration = () => {
     const jwtToken = localStorage.getItem('jwtToken');
     if (!jwtToken) {
       alert('로그인이 필요합니다.');
-      return null;
+    return null;
     }
 
     try {

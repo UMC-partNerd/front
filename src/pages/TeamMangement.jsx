@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import Button, { TYPES } from '../components/common/button';
+import Button, { TYPES } from '../components/common/button/button';
 import ClubInfoForm from '../components/teamregister/ClubInfoForm';
 import Banner from '../components/common/banner/Banner';
 import ProjectImageUploadForm from '../components/teamregister/ProjectImageUploadForm';
 import styled from 'styled-components';
-import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
+import CustomModal, { VERSIONS } from "../components/common/button/CustomModal";
 import PermissionRegistration from '../components/contact/permission-registration';
 import LeaderChange from '../components/contact/leader-change';
 

@@ -7,7 +7,7 @@ import {
     SMenuItem, 
     SDivider,
 } from '../../../styled-components/button/Styled-OptionMenu';
-import CustomModal, { VERSIONS } from "../modal/CustomModal";
+import CustomModal, { VERSIONS } from "./CustomModal";
 import { useNavigate } from 'react-router-dom';
 
 /*

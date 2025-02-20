@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   position: absolute;
-  top: 68px;
-  right: 432px;
+  top: 40px;
+  right: 20px;
   border-radius: 10px;
   min-width: 150px;
   z-index: 10;
@@ -11,7 +11,6 @@ export const Container = styled.div`
 
   justify-content: flex-end;
   align-items: flex-start;
-  padding: 20px;
 `;
 
 export const AlarmWrap1 = styled.div`
@@ -48,13 +47,14 @@ export const AlarmWrap2 = styled.div`
   width: 497px;
   height: 620px;
   flex-shrink: 0;
-  border-radius: 8px;
+  border-radius: 16px;
   background: #FFFFFF;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px;`;
+  padding: 20px;
+`;
 
 export const AlarmContainer = styled.div`
   width: 100%;
@@ -73,15 +73,14 @@ export const Row = styled.div`
   width: 100%;
 `;
 
-export const Indicator = styled.div`
+export const Indicator = styled.circle`
   width: 12px;
   height: 12px;
   flex-shrink: 0;
   fill: var(--Main-Color, #0D29B7);
-  border-radius: 50%;  // 기존 'circle' -> div 사용하므로 원형 유지
+
   margin-bottom: 8px;
   margin-right: 20px;
-  visibility: ${({ isRead }) => (isRead ? "hidden" : "visible")}; // ✅ isRead가 true일 경우 숨김
 `;
 
 export const AlarmMessage = styled.p`

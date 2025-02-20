@@ -8,8 +8,8 @@ import ProjectCommentList from '../../components/projectdetail/ProjectCommentLis
 import CommentForm from '../../components/projectdetail/CommentForm';
 import useBannerPhoto from '../../hooks/useBannerPhoto';
 import MemberForm from '../../components/projectdetail/MemberForm';
-import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
-import Button, { TYPES } from "../../components/common/button";
+import CustomModal, { VERSIONS } from "../../components/common/button/CustomModal";
+import Button, { TYPES } from "../../components/common/button/button";
 import OptionMenu from '../../components/common/button/optionMenu';
 import { UserName } from '../../styled-components/community-styles/styled-PostItem';
 

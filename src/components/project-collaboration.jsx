@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // 추가
-import Button, { TYPES } from "./common/button";
-import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
-import Banner from "../components/common/banner/Banner";
+import Button, { TYPES } from "./common/button/button";
+import CustomModal, { VERSIONS } from "./common/button/CustomModal";
+import Banner from "./common/banner/Banner";
 
 import {
   PaginationContainer,

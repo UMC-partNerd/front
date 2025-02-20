@@ -2,23 +2,24 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import {
     Background,
+    ProfileWrapp,
+    Profile,
     Boldface,
     Regular,
     ButtonContainer,
-} from '../../../styled-components/styled-Modal';
-import Button, { TYPES } from "../button";
+} from '../../../styled-components/button/styled-Request';
+import Button, { TYPES } from "./button";
 import { useNavigate } from 'react-router-dom';
 
-export const VERSIONS = {
-    VER1: 'ver1',   // NEXT
-    VER2: 'ver2',   // NO
-    VER3: 'ver3'    // NO, YES
+export const TO = {
+    SEND: 'Send',       // 송신
+    RECEIVE: 'Receive', // 수신
 };
 
 {/*
     import React, { useState } from 'react';
   import Button, { TYPES } from "../components/common/button";
-  import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
+  import Request, { VERSIONS } from "../components/common/modal/Request";
   import { useNavigate } from 'react-router-dom';
 
   // useNavigate 훅을 사용하여 이동 기능 추가
@@ -57,7 +58,7 @@ export const VERSIONS = {
     onClick={clubJoinHandler}
     /> 
 
-    <CustomModal
+    <Request
     openModal={openFirstModal} 
     closeModal={() => setopenFirstModal(false)}
 
@@ -68,7 +69,7 @@ export const VERSIONS = {
     variant={VERSIONS.VER3}
     />
 
-    <CustomModal
+    <Request
     openModal={openSecondModal} 
     closeModal={() => setOpenSecondModal(false)}
 
@@ -80,103 +81,98 @@ export const VERSIONS = {
 
 */}
 
-//
-Modal.setAppElement('#root');
+function Request ({ who, club, onClickPost, onClickChat, to }) {
+    const [request, setRequest] = useState(true);
 
-// text, onClickHandler는 ver3(yes)에만 필요
-function CustomModal ({ openModal, closeModal, boldface, regular, text, onClickHandler, variant }) {
-    // 콜라보레이션 하러가기
+    const onCencel = () => {
+        // 요청 취소 동작
+
+        setRequest(false);
+    };
+    
     const navigate = useNavigate();
     const moveToColab = () => {
         navigate('/collaboration');
     };
 
-    const renderVer1Modal = () => (
+    const renderToSend = () => (
         <Modal 
-            isOpen={openModal}
-            onRequestClose={closeModal}
+            isOpen={request}
+            onRequestClose={onCencel}
             style={Background}
-            ariaHideApp={false}     // appElement 숨김 여부
-            contentLabel= {boldface}   // 스크린더 사용자에게 전달되는 문자열
+            ariaHideApp={true}
+            contentLabel= "협업 요청"
             shouldCloseOnOverlayClick={false}
         >
-            <Boldface>{boldface}취소된 콜라보레이션 요청</Boldface>
-            <Regular>{regular}다른 동아리와 협업해볼까요?</Regular>
-            <ButtonContainer>
-                <Button
-                    type={TYPES.NEXT}
-                    text='콜라보레이션 하러 가기'
-                    onClick={moveToColab}
-                />
-            </ButtonContainer>
-        </Modal>
-    );
+            <Button
+                type={TYPES.CANCEL}
+                onClick={onCencel}
+            />
 
-    const renderVer2Modal = () => (
-        <Modal 
-            isOpen={openModal}
-            onRequestClose={closeModal}
-            style={Background}
-            ariaHideApp={false}
-            contentLabel= {boldface}
-            shouldCloseOnOverlayClick={false}
-        >
-            <Boldface>{boldface}</Boldface>
-            <Regular>{regular}</Regular>
+            <ProfileWrapp>
+                <Profile></Profile>
+                <Boldface>{who}</Boldface>
+            </ProfileWrapp>
+            <Regular>'{club}'에 대하여 협업 요청을 보냈습니다.</Regular>
             <ButtonContainer>
                 <Button
-                    width='120px' 
-                    height='32px' 
-                    fontSize='24px' 
                     type={TYPES.NO}
-                    text='닫기'
-                    onClick={closeModal}
+                    text='게시글 보러가기'
+                    onClick={onClickPost}
+                />
+                <Button
+                    width='20px' 
+                    height='32px' 
+                    fontSize='16px' 
+                    type={TYPES.YES}
+                    text='콜라보레이션 채팅'
+                    onClick={onClickChat}
                 />
             </ButtonContainer>
         </Modal>
     );
 
-    const renderVer3Modal = () => (
+    const renderToReceive = () => (
         <Modal 
-            isOpen={openModal}
-            onRequestClose={closeModal}
+            isOpen={request}
+            onRequestClose={onCencel}
             style={Background}
-            ariaHideApp={false}
-            contentLabel= {boldface}
+            ariaHideApp={true}
+            contentLabel= "협업 요청"
             shouldCloseOnOverlayClick={false}
         >
-            <Boldface>{boldface}</Boldface>
-            <Regular>{regular}</Regular>
+
+            <ProfileWrapp>
+                <Profile></Profile>
+                <Boldface>{who}</Boldface>
+            </ProfileWrapp>
+            <Regular>'{club}'에 대하여 협업 요청을 보냈습니다.</Regular>
             <ButtonContainer>
                 <Button
                     width='120px' 
                     height='32px' 
                     fontSize='20px' 
                     type={TYPES.NO}
-                    text='돌아가기'
-                    onClick={closeModal}
+                    text='게시글 보러가기'
+                    onClick={onClickPost}
                 />
                 <Button
                     width='120px' 
                     height='32px' 
                     fontSize='20px' 
                     type={TYPES.YES}
-                    text={text}
-                    onClick={onClickHandler}
+                    text='콜라보레이션 채팅'
+                    onClick={onClickChat}
                 />
             </ButtonContainer>
         </Modal>
     );
 
-    if (variant === VERSIONS.VER3) {
-        return renderVer3Modal();
+    if (TO === TO.SEND) {
+        return renderToSend();
     }
 
-    if (variant === VERSIONS.VER2) {
-        return renderVer2Modal();
-    }
-
-    return renderVer1Modal();
+    return renderToReceive();
 };
 
-export default CustomModal;
+export default Request;

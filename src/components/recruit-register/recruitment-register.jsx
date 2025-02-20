@@ -5,8 +5,8 @@ import ProjectImageUploadForm from '../teamregister/ProjectImageUploadForm';
 import ActivityImageUpload from '../common/images/ActivityImageUpload';
 import ImageRectangle from '../common/images/ImageRectangle';
 import DateList from '../common/DateList';
-import Button, { TYPES } from "../common/button";
-import CustomModal, { VERSIONS } from "../common/modal/CustomModal";
+import Button, { TYPES } from "../common/button/button";
+import CustomModal, { VERSIONS } from "../common/button/CustomModal";
 import { useNavigate } from 'react-router-dom';
 
 import TeamMemberRegistration from '../contact/member-registration';

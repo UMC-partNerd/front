@@ -6,9 +6,6 @@ import { MdOutlinePersonOutline } from "react-icons/md";
 import { BsChatRightDots } from "react-icons/bs";
 import { useState } from 'react';
 import ProfileMenu from '../home/ProfileMenu';
-
-// 배지
-import Badge from "../alarm/badge";
 import AlarmWindow from '../alarm/alarm-window';
 
 function Navbar({ isLoggedIn, isStatus, badgeCount, onLogout }) {

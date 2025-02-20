@@ -332,6 +332,7 @@ const Chat = () => {
       return "/default-avatar.png"; // 요청 실패 시 기본 이미지 사용
     }
   };
+  
   // ✅ 채팅 리스트 업데이트 시 아바타 이미지 URL 요청
   useEffect(() => {
     const fetchAvatars = async () => {

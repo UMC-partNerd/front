@@ -10,7 +10,7 @@ import {
     UserListWrapper
 } from '../../../styled-components/member-Manage/styled-manageWindow';
 import Modal from 'react-modal';
-import Button, { TYPES } from "../../common/button";
+import Button, { TYPES } from "../../common/button/button";
 import MemberList from './memberList';
 
 export const VERSIONS = {

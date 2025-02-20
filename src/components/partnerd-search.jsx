@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Button, { TYPES } from "../components/common/button";
-import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
+import Button, { TYPES } from "./common/button/button";
+import CustomModal, { VERSIONS } from "./common/button/CustomModal";
 import { useNavigate } from 'react-router-dom';
 import Banner from "../components/common/banner/Banner";
 

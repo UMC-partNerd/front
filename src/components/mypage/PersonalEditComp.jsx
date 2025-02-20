@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Button, { TYPES } from "../common/button";
+import Button, { TYPES } from "../common/button/button";
 import { MainWrapp, Title, PersonalField, StyledHr, SubTitle, SubupSec } from "../../styles/mypagestyles";
 import { Subup } from "../../styles/registerstyles";
 import { useNavigate } from "react-router-dom";
