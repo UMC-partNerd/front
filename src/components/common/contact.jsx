@@ -1,15 +1,16 @@
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import Button, { TYPES } from "../common/button";
+import { useNavigate } from "react-router-dom";
+import useContectChat from "../../hooks/useChatContect";
 
 //contact 컴포넌트 
 const PersonalContact = ({profileImageUrl, nickname, explan, intro}) =>{
+    const navigate = useNavigate();
     const location = useLocation();
     const isPersonalPage = location.pathname === "/mypage/personal-page";
+    const {startChat, loading, error} = useContectChat();
 
-    const onClickHandler = () => {
-    
-    };
 
     return(
         <Container>
@@ -32,7 +33,8 @@ const PersonalContact = ({profileImageUrl, nickname, explan, intro}) =>{
                         styled={{fontSize:'5px'}}
                         type={TYPES.YES}
                         text='채팅'
-                        onClick={onClickHandler}
+                        //onClick={() => navigate("/chat")}
+                        onClick={() => startChat("사이먼")}
                     /></ButtonWrapper>
                 ) : (
                     <ButtonWrapper>
@@ -40,7 +42,8 @@ const PersonalContact = ({profileImageUrl, nickname, explan, intro}) =>{
                         styled={{fontSize:'5px'}}
                         type={TYPES.YES}
                         text='채팅'
-                        onClick={onClickHandler}
+                        onClick={() => startChat(nickname)} // nickname 전달
+                        disabled={loading}
                     /></ButtonWrapper>
                 )}
             </TopContainer>
