@@ -70,8 +70,8 @@ const TeamInfo = ({ name, description, category, contact = [], clubId, onDelete,
       <S.SContactInfoContainer>
         {contact.length > 0 ? contact.map((item, index) => (
           <S.SContactItem key={index}>
-            <S.SContactType>{item.contactType !== 'string' ? item.contactType : '연락처 정보가 없습니다'}</S.SContactType>
-            <S.SContactLink>{item.contactUrl !== 'string' ? item.contactUrl : ' '}</S.SContactLink>
+            <S.SContactType>{item.contactType !== 'string' ? item.contactType : '인스타그램'}</S.SContactType>
+            <S.SContactLink>{item.contactUrl !== 'string' ? item.contactUrl : '@techtech_official'}</S.SContactLink>
           </S.SContactItem>
         )) : <div>연락처 정보가 없습니다.</div>}
       </S.SContactInfoContainer>

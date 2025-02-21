@@ -311,6 +311,7 @@ const CollaborationDetailPage = () => {
 
 <Wrapper>
   <ImageSection>
+
     <ImageContainer>
       {bannerLoading ? <div>로딩 중...</div> :
         bannerError ? <div>{bannerError}</div> :
