@@ -14,8 +14,11 @@ const useTopRank = () => {
         if (response.data.isSuccess && Array.isArray(response.data.result)) {
           const dataWithImages = await Promise.all(
             response.data.result.map(async (item) => {
+              console.log('처리 중인 아이템:', item);
+              
               if (item.profileKeyName && item.profileKeyName.trim() !== '') {
                 try {
+                  console.log('프로필 이미지 요청 시작:', item.profileKeyName);
                   const presignedUrlResponse = await axios.get(
                     `${import.meta.env.VITE_API_BASE_URL}/api/s3/preSignedUrl`, {
                       params: {
@@ -27,15 +30,26 @@ const useTopRank = () => {
                     }
                   );
                   
+                  console.log('프로필 이미지 응답 상태:', presignedUrlResponse.status);
+                  console.log('프로필 이미지 응답 데이터:', presignedUrlResponse.data);
+                  
                   if (presignedUrlResponse.data.isSuccess && presignedUrlResponse.data.result) {
+                    const cloudFrontUrl = presignedUrlResponse.data.result.cloudFrontUrl;
+                    console.log('생성된 CloudFront URL:', cloudFrontUrl);
                     return {
                       ...item,
-                      profileImageUrl: presignedUrlResponse.data.result.cloudFrontUrl
+                      profileImageUrl: cloudFrontUrl
                     };
                   }
+                  console.warn('프로필 이미지 URL 생성 실패: 응답 데이터가 올바르지 않음');
                   return { ...item, profileImageUrl: null };
                 } catch (err) {
-                  console.error('프로필 이미지 URL 생성 실패:', err, 'profileKeyName:', item.profileKeyName);
+                  console.error('프로필 이미지 URL 생성 실패:', {
+                    error: err.message,
+                    status: err.response?.status,
+                    data: err.response?.data,
+                    profileKeyName: item.profileKeyName
+                  });
                   return { ...item, profileImageUrl: null };
                 }
               }

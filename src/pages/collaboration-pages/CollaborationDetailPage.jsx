@@ -32,8 +32,6 @@ const CollaborationDetailPage = () => {
     console.log('Edit clicked');
   };
 
-
-
   useEffect(() => {
     const fetchCollabData = async () => {
       try {
@@ -309,16 +307,16 @@ const CollaborationDetailPage = () => {
         bannerError ? <div>{bannerError}</div> :
           <BannerPhoto src={bannerPhotoUrl || DefaultImage} />}
 
-<Wrapper>
-  <ImageSection>
-    <ImageContainer>
-      {bannerLoading ? <div>로딩 중...</div> :
-        bannerError ? <div>{bannerError}</div> :
-          <img src={mainPhotoUrl || DefaultImage} alt="Main" style={{ width: '100%', height: '100%', borderRadius: '8px' }} />}
-    </ImageContainer>
+      <Wrapper>
+        <ImageSection>
+          <ImageContainer>
+            {bannerLoading ? <div>로딩 중...</div> :
+              bannerError ? <div>{bannerError}</div> :
+                <img src={mainPhotoUrl || DefaultImage} alt="Main" style={{ width: '100%', height: '100%', borderRadius: '8px' }} />}
+          </ImageContainer>
 
-       <MoreIconWrapper>
-         <FiMoreVertical
+          <MoreIconWrapper>
+            <FiMoreVertical
               onClick={handleOptionsClick}
               style={{
                 position: 'absolute',
@@ -328,57 +326,49 @@ const CollaborationDetailPage = () => {
                 fontSize: '20px', 
               }}
             />
-    </MoreIconWrapper>
+          </MoreIconWrapper>
 
-    <MoreOptionsMenu show={showOptions}>
-      <MenuItem onClick={handleEditClick}>수정하기</MenuItem>
-      <Divider />
-      <MenuItem onClick={handleDeleteClick}>삭제하기</MenuItem>
-    </MoreOptionsMenu>
-  </ImageSection>
+          <MoreOptionsMenu show={showOptions}>
+            <MenuItem onClick={handleEditClick}>수정하기</MenuItem>
+            <Divider />
+            <MenuItem onClick={handleDeleteClick}>삭제하기</MenuItem>
+          </MoreOptionsMenu>
+        </ImageSection>
 
-    <InfoSectionWrapper>
-      {isLoadingCollab ? <div>로딩 중...</div> :
-      errorCollab ? <div>{errorCollab}</div> :
-        <InfoSection collabData={collabData} />}
-    </InfoSectionWrapper>
-  </Wrapper>
+        <InfoSectionWrapper>
+          {isLoadingCollab ? <div>로딩 중...</div> :
+            errorCollab ? <div>{errorCollab}</div> :
+              <InfoSection collabData={collabData} />}
+        </InfoSectionWrapper>
+      </Wrapper>
 
-      <EventOverviewWrapper>
-        {collabData ? <EventOverview eventData={collabData} /> : <div>데이터를 불러오는 중...</div>}
-      </EventOverviewWrapper>
-
-      <MainWrapper>
-      <EventGuideWrapper>
-        {collabData ? <EventGuide collabData={collabData} /> : <div>데이터를 불러오는 중...</div>}
-      </EventGuideWrapper>
-
-      <EventImagesWrapper>
-        {collabData ? <EventImages images={eventPhotoUrls} /> : null}
-      </EventImagesWrapper>
-
-      <PersonalContactWrapper>
-        <ContactTitle>컨택하러 가기</ContactTitle>
-        <PersonalContact
-        profileImageUrl={""}
-        nickname={collabData?.nickname}
-        explan={`${collabData?.contactMethod[1]?.contactUrl || collabData?.contactMethod[0]?.contactUrl ||"open.kakao.partNerd"}`}
-        />
-      </PersonalContactWrapper>
-
-      <InquiryAndCommentsWrapper>
-        <InquiryForm collabPostId={collabPostId} onSubmit={handleAddComment} />
-        <div style={{ marginTop: '40px' }}>
-          <CommentList
-            comments={comments}  // Use 'comments' state here.
-            collabPostId={collabPostId}
-            onReply={handleReply}
-            onDelete={(commentId) => handleDeleteComment(commentId)}
-            onUpdate={handleUpdateComment}
+      <ContentContainer>
+        <EventOverview eventData={collabData} />
+        <EventGuide collabData={collabData} />
+        <EventImages images={eventPhotoUrls} />
+        
+        <ContactSection>
+          <ContactTitle>컨택하러 가기</ContactTitle>
+          <PersonalContact
+            profileImageUrl={""}
+            nickname={collabData?.nickname}
+            explan={`${collabData?.contactMethod[1]?.contactUrl || collabData?.contactMethod[0]?.contactUrl ||"open.kakao.partNerd"}`}
           />
-        </div>
-      </InquiryAndCommentsWrapper>
-    </MainWrapper>
+        </ContactSection>
+
+        <InquirySection>
+          <InquiryForm collabPostId={collabPostId} onSubmit={handleAddComment} />
+          <CommentListWrapper>
+            <CommentList
+              comments={comments}
+              collabPostId={collabPostId}
+              onReply={handleReply}
+              onDelete={handleDeleteComment}
+              onUpdate={handleUpdateComment}
+            />
+          </CommentListWrapper>
+        </InquirySection>
+      </ContentContainer>
 
       <CustomModal
         openModal={openModal}
@@ -457,25 +447,53 @@ const InfoSectionWrapper = styled.div`
 `;
 
 
+const ContentContainer = styled.div`
+  width: 1000px;
+  margin: 70px auto 0;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 70px;  // 섹션 간 간격
+
+  > * {
+    width: 520px;  // 모든 자식 요소의 너비를 통일
+  }
+`;
+
+const ContactSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+  width:100%;
+`;
+
+const InquirySection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-bottom: 100px;
+`;
+
+const CommentListWrapper = styled.div`
+  margin-top: 40px;
+`;
+
 const EventOverviewWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 70px;
-  margin-left: 470px;
-  width: 520px;
 `;
 
 const EventGuideWrapper = styled.div`
-  margin-top: 65px;
-  margin-left: 20px;
-  width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
 const EventImagesWrapper = styled.div`
-  margin-top: 20px;
-  margin-left: 20px;
-  width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
 export const MenuItem = styled.div`
@@ -500,40 +518,10 @@ export const Divider = styled.div`
   margin-left: 10px;
 `;
 
-const PersonalContactWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top: 100px;
-  margin-left: 20px;
-  width: 520px;
-`;
-
 const ContactTitle = styled.div`
   color: #212121;
   font-family: Pretendard, sans-serif;
   font-size: 25px;
   font-weight: 700;
   margin: 0 0 35px 0;
-`;
-
-
-const InquiryAndCommentsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top: 80px;
-  margin-left: 20px;
-  width: 520px;
-  margin-bottom: 100px;
-`;
-
-export const MainWrapper = styled.div`
-  width: 1000px;
-  margin: 0 auto;
-  padding: 0;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
 `;
