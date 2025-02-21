@@ -360,9 +360,9 @@ const CollaborationDetailPage = () => {
       <PersonalContactWrapper>
         <ContactTitle>컨택하러 가기</ContactTitle>
         <PersonalContact
-        profileImageUrl={""}
-        nickname={collabData?.nickname}
-        explan={`${collabData?.contactMethod[1].contactUrl}`}
+          profileImageUrl={""}
+          nickname={collabData?.nickname}
+          explan={collabData?.contactMethod?.[1]?.contactUrl || "연락처 정보가 없습니다"}
         />
       </PersonalContactWrapper>
 
