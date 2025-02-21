@@ -39,6 +39,7 @@ const CollaborationDetailPage = () => {
       try {
         const response = await axios.get(`https://api.partnerd.site/api/collabPosts/${collabPostId}`);
         if (response.data.isSuccess) {
+          console.log("콜라보레이션 데이터", response.data.result);
           setCollabData(response.data.result);
           // 댓글 데이터가 있는 경우에만 설정
           if (response.data.result.collabInquiryList) {
@@ -310,6 +311,7 @@ const CollaborationDetailPage = () => {
 
 <Wrapper>
   <ImageSection>
+
     <ImageContainer>
       {bannerLoading ? <div>로딩 중...</div> :
         bannerError ? <div>{bannerError}</div> :
@@ -347,6 +349,7 @@ const CollaborationDetailPage = () => {
         {collabData ? <EventOverview eventData={collabData} /> : <div>데이터를 불러오는 중...</div>}
       </EventOverviewWrapper>
 
+      <MainWrapper>
       <EventGuideWrapper>
         {collabData ? <EventGuide collabData={collabData} /> : <div>데이터를 불러오는 중...</div>}
       </EventGuideWrapper>
@@ -357,21 +360,26 @@ const CollaborationDetailPage = () => {
 
       <PersonalContactWrapper>
         <ContactTitle>컨택하러 가기</ContactTitle>
-        <PersonalContact />
+        <PersonalContact
+        profileImageUrl={""}
+        nickname={collabData?.nickname}
+        explan={`${collabData?.contactMethod[1]?.contactUrl || collabData?.contactMethod[0]?.contactUrl ||"open.kakao.partNerd"}`}
+        />
       </PersonalContactWrapper>
 
       <InquiryAndCommentsWrapper>
         <InquiryForm collabPostId={collabPostId} onSubmit={handleAddComment} />
-         <div style={{ marginTop: '40px' }}>
-        <CommentList
-         comments={comments}  // Use 'comments' state here.
-         collabPostId={collabPostId}
-         onReply={handleReply}
-         onDelete={(commentId) => handleDeleteComment(commentId)}
-         onUpdate={handleUpdateComment}
-        />
-         </div>
+        <div style={{ marginTop: '40px' }}>
+          <CommentList
+            comments={comments}  // Use 'comments' state here.
+            collabPostId={collabPostId}
+            onReply={handleReply}
+            onDelete={(commentId) => handleDeleteComment(commentId)}
+            onUpdate={handleUpdateComment}
+          />
+        </div>
       </InquiryAndCommentsWrapper>
+    </MainWrapper>
 
       <CustomModal
         openModal={openModal}
@@ -455,20 +463,20 @@ const EventOverviewWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   margin-top: 70px;
-  margin-left: 360px;
-  width: 555px;
+  margin-left: 470px;
+  width: 520px;
 `;
 
 const EventGuideWrapper = styled.div`
   margin-top: 65px;
-  margin-left: 340px;
-  width: 550px;
+  margin-left: 20px;
+  width: 520px;
 `;
 
 const EventImagesWrapper = styled.div`
   margin-top: 20px;
-  margin-left: 340px;
-  width: 550px;
+  margin-left: 20px;
+  width: 520px;
 `;
 
 export const MenuItem = styled.div`
@@ -498,8 +506,8 @@ const PersonalContactWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   margin-top: 100px;
-  margin-left: 350px;
-  width: 555px;
+  margin-left: 20px;
+  width: 520px;
 `;
 
 const ContactTitle = styled.div`
@@ -516,7 +524,17 @@ const InquiryAndCommentsWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   margin-top: 80px;
-  margin-left: 350px;
-  width: 555px;
+  margin-left: 20px;
+  width: 520px;
   margin-bottom: 100px;
+`;
+
+export const MainWrapper = styled.div`
+  width: 1000px;
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;

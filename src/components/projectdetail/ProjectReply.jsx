@@ -89,6 +89,7 @@ const ProjectReply = ({ replyId, text, user, date, onDelete, onUpdate, jwtToken 
       <S.SArrow />
       <S.SProfileImageReply src='/default-profile.png' />
 
+
       <S.SReplyContent>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ fontSize: '16px', fontWeight: '600', marginBottom: '5px' }}>{user}</div>

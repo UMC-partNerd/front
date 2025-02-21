@@ -75,3 +75,5 @@ const MembersWrapper = styled.div`
   gap: 20px;
   flex-wrap: wrap; 
 `;
+
+

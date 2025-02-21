@@ -1,22 +1,23 @@
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import Button, { TYPES } from "../common/button";
+import { useNavigate } from "react-router-dom";
+import useContectChat from "../../hooks/useChatContect";
 
 //contact 컴포넌트 
 const PersonalContact = ({profileImageUrl, nickname, explan, intro}) =>{
+    const navigate = useNavigate();
     const location = useLocation();
     const isPersonalPage = location.pathname === "/mypage/personal-page";
+    const {startChat, loading, error} = useContectChat();
 
-    const onClickHandler = () => {
-    
-    };
 
     return(
         <Container>
             <TopContainer>
                 {/* 이미지 */}
                 <ImageComp 
-                        src={profileImageUrl || "/Profile_none.png"}
+                        src={profileImageUrl|| "/Profile_none.png"}
                             alt = "프로필 이미지"
                         />
                 <CenterContainer>
@@ -32,7 +33,8 @@ const PersonalContact = ({profileImageUrl, nickname, explan, intro}) =>{
                         styled={{fontSize:'5px'}}
                         type={TYPES.YES}
                         text='채팅'
-                        onClick={onClickHandler}
+                        onClick={() => navigate("/chat")}
+                        //onClick={() => startChat("사이먼")}
                     /></ButtonWrapper>
                 ) : (
                     <ButtonWrapper>
@@ -40,7 +42,8 @@ const PersonalContact = ({profileImageUrl, nickname, explan, intro}) =>{
                         styled={{fontSize:'5px'}}
                         type={TYPES.YES}
                         text='채팅'
-                        onClick={onClickHandler}
+                        onClick={() => startChat(nickname)} // nickname 전달
+                        disabled={loading}
                     /></ButtonWrapper>
                 )}
             </TopContainer>
@@ -129,15 +132,31 @@ justify-content: space-between;
 margin-bottom:50px;
 `
 
-const ImageComp = styled.img`
-object-fit: cover;
-border-radius: 50%;
-background:gray;
-width: 50px; /* 최소 너비를 고정 */
-  max-width: 50px; /* 최대 너비를 고정 */
-  min-height: 50px; /* 최소 높이를 고정 */
-  max-height: 50px; /* 최대 높이를 고정 */
-margin-left:0;
-`
+const ImageComp = styled.img.attrs((props) => ({
+    onError: (event) => {
+      event.target.src = "/Profile_none.png"; // 대체 이미지
+      event.target.onerror = null; // 무한 루프 방지
+    },
+  }))`
+    object-fit: cover;
+    border-radius: 50%;
+    background: gray;
+    width: 50px;
+    max-width: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    margin-left: 0;
+  `;
+
+// const ImageComp = styled.img`
+// object-fit: cover;
+// border-radius: 50%;
+// background:gray;
+// width: 50px; /* 최소 너비를 고정 */
+//   max-width: 50px; /* 최대 너비를 고정 */
+//   min-height: 50px; /* 최소 높이를 고정 */
+//   max-height: 50px; /* 최대 높이를 고정 */
+// margin-left:0;
+// `
 
 export default PersonalContact;

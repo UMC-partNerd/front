@@ -38,8 +38,8 @@ const ProjectCollaboration = () => {
     totalPages,
     sortBy,
     setSortBy,
-    selectedCategory,
-    setSelectedCategory,
+    selectedCategories,
+    setSelectedCategories,
     categories,
     loading,
     getImageUrl
@@ -120,8 +120,23 @@ const ProjectCollaboration = () => {
           {categories.map(category => (
             <CategoryButton
               key={category.id}
-              isActive={selectedCategory === category.id}
-              onClick={() => setSelectedCategory(category.id)}
+              isActive={selectedCategories.includes(category.id)}
+              onClick={() => {
+                if (category.id === null) {
+                  // '전체' 카테고리 클릭 시 무조건 [null]로 설정
+                  setSelectedCategories([null]);
+                } else {
+                  // 이미 선택된 카테고리면 제거
+                  if (selectedCategories.includes(category.id)) {
+                    const newCategories = selectedCategories.filter(id => id !== category.id);
+                    // 모든 카테고리가 해제되면 자동으로 '전체' 선택
+                    setSelectedCategories(newCategories.length === 0 ? [null] : newCategories);
+                  } else {
+                    // 새로운 카테고리 추가 시 '전체' 카테고리는 제거
+                    setSelectedCategories([...selectedCategories.filter(id => id !== null), category.id]);
+                  }
+                }
+              }}
             >
               {category.name}
             </CategoryButton>

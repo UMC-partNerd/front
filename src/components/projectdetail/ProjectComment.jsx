@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiMoreVertical } from "react-icons/fi";
 import { CiHeart } from "react-icons/ci";
 import ProjectReply from './ProjectReply';
 import ReplyInput from '../collaboration-detail/comments/ReplyInput';
+import useBannerPhoto from '../../hooks/useBannerPhoto';  // useBannerPhoto 훅 임포트
 import useUserInfo from '../../hooks/useUserInfo';
 import useMypageImg from '../../hooks/useMypagesProfileImg'; 
 import CustomModal, { VERSIONS } from "../common/modal/CustomModal"; 
+
 import * as S from '../../styled-components/projectdetail-styles/styled-ProjectComment';
 
-const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdate, onReply, type, jwtToken }) => {
+const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdate, onReply, type, jwtToken, nickname, profileKeyName }) => {
   const [showReply, setShowReply] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -18,8 +20,8 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
   const [liked, setLiked] = useState(false); 
   const [openModal, setOpenModal] = useState(false); // State to manage modal visibility
 
-  const { userInfo } = useUserInfo(jwtToken);  // 사용자 정보 가져오기
-
+  // useBannerPhoto 훅을 사용하여 프로필 이미지 URL 가져오기
+  const { profilePhotoUrl } = useBannerPhoto('', '', '', '', '', '', profileKeyName);
 
   const profileImageKey = userInfo?.profileKeyName
     ? `myProfileImage/MYPROFILE/${userInfo.profileKeyName.split('/').pop()}`
@@ -57,19 +59,18 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
     const today = new Date();
     const formattedDate = `${today.getFullYear()}. ${today.getMonth() + 1}. ${today.getDate()}`; // 오늘 날짜 포맷
     
-    const displayName = userInfo?.nickname || "임시 닉네임"; 
-    const profileKeyName = profileImageUrl || '/default-profile.png'; 
-    
     // 새로운 대댓글 객체 생성
     const newReply = {
       contents: replyText,  
-      nickname: displayName,  
-      profileKeyName: profileKeyName,  
+      nickname: nickname || "임시 닉네임",  // 유저 닉네임 사용
+      profileKeyName: profileKeyName || '/default-profile.png',  // 유저 프로필 이미지 URL
       projectCommentId: commentId,
       date: formattedDate,  
     };
   
-    onReply(replyText, commentId, type); 
+
+    onReply(replyText, commentId, type);  // 대댓글 추가 처리
+
     setReplyList([...replyList, newReply]);
     setShowReply(false);  
   };
@@ -102,11 +103,58 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
 
   const formattedDate = formatDate(date);
 
-  // 댓글 ID와 대댓글 ID를 type에 따라 처리
-  const currentCommentId = type === 'recruit' ? commentId : commentId;
-
   return (
     <S.SCommentWrapper>
+
+  {/* 프로필 이미지 */}
+  <S.SProfileImage src={profilePhotoUrl || '/default-profile.png'} alt="Profile" />
+
+  <S.SCommentContent>
+    {/* 댓글 사용자 이름 */}
+    <S.SCommentHeader>{nickname || "임시 닉네임"}</S.SCommentHeader>
+    <S.SCommentMeta>
+      <S.SDateText>{formattedDate}</S.SDateText>
+      <S.SLikeButtonWrapper>
+        <S.SLikeButton onClick={handleLike}>
+          <CiHeart color={liked ? "red" : "gray"} size={20} />
+        </S.SLikeButton>
+        <S.SLikeCount>{likes}</S.SLikeCount>
+      </S.SLikeButtonWrapper>
+    </S.SCommentMeta>
+
+    <S.SCommentBody>
+      {editMode ? (
+        <S.SCommentInput
+          type="text"
+          value={editedText}
+          onChange={handleEditChange}
+          onBlur={handleEditSubmit}
+          autoFocus
+        />
+      ) : (
+        <S.SCommentText>{text}</S.SCommentText>
+      )}
+      <S.SReplyButton onClick={handleReplyClick}>답글달기</S.SReplyButton>
+    </S.SCommentBody>
+  </S.SCommentContent>
+
+  {/* 대댓글 목록 */}
+  {replyList.map((reply, index) => (
+    <div key={index} style={{ marginTop: '10px' }}>
+      <ProjectReply 
+        replyId={reply.projectCommentId}  
+        text={reply.contents}  
+        user={reply.nickname}  
+        date={reply.date} 
+        profileKeyName={reply.profileKeyName} // 대댓글의 프로필 이미지
+        onDelete={(replyId) => {
+          setReplyList(replyList.filter((r) => r.projectCommentId !== replyId));
+          onDelete(replyId, 'reply');
+        }}
+        onUpdate={(replyId, newText) => {
+          setReplyList(replyList.map((r) => r.projectCommentId === replyId ? { ...r, contents: newText } : r));
+          onUpdate(replyId, newText, 'reply');
+
     
       {isLoading ? (
         <S.SProfileImage alt="로딩 중" />
@@ -180,8 +228,36 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
           right: '30px',
           top: '18px',
           cursor: 'pointer',
+
         }}
       />
+    </div>
+  ))}
+
+  {showReply && (
+    <ReplyInput 
+      onReply={handleReplySubmit} 
+      onClose={() => setShowReply(false)} 
+    />
+  )}
+  
+  <FiMoreVertical
+    onClick={handleOptionsClick}
+    style={{
+      position: 'absolute',
+      right: '30px',
+      top: '18px',
+      cursor: 'pointer',
+    }}
+  />
+
+  <S.SMoreOptionsMenu show={showOptions}>
+    <S.SMenuItem onClick={handleEditClick}>수정하기</S.SMenuItem>
+    <S.SDivider />
+    <S.SMenuItem onClick={handleDeleteClick}>삭제하기</S.SMenuItem>
+  </S.SMoreOptionsMenu>
+</S.SCommentWrapper>
+
 
       <S.SMoreOptionsMenu show={showOptions}>
         <S.SMenuItem onClick={handleEditClick}>수정하기</S.SMenuItem>
@@ -200,7 +276,9 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
         variant={VERSIONS.VER3}
       />
     </S.SCommentWrapper>
+
   );
 };
 
 export default ProjectComment;
+

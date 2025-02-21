@@ -29,17 +29,17 @@ import {
   SearchContainer,
   CategoryBadge
 } from "../styled-components/styled-partnerd-search";
-import { usePartnerSearch, PARTNER_CATEGORIES, SORT_OPTIONS } from '../hooks/usePartnerSearch';
+import { usePartnerSearch, SORT_OPTIONS } from '../hooks/usePartnerSearch';
 
 const PartnerSearch = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState(SORT_OPTIONS.RECENT);
-  const [selectedCategory, setSelectedCategory] = useState('전체');
+  const [selectedCategories, setSelectedCategories] = useState([null]);
   const [openModal, setOpenModal] = useState(false);
   const itemsPerPage = 12;
   const navigate = useNavigate();
 
-  const { partners, isLoading, error } = usePartnerSearch(selectedCategory, sortBy, currentPage);
+  const { partners, isLoading, error, categories } = usePartnerSearch(selectedCategories, sortBy, currentPage);
 
   const renderPageButtons = () => {
     const buttons = [];
@@ -133,13 +133,19 @@ const PartnerSearch = () => {
       <PartnerSearchContainer>
         <CategoryTitle>카테고리</CategoryTitle>
         <CategoryContainer>
-          {PARTNER_CATEGORIES.map(category => (
+          {categories.map(category => (
             <CategoryButton
-              key={category}
-              isActive={selectedCategory === category}
-              onClick={() => setSelectedCategory(category)}
+              key={category.id}
+              isActive={selectedCategories.includes(category.id)}
+              onClick={() => {
+                if (category.id === null) {
+                  setSelectedCategories([null]);
+                } else {
+                  setSelectedCategories([category.id]);
+                }
+              }}
             >
-              {category}
+              {category.name}
             </CategoryButton>
           ))}
         </CategoryContainer>

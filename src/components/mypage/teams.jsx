@@ -33,7 +33,8 @@ const MyTeamsComp = () => {
                         
                         return (
                             <ClubCard key={club.clubId} 
-                                onClick={() => navigate('/find/${club.clubId}')}
+                                onClick={() => navigate(`/find/32`)} //데모데이용
+                                //onClick={() => navigate(`/find/${club.clubId}`)}
                                 style={{cursor:'pointer'}}
                                 >
                                 <ImagePlaceholder>
