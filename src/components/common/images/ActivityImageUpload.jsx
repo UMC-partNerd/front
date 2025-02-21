@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import * as S from '../../../styled-components/common-styles/styled-ActivityImageUpload';
+import * as S from '../../../styled-components/common-styles/Styled-ActivityImageUpload';
 
 
 /*
