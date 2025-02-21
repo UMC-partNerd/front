@@ -11,9 +11,11 @@ import MemberForm from '../../components/projectdetail/MemberForm';
 import PersonalContact from '../../components/common/contact';
 import useBannerPhoto from '../../hooks/useBannerPhoto';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
+import useMypageImg from '../../hooks/useMypagesProfileImg';
 
 const DefaultImage = '/default-image.png';
 const DefaultProfileImage = '/default-profile.png';
+
 
 const ProjectRecruitDetail = () => {
   const { recruitProjectId } = useParams();
@@ -61,6 +63,8 @@ const ProjectRecruitDetail = () => {
         }, [recruitProjectId]); 
       
 
+
+        const {profileImageUrl, isLoadingP, isErrorP} = useMypageImg(projectData?.leaderInfo?.profileKeyName);
   const { thumbnailPhotoUrl, introPhotoUrl, isLoading, error } = useBannerPhoto(
     'projects', 
     null, 
@@ -216,6 +220,8 @@ const ProjectRecruitDetail = () => {
     return <div>Loading...</div>;
   }
 
+  
+
   return (
     <S.SContainer>
       <S.SImageBoxContainer>
@@ -275,7 +281,7 @@ const ProjectRecruitDetail = () => {
       <S.SPersonalContactWrapper>
         <S.SContactTitle>컨택하러 가기</S.SContactTitle>
         <PersonalContact 
-          profileImageUrl = {projectData?.leaderInfo?.profileKeyName || "/Profile_none.png"}
+          profileImageUrl = {profileImageUrl}
           nickname={projectData?.leaderInfo.nickname}
           explan={`${projectData?.leaderInfo.occupation_of_interest}/${projectData?.leaderInfo.belong_to_club}`}
         />

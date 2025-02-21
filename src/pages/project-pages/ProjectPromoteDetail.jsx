@@ -10,6 +10,7 @@ import useBannerPhoto from '../../hooks/useBannerPhoto';
 import MemberForm from '../../components/projectdetail/MemberForm';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
 import PersonalContact from '../../components/common/contact';
+import useMypageImg from '../../hooks/useMypagesProfileImg';
 
 const DefaultImage = '/default-image.png';
 
@@ -51,6 +52,8 @@ const ProjectPromoteDetail = () => {
         console.error('댓글 조회 중 오류 발생:', error);
       });
   }, [promotionProjectId]);
+
+  const {profileImageUrl, isLoadingP, errorP} = useMypageImg(projectData?.leaderInfo?.profileKeyName);
 
   const { thumbnailPhotoUrl, introPhotoUrl, isLoading, error } = useBannerPhoto(
     'projects', 
@@ -301,7 +304,7 @@ const ProjectPromoteDetail = () => {
        <S.SPersonalContactWrapper>
         <S.SContactTitle>컨택하러 가기</S.SContactTitle>
         <PersonalContact 
-        profileImageUrl = {projectData?.leaderInfo?.profileKeyName || "/Profile_none.png"}
+        profileImageUrl = {profileImageUrl || "/Profile_none.png"}
         nickname={projectData?.leaderInfo.nickname}
         explan={`${projectData?.leaderInfo.occupation_of_interest}/${projectData?.leaderInfo.belong_to_club}`}
         />

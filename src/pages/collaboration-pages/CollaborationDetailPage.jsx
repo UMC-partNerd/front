@@ -13,6 +13,7 @@ import { FiMoreVertical } from "react-icons/fi";
 import axios from 'axios';
 import EventOverview from '../../components/collaboration-detail/EventOverview';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
+import useMypageImg from '../../hooks/useMypagesProfileImg';
 
 const DefaultImage = '/default-image.png';
 
@@ -301,6 +302,8 @@ const CollaborationDetailPage = () => {
     setOpenModal(false);
   };
 
+  const {profileImageUrl, isLoading, error} = useMypageImg(collabData?.profileKeyname);
+
   return (
     <>
       {bannerLoading ? <div>로딩 중...</div> :
@@ -350,7 +353,7 @@ const CollaborationDetailPage = () => {
         <ContactSection>
           <ContactTitle>컨택하러 가기</ContactTitle>
           <PersonalContact
-            profileImageUrl={""}
+            profileImageUrl={profileImageUrl}
             nickname={collabData?.nickname}
             explan={`${collabData?.contactMethod[1]?.contactUrl || collabData?.contactMethod[0]?.contactUrl ||"open.kakao.partNerd"}`}
           />
