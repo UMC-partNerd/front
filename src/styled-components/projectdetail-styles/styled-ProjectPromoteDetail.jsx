@@ -159,3 +159,21 @@ export const SCommentInput = styled.input`
   border-radius: 5px;
   background-color: #f9f9f9;
 `;
+
+export const SPersonalContactWrapper = styled.div`
+  width: 100%;
+  max-width: 1000px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+`;
+
+export const SContactTitle = styled.h3`
+  font-size: 20px;
+  color: #212121;
+  font-weight: 600;
+  margin-bottom: 20px;
+`;
