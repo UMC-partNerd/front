@@ -19,6 +19,13 @@ const useBannerPhoto = (
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const convertToCloudFrontUrl = (url) => {
+    if (url && url.startsWith('http://localhost:3000')) {
+      return url.replace('http://localhost:3000', 'https://d5sroz33vtblq.cloudfront.net');
+    }
+    return url;
+  };
+
   const fetchPhotoUrl = useCallback(async (keyName) => {
     if (!keyName || keyName.startsWith('http')) {
       return keyName;
@@ -26,7 +33,6 @@ const useBannerPhoto = (
 
     try {
       const encodedKeyName = encodeURIComponent(keyName);
-      console.log('Requesting for encodedKeyName:', encodedKeyName);  // 로깅 추가
 
       const response = await axios.get(
         `https://api.partnerd.site/api/s3/preSignedUrl?keyName=${encodedKeyName}`,
@@ -37,15 +43,12 @@ const useBannerPhoto = (
         }
       );
 
-      console.log('Response from fetchPhotoUrl:', response);  // 응답 내용 확인
-
       if (response.data && response.data.result && response.data.result.cloudFrontUrl) {
         return response.data.result.cloudFrontUrl;
       } else {
         throw new Error('이미지 URL을 찾을 수 없습니다.');
       }
     } catch (err) {
-      console.error("Error fetching URL:", err);
       setError(err.message);
       throw new Error('이미지 데이터를 불러오는 중 오류가 발생했습니다.');
     }
@@ -56,25 +59,24 @@ const useBannerPhoto = (
 
     const fetchPhotos = async () => {
       try {
-        // profileImageFile 값이 제대로 설정되었을 경우에만 fetchPhotoUrl 호출
         if (profileImageFile && !profilePhotoUrl && isMounted) {
           const profileUrl = await fetchPhotoUrl(profileImageFile);
           if (isMounted) {
-            setProfilePhotoUrl(profileUrl);
+            setProfilePhotoUrl(convertToCloudFrontUrl(profileUrl)); // CloudFront URL로 변환
           }
         }
 
         if (bannerImageFile && !bannerPhotoUrl && isMounted) {
           const bannerUrl = await fetchPhotoUrl(bannerImageFile);
           if (isMounted) {
-            setBannerPhotoUrl(bannerUrl);
+            setBannerPhotoUrl(convertToCloudFrontUrl(bannerUrl)); // CloudFront URL로 변환
           }
         }
 
         if (mainImageFile && !mainPhotoUrl && isMounted) {
           const mainUrl = await fetchPhotoUrl(mainImageFile);
           if (isMounted) {
-            setMainPhotoUrl(mainUrl);
+            setMainPhotoUrl(convertToCloudFrontUrl(mainUrl)); // CloudFront URL로 변환
           }
         }
 
@@ -83,21 +85,21 @@ const useBannerPhoto = (
             eventImageFiles.map(file => fetchPhotoUrl(file))
           );
           if (isMounted) {
-            setEventPhotoUrls(eventUrls);
+            setEventPhotoUrls(eventUrls.map(url => convertToCloudFrontUrl(url))); // CloudFront URL로 변환
           }
         }
 
         if (thumbnailImageFile && !thumbnailPhotoUrl && isMounted) {
           const thumbnailUrl = await fetchPhotoUrl(thumbnailImageFile);
           if (isMounted) {
-            setThumbnailPhotoUrl(thumbnailUrl);
+            setThumbnailPhotoUrl(convertToCloudFrontUrl(thumbnailUrl)); // CloudFront URL로 변환
           }
         }
 
         if (introImageFile && !introPhotoUrl && isMounted) {
           const introUrl = await fetchPhotoUrl(introImageFile);
           if (isMounted) {
-            setIntroPhotoUrl(introUrl);
+            setIntroPhotoUrl(convertToCloudFrontUrl(introUrl)); // CloudFront URL로 변환
           }
         }
       } catch (err) {
@@ -111,7 +113,6 @@ const useBannerPhoto = (
       }
     };
 
-    // 이미지 파일이 제공되었을 때만 fetchPhotos 호출
     if (
       bannerImageFile || 
       mainImageFile || 
@@ -143,8 +144,6 @@ const useBannerPhoto = (
     introPhotoUrl,
     profilePhotoUrl
   ]);
-
-  console.log("Fetched profile image URL:", profilePhotoUrl); // 로깅
 
   return { 
     bannerPhotoUrl, 

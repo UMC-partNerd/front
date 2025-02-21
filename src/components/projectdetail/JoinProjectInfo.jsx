@@ -6,7 +6,7 @@ const JoinProjectInfo = ({ projectData }) => {
   const partList = projectData.part ? projectData.part.split(',') : [];
 
   // 기술 스택을 쉼표로 구분해서 배열로 만듬
-  const skillList = projectData.skill ? projectData.skill.split(',') : [];
+  const skillList = projectData.skill ? projectData.skill.split('\n') : []; // \n 기준으로 분리
 
   // 날짜 포맷을 수정하는 함수
   const formatDate = (dateString) => {
@@ -35,7 +35,10 @@ const JoinProjectInfo = ({ projectData }) => {
         <SubTitle>필요한 역량</SubTitle>
         <SmallText> 
           {skillList.length > 0 ? skillList.map((skill, index) => (
-            <div key={index}>• {skill.trim()}</div>  
+            <div key={index} style={{ marginBottom: '8px' }}>
+              <span style={{ marginRight: '10px' }}>•</span>
+              <span>{skill.trim().replace(/^-/g, '')}</span> {/* - 제거 */}
+            </div>  
           )) : "필요한 역량 정보가 없습니다."}
         </SmallText>
       </SectionWrapper>

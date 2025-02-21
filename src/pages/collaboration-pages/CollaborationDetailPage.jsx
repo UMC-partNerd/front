@@ -348,6 +348,7 @@ const CollaborationDetailPage = () => {
         {collabData ? <EventOverview eventData={collabData} /> : <div>데이터를 불러오는 중...</div>}
       </EventOverviewWrapper>
 
+      <MainWrapper>
       <EventGuideWrapper>
         {collabData ? <EventGuide collabData={collabData} /> : <div>데이터를 불러오는 중...</div>}
       </EventGuideWrapper>
@@ -367,16 +368,17 @@ const CollaborationDetailPage = () => {
 
       <InquiryAndCommentsWrapper>
         <InquiryForm collabPostId={collabPostId} onSubmit={handleAddComment} />
-         <div style={{ marginTop: '40px' }}>
-        <CommentList
-         comments={comments}  // Use 'comments' state here.
-         collabPostId={collabPostId}
-         onReply={handleReply}
-         onDelete={(commentId) => handleDeleteComment(commentId)}
-         onUpdate={handleUpdateComment}
-        />
-         </div>
+        <div style={{ marginTop: '40px' }}>
+          <CommentList
+            comments={comments}  // Use 'comments' state here.
+            collabPostId={collabPostId}
+            onReply={handleReply}
+            onDelete={(commentId) => handleDeleteComment(commentId)}
+            onUpdate={handleUpdateComment}
+          />
+        </div>
       </InquiryAndCommentsWrapper>
+    </MainWrapper>
 
       <CustomModal
         openModal={openModal}
@@ -466,13 +468,13 @@ const EventOverviewWrapper = styled.div`
 
 const EventGuideWrapper = styled.div`
   margin-top: 65px;
-  margin-left: 340px;
+  margin-left: 310px;
   width: 550px;
 `;
 
 const EventImagesWrapper = styled.div`
   margin-top: 20px;
-  margin-left: 340px;
+  margin-left: 300px;
   width: 550px;
 `;
 
@@ -503,7 +505,7 @@ const PersonalContactWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   margin-top: 100px;
-  margin-left: 350px;
+  margin-left: 320px;
   width: 555px;
 `;
 
@@ -521,7 +523,16 @@ const InquiryAndCommentsWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   margin-top: 80px;
-  margin-left: 350px;
+    margin-left: 320px;
   width: 555px;
   margin-bottom: 100px;
+`;
+
+export const MainWrapper = styled.div`
+  width: 100%;
+  padding: 5% 2%;  /* 상하 패딩 5%, 좌우 패딩 2% */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 `;

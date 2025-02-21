@@ -108,8 +108,7 @@ const Comment = ({ collabPostId, id, text, user, date, replies = [], onDelete, o
         <S.SProfileImage alt="로딩 중" />
       ) : (
         <S.SProfileImage 
-          src={profileImageUrl || '/default-profile.png'} 
-          alt="Profile" 
+          src={'/default-profile.png'} 
         />
       )}
 
