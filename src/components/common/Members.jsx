@@ -5,12 +5,15 @@ const Members = ({ name, image, isLeader, isLoading, error }) => {
   return (
     <MembersField>
       {isLoading ? (
-        <ImageComp className="loading">로딩 중...</ImageComp>  
+        <ImageComp className="loading" src="/Profile_none.png" alt="로딩 중" />
       ) : error ? (
-        <ImageComp className="error">에러 발생</ImageComp>  
+        <ImageComp src="/Profile_none.png" alt="에러 이미지" />
       ) : (
         <ImageCompContainer>
-          <img src={image} alt={`${name} profile`} />  
+          <ImageComp 
+            src={image || "/Profile_none.png"}
+            alt="프로필 이미지"
+          />
         </ImageCompContainer>
       )}
       <NameTag>
@@ -20,6 +23,8 @@ const Members = ({ name, image, isLeader, isLoading, error }) => {
     </MembersField>
   );
 };
+
+
 
 const NameTag = styled.div`
   font-size: 14px;
@@ -39,30 +44,30 @@ const ImageCompContainer = styled.div`
   background-color: #f0f0f0;
 
   img {
-    width: 100%;
-    height: 100%;
+    width: 1000%;
+    height: 1000%;
     object-fit: cover;
   }
 `;
 
-const ImageComp = styled.div`
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f0f0f0;
+// const ImageComp = styled.div`
+//   width: 70px;
+//   height: 70px;
+//   border-radius: 50%;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   background-color: #f0f0f0;
   
-  &.loading {
-    color: #888;
-  }
+//   &.loading {
+//     color: #888;
+//   }
 
-  &.error {
-    background: #f5c6cb;
-    color: #721c24;
-  }
-`;
+//   &.error {
+//     background: #f5c6cb;
+//     color: #721c24;
+//   }
+// `;
 
 const CrownIcon = styled.img`
   width: 15px;
@@ -78,4 +83,21 @@ const MembersField = styled.main`
   margin-right: 40px;
 `;
 
+const ImageComp = styled.img.attrs((props) => ({
+  onError: (event) => {
+    event.target.src = "/Profile_none.png"; // 대체 이미지
+    event.target.onerror = null; // 무한 루프 방지
+  },
+}))`
+  object-fit: cover;
+  border-radius: 50%;
+  width: 50px;
+  max-width: 50px;
+  min-height: 50px;
+  max-height: 50px;
+  margin-left: 0;
+`;
+
+
 export default Members;
+

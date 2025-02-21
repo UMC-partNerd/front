@@ -11,8 +11,6 @@ import MemberForm from '../../components/projectdetail/MemberForm';
 import CustomModal, { VERSIONS } from "../../components/common/modal/CustomModal";
 import PersonalContact from '../../components/common/contact';
 
-import Button, { TYPES } from "../../components/common/button";
-
 const DefaultImage = '/default-image.png';
 
 const ProjectPromoteDetail = () => {
