@@ -4,10 +4,6 @@ import { CiHeart } from "react-icons/ci";
 import ProjectReply from './ProjectReply';
 import ReplyInput from '../collaboration-detail/comments/ReplyInput';
 import useBannerPhoto from '../../hooks/useBannerPhoto';  // useBannerPhoto 훅 임포트
-import useUserInfo from '../../hooks/useUserInfo';
-import useMypageImg from '../../hooks/useMypagesProfileImg'; 
-import CustomModal, { VERSIONS } from "../common/modal/CustomModal"; 
-
 import * as S from '../../styled-components/projectdetail-styles/styled-ProjectComment';
 
 const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdate, onReply, type, jwtToken, nickname, profileKeyName }) => {
@@ -18,19 +14,9 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
   const [replyList, setReplyList] = useState(replies); // 대댓글 상태
   const [likes, setLikes] = useState(0); 
   const [liked, setLiked] = useState(false); 
-  const [openModal, setOpenModal] = useState(false); // State to manage modal visibility
 
   // useBannerPhoto 훅을 사용하여 프로필 이미지 URL 가져오기
   const { profilePhotoUrl } = useBannerPhoto('', '', '', '', '', '', profileKeyName);
-
-  const profileImageKey = userInfo?.profileKeyName
-    ? `myProfileImage/MYPROFILE/${userInfo.profileKeyName.split('/').pop()}`
-    : null;
-
-
-  const { profileImageUrl, isLoading, error, imageType } = useMypageImg(profileImageKey);
-
-  const displayName = userInfo?.nickname || "임시 닉네임"; 
 
   const handleReplyClick = () => setShowReply(prev => !prev);
   const handleOptionsClick = () => setShowOptions(prev => !prev);
@@ -68,9 +54,7 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
       date: formattedDate,  
     };
   
-
     onReply(replyText, commentId, type);  // 대댓글 추가 처리
-
     setReplyList([...replyList, newReply]);
     setShowReply(false);  
   };
@@ -81,14 +65,8 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
   };
 
   const handleDeleteClick = () => {
-    setOpenModal(true); 
-  };
-
-  
-  const handleDeleteConfirm = () => {
     onDelete(commentId, type); 
     setReplyList([]);  
-    setOpenModal(false); 
   };
 
   // 날짜 포맷 함수
@@ -105,7 +83,6 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
 
   return (
     <S.SCommentWrapper>
-
   {/* 프로필 이미지 */}
   <S.SProfileImage src={profilePhotoUrl || '/default-profile.png'} alt="Profile" />
 
@@ -154,81 +131,6 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
         onUpdate={(replyId, newText) => {
           setReplyList(replyList.map((r) => r.projectCommentId === replyId ? { ...r, contents: newText } : r));
           onUpdate(replyId, newText, 'reply');
-
-    
-      {isLoading ? (
-        <S.SProfileImage alt="로딩 중" />
-      ) : (
-        <S.SProfileImage 
-          src={profileImageUrl || '/default-profile.png'} 
-          alt="Profile" 
-        />
-      )}
-
-      <S.SCommentContent>
-        <S.SCommentHeader>{displayName}</S.SCommentHeader>
-        <S.SCommentMeta>
-          <S.SDateText>{formattedDate}</S.SDateText>
-          <S.SLikeButtonWrapper>
-            <S.SLikeButton onClick={handleLike}>
-              <CiHeart color={liked ? "red" : "gray"} size={20} />
-            </S.SLikeButton>
-            <S.SLikeCount>{likes}</S.SLikeCount>
-          </S.SLikeButtonWrapper>
-        </S.SCommentMeta>
-        <S.SCommentBody>
-          {editMode ? (
-            <S.SCommentInput
-              type="text"
-              value={editedText}
-              onChange={handleEditChange} 
-              onBlur={handleEditSubmit} 
-              autoFocus
-            />
-          ) : (
-            <S.SCommentText>{text}</S.SCommentText>
-          )}
-          <S.SReplyButton onClick={handleReplyClick}>답글달기</S.SReplyButton>
-        </S.SCommentBody>
-
-        {replyList.map((reply, index) => (
-          <div key={index} style={{ marginTop: '10px' }}>
-            <ProjectReply 
-              replyId={reply.projectCommentId}  
-              text={reply.contents}  
-              user={reply.nickname}  
-              date={reply.date} 
-              onDelete={(replyId) => {
-                setReplyList(replyList.filter((r) => r.projectCommentId !== replyId));
-                onDelete(replyId, 'reply');  // 대댓글 삭제 시 별도로 처리
-              }}
-              onUpdate={(replyId, newText) => {
-                setReplyList(replyList.map((r) => 
-                  r.projectCommentId === replyId ? { ...r, contents: newText } : r
-                ));
-                onUpdate(replyId, newText, 'reply');  // 대댓글 수정 시 별도로 처리
-              }}
-              jwtToken={jwtToken}
-            />
-          </div>
-        ))}
-        
-        {showReply && (
-          <ReplyInput 
-            onReply={handleReplySubmit} 
-            onClose={() => setShowReply(false)} 
-          />
-        )}
-      </S.SCommentContent>
-
-      <FiMoreVertical
-        onClick={handleOptionsClick}
-        style={{
-          position: 'absolute',
-          right: '30px',
-          top: '18px',
-          cursor: 'pointer',
-
         }}
       />
     </div>
@@ -257,25 +159,6 @@ const ProjectComment = ({ commentId, text, date, replies = [], onDelete, onUpdat
     <S.SMenuItem onClick={handleDeleteClick}>삭제하기</S.SMenuItem>
   </S.SMoreOptionsMenu>
 </S.SCommentWrapper>
-
-
-      <S.SMoreOptionsMenu show={showOptions}>
-        <S.SMenuItem onClick={handleEditClick}>수정하기</S.SMenuItem>
-        <S.SDivider />
-        <S.SMenuItem onClick={handleDeleteClick}>삭제하기</S.SMenuItem>
-      </S.SMoreOptionsMenu>
-
-
-      <CustomModal
-        openModal={openModal}
-        closeModal={() => setOpenModal(false)}
-        boldface="댓글을 삭제하시겠습니까?"
-        regular="삭제하기를 누르면 다시 되돌릴 수 없습니다. 정말로 삭제하시겠습니까?"
-        text="삭제하기"
-        onClickHandler={handleDeleteConfirm}
-        variant={VERSIONS.VER3}
-      />
-    </S.SCommentWrapper>
 
   );
 };
