@@ -82,11 +82,12 @@ const EventOverviewHeader = styled.h2`
   font-size: 25px;
   font-weight: 700;
   margin: 0 0 16px 0;
+  margin-left: 10px;
 `;
 
 const EventOverviewContainer = styled.div`
   display: flex;
-  width: 470px;
+  width: 520px;
   padding: 20px 24px;
   flex-direction: column;
   align-items: flex-start;
