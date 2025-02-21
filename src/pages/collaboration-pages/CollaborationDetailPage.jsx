@@ -362,7 +362,7 @@ const CollaborationDetailPage = () => {
         <PersonalContact
         profileImageUrl={""}
         nickname={collabData?.nickname}
-        explan={`${collabData?.contactMethod[1].contactUrl}`}
+        explan={`${collabData?.contactMethod[1]?.contactUrl || collabData?.contactMethod[0]?.contactUrl ||"open.kakao.partNerd"}`}
         />
       </PersonalContactWrapper>
 
