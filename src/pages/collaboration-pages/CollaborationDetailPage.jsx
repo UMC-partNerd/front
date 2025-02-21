@@ -463,20 +463,20 @@ const EventOverviewWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   margin-top: 70px;
-  margin-left: 360px;
-  width: 555px;
+  margin-left: 470px;
+  width: 520px;
 `;
 
 const EventGuideWrapper = styled.div`
   margin-top: 65px;
-  margin-left: 310px;
-  width: 550px;
+  margin-left: 20px;
+  width: 520px;
 `;
 
 const EventImagesWrapper = styled.div`
   margin-top: 20px;
-  margin-left: 300px;
-  width: 550px;
+  margin-left: 20px;
+  width: 520px;
 `;
 
 export const MenuItem = styled.div`
@@ -506,8 +506,8 @@ const PersonalContactWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   margin-top: 100px;
-  margin-left: 320px;
-  width: 555px;
+  margin-left: 20px;
+  width: 520px;
 `;
 
 const ContactTitle = styled.div`
@@ -524,16 +524,17 @@ const InquiryAndCommentsWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   margin-top: 80px;
-    margin-left: 320px;
-  width: 555px;
+  margin-left: 20px;
+  width: 520px;
   margin-bottom: 100px;
 `;
 
 export const MainWrapper = styled.div`
-  width: 100%;
-  padding: 5% 2%;  /* 상하 패딩 5%, 좌우 패딩 2% */
+  width: 1000px;
+  margin: 0 auto;
+  padding: 0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  align-items: flex-start;
 `;
