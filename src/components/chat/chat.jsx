@@ -77,7 +77,7 @@ const Chat = () => {
   const initializeWebSocket = (chatRoomId) => {
     console.log(`🔄 새로운 WebSocket 연결 시작: ${chatRoomId}`);
 
-    const socket = new SockJS(`http://localhost:8080/ws?token=${token}`);
+    const socket = new SockJS(`https://api.partnerd.site/ws?token=${token}`);
 
     const client = new Client({
       webSocketFactory: () => socket,
@@ -215,8 +215,8 @@ const Chat = () => {
     try {
       const url =
         tab === "private"
-          ? "http://localhost:8080/api/chatRooms/private"
-          : "http://localhost:8080/api/chatRooms/collab";
+          ? "https://api.partnerd.site/api/chatRooms/private"
+          : "https://api.partnerd.site/api/chatRooms/collab";
 
       const response = await axios.get(url, {
         headers: {
