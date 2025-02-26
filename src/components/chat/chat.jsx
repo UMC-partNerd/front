@@ -77,7 +77,7 @@ const Chat = () => {
   const initializeWebSocket = (chatRoomId) => {
     console.log(`🔄 새로운 WebSocket 연결 시작: ${chatRoomId}`);
 
-    const socket = new SockJS(`http://api.partnerd.site/ws?token=${token}`);
+    const socket = new SockJS(`https://api.partnerd.site/ws?token=${token}`);
 
     const client = new Client({
       webSocketFactory: () => socket,
