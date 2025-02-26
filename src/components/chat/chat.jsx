@@ -51,7 +51,7 @@ const Chat = () => {
   const [selectedChat, setSelectedChat] = useState({});
   // 🔹 이전 채팅방 ID를 저장하는 상태 추가
   const [previousChatRoomId, setPreviousChatRoomId] = useState(null);
-
+  const senderNickname = localStorage.getItem("nickname");
   const navigate = useNavigate();
 
   const connectWebSocket = async (SelectedchatRoomId) => {
@@ -168,41 +168,16 @@ const Chat = () => {
     setPreviousChatRoomId(selectedChatRoomId);
     setSelectedChatRoomId(newChatRoomId);
     setSelectedChat(newChat);
-    navigate(`/chat/${newChatRoomId}`);
   };
 
   // ✅ WebSocket 연결 감지 및 초기화 (중복 연결 방지)
   useEffect(() => {
     if (!selectedChatRoomId) return;
-
-    console.log(`🔄 WebSocket 감지: 채팅방 ${selectedChatRoomId}`);
-
-    const establishConnection = async () => {
-      // ✅ 기존 WebSocket이 활성화된 경우 종료 후 재연결
-      if (stompClient && stompClient.connected) {
-        console.log(
-          `🔴 기존 WebSocket 종료 요청: 채팅방 ${previousChatRoomId}`
-        );
-
-        await new Promise((resolve) => {
-          stompClient.deactivate();
-          stompClient.onDisconnect = () => {
-            console.log("✅ 기존 WebSocket 완전히 종료됨");
-            resolve();
-          };
-        });
-      }
-
-      // ✅ 새로운 WebSocket 연결 시작
-      initializeWebSocket(selectedChatRoomId);
-    };
-
-    // ✅ 500ms 딜레이 후 WebSocket 연결 (중복 방지)
-    const timeoutId = setTimeout(() => {
-      establishConnection();
-    }, 500);
-
-    return () => clearTimeout(timeoutId);
+    // 기존 WebSocket 유지, 구독만 변경
+    if (stompClient && stompClient.connected) {
+      // 새 채팅방 구독
+      subscribeToChat(selectedChatRoomId, stompClient);
+    }
   }, [selectedChatRoomId]);
 
   // ✅ 채팅방 목록 불러오기 (개인 채팅 & 콜라보 채팅)
@@ -281,7 +256,7 @@ const Chat = () => {
     let chatRoomId = selectedChatRoomId;
     const newMessage = {
       chatRoomId,
-      senderNickname: "율무",
+      senderNickname: senderNickname,
       content: inputMessage,
       sendTime: new Date().toISOString(),
     };
