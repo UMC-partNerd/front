@@ -106,7 +106,7 @@ const KakaoCallback = () => {
             // 이메일 정보 저장
             const email = response.data.result.email;
             const jwtToken = response.data.result.jwtToken;
-            const nickname = refreshResponse.data.result.nickname;
+            const nickname = response.data.result.nickname;
 
             //localStorage.setItem("kakao_access_token", response.data.result.access_token);
 
