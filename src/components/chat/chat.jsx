@@ -54,29 +54,8 @@ const Chat = () => {
   const senderNickname = localStorage.getItem("nickname");
   const navigate = useNavigate();
 
-  const connectWebSocket = async (SelectedchatRoomId) => {
-    console.log(
-      `🔄 채팅방 변경 감지: ${SelectedchatRoomId} -> WebSocket 재연결`
-    );
-
-    if (stompClient) {
-      console.log(`🔴 기존 WebSocket 구독 해제: sub-${previousChatRoomId}`);
-
-      await new Promise((resolve) => {
-        stompClient.deactivate();
-        setTimeout(() => {
-          console.log("✅ 기존 WebSocket 종료 완료");
-          resolve();
-        }, 1000); // ✅ WebSocket이 완전히 종료될 때까지 기다림
-      });
-    }
-    initializeWebSocket(SelectedchatRoomId);
-  };
-
   // 🔹 새로운 WebSocket을 설정하는 함수
-  const initializeWebSocket = (chatRoomId) => {
-    console.log(`🔄 새로운 WebSocket 연결 시작: ${chatRoomId}`);
-
+  const initializeWebSocket = () => {
     const socket = new SockJS(`https://api.partnerd.site/ws?token=${token}`);
 
     const client = new Client({
@@ -88,20 +67,11 @@ const Chat = () => {
       heartbeatOutgoing: 4000,
       onConnect: () => {
         console.log("✅ WebSocket 연결 성공");
-        setTimeout(() => {
-          if (client.connected) {
-            console.log(
-              `📡 WebSocket 연결 확인됨, 채팅방 ${chatRoomId} 구독 시작`
-            );
-            subscribeToChat(chatRoomId, client);
-          } else {
-            console.warn("⚠️ WebSocket 연결이 아직 완료되지 않음!");
-          }
-        }, 500);
+        setStompClient(client); // WebSocket 클라이언트 저장
       },
       onDisconnect: () => {
         console.log("❌ WebSocket 연결 종료");
-        setTimeout(() => initializeWebSocket(chatRoomId), 3000);
+        setTimeout(initializeWebSocket, 3000); // 연결이 끊어지면 다시 연결 시도
       },
     });
 
@@ -168,17 +138,17 @@ const Chat = () => {
     setPreviousChatRoomId(selectedChatRoomId);
     setSelectedChatRoomId(newChatRoomId);
     setSelectedChat(newChat);
+    navigate(`/chat/${newChatRoomId}`);
   };
 
-  // ✅ WebSocket 연결 감지 및 초기화 (중복 연결 방지)
   useEffect(() => {
-    if (!selectedChatRoomId) return;
-    // 기존 WebSocket 유지, 구독만 변경
-    if (stompClient && stompClient.connected) {
-      // 새 채팅방 구독
-      subscribeToChat(selectedChatRoomId, stompClient);
-    }
-  }, [selectedChatRoomId]);
+    initializeWebSocket();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedChatRoomId || !stompClient || !stompClient.connected) return;
+    subscribeToChat(selectedChatRoomId);
+  }, [selectedChatRoomId, stompClient]);
 
   // ✅ 채팅방 목록 불러오기 (개인 채팅 & 콜라보 채팅)
   useEffect(() => {
