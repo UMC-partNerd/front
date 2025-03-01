@@ -21,6 +21,7 @@ const useProjectCollaboration = () => {
   const [pageNumbers, setPageNumbers] = useState([]);
   // 페이지 그룹 (10개 단위로 관리)
   const [pageGroupStart, setPageGroupStart] = useState(1);
+  const [pageReferenceCache, setPageReferenceCache] = useState({});
 
   const api = axios.create({
     baseURL: "https://api.partnerd.site", // 실제 백엔드 서버 URL로 변경
@@ -145,6 +146,7 @@ const useProjectCollaboration = () => {
             mainImgKeyname: p.mainImgKeyname,
           }))
         );
+        console.log(pageGroupStart);
         // ✅ `pageReferenceDTOList` 업데이트하여 다음 페이지 요청 시 사용
         if (result.pageReferenceDTOList != null) {
           setPageReferenceDTOList(result.pageReferenceDTOList);
@@ -194,25 +196,25 @@ const useProjectCollaboration = () => {
   };
 
   const handleArrowButtonClick = (direction) => {
-    let newStartPage = pageGroupStart + direction * 10;
-
+    console.log(pageGroupStart);
+    const newStartPage = pageGroupStart + direction * 10;
+    console.log("newStartPage", newStartPage);
     if (newStartPage < 1) newStartPage = 1;
 
+    console.log("페이지 캐싱", pageReferenceCache);
+    console.log("페이지 캐싱", pageReferenceDTOList);
     setPageGroupStart(newStartPage);
     setCurrentPage(newStartPage);
     // ✅ `pageReferenceDTOList`에서 이전 페이지 정보 가져오기
-    if (
-      pageReferenceDTOList &&
-      pageReferenceDTOList.length >= newStartPage - 2
-    ) {
-      const referenceData = pageReferenceDTOList[newStartPage - 2]; // 🔥 `pageNum - 2`는 이전 페이지 인덱스
+    if (pageReferenceDTOList && newStartPage != 1) {
+      const referenceData = pageReferenceCache[newStartPage - 10]; // 🔥 `pageNum - 2`는 이전 페이지 인덱스
 
-      console.log("📌 페이지 참조 데이터:", referenceData);
+      console.log("📌 페이지 참조 데이터:", referenceData[9]);
 
       // ✅ 이전 페이지의 마지막 데이터를 기준으로 새로운 페이지 요청
-      setLastId(referenceData.lastId || null);
-      setLastEndDate(referenceData.lastEndDate || null);
-      setLastCreatedAt(referenceData.lastCreatedAt || null);
+      setLastId(referenceData[9].lastId || null);
+      setLastEndDate(referenceData[9].lastEndDate || null);
+      setLastCreatedAt(referenceData[9].lastCreatedAt || null);
     }
   };
 
@@ -220,12 +222,14 @@ const useProjectCollaboration = () => {
     console.log(`📌 페이지 클릭: ${pageNum}`);
 
     // ✅ 첫 번째 페이지 요청 시 `lastEndDate`, `lastCreatedAt`, `lastId` 초기화
-    if (pageNum === 1) {
-      setLastEndDate(null);
-      setLastCreatedAt(null);
-      setLastId(null);
+    if (pageNum % 10 === 1) {
+      console.log(pageGroupStart);
+      console.log(pageReferenceCache[pageGroupStart - 10]);
+      let pageReferenceCacheList = pageReferenceCache[pageGroupStart - 10];
+      setLastId(pageReferenceCacheList[9].lastId);
+      setLastCreatedAt(pageReferenceCacheList[9].lastCreatedAt);
+      setLastEndDate(pageReferenceCacheList[9].lastEndDate);
       setCurrentPage(pageNum);
-      fetchProjects(); // API 요청
       return;
     }
 
@@ -234,7 +238,7 @@ const useProjectCollaboration = () => {
     console.log(pageReferenceDTOList);
 
     // ✅ `pageReferenceDTOList`에서 이전 페이지 정보 가져오기
-    if (pageReferenceDTOList && pageReferenceDTOList.length >= referenceId) {
+    if (pageReferenceDTOList) {
       const referenceData = pageReferenceDTOList[referenceId]; // 🔥 `pageNum - 2`는 이전 페이지 인덱스
 
       console.log("📌 페이지 참조 데이터:", referenceData);
@@ -270,6 +274,21 @@ const useProjectCollaboration = () => {
       (_, i) => startPage + i
     );
   };
+  useEffect(() => {
+    if (pageReferenceDTOList != null) {
+      setTimeout(() => {
+        // ✅ setTimeout을 사용하여 상태 업데이트 후 실행
+        setPageReferenceCache((prevCache) => ({
+          ...prevCache,
+          [pageGroupStart]: pageReferenceDTOList, // ✅ 최신 pageGroupStart 반영
+        }));
+        console.log(
+          `✅ 캐시 저장: pageGroupStart=${pageGroupStart}, 데이터=`,
+          pageReferenceDTOList
+        );
+      }, 0);
+    }
+  }, [pageReferenceDTOList, pageGroupStart]); // ✅ pageGroupStart를 의존성에 추가
 
   useEffect(() => {
     console.log("현재페이지", currentPage);
