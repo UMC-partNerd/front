@@ -55,9 +55,7 @@ const Chat = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   // 🔹 새로운 WebSocket을 설정하는 함수
-  const initializeWebSocket = (chatRoomId) => {
-    console.log(`🔄 새로운 WebSocket 연결 시작: ${chatRoomId}`);
-
+  const initializeWebSocket = () => {
     const socket = new SockJS(`${API_BASE_URL}/ws?token=${token}`);
 
     const client = new Client({
@@ -78,7 +76,6 @@ const Chat = () => {
     });
 
     client.activate();
-    setStompClient(client);
   };
   // 🔹 기존 채팅방을 해제한 후 새로운 채팅방을 구독하는 함수
   const subscribeToChat = (chatRoomId, client) => {
@@ -155,7 +152,7 @@ const Chat = () => {
 
   useEffect(() => {
     if (!selectedChatRoomId || !stompClient || !stompClient.connected) return;
-    subscribeToChat(selectedChatRoomId);
+    subscribeToChat(selectedChatRoomId, stompClient);
   }, [selectedChatRoomId, stompClient]);
 
   // ✅ 채팅방 목록 불러오기 (개인 채팅 & 콜라보 채팅)
