@@ -52,11 +52,13 @@ const Chat = () => {
   // 🔹 이전 채팅방 ID를 저장하는 상태 추가
   const [previousChatRoomId, setPreviousChatRoomId] = useState(null);
   const senderNickname = localStorage.getItem("nickname");
-  const navigate = useNavigate();
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   // 🔹 새로운 WebSocket을 설정하는 함수
-  const initializeWebSocket = () => {
-    const socket = new SockJS(`https://api.partnerd.site/ws?token=${token}`);
+  const initializeWebSocket = (chatRoomId) => {
+    console.log(`🔄 새로운 WebSocket 연결 시작: ${chatRoomId}`);
+
+    const socket = new SockJS(`${API_BASE_URL}/ws?token=${token}`);
 
     const client = new Client({
       webSocketFactory: () => socket,
@@ -67,11 +69,11 @@ const Chat = () => {
       heartbeatOutgoing: 4000,
       onConnect: () => {
         console.log("✅ WebSocket 연결 성공");
-        setStompClient(client); // WebSocket 클라이언트 저장
+        setStompClient(client);
       },
       onDisconnect: () => {
         console.log("❌ WebSocket 연결 종료");
-        setTimeout(initializeWebSocket, 3000); // 연결이 끊어지면 다시 연결 시도
+        setTimeout(initializeWebSocket, 3000);
       },
     });
 
@@ -141,8 +143,14 @@ const Chat = () => {
     navigate(`/chat/${newChatRoomId}`);
   };
 
+  /**
+   * ✅ 최초 한 번만 WebSocket 연결
+   */
   useEffect(() => {
-    initializeWebSocket();
+    if (!stompClient) {
+      console.log("🔗 WebSocket 최초 연결 시도...");
+      initializeWebSocket();
+    }
   }, []);
 
   useEffect(() => {
@@ -160,8 +168,8 @@ const Chat = () => {
     try {
       const url =
         tab === "private"
-          ? "https://api.partnerd.site/api/chatRooms/private"
-          : "https://api.partnerd.site/api/chatRooms/collab";
+          ? `${API_BASE_URL}/api/chatRooms/private`
+          : `${API_BASE_URL}/api/chatRooms/collab`;
 
       const response = await axios.get(url, {
         headers: {
@@ -189,7 +197,7 @@ const Chat = () => {
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
-          `https://api.partnerd.site/api/chat/${selectedChatRoomId}`,
+          `${API_BASE_URL}/api/chat/${selectedChatRoomId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -254,14 +262,11 @@ const Chat = () => {
     console.log(imgKey);
     if (!imgKey) return "/default-avatar.png"; // 기본 이미지 반환
     try {
-      const response = await axios.get(
-        `https://api.partnerd.site/api/s3/preSignedUrl`,
-        {
-          params: {
-            keyName: imgKey,
-          },
-        }
-      );
+      const response = await axios.get(`${API_BASE_URL}/api/s3/preSignedUrl`, {
+        params: {
+          keyName: imgKey,
+        },
+      });
       console.log(response.data.result.cloudFrontUrl);
       return response.data.result.cloudFrontUrl;
     } catch (error) {
@@ -269,6 +274,7 @@ const Chat = () => {
       return "/default-avatar.png"; // 요청 실패 시 기본 이미지 사용
     }
   };
+
   // ✅ 채팅 리스트 업데이트 시 아바타 이미지 URL 요청
   useEffect(() => {
     const fetchAvatars = async () => {
