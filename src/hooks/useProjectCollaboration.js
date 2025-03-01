@@ -12,7 +12,15 @@ const useProjectCollaboration = () => {
   const [imageLoading, setImageLoading] = useState({});
   const [lastEndDate, setLastEndDate] = useState(null);
   const [lastCreatedAt, setLastCreatedAt] = useState(null);
+  const [pageReferenceDTOList, setPageReferenceDTOList] = useState(null);
   const [lastId, setLastId] = useState(null);
+  const [hasMorePages, setHasMorePages] = useState(false);
+  const [availablePages, setAvailablePages] = useState(1);
+  const [isFirst, setIsFirst] = useState(false);
+  const [isLast, setIsLast] = useState(false);
+  const [pageNumbers, setPageNumbers] = useState([]);
+  // 페이지 그룹 (10개 단위로 관리)
+  const [pageGroupStart, setPageGroupStart] = useState(1);
 
   const api = axios.create({
     baseURL: "https://api.partnerd.site", // 실제 백엔드 서버 URL로 변경
@@ -23,9 +31,9 @@ const useProjectCollaboration = () => {
     { id: 1, name: "웹/앱 개발" },
     { id: 2, name: "인공지능" },
     { id: 3, name: "데이터" },
-    { id: 4, name: "디자인" },
-    { id: 5, name: "마케팅" },
-    { id: 6, name: "게임" },
+    { id: 4, name: "게임" },
+    { id: 5, name: "디자인" },
+    { id: 6, name: "기획/마케팅" },
     { id: 7, name: "기타" },
   ];
 
@@ -138,7 +146,7 @@ const useProjectCollaboration = () => {
           }))
         );
         // ✅ `pageReferenceDTOList` 업데이트하여 다음 페이지 요청 시 사용
-        if (result.pageReferenceDTOList.length > 0) {
+        if (result.pageReferenceDTOList != null) {
           setPageReferenceDTOList(result.pageReferenceDTOList);
         }
 
@@ -163,14 +171,19 @@ const useProjectCollaboration = () => {
             };
           })
         );
+        // ✅ 페이지네이션 정보 업데이트
+        if (currentPage % 10 == 1 && result.availablePages != -1) {
+          setAvailablePages(result.availablePages);
+          setHasMorePages(result.hasMorePages);
+        }
+        setIsFirst(result.first);
+        setIsLast(result.last);
+
+        console.log(currentPage);
+        console.log(availablePages);
 
         console.log("✅ 최종 프로젝트 데이터:", projectsWithImages);
         setProjects(projectsWithImages);
-        // ✅ 페이지네이션 정보 업데이트
-        setTotalPages(result.availablePages);
-        setHasMorePages(result.hasMorePages);
-        setIsFirst(result.isFirst);
-        setIsLast(result.isLast);
       }
     } catch (err) {
       console.error("❌ 프로젝트 데이터 조회 실패:", err);
@@ -180,9 +193,101 @@ const useProjectCollaboration = () => {
     }
   };
 
+  const handleArrowButtonClick = (direction) => {
+    let newStartPage = pageGroupStart + direction * 10;
+
+    if (newStartPage < 1) newStartPage = 1;
+
+    setPageGroupStart(newStartPage);
+    setCurrentPage(newStartPage);
+    // ✅ `pageReferenceDTOList`에서 이전 페이지 정보 가져오기
+    if (
+      pageReferenceDTOList &&
+      pageReferenceDTOList.length >= newStartPage - 2
+    ) {
+      const referenceData = pageReferenceDTOList[newStartPage - 2]; // 🔥 `pageNum - 2`는 이전 페이지 인덱스
+
+      console.log("📌 페이지 참조 데이터:", referenceData);
+
+      // ✅ 이전 페이지의 마지막 데이터를 기준으로 새로운 페이지 요청
+      setLastId(referenceData.lastId || null);
+      setLastEndDate(referenceData.lastEndDate || null);
+      setLastCreatedAt(referenceData.lastCreatedAt || null);
+    }
+  };
+
+  const handlePageClick = (pageNum) => {
+    console.log(`📌 페이지 클릭: ${pageNum}`);
+
+    // ✅ 첫 번째 페이지 요청 시 `lastEndDate`, `lastCreatedAt`, `lastId` 초기화
+    if (pageNum === 1) {
+      setLastEndDate(null);
+      setLastCreatedAt(null);
+      setLastId(null);
+      setCurrentPage(pageNum);
+      fetchProjects(); // API 요청
+      return;
+    }
+
+    const referenceId = pageNum % 10 != 0 ? (pageNum % 10) - 2 : 8;
+    console.log(referenceId);
+    console.log(pageReferenceDTOList);
+
+    // ✅ `pageReferenceDTOList`에서 이전 페이지 정보 가져오기
+    if (pageReferenceDTOList && pageReferenceDTOList.length >= referenceId) {
+      const referenceData = pageReferenceDTOList[referenceId]; // 🔥 `pageNum - 2`는 이전 페이지 인덱스
+
+      console.log("📌 페이지 참조 데이터:", referenceData);
+
+      // ✅ 이전 페이지의 마지막 데이터를 기준으로 새로운 페이지 요청
+      setLastId(referenceData.lastId || null);
+      setLastEndDate(referenceData.lastEndDate || null);
+      setLastCreatedAt(referenceData.lastCreatedAt || null);
+    }
+
+    setCurrentPage(pageNum);
+  };
+
   useEffect(() => {
     fetchProjects();
+    console.log("선택한 카테고리", selectedCategories);
   }, [currentPage, sortBy, selectedCategories]);
+
+  const getPageNumbers = (currentPage, availablePages) => {
+    console.log("현재페이지", currentPage);
+    console.log("표시할수있는페이지", availablePages);
+
+    const maxPagesToShow = 10; // ✅ 한 번에 표시할 최대 페이지 수
+    if (availablePages < 1) return [1]; // ✅ 최소 1페이지 보장
+    let startPage = currentPage;
+    let endPage = Math.min(
+      currentPage + availablePages - 1,
+      currentPage + maxPagesToShow - 1
+    );
+
+    return Array.from(
+      { length: endPage - startPage + 1 },
+      (_, i) => startPage + i
+    );
+  };
+
+  useEffect(() => {
+    console.log("현재페이지", currentPage);
+    console.log("표시할수있는페이지", availablePages);
+    const maxPagesToShow = 10;
+    if (availablePages < 1) return;
+
+    let startPage = pageGroupStart;
+    let endPage = Math.min(
+      startPage + availablePages - 1,
+      startPage + maxPagesToShow - 1
+    );
+
+    setPageNumbers(
+      Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i)
+    );
+    console.log(pageNumbers);
+  }, [pageGroupStart, availablePages]);
 
   return {
     projects,
@@ -193,10 +298,19 @@ const useProjectCollaboration = () => {
     setSortBy,
     selectedCategories,
     setSelectedCategories,
+    pageReferenceDTOList,
+    availablePages,
+    hasMorePages,
     categories,
     loading,
     error,
     imageLoading,
+    handlePageClick,
+    handleArrowButtonClick,
+    isFirst,
+    isLast,
+    getPageNumbers,
+    pageNumbers,
   };
 };
 
