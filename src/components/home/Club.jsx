@@ -10,13 +10,12 @@ import {
   CardContent,
   CategoryBadge,
   ClubTitle,
-  Description
+  Description,
 } from "../../styled-components/styled-Club";
-import { useHomeData } from '../../hooks/useHomeData';
-import { useNavigate } from 'react-router-dom';
+import { useHomeData } from "../../hooks/useHomeData";
+import { useNavigate } from "react-router-dom";
 
-function Club() {
-  const { homeData, isLoading } = useHomeData();
+function Club({ homeData, isLoading }) {
   const navigate = useNavigate();
 
   if (isLoading) {
@@ -35,10 +34,7 @@ function Club() {
       </Header>
       <CardGrid>
         {homeData.clubs.map((club, index) => (
-          <ClubCard 
-            key={index} 
-            onClick={() => handleCardClick(club.id)}
-          >
+          <ClubCard key={index} onClick={() => handleCardClick(club.id)}>
             <ImagePlaceholder>
               <img src={club.imageUrl} alt={club.name} />
             </ImagePlaceholder>

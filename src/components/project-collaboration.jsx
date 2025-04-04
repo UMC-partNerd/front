@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // 추가
 import Button, { TYPES } from "./common/button";
 import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
@@ -42,17 +42,18 @@ const ProjectCollaboration = () => {
     setSelectedCategories,
     categories,
     loading,
-    getImageUrl,
-    availablePages,
     hasMorePages,
-    handlePageClick,
-    handleArrowButtonClick,
-    getPageNumbers,
-    pageNumbers,
+    availablePages,
+    pageReferenceDTOList,
+    getImageUrl,
+    fetchProjects,
+    currentCursor,
+    setCurrentCursor,
   } = useProjectCollaboration();
 
   // 버튼: 협업글 작성하기
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pageGroupStart, setPageGroupStart] = useState(1);
 
   const navigate = useNavigate();
 
@@ -72,6 +73,19 @@ const ProjectCollaboration = () => {
 
   const handleCardClick = (id) => {
     navigate(`/collaboration/${id}`);
+  };
+  const getPageNumbers = () => {
+    console.log("pageGroupStart", pageGroupStart);
+    const groupSize = 10;
+    const pages = [];
+    for (
+      let i = pageGroupStart;
+      i < pageGroupStart + groupSize && i - groupSize <= availablePages;
+      i++
+    ) {
+      pages.push(i);
+    }
+    return pages;
   };
 
   /** const getPageNumbers = (current, total) => {
@@ -203,6 +217,7 @@ const ProjectCollaboration = () => {
                 <img
                   src={project.imageUrl}
                   alt={project.title}
+                  loading="lazy" // 💥 여기 추가!
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = "/default-image.png";
@@ -215,8 +230,8 @@ const ProjectCollaboration = () => {
                 </CategoryBadge>
                 <Title>{project.title}</Title>
                 <Deadline>
-                  {formatDate(project.startDate)} ~{" "}
-                  {formatDate(project.endDate)}
+                  {new Date(project.startDate).toLocaleDateString()} ~
+                  {new Date(project.endDate).toLocaleDateString()}
                 </Deadline>
               </CardContent>
             </ProjectCard>
@@ -224,28 +239,57 @@ const ProjectCollaboration = () => {
         </ProjectGrid>
 
         <PaginationContainer>
-          {currentPage > 10 && (
-            <ArrowButton onClick={() => handleArrowButtonClick(-1)}>
-              <ArrowIcon className="left" />
-            </ArrowButton>
-          )}
+          {/* ◀️ 이전 그룹 */}
+          <ArrowButton
+            onClick={() => {
+              const prevGroupStart = pageGroupStart - 10;
+              if (prevGroupStart >= 1) {
+                const prevCursor = pageReferenceDTOList[prevGroupStart - 2];
+                setPageGroupStart(prevGroupStart);
+                setCurrentPage(prevGroupStart);
+                if (prevCursor) setCurrentCursor(prevCursor);
+              }
+            }}
+            disabled={pageGroupStart === 1}
+          >
+            <ArrowIcon className="left" />
+          </ArrowButton>
 
-          {pageNumbers.map((page) => (
-            <PageButton
-              key={page}
-              $isActive={currentPage === page}
-              onClick={() => handlePageClick(page)}
-            >
-              {page}
-            </PageButton>
-          ))}
+          {/* 페이지 번호 버튼 */}
+          {getPageNumbers().map((page) => {
+            console.log(page);
+            const cursor = pageReferenceDTOList[page - 2];
+            return (
+              <PageButton
+                key={page}
+                $isActive={currentPage === page}
+                onClick={() => {
+                  setCurrentPage(page);
+                  if (cursor) {
+                    setCurrentCursor(cursor);
+                  }
+                }}
+              >
+                {page}
+              </PageButton>
+            );
+          })}
 
-          {/* ➡️ 다음 페이지 버튼 (hasMorePages가 true일 때만 표시) */}
-          {hasMorePages && (
-            <ArrowButton onClick={() => handleArrowButtonClick(1)}>
-              <ArrowIcon className="right" />
-            </ArrowButton>
-          )}
+          {/* ▶️ 다음 그룹 */}
+          <ArrowButton
+            onClick={() => {
+              const nextGroupStart = pageGroupStart + 10;
+              if (hasMorePages) {
+                const nextCursor = pageReferenceDTOList[nextGroupStart - 2];
+                setPageGroupStart(nextGroupStart);
+                setCurrentPage(nextGroupStart);
+                if (nextCursor) setCurrentCursor(nextCursor);
+              }
+            }}
+            disabled={!hasMorePages}
+          >
+            <ArrowIcon className="right" />
+          </ArrowButton>
         </PaginationContainer>
       </CollaborationContainer>
     </>

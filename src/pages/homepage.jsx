@@ -1,32 +1,39 @@
-import React from 'react';
-import BannerSlider from '../components/home/BannerSlider';
-import Collaboration from '../components/home/Collaboration';
-import Project from '../components/home/Project';
-import Club from '../components/home/Club';
-import styled from 'styled-components';
+import React from "react";
+import BannerSlider from "../components/home/BannerSlider";
+import Collaboration from "../components/home/Collaboration";
+import Project from "../components/home/Project";
+import Club from "../components/home/Club";
+import styled from "styled-components";
+import { useHomeData } from "../hooks/useHomeData";
 
 const Homepage = () => {
+  const { homeData, isLoading } = useHomeData();
+
   return (
     <PageWrapper>
       <BannerWrapper>
         <BannerSlider />
       </BannerWrapper>
       <ContentSection>
-        <Collaboration />
+        <Collaboration homeData={homeData} isLoading={isLoading} />
       </ContentSection>
       <ContentSection>
-        <Club />
+        <Club homeData={homeData} isLoading={isLoading} />
       </ContentSection>
       <ContentSection>
-        <Project 
-          title="지금 함께하고 싶은 프로젝트" 
-          type="recent" 
+        <Project
+          title="지금 함께하고 싶은 프로젝트"
+          type="recent"
+          homeData={homeData}
+          isLoading={isLoading}
         />
       </ContentSection>
       <ContentSection>
-        <Project 
-          title="지금 인기 있는 프로젝트" 
-          type="popular" 
+        <Project
+          title="지금 인기 있는 프로젝트"
+          type="popular"
+          homeData={homeData}
+          isLoading={isLoading}
         />
       </ContentSection>
     </PageWrapper>
@@ -44,7 +51,7 @@ const PageWrapper = styled.div`
   padding: 0;
   margin: 0;
   align-items: center;
-  font-family: 'Pretendard', sans-serif; 
+  font-family: "Pretendard", sans-serif;
 `;
 
 const BannerWrapper = styled.div`

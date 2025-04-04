@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import { useState, useEffect, useCallback } from "react";
+import axios from "axios";
 
 const useBannerPhoto = (
   folderName,
@@ -20,38 +20,17 @@ const useBannerPhoto = (
   const [error, setError] = useState(null);
 
   const convertToCloudFrontUrl = (url) => {
-    if (url && url.startsWith('http://localhost:3000')) {
-      return url.replace('http://localhost:3000', 'https://d5sroz33vtblq.cloudfront.net');
+    if (url && url.startsWith("http://localhost:3000")) {
+      return url.replace(
+        "http://localhost:3000",
+        "https://d5sroz33vtblq.cloudfront.net"
+      );
     }
     return url;
   };
 
   const fetchPhotoUrl = useCallback(async (keyName) => {
-    if (!keyName || keyName.startsWith('http')) {
-      return keyName;
-    }
-
-    try {
-      const encodedKeyName = encodeURIComponent(keyName);
-
-      const response = await axios.get(
-        `https://api.partnerd.site/api/s3/preSignedUrl?keyName=${encodedKeyName}`,
-        {
-          headers: {
-            'Accept': 'application/json',
-          },
-        }
-      );
-
-      if (response.data && response.data.result && response.data.result.cloudFrontUrl) {
-        return response.data.result.cloudFrontUrl;
-      } else {
-        throw new Error('이미지 URL을 찾을 수 없습니다.');
-      }
-    } catch (err) {
-      setError(err.message);
-      throw new Error('이미지 데이터를 불러오는 중 오류가 발생했습니다.');
-    }
+    return `https://www.partnerd.site/${keyName}`;
   }, []);
 
   useEffect(() => {
@@ -80,12 +59,19 @@ const useBannerPhoto = (
           }
         }
 
-        if (eventImageFiles && eventImageFiles.length > 0 && !eventPhotoUrls.length && isMounted) {
+        if (
+          eventImageFiles &&
+          eventImageFiles.length > 0 &&
+          !eventPhotoUrls.length &&
+          isMounted
+        ) {
           const eventUrls = await Promise.all(
-            eventImageFiles.map(file => fetchPhotoUrl(file))
+            eventImageFiles.map((file) => fetchPhotoUrl(file))
           );
           if (isMounted) {
-            setEventPhotoUrls(eventUrls.map(url => convertToCloudFrontUrl(url))); // CloudFront URL로 변환
+            setEventPhotoUrls(
+              eventUrls.map((url) => convertToCloudFrontUrl(url))
+            ); // CloudFront URL로 변환
           }
         }
 
@@ -114,12 +100,12 @@ const useBannerPhoto = (
     };
 
     if (
-      bannerImageFile || 
-      mainImageFile || 
+      bannerImageFile ||
+      mainImageFile ||
       (eventImageFiles && eventImageFiles.length > 0) ||
-      thumbnailImageFile || 
+      thumbnailImageFile ||
       introImageFile ||
-      profileImageFile 
+      profileImageFile
     ) {
       fetchPhotos();
     } else {
@@ -135,25 +121,25 @@ const useBannerPhoto = (
     eventImageFiles,
     thumbnailImageFile,
     introImageFile,
-    profileImageFile,  
+    profileImageFile,
     fetchPhotoUrl,
-    bannerPhotoUrl,  
+    bannerPhotoUrl,
     mainPhotoUrl,
     eventPhotoUrls,
     thumbnailPhotoUrl,
     introPhotoUrl,
-    profilePhotoUrl
+    profilePhotoUrl,
   ]);
 
-  return { 
-    bannerPhotoUrl, 
-    mainPhotoUrl, 
-    eventPhotoUrls, 
-    thumbnailPhotoUrl, 
+  return {
+    bannerPhotoUrl,
+    mainPhotoUrl,
+    eventPhotoUrls,
+    thumbnailPhotoUrl,
     introPhotoUrl,
-    profilePhotoUrl, 
-    isLoading, 
-    error 
+    profilePhotoUrl,
+    isLoading,
+    error,
   };
 };
 

@@ -12,22 +12,21 @@ import {
   CompanyName,
   CollabTitle,
   CollabDescription,
-  PostDate
+  PostDate,
 } from "../../styled-components/styled-Collaboration";
-import { useCollaborationData } from '../../hooks/useCollaborationData';
-import { useNavigate } from 'react-router-dom';
+import { useCollaborationData } from "../../hooks/useCollaborationData";
+import { useNavigate } from "react-router-dom";
+import { useHomeData } from "../../hooks/useHomeData";
 
-const Collaboration = () => {
+const Collaboration = ({ homeData, isLoading }) => {
   const navigate = useNavigate();
-  const { collaborations, isLoading, error } = useCollaborationData();
-
   const handleCardClick = (id) => {
     navigate(`/collaboration/${id}`);
   };
 
   if (isLoading) return <div>로딩 중...</div>;
-  if (error) return <div>에러가 발생했습니다: {error.message}</div>;
-  if (!collaborations || collaborations.length === 0) return <div>콜라보레이션 데이터가 없습니다.</div>;
+  if (!homeData.collabPost || homeData.collabPost.length === 0)
+    return <div>콜라보레이션 데이터가 없습니다.</div>;
 
   return (
     <CollaborationContainer>
@@ -36,18 +35,20 @@ const Collaboration = () => {
         <MoreButton href="/collaboration">더보기 ›</MoreButton>
       </Header>
       <CardGrid>
-        {collaborations.map((collab) => (
-          <CollabCard 
+        {homeData.collabPost.map((collab) => (
+          <CollabCard
             key={collab.id}
             onClick={() => handleCardClick(collab.id)}
           >
             <TitleRow>
               <CompanyLogo>
-                <img 
-                  src={collab.imageUrl || collab.thumbnail || '/default-image.png'} 
+                <img
+                  src={
+                    collab.imageUrl || collab.thumbnail || "/default-image.png"
+                  }
                   alt={collab.clubName}
                   onError={(e) => {
-                    e.target.src = '/default-image.png';
+                    e.target.src = "/default-image.png";
                     e.target.onerror = null;
                   }}
                 />
