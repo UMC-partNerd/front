@@ -137,7 +137,6 @@ const Chat = () => {
     setPreviousChatRoomId(selectedChatRoomId);
     setSelectedChatRoomId(newChatRoomId);
     setSelectedChat(newChat);
-    navigate(`/chat/${newChatRoomId}`);
   };
 
   /**

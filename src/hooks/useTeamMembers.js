@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export const useTeamMembers = () => {
   const [searchResults, setSearchResults] = useState([]);
@@ -12,16 +12,19 @@ export const useTeamMembers = () => {
     const fetchCurrentUser = async () => {
       setIsLoading(true);
       try {
-        const token = localStorage.getItem('jwtToken');
+        const token = localStorage.getItem("jwtToken");
         if (!token) {
-          throw new Error('로그인이 필요합니다.');
+          throw new Error("로그인이 필요합니다.");
         }
 
-        const response = await axios.get('https://api.partnerd.site/api/users/me/info', {
-          headers: {
-            'Authorization': `Bearer ${token}`
+        const response = await axios.get(
+          "https://api.partnerd.site/api/users/me/info",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
 
         setCurrentUser(response.data.result);
       } catch (err) {
@@ -37,16 +40,12 @@ export const useTeamMembers = () => {
   const getImageUrl = async (profileKeyName) => {
     try {
       if (!profileKeyName) return null;
-      
-      const response = await axios.get(`https://api.partnerd.site/api/s3/preSignedUrl`, {
-        params: {
-          keyName: profileKeyName
-        }
-      });
-      
-      return response.data.result.cloudFrontUrl;
+
+      const response = `https://www.partnerd.site/${profileKeyName}`;
+
+      return response;
     } catch (err) {
-      console.error('이미지 URL 가져오기 실패:', err);
+      console.error("이미지 URL 가져오기 실패:", err);
       return null;
     }
   };
@@ -56,36 +55,42 @@ export const useTeamMembers = () => {
     setError(null);
 
     try {
-      const token = localStorage.getItem('jwtToken');
+      const token = localStorage.getItem("jwtToken");
       if (!token) {
-        throw new Error('로그인이 필요합니다.');
+        throw new Error("로그인이 필요합니다.");
       }
 
-      console.log('검색 요청 URL:', `https://api.partnerd.site/api/partnerd/register/members?nickname=${nickname}`);
-      console.log('토큰:', token);
+      console.log(
+        "검색 요청 URL:",
+        `https://api.partnerd.site/api/partnerd/register/members?nickname=${nickname}`
+      );
+      console.log("토큰:", token);
 
-      const response = await axios.get(`https://api.partnerd.site/api/partnerd/register/members`, {
-        params: { nickname },
-        headers: {
-          'Authorization': `Bearer ${token}`
+      const response = await axios.get(
+        `https://api.partnerd.site/api/partnerd/register/members`,
+        {
+          params: { nickname },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
-      
-      console.log('응답 데이터:', response.data);
+      );
+
+      console.log("응답 데이터:", response.data);
 
       const members = await Promise.all(
         response.data.result.map(async (member) => ({
           nickname: member.nickname,
-          profileImage: await getImageUrl(member.profileKeyName)
+          profileImage: await getImageUrl(member.profileKeyName),
         }))
       );
 
       setSearchResults(members);
     } catch (err) {
-      console.log('에러 상세 정보:', {
+      console.log("에러 상세 정보:", {
         message: err.message,
         response: err.response?.data,
-        status: err.response?.status
+        status: err.response?.status,
       });
       setError(err.message);
       setSearchResults([]);
@@ -99,6 +104,6 @@ export const useTeamMembers = () => {
     isLoading,
     error,
     searchMembers,
-    currentUser
+    currentUser,
   };
-}; 
+};

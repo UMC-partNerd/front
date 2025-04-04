@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import axios from 'axios';
+import { useState } from "react";
+import axios from "axios";
 
 const useProjectPromotion = () => {
   const [topProjects, setTopProjects] = useState([]);
@@ -22,17 +22,10 @@ const useProjectPromotion = () => {
     if (!token) return null;
 
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/api/s3/preSignedUrl?keyName=${keyName}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-      return response.data.result.cloudFrontUrl;
+      const response = `https://www.partnerd.site/${keyName}`;
+      return response;
     } catch (error) {
-      console.error('이미지 URL 조회 실패:', error);
+      console.error("이미지 URL 조회 실패:", error);
       return null;
     }
   };
@@ -47,20 +40,20 @@ const useProjectPromotion = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_API_BASE_URL}/api/project/promotion/top3`,
         {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-      
+
       const projectsWithImages = await Promise.all(
         response.data.result.map(async (project) => ({
           ...project,
-          imageUrl: await getImageUrl(project.thumbnailKeyName)
+          imageUrl: await getImageUrl(project.thumbnailKeyName),
         }))
       );
-      
+
       setTopProjects(projectsWithImages);
     } catch (error) {
-      setError('인기 프로젝트 조회 실패');
+      setError("인기 프로젝트 조회 실패");
       console.error(error);
     } finally {
       setLoading(false);
@@ -76,50 +69,51 @@ const useProjectPromotion = () => {
     try {
       setLoading(true);
       setError(null);
-      
-      const sortValue = sortBy === 'latest' ? 1 : 0;
-      console.log('정렬 요청값:', { page, sortBy, sortValue });
+
+      const sortValue = sortBy === "latest" ? 1 : 0;
+      console.log("정렬 요청값:", { page, sortBy, sortValue });
 
       const url = `${import.meta.env.VITE_API_BASE_URL}/api/project/promotion?page=${page}&sort=${sortValue}`;
-      console.log('요청 URL:', url);
+      console.log("요청 URL:", url);
 
       const response = await axios.get(url, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
-      
-      console.log('서버 응답:', response.data);
-      
+
+      console.log("서버 응답:", response.data);
+
       if (!response.data || !response.data.result) {
-        throw new Error('잘못된 응답 데이터입니다.');
+        throw new Error("잘못된 응답 데이터입니다.");
       }
 
       if (!Array.isArray(response.data.result.promotionProjectPreviewDTOList)) {
-        throw new Error('프로젝트 목록이 올바른 형식이 아닙니다.');
+        throw new Error("프로젝트 목록이 올바른 형식이 아닙니다.");
       }
 
       const projectsWithImages = await Promise.all(
-        response.data.result.promotionProjectPreviewDTOList.map(async (project) => {
-          try {
-            const imageUrl = await getImageUrl(project.thumbnailKeyName);
-            return { ...project, imageUrl };
-          } catch (error) {
-            console.error('이미지 URL 조회 실패:', error);
-            return { ...project, imageUrl: null };
+        response.data.result.promotionProjectPreviewDTOList.map(
+          async (project) => {
+            try {
+              const imageUrl = await getImageUrl(project.thumbnailKeyName);
+              return { ...project, imageUrl };
+            } catch (error) {
+              console.error("이미지 URL 조회 실패:", error);
+              return { ...project, imageUrl: null };
+            }
           }
-        })
+        )
       );
-      
+
       setProjects(projectsWithImages);
       setTotalPages(response.data.result.totalPage || 1);
-      
     } catch (error) {
-      console.error('프로젝트 목록 조회 실패:', error);
-      console.error('에러 상세:', {
+      console.error("프로젝트 목록 조회 실패:", error);
+      console.error("에러 상세:", {
         message: error.message,
         response: error.response?.data,
-        status: error.response?.status
+        status: error.response?.status,
       });
-      setError('프로젝트 목록 조회 실패');
+      setError("프로젝트 목록 조회 실패");
       setProjects([]);
       setTotalPages(1);
     } finally {
@@ -138,21 +132,23 @@ const useProjectPromotion = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_API_BASE_URL}/api/project/promotion/search?page=${page}&keyword=${keyword}`,
         {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-      
+
       const projectsWithImages = await Promise.all(
-        response.data.result.promotionProjectPreviewDTOList.map(async (project) => ({
-          ...project,
-          imageUrl: await getImageUrl(project.thumbnailKeyName)
-        }))
+        response.data.result.promotionProjectPreviewDTOList.map(
+          async (project) => ({
+            ...project,
+            imageUrl: await getImageUrl(project.thumbnailKeyName),
+          })
+        )
       );
-      
+
       setProjects(projectsWithImages);
       setTotalPages(response.data.result.totalPage);
     } catch (error) {
-      setError('프로젝트 검색 실패');
+      setError("프로젝트 검색 실패");
       console.error(error);
     } finally {
       setLoading(false);
@@ -167,7 +163,7 @@ const useProjectPromotion = () => {
     error,
     fetchTopProjects,
     fetchProjects,
-    searchProjects
+    searchProjects,
   };
 };
 
