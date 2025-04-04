@@ -54,6 +54,7 @@ const ProjectCollaboration = () => {
   // 버튼: 협업글 작성하기
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pageGroupStart, setPageGroupStart] = useState(1);
+
   const navigate = useNavigate();
 
   const handleWriteClick = () => {
@@ -127,6 +128,9 @@ const ProjectCollaboration = () => {
   if (loading) {
     return <div>로딩 중...</div>;
   }
+  const formatDate = (dateString) => {
+    return new Date(dateString).toISOString().split("T")[0]; // "YYYY-MM-DD" 형식으로 반환
+  };
 
   return (
     <>
