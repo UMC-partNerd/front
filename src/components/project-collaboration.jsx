@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // 추가
 import Button, { TYPES } from "./common/button";
 import CustomModal, { VERSIONS } from "../components/common/modal/CustomModal";
@@ -35,7 +35,6 @@ const ProjectCollaboration = () => {
     projects,
     currentPage,
     setCurrentPage,
-    totalPages,
     sortBy,
     setSortBy,
     selectedCategories,
@@ -45,17 +44,21 @@ const ProjectCollaboration = () => {
     hasMorePages,
     availablePages,
     pageReferenceDTOList,
-    getImageUrl,
     fetchProjects,
     currentCursor,
     setCurrentCursor,
+    prevLastReferenceDTO,
   } = useProjectCollaboration();
 
   // 버튼: 협업글 작성하기
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pageGroupStart, setPageGroupStart] = useState(1);
-
   const navigate = useNavigate();
+  const [isFetching, setIsFetching] = useState(false);
+
+  useEffect(() => {
+    fetchProjects({ cursor: currentCursor, page: currentPage });
+  }, []);
 
   const handleWriteClick = () => {
     const jwtToken = localStorage.getItem("jwtToken");
@@ -75,62 +78,17 @@ const ProjectCollaboration = () => {
     navigate(`/collaboration/${id}`);
   };
   const getPageNumbers = () => {
-    console.log("pageGroupStart", pageGroupStart);
-    const groupSize = 10;
     const pages = [];
-    for (
-      let i = pageGroupStart;
-      i < pageGroupStart + groupSize && i - groupSize <= availablePages;
-      i++
-    ) {
+    console.log(pageGroupStart);
+    for (let i = pageGroupStart; i < pageGroupStart + availablePages; i++) {
       pages.push(i);
     }
     return pages;
   };
 
-  /** const getPageNumbers = (current, total) => {
-    if (total <= 5) {
-      return Array.from({ length: total }, (_, i) => i + 1);
-    }
-
-    let pages = [];
-    let start = current - 2;
-
-    // 시작 페이지가 1보다 작을 경우 (예: current가 1 또는 2일 때)
-    if (start < 1) {
-      start = total + start; // 끝에서부터 시작
-      pages = Array.from({ length: 5 }, (_, i) => {
-        let page = start + i;
-        if (page > total) {
-          page = page - total;
-        }
-        return page;
-      });
-    }
-    // 끝 페이지가 total보다 클 경우 (예: current가 total 또는 total-1일 때)
-    else if (current + 2 > total) {
-      pages = Array.from({ length: 5 }, (_, i) => {
-        let page = start + i;
-        if (page > total) {
-          page = page - total;
-        }
-        return page;
-      });
-    }
-    // 일반적인 경우
-    else {
-      pages = Array.from({ length: 5 }, (_, i) => start + i);
-    }
-
-    return pages;
-  }; **/
-
   if (loading) {
     return <div>로딩 중...</div>;
   }
-  const formatDate = (dateString) => {
-    return new Date(dateString).toISOString().split("T")[0]; // "YYYY-MM-DD" 형식으로 반환
-  };
 
   return (
     <>
@@ -217,11 +175,11 @@ const ProjectCollaboration = () => {
                 <img
                   src={project.imageUrl}
                   alt={project.title}
-                  loading="lazy" // 💥 여기 추가!
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = "/default-image.png";
                   }}
+                  loading="lazy"
                 />
               </ImagePlaceholder>
               <CardContent>
@@ -243,31 +201,32 @@ const ProjectCollaboration = () => {
           <ArrowButton
             onClick={() => {
               const prevGroupStart = pageGroupStart - 10;
-              if (prevGroupStart >= 1) {
-                const prevCursor = pageReferenceDTOList[prevGroupStart - 2];
-                setPageGroupStart(prevGroupStart);
-                setCurrentPage(prevGroupStart);
-                if (prevCursor) setCurrentCursor(prevCursor);
-              }
+              const prevCursor = prevLastReferenceDTO;
+              console.log("이전 페이지 참고 DTO", prevCursor);
+              fetchProjects({ cursor: prevCursor, page: prevGroupStart });
+              setPageGroupStart(prevGroupStart);
+              setCurrentPage(prevGroupStart);
             }}
-            disabled={pageGroupStart === 1}
           >
             <ArrowIcon className="left" />
           </ArrowButton>
 
           {/* 페이지 번호 버튼 */}
           {getPageNumbers().map((page) => {
-            console.log(page);
-            const cursor = pageReferenceDTOList[page - 2];
+            console.log("페이지 렌더링됨:", page); // 추가
+
             return (
               <PageButton
                 key={page}
                 $isActive={currentPage === page}
                 onClick={() => {
+                  console.log("현재 페이지 번호:", page);
+
+                  const index = page - pageGroupStart;
+                  const cursor = pageReferenceDTOList[index - 1];
+                  console.log(pageReferenceDTOList[index - 1]);
                   setCurrentPage(page);
-                  if (cursor) {
-                    setCurrentCursor(cursor);
-                  }
+                  fetchProjects({ cursor: cursor, page: page });
                 }}
               >
                 {page}
@@ -280,13 +239,19 @@ const ProjectCollaboration = () => {
             onClick={() => {
               const nextGroupStart = pageGroupStart + 10;
               if (hasMorePages) {
-                const nextCursor = pageReferenceDTOList[nextGroupStart - 2];
+                const nextCursor = pageReferenceDTOList[9];
                 setPageGroupStart(nextGroupStart);
                 setCurrentPage(nextGroupStart);
-                if (nextCursor) setCurrentCursor(nextCursor);
+                if (nextCursor) {
+                  console.log(nextCursor);
+                  console.log(nextGroupStart);
+                  fetchProjects({
+                    cursor: nextCursor,
+                    page: nextGroupStart,
+                  });
+                }
               }
             }}
-            disabled={!hasMorePages}
           >
             <ArrowIcon className="right" />
           </ArrowButton>
