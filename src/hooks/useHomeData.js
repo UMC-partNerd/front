@@ -17,15 +17,15 @@ export const useHomeData = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const getImageUrl = async (profileImage) => {
+  const getImageUrl = (profileImage) => {
     return `https://www.partnerd.site/${profileImage}`;
   };
 
-  const processImageUrls = async (items) => {
+  const processImageUrls = (items) => {
     return Promise.all(
       items.map(async (item) => {
         if (item.profileImage) {
-          const cloudFrontUrl = await getImageUrl(item.profileImage);
+          const cloudFrontUrl = getImageUrl(item.profileImage);
           return {
             ...item,
             thumbnail: cloudFrontUrl || "",
@@ -43,20 +43,17 @@ export const useHomeData = () => {
         setIsLoading(true);
         const data = await fetchHomeData();
 
-        const processCollabPost = await processImageUrls(
-          data.result.recentCollabPosts || []
-        );
-
-        const processedProjects = await processImageUrls(
-          data.result.recentProjects || []
-        );
-        const processedPromotionProjects = await processImageUrls(
-          data.result.popularPromotionProjects || []
-        );
-        const processedClubs = await processImageUrls(
-          data.result.popularClubs || []
-        );
-
+        const [
+          processCollabPost,
+          processedClubs,
+          processedProjects,
+          processedPromotionProjects,
+        ] = await Promise.all([
+          processImageUrls(data.result.recentCollabPosts || []),
+          processImageUrls(data.result.popularClubs || []),
+          processImageUrls(data.result.recentProjects || []),
+          processImageUrls(data.result.popularPromotionProjects || []),
+        ]);
         setHomeData({
           collabPost: processCollabPost,
           clubs: processedClubs,

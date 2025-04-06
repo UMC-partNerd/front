@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   CardContainer,
   Thumbnail,
@@ -6,27 +6,28 @@ import {
   Badge,
   Title,
   Content,
-  Footer
-} from '../../styled-components/styled-Card';
+  Footer,
+} from "../../styled-components/styled-Card";
 
 export const VARIANTS = {
-  PROJECT: 'project',
-  CLUB: 'club',
+  PROJECT: "project",
+  CLUB: "club",
 };
 
 function Card({ title, content, thumbnail, footer, variant }) {
   const renderProjectCard = () => (
     <CardContainer variant={variant}>
       <Thumbnail variant={variant}>
-        <img 
-          src={thumbnail} 
+        <img
+          src={thumbnail}
           alt={title}
           style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            borderRadius: '12px'
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            borderRadius: "12px",
           }}
+          loading="lazy"
         />
       </Thumbnail>
       <ContentSection variant={variant}>
@@ -39,15 +40,16 @@ function Card({ title, content, thumbnail, footer, variant }) {
   const renderClubCard = () => (
     <CardContainer variant={variant}>
       <Thumbnail variant={variant}>
-        <img 
-          src={thumbnail} 
+        <img
+          src={thumbnail}
           alt={title}
           style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            borderRadius: '16px'
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            borderRadius: "16px",
           }}
+          loading="lazy"
         />
       </Thumbnail>
       <ContentSection variant={variant}>
@@ -64,14 +66,15 @@ function Card({ title, content, thumbnail, footer, variant }) {
       <Content variant={variant}>{content}</Content>
       <Footer>
         <Thumbnail variant={variant}>
-          <img 
-            src={thumbnail} 
+          <img
+            src={thumbnail}
             alt={title}
             style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover'
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
             }}
+            loading="lazy"
           />
         </Thumbnail>
         {footer}
